@@ -1,6 +1,21 @@
 # CUMA
 Project 6 CUMA (Course Unit Mapping Automation)
 
-Members:  
-Zilei Chen  
-David Batonda
+|Member|Email|
+|---|---|
+|Zilei Chen|   |
+|David Batonda|   |
+|Michael Sigal|   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
+|   |   |
