@@ -17,6 +17,6 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Melvin Pramode       | mpra0021@student.monash.edu |
 | Tharith Yeak         | tyea0002@student.monash.edu |
 | Cheuk Lam Winnie Chui| cchu0061@student.monash.edu |
-|                      |                             |
+| Sok Huot Ear         | sear0002@student.monash.edu |
 |                      |                             |
 |                      |                             |
