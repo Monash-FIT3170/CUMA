@@ -13,7 +13,7 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Mishal FAOA Alhaidar | malh0009@student.monash.edu |
 | Jamie Gary Harrison  | jhar0038@student.monash.edu |
 | Changheng Li         | clii0078@student.monash.edu |
-|                      |                             |
+| Sean Heng Keh        | skeh0003@student.monash.edu |
 |                      |                             |
 |                      |                             |
 |                      |                             |
