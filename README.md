@@ -19,4 +19,3 @@ Project 6 CUMA (Course Unit Mapping Automation)
 |   |   |
 |   |   |
 |   |   |
->>>>>>>>> Temporary merge branch 2
