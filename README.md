@@ -20,4 +20,3 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Sok Huot Ear                | sear0002@student.monash.edu |
 | Niroshan Sivaneeswaran      | nsiv0005@srudent.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
-|                             |
