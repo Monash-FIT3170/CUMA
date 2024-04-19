@@ -23,7 +23,8 @@ Project 6 CUMA (Course Unit Mapping Automation)
 
 
 ## Documentation 
-** MongoDB Implementation
+** MongoDB Implementation **
+
 Deciding on the implementation of MongoDB and its accessibility to team members is important, and is based on several factors.
 
 The options include:
@@ -32,6 +33,7 @@ Pros:
 - Full control over the database environment.
 - No network latency issues during development.
 - Works offline.
+
 Cons:
 - Requires installation and configuration on each developer’s machine.
 - May lead to inconsistencies in database versions or configurations across different machines.
@@ -41,6 +43,7 @@ You can set up a single MongoDB instance on a remote server that all developers 
 Pros:
 - Centralized management of the database.
 - Uniform environment for all developers.
+
 Cons:
 - Requires network connectivity.
 - Possible performance degradation due to network latency.
@@ -52,6 +55,7 @@ Pros:
 - Consistent database environment across all machines.
 - Easy to set up and tear down.
 - Works well with continuous integration/continuous deployment (CI/CD) systems.
+
 Cons:
 - Requires Docker knowledge and setup on each developer’s machine.
 - Still requires some local resources and might have issues with Docker on certain systems (eg., Windows Home).
@@ -62,7 +66,11 @@ Pros:
 - No installation required; developers can connect to the database using the internet.
 - Managed service includes backups, scalability, and maintenance.
 - Often provides additional tools for monitoring and optimization.
+
 Cons:
 - Requires continuous internet connectivity.
 - Cost associated with cloud services, which can vary based on usage.
 - Potentially greater latency compared to local instances, depending on the geographical location of the server.
+
+
+** Node.JS **
