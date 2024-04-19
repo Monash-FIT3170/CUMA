@@ -20,3 +20,49 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Sok Huot Ear                | sear0002@student.monash.edu |
 | Niroshan Sivaneeswaran      | nsiv0005@srudent.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
+
+
+## Documentation 
+** MongoDB Implementation
+Deciding on the implementation of MongoDB and its accessibility to team members is important, and is based on several factors.
+
+The options include:
+1) Local Installation
+Pros:
+- Full control over the database environment.
+- No network latency issues during development.
+- Works offline.
+Cons:
+- Requires installation and configuration on each developer’s machine.
+- May lead to inconsistencies in database versions or configurations across different machines.
+
+2. Shared Database Server
+You can set up a single MongoDB instance on a remote server that all developers connect to. This could be on a dedicated server or a cloud-based instance.
+Pros:
+- Centralized management of the database.
+- Uniform environment for all developers.
+Cons:
+- Requires network connectivity.
+- Possible performance degradation due to network latency.
+- Higher risk of conflicts or interference between developers’ activities.
+
+3. Docker Containers
+Using Docker, you can create a MongoDB container that each developer runs on their local machine. This approach provides consistency across environments while still allowing each developer to work locally.
+Pros:
+- Consistent database environment across all machines.
+- Easy to set up and tear down.
+- Works well with continuous integration/continuous deployment (CI/CD) systems.
+Cons:
+- Requires Docker knowledge and setup on each developer’s machine.
+- Still requires some local resources and might have issues with Docker on certain systems (eg., Windows Home).
+
+4. Database as a Service (DBaaS)
+Using a service like MongoDB Atlas or other cloud providers that offer MongoDB as a service. This is a fully managed solution.
+Pros:
+- No installation required; developers can connect to the database using the internet.
+- Managed service includes backups, scalability, and maintenance.
+- Often provides additional tools for monitoring and optimization.
+Cons:
+- Requires continuous internet connectivity.
+- Cost associated with cloud services, which can vary based on usage.
+- Potentially greater latency compared to local instances, depending on the geographical location of the server.
