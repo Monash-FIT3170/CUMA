@@ -18,5 +18,5 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Tharith Yeak                | tyea0002@student.monash.edu |
 | Cheuk Lam Winnie Chui       | cchu0061@student.monash.edu |
 | Sok Huot Ear                | sear0002@student.monash.edu |
-| Niroshan Sivaneeswaran      | nsiv0005@srudent.monash.edu |
+| Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
