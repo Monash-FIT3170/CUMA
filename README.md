@@ -79,3 +79,9 @@ Cons:
 - Cost associated with cloud services, which can vary based on usage.
 - Potentially greater latency compared to local instances, depending on the geographical location of the server.
 
+
+**Mongoose - MongoDB Object Data Modeling Library for Node.js**
+
+Mongoose is a mongodb object modelling for Node.js. It provides a high level of abstraction that allows the definition of schemas for seperate collections which are not natively supported by MongoDB. Mongoose then translates hese schemas into MongoDB interactions, simplifying the management of data validations, object mapping, and database interactions.
+
+Mongoose was chosen as it is specifically designed for use with Node.js as it is a Node.js package that facilitates programming with MongoDB.
