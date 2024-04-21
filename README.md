@@ -79,5 +79,3 @@ Cons:
 - Cost associated with cloud services, which can vary based on usage.
 - Potentially greater latency compared to local instances, depending on the geographical location of the server.
 
-
-**Node.JS**
