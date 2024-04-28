@@ -12,7 +12,7 @@
     <body>
         <div class="search-container">
             <label for="search-unit">Search Units</label>
-            <input type="search" id="search-unit">
+            <input type="text" id="search-unit" placeholder="Search for units...">
             <label for="search-university">University</label>
             <input type="search" id="search-university">
             <label for="search-course">Course</label>
@@ -20,8 +20,9 @@
             <label for="search-degree">Degree</label>
             <input type="search" id="search-degree">
         </div>
-        <div class="search-results">
-            results go here
+        <div id="autocomplete-results"></div>
+        
         </div>
+        <script src="autocomplete.js"></script>
     </body>
 </html>
