@@ -40,33 +40,6 @@ Put in .env file:
 Test: 
     Go to the terminal. Run "node index.js". If no error, It should show results about "Back to the future" movie. 
 
-    If it shows error, try connecting to monash cisco anyconnect vpn and try again.
-
-
-
-
-
-
-
-How to connect to mongoDB: 
-
-install nodejs: 
-    downloading and installing Node.js and npm. Follow:
-    https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
-
-install mongodb: 
-    in root dir do: 
-    npm install mongodb@4.1
-
-Put in .env file: 
-    See: https://docs.google.com/document/d/1I_V_UTH5uzy08R5zupgvutbQwg_zZ2vNFkiAbS3ERVE/edit
-
-    1) Create a file named .env in root dir
-    2) Copy the code from the google doc above to the .env file.
-
-Test: 
-    Go to the terminal. Run "node index.js". If no error, It should show results about "Back to the future" movie. 
-
     If it shows error, try connecting to monash cisco anyconnect vpn.
 
 
