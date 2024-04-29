@@ -40,7 +40,7 @@ Put in .env file:
 Test: 
     Go to the terminal. Run "node index.js". If no error, It should show results about "Back to the future" movie. 
 
-    If it shows error, try connecting to monash cisco anyconnect vpn.
+    If it shows error, try connecting to monash cisco anyconnect vpn and try again.
 
 
 
