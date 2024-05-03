@@ -17,7 +17,7 @@ const client = new MongoClient(uri);
  * @param {string} database - database to retrieve from
  * @param {string} collection - collection to retrieve from
  * @param {Object} query - filter in format {"field" : value, etc.}
- * @returns {Promise<object | null>} Promise that resolves to object satisfying query or null
+ * @returns {Promise} Promise that resolves to object satisfying query or null
  */
 async function getOneFromCollection(database, collection, query) {
   try {
@@ -31,4 +31,26 @@ async function getOneFromCollection(database, collection, query) {
   }
 }
 
-module.exports = { getOneFromCollection };
+/**
+ * insertOneToCollection is a function for inserting a document into a collection (if not already existing)
+ * 
+ * @param {string} database - database to insert into
+ * @param {string} collection - collection to insert into
+ * @param {Object} document - document to insert
+ * @returns {Promise} Promise that resolves when the document is inserted
+ */
+async function insertOneToCollection(database, collection, document) {
+  try {
+    await client.connect();
+    const db = client.db(database);
+    const cl = db.collection(collection);
+    const existingDocument = await cl.findOne(document);
+    if (!existingDocument) {
+      await cl.insertOne(document);
+    }
+  } finally {
+    await client.close();
+  }
+}
+
+module.exports = { getOneFromCollection, insertOneToCollection };
