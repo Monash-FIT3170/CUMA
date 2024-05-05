@@ -1,27 +1,32 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <!-- Adding default font of Roboto-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles/general.css">
-        <title>CUMA</title>
-    </head>
+<html lang="en">
+<head>
+    <!-- Adding default font of Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/general.css">
+    <title>CUMA - Course Search</title>
+</head>
 
-    <body>
-        <div class="search-container">
-            <label for="search-unit">Search Units</label>
-            <input type="search" id="search-unit">
-            <label for="search-university">University</label>
-            <input type="search" id="search-university">
-            <label for="search-course">Course</label>
-            <input type="search" id="search-course">
-            <label for="search-degree">Degree</label>
-            <input type="search" id="search-degree">
-        </div>
-        <div class="search-results">
-            results go here
-        </div>
-    </body>
+<body>
+
+<!-- Search Section -->
+<div class="search-container">
+    <h1>Course Search</h1>
+    <div class="search-fields">
+        <label for="search-university">University</label>
+        <input type="search" id="search-university" placeholder="Type university name...">
+        <label for="search-unit">Search Units</label>
+        <input type="search" id="search-unit" placeholder="Type unit name...">
+        <button id="search-button">Search</button>
+    </div>
+</div>
+
+<!-- Results Section -->
+<div class="search-results">
+    <h2>Results</h2>
+    <p>Results loaded here</p>
+</div>
+</body>
 </html>
