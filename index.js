@@ -26,9 +26,3 @@ async function run() {
 }
 run().catch(console.dir);
 
-/**
- * Add information about the unit such as name, description, level and credit points
- */
-function addUnitInfo(name, desc, level, credit){
-  // add this info and format
-}
