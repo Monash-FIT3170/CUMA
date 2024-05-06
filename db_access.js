@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-require('dotenv').config();
+require('dotenv').config({ override: true })
 
 const username = process.env.USERNAME
 const password = process.env.PASSWORD;
