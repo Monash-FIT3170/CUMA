@@ -31,8 +31,8 @@ async function getUnits(page,url){
 
         let title = document.querySelectorAll("h2")[0].innerText.split("-");
 
-        let courseCode = title[0];
-        let courseTitle = title[1];
+        let courseCode = title[0].trim();
+        let courseTitle = title[1].trim();
 
     
         return [unitsProcessed,courseCode,courseTitle];
@@ -72,7 +72,7 @@ async function getUnitInfo(page, url){
         let header = document.querySelectorAll("h2")[0].innerText.split("-")
 
         let unitCode = header[0].trim()
-        let unitTitle = header[1].trim()
+        let unitName = header[1].trim()
 
         //get unit info
         let unitDescription = document.querySelector("div[class*='e1ydu1r41'] > div > p").innerText.trim();
@@ -80,21 +80,37 @@ async function getUnitInfo(page, url){
         //right column on page containing unit info
         let rightCol = Array.from(document.querySelectorAll("div[class='css-1sscrr8-Box--Box-Box-Attribute--AttrContainer ene3w3n2']"));
 
-        let faculty = rightCol[0].querySelector("div").innerText
-        let creditPoints = rightCol[5].querySelector("div").innerText
+        let faculty = rightCol[0].querySelector("div").innerText.trim()
+        let creditPoints = rightCol[5].querySelector("div").innerText.trim()
 
+        //get offerings
+        let offeringElement = document.querySelector("div[data-menu-id='Offerings']");
+
+        let offeringsArr = [];
+        //handling in case offerings section is not availble:
+        if (offeringElement !== null){
+            offeringsArr = Array.from(offeringElement.querySelectorAll("strong")).map(x => x.innerText.trim());
+        } 
+
+        //offeringsArr = offeringsArr.map(x => (x[0],x[2],x.slice(3,x.length)));
         
+        //get unit level
+        let unitLevel = unitCode[3];
+
         //organise into obj
         let formattedData = {
             "unitCode": unitCode,
-            "unitTitle": unitTitle,
+            "unitName": unitName,
+            "unitLevel": unitLevel,
+            "unitType": null,
             "faculty": faculty,
             "creditPoints": creditPoints,
+            "offerings": offeringsArr,
             "unitDescription": unitDescription,
             "handbookURL": document.URL
         }
 
-        return formattedData
+        return formattedData;
     })
 
     return result
@@ -131,6 +147,7 @@ async function run(course){
     await new Promise(r => setTimeout(r, 500));
 
     let data = {
+        "University": "Monash",
         "courseCode": courseCode,
         "CourseTitle": courseTitle,
         units:[]
@@ -140,17 +157,22 @@ async function run(course){
     for(let i = 0; i < courseUnits.length; i++){
 
         let unitURL = courseUnits[i];
+        console.log(`Scraping unit: ${unitURL.split("/")[5]}`)
         
         //get unit info
         let unitData = await getUnitInfo(page,unitURL);
 
+
         //check if page 404d, if not add to our json obj
         if (unitData !== null){
             data.units.push(unitData);
+            //update user
+            console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
+        } else {
+            console.log(`Unit at ${unitURL} 404d :(\n`)
         }
 
-        //update user
-        console.log(`Completed ${i} out of ${courseUnits.length} units `)
+
         
         //pause so as not to overwhelm monash servers
         await new Promise(r => setTimeout(r, 500));
