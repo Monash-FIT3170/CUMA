@@ -79,7 +79,6 @@ async function getUnitInfo(page, url){
 
         //right column on page containing unit info
         let rightCol = Array.from(document.querySelectorAll("div[class='css-1sscrr8-Box--Box-Box-Attribute--AttrContainer ene3w3n2']"));
-        
         let faculty = rightCol[0].querySelector("div").innerText.trim()
         let creditPoints = rightCol[5].querySelector("div").innerText.trim()
 
