@@ -1,5 +1,6 @@
 export const message = {
-    FieldMissing: "Field is missing."
+    fieldMissing: "Field is missing.",
+    success: "Successful"
 }
 
 

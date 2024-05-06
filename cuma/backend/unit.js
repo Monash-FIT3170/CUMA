@@ -1,19 +1,20 @@
 import message from "./messageFile"
 
-/** 
-unitInfo structure: {
-    name: str;
-    desc: 
-    type: int;
-    creditPt: int;
-    level: int;
-    overview: str;
-    link: str
 
-}
-*/
+
 function addUnitInfo(unitInfo){
-  //
+    /** 
+    unitInfo structure: {
+        name: str;
+        desc: 
+        type: int;
+        creditPt: int;
+        level: int;
+        overview: str;
+        link: str
+
+    }
+    */
     var name=  unitInfo.name;
     var desc=  unitInfo.desc;
     var type=  unitInfo.type;
@@ -30,7 +31,7 @@ function addUnitInfo(unitInfo){
                 if (level) {
                     if (overview) {
                         if (link) {
-                            const newUnit = Unit.findOne(unitInfo);
+                            const newUnit = db.Unit.findOne(unitInfo);
                         } else {
                             fieldMissing.push("desc");
                         }
@@ -52,4 +53,50 @@ function addUnitInfo(unitInfo){
     
     
 }
+
+
+function modifyUnit(unitCode, unitInfoChange){
+    /** 
+    unitInfo structure: {
+        name: str;
+        desc: 
+        type: int;
+        creditPt: int;
+        level: int;
+        overview: str;
+        link: str
+
+    }
+    */
+
+    db.Unit.updateOne({unitCode: unitCode}, {$set:unitInfoChange})
+
+    return {successCode: 1, message : message.success}
+
+}
+
+function deleteUnit(unitCode){
+    /** 
+    unitInfo structure: {
+        name: str;
+        desc: 
+        type: int;
+        creditPt: int;
+        level: int;
+        overview: str;
+        link: str
+
+    }
+    */
+
+    db.Unit.deleteOne({unitCode: unitCode})
+
+    return {successCode: 1, message : message.success}
+
+}
+
+
+
+
+
 
