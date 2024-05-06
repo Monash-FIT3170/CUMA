@@ -1,79 +1,158 @@
-/* styles/main.css */
-
-/* General Page Styles */
+/* Global styles */
 body {
-    font-family: "Roboto", Arial, sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #f9f9f9;
     padding: 0;
+    background-color: #f4f6f9;
 }
 
-h1, h2 {
-    font-weight: 500;
+header {
+    background-color: #4da5f5;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-p {
-    font-size: 16px;
-    line-height: 1.6;
+header h1 {
+    margin: 0;
 }
 
-/* Navigation Bar */
-.navbar {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar ul {
+nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: space-around;
+    gap: 15px;
 }
 
-.navbar a {
-    color: #fff;
+nav a {
+    color: white;
     text-decoration: none;
-    padding: 10px 15px;
 }
 
-.navbar a:hover {
-    background-color: #0056b3;
+main {
+    display: flex;
+    padding: 20px;
+    max-width: 1400px;
+    margin: auto;
+    gap: 20px;
+}
+
+.course-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
-/* Sections */
-.section {
-    max-width: 800px;
-    margin: 50px auto;
+.add-unit-form {
+    flex: 1;
+    background: white;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: none;
 }
 
-.cta-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-top: 15px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
+.course-info h2, .add-unit-form h3 {
+    margin-bottom: 15px;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-container input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+textarea {
+    resize: vertical;
+    height: 60px;
+}
+
+.input-container label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    pointer-events: none;
+    transition: 0.2s;
+    color: #666;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label,
+.input-container textarea:focus + label,
+.input-container textarea:not(:placeholder-shown) + label,
+.input-container select:focus + label,
+.input-container select:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 10px;
+    background-color: white;
+    padding: 0 5px;
+    font-size: 0.8em;
+    color: #4da5f5;
+}
+
+.unit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.unit {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.unit.selected {
+    background-color: #d3e9ff;
+    border-color: #4da5f5;
+}
+
+.unit h4 {
+    margin: 0;
+    font-size: 1em;
+}
+
+.unit p {
+    margin: 0;
+    color: #666;
+}
+
+button, .add-unit {
+    background-color: #4da5f5;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover, .add-unit:hover {
+    background-color: #3b90d5;
+}
+
+.add-unit-form button {
+    margin-top: 10px;
+}
+.unit-details {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
-.cta-button:hover {
-    background-color: #0056b3;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #007bff;
-    color: #fff;
-    margin-top: 50px;
-}

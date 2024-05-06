@@ -1,32 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Adding default font of Roboto -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bachelor of Software Engineering - Monash University</title>
     <link rel="stylesheet" href="styles/general.css">
-    <title>CUMA - Course Search</title>
+    <script src="index.js" defer></script>
 </head>
-
 <body>
+<header>
+    <h1>CUMA</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Mapping</a></li>
+            <li><a href="#">Add Unit</a></li>
+            <li><a href="#">Unit Info</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
 
-<!-- Search Section -->
-<div class="search-container">
-    <h1>Course Search</h1>
-    <div class="search-fields">
-        <label for="search-university">University</label>
-        <input type="search" id="search-university" placeholder="Type university name...">
-        <label for="search-unit">Search Units</label>
-        <input type="search" id="search-unit" placeholder="Type unit name...">
-        <button id="search-button">Search</button>
-    </div>
-</div>
+    <!-- Course Units Section -->
+    <section class="course-info">
+        <h2>Bachelor of Software Engineering - Monash University</h2>
+        <input type="text" placeholder="Search Unit">
+        <div class="course-units">
+            <h3>Course Units</h3>
+            <div class="unit-list" id="unit-list">
+                <!-- Dynamic units will be appended here -->
+            </div>
+            <button class="add-unit" onclick="toggleAddUnitForm()">Add Unit</button>
+        </div>
+    </section>
 
-<!-- Results Section -->
-<div class="search-results">
-    <h2>Results</h2>
-    <p>Results loaded here</p>
-</div>
+    <!-- Add Unit Section -->
+    <section class="add-unit-form" id="add-unit-form">
+        <h3>Add Unit to Bachelor of SE</h3>
+
+        <!-- Form: Unit Name -->
+        <div class="input-container">
+            <input type="text" id="form-unit-name" required>
+            <label for="form-unit-name">Unit Name</label>
+        </div>
+
+        <!-- Form: Unit Code -->
+        <div class="input-container">
+            <input type="text" id="form-unit-code" required>
+            <label for="form-unit-code">Unit Code</label>
+        </div>
+
+        <!-- Form: Unit Type Dropdown -->
+        <div class="input-container">
+            <select id="form-unit-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-unit-type">Unit Type</label>
+        </div>
+
+        <!-- Form: Other Fields -->
+        <div class="input-container">
+            <input type="number" id="form-unit-credit" required>
+            <label for="form-unit-credit">Unit Credit Points</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="form-unit-level" required>
+            <label for="form-unit-level">Unit Level</label>
+        </div>
+        <div class="input-container">
+            <textarea id="form-unit-overview" required></textarea>
+            <label for="form-unit-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addUnit()">Add Unit to Course</button>
+        <button onclick="toggleAddUnitForm()">Cancel</button>
+    </section>
+
+    <!-- Unit Details Display Section -->
+    <section class="unit-details" id="unit-details">
+        <h3> Selected Unit Information</h3>
+        <h3 id="display-unit-title"></h3>
+        <p><strong>Type:</strong> <span id="display-unit-type">N/A</span></p>
+        <p><strong>Credits:</strong> <span id="display-unit-credits">N/A</span></p>
+        <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
+        <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
+        <p id="display-unit-description">Select a unit to see the details</p>
+    </section>
+
+
+
+
+</main>
 </body>
 </html>
