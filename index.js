@@ -1,5 +1,6 @@
 let unitConnections = {};
 let selectedUnitId = null;
+let isEditMode = false; // Track whether we're in add or edit mode
 
 const { MongoClient } = require("mongodb");
 require('dotenv').config();
@@ -29,7 +30,16 @@ run().catch(console.dir);
 // Toggle the "Add Unit" form visibility
 function toggleAddUnitForm() {
   const addUnitForm = document.getElementById('add-unit-form');
-  addUnitForm.style.display = addUnitForm.style.display === 'none' || addUnitForm.style.display === '' ? 'block' : 'none';
+  const displayStyle = addUnitForm.style.display;
+
+  // Toggle visibility
+  if (displayStyle === 'none' || displayStyle === '') {
+    addUnitForm.style.display = 'block';
+  } else {
+    addUnitForm.style.display = 'none';
+    isEditMode = false; // Reset to add mode when hiding the form
+    clearUnitForm();
+  }
 }
 
 // Toggle the "Add Connection" form visibility
@@ -63,7 +73,7 @@ function clearConnectionForm() {
   connectionType.selectedIndex = 0;
 }
 
-// Add a new unit to the "Course Units" section
+// Add or modify a unit
 function addUnit() {
   const unitList = document.getElementById('unit-list');
 
@@ -81,41 +91,127 @@ function addUnit() {
     return;
   }
 
-  // Create a new unit element
-  const unitDiv = document.createElement('div');
-  unitDiv.className = 'unit';
-  unitDiv.dataset.id = unitCode;
-  unitDiv.dataset.name = unitName;
-  unitDiv.dataset.type = unitType;
-  unitDiv.dataset.credit = unitCredit;
-  unitDiv.dataset.level = unitLevel;
-  unitDiv.dataset.overview = unitOverview;
+  if (isEditMode) {
+    // Modify existing unit
+    const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+    if (existingUnit) {
+      existingUnit.dataset.name = unitName;
+      existingUnit.dataset.type = unitType;
+      existingUnit.dataset.credit = unitCredit;
+      existingUnit.dataset.level = unitLevel;
+      existingUnit.dataset.overview = unitOverview;
 
-  // Populate unit content
-  unitDiv.innerHTML = `
-    <h4>${unitCode} - ${unitName}</h4>
-    <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-  `;
+      existingUnit.innerHTML = `
+        <h4>${unitCode} - ${unitName}</h4>
+        <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+      `;
+    }
 
-  // Add click event to show details when clicked
-  unitDiv.addEventListener('click', function () {
-    selectUnit(unitDiv);
-  });
+    // Update the unitConnections if the unitCode was changed
+    if (selectedUnitId !== unitCode) {
+      unitConnections[unitCode] = unitConnections[selectedUnitId];
+      delete unitConnections[selectedUnitId];
+    }
 
-  // Initialize the connections data structure for the unit
-  unitConnections[unitCode] = [];
+    selectedUnitId = unitCode;
+  } else {
+    // Create a new unit element
+    const unitDiv = document.createElement('div');
+    unitDiv.className = 'unit';
+    unitDiv.dataset.id = unitCode;
+    unitDiv.dataset.name = unitName;
+    unitDiv.dataset.type = unitType;
+    unitDiv.dataset.credit = unitCredit;
+    unitDiv.dataset.level = unitLevel;
+    unitDiv.dataset.overview = unitOverview;
 
-  // Add the new unit to the list
-  unitList.appendChild(unitDiv);
+    // Populate unit content
+    unitDiv.innerHTML = `
+      <h4>${unitCode} - ${unitName}</h4>
+      <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+    `;
 
-  // Clear the input fields after adding
+    // Add click event to show details when clicked
+    unitDiv.addEventListener('click', function () {
+      selectUnit(unitDiv);
+    });
+
+    // Initialize the connections data structure for the unit
+    unitConnections[unitCode] = [];
+
+    // Add the new unit to the list
+    unitList.appendChild(unitDiv);
+  }
+
+  // Clear the input fields after adding or modifying
   clearUnitForm();
 
   // Hide the form again
   toggleAddUnitForm();
+
+  // Refresh the displayed mapped units
+  displayMappedUnits(selectedUnitId);
 }
 
-// Display the selected unit information in the details section
+// Set form to edit mode with the selected unit's information
+function modifyUnit() {
+  if (!selectedUnitId) {
+    alert("No unit selected.");
+    return;
+  }
+
+  const unitElement = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+  if (!unitElement) {
+    alert("Invalid unit selected.");
+    return;
+  }
+
+  // Populate form with existing values
+  document.getElementById('form-unit-name').value = unitElement.dataset.name;
+  document.getElementById('form-unit-code').value = unitElement.dataset.id;
+  document.getElementById('form-unit-type').value = unitElement.dataset.type;
+  document.getElementById('form-unit-credit').value = unitElement.dataset.credit;
+  document.getElementById('form-unit-level').value = unitElement.dataset.level;
+  document.getElementById('form-unit-overview').value = unitElement.dataset.overview;
+
+  // Toggle the form and set to edit mode
+  toggleAddUnitForm();
+  isEditMode = true;
+}
+
+function deleteUnit() {
+  if (!selectedUnitId) {
+    alert("No unit selected.");
+    return;
+  }
+
+  // Confirm before deleting
+  if (!confirm(`Are you sure you want to delete unit ${selectedUnitId}?`)) {
+    return;
+  }
+
+  const unitElement = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+  if (unitElement) {
+    unitElement.remove();
+  }
+
+  delete unitConnections[selectedUnitId];
+
+  // Clear selected unit info
+  selectedUnitId = null;
+  document.getElementById('display-unit-title').textContent = '';
+  document.getElementById('display-unit-id').textContent = 'N/A';
+  document.getElementById('display-unit-type').textContent = 'N/A';
+  document.getElementById('display-unit-credits').textContent = 'N/A';
+  document.getElementById('display-unit-level').textContent = 'N/A';
+  document.getElementById('display-unit-description').textContent = 'Select a unit to see the details';
+  document.getElementById('unit-connection-list').innerHTML = '<p>No mapped units available.</p>';
+
+  // Hide the Modify and Delete buttons
+  document.getElementById('modify-unit-button').style.display = 'none';
+  document.getElementById('delete-unit-button').style.display = 'none';
+}
+
 function selectUnit(unitElement) {
   // Highlight the selected unit
   const units = document.querySelectorAll('.unit');
@@ -135,6 +231,10 @@ function selectUnit(unitElement) {
 
   // Display mapped units for this selected unit
   displayMappedUnits(selectedUnitId);
+
+  // Show the Modify and Delete buttons
+  document.getElementById('modify-unit-button').style.display = 'inline-block';
+  document.getElementById('delete-unit-button').style.display = 'inline-block';
 }
 
 // Display mapped units for the given unit ID

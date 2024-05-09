@@ -241,3 +241,19 @@ button:last-of-type:hover,
     margin: 0;
     color: #666;
 }
+
+/* Modify and Delete Buttons */
+#modify-unit-button, #delete-unit-button {
+    background-color: #4da5f5;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#modify-unit-button:hover, #delete-unit-button:hover {
+    background-color: #3b90d5;
+}
+
