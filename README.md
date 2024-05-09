@@ -1,6 +1,8 @@
-# CUMA
+# CUMA (Course Unit Mapping Automation) 
 
-Project 6 CUMA (Course Unit Mapping Automation)
+## Project 6 - FIT3170
+
+## Team
 
 | Member                      | Email                       |
 | --------------------------- | --------------------------- |
@@ -21,7 +23,7 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-## How to setup project and connect to MongoDB:
+## How to connect to MongoDB:
 
 ### 1. Install Node.js and npm
 
