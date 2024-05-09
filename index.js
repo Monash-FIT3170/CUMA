@@ -1,6 +1,30 @@
-// Global variable to store unit connections
 let unitConnections = {};
-let selectedUnitId = null; // Track the currently selected unit
+let selectedUnitId = null;
+
+const { MongoClient } = require("mongodb");
+require('dotenv').config();
+
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
+const clusterUrl = process.env.CLUSTER_URL;
+
+const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&writeConcern=majority`;
+const client = new MongoClient(uri);
+
+async function run() {
+  try {
+    await client.connect();
+    const database = client.db('sample_mflix');
+    const movies = database.collection('movies');
+    const query = { title: 'Back to the Future' };
+    const movie = await movies.findOne(query);
+    console.log(movie);
+  } finally {
+    await client.close();
+  }
+}
+
+run().catch(console.dir);
 
 // Toggle the "Add Unit" form visibility
 function toggleAddUnitForm() {
@@ -69,9 +93,9 @@ function addUnit() {
 
   // Populate unit content
   unitDiv.innerHTML = `
-        <h4>${unitCode} - ${unitName}</h4>
-        <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-    `;
+    <h4>${unitCode} - ${unitName}</h4>
+    <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+  `;
 
   // Add click event to show details when clicked
   unitDiv.addEventListener('click', function () {
@@ -116,19 +140,27 @@ function selectUnit(unitElement) {
 // Display mapped units for the given unit ID
 function displayMappedUnits(unitId) {
   const unitConnectionList = document.getElementById('unit-connection-list');
-  unitConnectionList.innerHTML = ''; // Clear existing connections
+  unitConnectionList.innerHTML = '';
 
-  const connections = unitConnections[unitId] || [];
-  connections.forEach(connection => {
-    const connectionDiv = document.createElement('div');
-    connectionDiv.className = 'connection';
-    connectionDiv.innerHTML = `
-            <h4>${connection.name} - ${connection.institution}</h4>
-            <p>Type: ${connection.type}, Credits: ${connection.credit}, Level: ${connection.level}</p>
-            <p>${connection.overview}</p>
-        `;
-    unitConnectionList.appendChild(connectionDiv);
-  });
+  const mappedUnitsSection = document.querySelector('.mapped-units');
+  mappedUnitsSection.style.display = 'block';
+
+  const connections = unitConnections[unitId];
+  if (connections && connections.length > 0) {
+    connections.forEach((connection, index) => {
+      const connectionDiv = document.createElement('div');
+      connectionDiv.className = 'connection';
+      connectionDiv.innerHTML = `
+        <h5>${connection.name}</h5>
+        <p>Institution: ${connection.institution}</p>
+        <p>Type: ${connection.type}, Credits: ${connection.credit}, Level: ${connection.level}</p>
+        <p>${connection.overview}</p>
+      `;
+      unitConnectionList.appendChild(connectionDiv);
+    });
+  } else {
+    unitConnectionList.innerHTML = '<p>No mapped units available.</p>';
+  }
 }
 
 // Add a new unit connection
