@@ -21,28 +21,28 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-### How to setup project and connect to MongoDB:
+## How to setup project and connect to MongoDB:
 
-1. Install Node.js and npm
+### 1. Install Node.js and npm
 
-    https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-2. Setup local repository
+### 2. Setup Local Repository
 
-    Open command prompt or terminal in root dir.
+Open command prompt or terminal in root dir.
 
-    Run "npm install" in root directory (CUMA).
+Run "npm install" in root directory (CUMA).
 
-3. Allow database access
+### 3. Allow Database Access
 
-    Download the .env file and place into the root dir.
+Download the .env file and place into the root dir.
 
-    https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
+https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
-4. Test
+### 4. Test
 
-    Open command prompt or terminal in root dir.
+Open command prompt or terminal in root dir.
 
-    Run "node cuma/index.js".
+Run "node cuma/index.js".
     
-    If no error, it should show results about "Back to the future" movie. 
+If no error, it should show results about "Back to the future" movie. 
