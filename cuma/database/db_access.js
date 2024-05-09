@@ -2,14 +2,8 @@ const { MongoClient } = require('mongodb');
 
 require('dotenv').config({ override: true })
 
-const username = process.env.USERNAME
-const password = process.env.PASSWORD;
-const clusterUrl = process.env.CLUSTER_URL;
-
-const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&w=majority`;
-
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.MONGODB_URI);
 
 /**
  * getOneFromCollection is a example function for retrieving 

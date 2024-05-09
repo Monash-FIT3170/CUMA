@@ -1,4 +1,4 @@
-const { getOneFromCollection, insertOneToCollection} = require('./db_access.js');
+const { getOneFromCollection, insertOneToCollection} = require('./database/db_access.js');
 
 // Sample retrieval of data
 const dbName = "sample_mflix";
