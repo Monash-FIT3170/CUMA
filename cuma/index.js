@@ -1,14 +1,8 @@
 const { MongoClient } = require("mongodb");
 
-// Replace the uri string with your connection string.
 require('dotenv').config();
 
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-const clusterUrl = process.env.CLUSTER_URL;
-
-const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&writeConcern=majority`;
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.MONGODB_URI);
 
 async function run() {
   try {
@@ -24,4 +18,5 @@ async function run() {
     await client.close();
   }
 }
+
 run().catch(console.dir);
