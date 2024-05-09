@@ -1,38 +1,17 @@
-const { MongoClient } = require("mongodb");
-
-// Replace the uri string with your connection string.
-require('dotenv').config();
-
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-const clusterUrl = process.env.CLUSTER_URL;
-
-const uri = `mongodb+srv://${username}:${password}@${clusterUrl}/?retryWrites=true&writeConcern=majority`;
-const client = new MongoClient(uri);
-
-async function run() {
-  try {
-    await client.connect();
-    const database = client.db('sample_mflix');
-    const movies = database.collection('movies');
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { title: 'Back to the Future' };
-    const movie = await movies.findOne(query);
-    console.log(movie);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-
-run().catch(console.dir);
-
-
+// Global variable to store unit connections
+let unitConnections = {};
+let selectedUnitId = null; // Track the currently selected unit
 
 // Toggle the "Add Unit" form visibility
 function toggleAddUnitForm() {
   const addUnitForm = document.getElementById('add-unit-form');
   addUnitForm.style.display = addUnitForm.style.display === 'none' || addUnitForm.style.display === '' ? 'block' : 'none';
+}
+
+// Toggle the "Add Connection" form visibility
+function toggleAddConnectionForm() {
+  const addConnectionForm = document.getElementById('add-connection-form');
+  addConnectionForm.style.display = addConnectionForm.style.display === 'none' || addConnectionForm.style.display === '' ? 'block' : 'none';
 }
 
 // Reset input fields including select dropdowns
@@ -46,6 +25,18 @@ function clearUnitForm() {
 
   const unitType = document.getElementById('form-unit-type');
   unitType.selectedIndex = 0;
+}
+
+function clearConnectionForm() {
+  document.getElementById('form-connection-name').value = '';
+  document.getElementById('form-connection-institution').value = '';
+  document.getElementById('form-connection-type').value = '';
+  document.getElementById('form-connection-credit').value = '';
+  document.getElementById('form-connection-level').value = '';
+  document.getElementById('form-connection-overview').value = '';
+
+  const connectionType = document.getElementById('form-connection-type');
+  connectionType.selectedIndex = 0;
 }
 
 // Add a new unit to the "Course Units" section
@@ -78,14 +69,17 @@ function addUnit() {
 
   // Populate unit content
   unitDiv.innerHTML = `
-    <h4>${unitCode} - ${unitName}</h4>
-    <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-  `;
+        <h4>${unitCode} - ${unitName}</h4>
+        <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+    `;
 
   // Add click event to show details when clicked
-  unitDiv.addEventListener('click', function() {
+  unitDiv.addEventListener('click', function () {
     selectUnit(unitDiv);
   });
+
+  // Initialize the connections data structure for the unit
+  unitConnections[unitCode] = [];
 
   // Add the new unit to the list
   unitList.appendChild(unitDiv);
@@ -111,7 +105,74 @@ function selectUnit(unitElement) {
   document.getElementById('display-unit-credits').textContent = unitElement.dataset.credit;
   document.getElementById('display-unit-level').textContent = unitElement.dataset.level;
   document.getElementById('display-unit-description').textContent = unitElement.dataset.overview;
+
+  // Set the current selected unit ID
+  selectedUnitId = unitElement.dataset.id;
+
+  // Display mapped units for this selected unit
+  displayMappedUnits(selectedUnitId);
 }
 
+// Display mapped units for the given unit ID
+function displayMappedUnits(unitId) {
+  const unitConnectionList = document.getElementById('unit-connection-list');
+  unitConnectionList.innerHTML = ''; // Clear existing connections
 
+  const connections = unitConnections[unitId] || [];
+  connections.forEach(connection => {
+    const connectionDiv = document.createElement('div');
+    connectionDiv.className = 'connection';
+    connectionDiv.innerHTML = `
+            <h4>${connection.name} - ${connection.institution}</h4>
+            <p>Type: ${connection.type}, Credits: ${connection.credit}, Level: ${connection.level}</p>
+            <p>${connection.overview}</p>
+        `;
+    unitConnectionList.appendChild(connectionDiv);
+  });
+}
 
+// Add a new unit connection
+function addUnitConnection() {
+  if (!selectedUnitId) {
+    alert("Please select a course unit to add the connection to.");
+    return;
+  }
+
+  // Collect input values
+  const connectionName = document.getElementById('form-connection-name').value.trim();
+  const connectionInstitution = document.getElementById('form-connection-institution').value.trim();
+  const connectionType = document.getElementById('form-connection-type').value.trim();
+  const connectionCredit = document.getElementById('form-connection-credit').value.trim();
+  const connectionLevel = document.getElementById('form-connection-level').value.trim();
+  const connectionOverview = document.getElementById('form-connection-overview').value.trim();
+
+  // Ensure fields are filled out
+  if (!connectionName || !connectionInstitution || !connectionType || !connectionCredit || !connectionLevel || !connectionOverview) {
+    alert("Please fill out all fields.");
+    return;
+  }
+
+  // Create a new connection object
+  const newConnection = {
+    name: connectionName,
+    institution: connectionInstitution,
+    type: connectionType,
+    credit: connectionCredit,
+    level: connectionLevel,
+    overview: connectionOverview
+  };
+
+  // Add the new connection to the appropriate unit
+  if (unitConnections[selectedUnitId]) {
+    unitConnections[selectedUnitId].push(newConnection);
+  }
+
+  // Clear the input fields after adding
+  clearConnectionForm();
+
+  // Hide the form again
+  toggleAddConnectionForm();
+
+  // Display the updated mapped units for the selected unit
+  displayMappedUnits(selectedUnitId);
+}

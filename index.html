@@ -88,10 +88,59 @@
         <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
         <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
         <p id="display-unit-description">Select a unit to see the details</p>
+        <button onclick="toggleAddConnectionForm()">Add Unit Connection</button>
     </section>
 
+    <!-- Mapped Units Section -->
+    <section class="mapped-units" id="mapped-units">
+        <h3>Mapped Units</h3>
+        <div id="unit-connection-list">
+            <!-- Mapped units will be appended here -->
+        </div>
+    </section>
 
+    <!-- Add Unit Connection Section -->
+    <section class="add-connection-form" id="add-connection-form">
+        <h3>Add Unit Connection</h3>
 
+        <!-- Form Fields -->
+        <div class="input-container">
+            <input type="text" id="form-connection-name" required>
+            <label for="form-connection-name">Unit Name</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="form-connection-institution" required>
+            <label for="form-connection-institution">Institution</label>
+        </div>
+
+        <div class="input-container">
+            <select id="form-connection-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-connection-type">Unit Type</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-credit" required>
+            <label for="form-connection-credit">Unit Credit Points</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-level" required>
+            <label for="form-connection-level">Unit Level</label>
+        </div>
+
+        <div class="input-container">
+            <textarea id="form-connection-overview" required></textarea>
+            <label for="form-connection-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addUnitConnection()">Link Unit to Selected Course</button>
+        <button onclick="toggleAddConnectionForm()">Cancel</button>
+    </section>
 
 </main>
 </body>
