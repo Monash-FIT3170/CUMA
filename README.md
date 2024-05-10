@@ -29,7 +29,7 @@ install nodejs:
 
 install mongodb: 
     in root dir do: 
-    npm install mongodb@4.1
+    npm install mongodb@6.5
 
 Put in .env file: 
     See: https://docs.google.com/document/d/1I_V_UTH5uzy08R5zupgvutbQwg_zZ2vNFkiAbS3ERVE/edit
@@ -41,6 +41,7 @@ Test:
     Go to the terminal. Run "node index.js". If no error, It should show results about "Back to the future" movie. 
 
     If it shows error, try connecting to monash cisco anyconnect vpn and try again.
+
 
 
 
