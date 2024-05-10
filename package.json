@@ -1,5 +1,6 @@
 {
   "name": "node",
+  "type": "module",
   "version": "1.0.0",
   "description": "## Project 6 - FIT3170",
   "main": "app.js",
