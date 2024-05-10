@@ -1,6 +1,8 @@
-# CUMA
+# CUMA (Course Unit Mapping Automation) 
 
-Project 6 CUMA (Course Unit Mapping Automation)
+## Project 6 - FIT3170
+
+## Team
 
 | Member                      | Email                       |
 | --------------------------- | --------------------------- |
@@ -21,30 +23,31 @@ Project 6 CUMA (Course Unit Mapping Automation)
 | Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-How to connect to mongoDB: 
-
-install nodejs: 
-    downloading and installing Node.js and npm. Follow:
-    https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+## How to connect to MongoDB:
 
 install mongodb: 
     in root dir do: 
     npm install mongodb@6.5
+### 1. Install Node.js and npm
 
-Put in .env file: 
-    See: https://docs.google.com/document/d/1I_V_UTH5uzy08R5zupgvutbQwg_zZ2vNFkiAbS3ERVE/edit
+https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-    1) Create a file named .env in root dir
-    2) Copy the code from the google doc above to the .env file.
+### 2. Setup Local Repository
 
-Test: 
-    Go to the terminal. Run "node index.js". If no error, It should show results about "Back to the future" movie. 
+Open command prompt or terminal in root dir.
 
-    If it shows error, try connecting to monash cisco anyconnect vpn and try again.
+Run "npm install" in root directory (CUMA).
 
+### 3. Allow Database Access
 
+Download the .env file and place into the root dir.
 
+https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
+### 4. Test
 
+Open command prompt or terminal in root dir.
 
-
+Run "node cuma/index.js".
+    
+If no error, it should show results about "Back to the future" movie. 
