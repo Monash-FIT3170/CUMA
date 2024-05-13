@@ -5,27 +5,20 @@ import express from 'express';
 const router = express.Router();
 
 // Example route handler accessing the client
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         // Access the MongoDB client from the request object
         const client = req.client;
-        await client.connect()
+        const database = client.db('CUMA');
+        const units = database.collection('units');
 
-        // const database = client.db('sample_mflix');
-        // const movies = database.collection('movies');
-        // // Query for a movie that has the title 'Back to the Future'
-        // const query = { title: 'Back to the Future' };
-        // const movie = await movies.findOne(query);
-
-        const collections  = client.listCollections().toArray();
-
-        // Extract collection names from the collections array
-        const collectionNames = collections.map(collection => collection.name);
+        console.log(req)
+        // add to units
+        const query = req.query; // Assuming you're sending data in the request body
+        const addition = await units.insertOne(query);
         
-        // Send collection names as the response
-        res.json(collectionNames);
-
-        res.send(movie)
+        // Send the inserted data as the response
+        res.json(addition);
     } catch (error) {
         // Handle errors
         console.error('Error:', error);
@@ -33,20 +26,21 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', (req, res) => {
-    // Handle GET request to retrieve data by ID
-});
 
-router.post('/', (req, res) => {
-    // Handle POST request to add new data
-});
+// router.get('/:id', (req, res) => {
+//     // Handle GET request to retrieve data by ID
+// });
 
-router.put('/:id', (req, res) => {
-    // Handle PUT request to update data by ID
-});
+// router.post('/', (req, res) => {
+//     // Handle POST request to add new data
+// });
 
-router.delete('/:id', (req, res) => {
-    // Handle DELETE request to delete data by ID
-});
+// router.put('/:id', (req, res) => {
+//     // Handle PUT request to update data by ID
+// });
+
+// router.delete('/:id', (req, res) => {
+//     // Handle DELETE request to delete data by ID
+// });
 
 export default router;

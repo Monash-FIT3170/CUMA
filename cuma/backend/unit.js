@@ -1,8 +1,4 @@
-import message from "./messageFile"
-
-
-
-function addUnitInfo(unitInfo){
+async function addUnitInfo(unitInfo){
     /** 
     unitInfo structure: {
         name: str;
@@ -25,34 +21,49 @@ function addUnitInfo(unitInfo){
 
     fieldMissing = []
     
-    if (desc) {
-        if (type) {
-            if (creditPt) {
-                if (level) {
-                    if (overview) {
-                        if (link) {
-                            const newUnit = db.Unit.findOne(unitInfo);
-                        } else {
-                            fieldMissing.push("desc");
-                        }
-                    } else {
-                        fieldMissing.push("type");
-                    }
-                } else {
-                    fieldMissing.push("creditPt");
-                }
-            } else {
-                fieldMissing.push("level");
-            }
-        } else {
-            fieldMissing.push("overview");
-        }
-    } else {
-        fieldMissing.push("link");
-    }
-    
-    
+    // if (desc) {
+    //     if (type) {
+    //         if (creditPt) {
+    //             if (level) {
+    //                 if (overview) {
+    //                     if (link) {
+                       
+                            try {
+                                const response = await fetch("http://127.0.0.1:3000" + "/api/unit", {
+                                  method: "POST", 
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify(unitInfo),
+                                });
+                            
+                                const result = await response.json();
+                                console.log("Success:", result);
+                              } catch (error) {
+                                console.error("Error:", error);
+                            }
+                            
+
+    //                     } else {
+    //                         fieldMissing.push("desc");
+    //                     }
+    //                 } else {
+    //                     fieldMissing.push("type");
+    //                 }
+    //             } else {
+    //                 fieldMissing.push("creditPt");
+    //             }
+    //         } else {
+    //             fieldMissing.push("level");
+    //         }
+    //     } else {
+    //         fieldMissing.push("overview");
+    //     }
+    // } else {
+    //     fieldMissing.push("link");
+    // }
 }
+
 
 
 function modifyUnit(unitCode, unitInfoChange){
