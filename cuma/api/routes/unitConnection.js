@@ -12,29 +12,40 @@ router.post('/', async (req, res) => {
         const database = client.db('CUMA');
         const universities = database.collection('universities');
 
-        const { universityFrom, unitcodeFrom, universityTo, unitcodeTo } = req.body;
-        // Check if universities and unitcode exists
-        const fromUniversity = await universities.findOne({universityName: universityFrom, "units.unitCode": unitcodeFrom});
-        const toUniversity = await universities.findOne({universityName: universityTo, "units.unitCode": unitcodeTo});
-        if (!fromUniversity) {
+        const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
+
+        // Check if universities and unitCode exists
+        const universityA = await universities.findOne({universityName: universityNameA, "units.unitCode": unitCodeA});
+        const universityB = await universities.findOne({universityName: universityNameB, "units.unitCode": unitCodeB});
+
+        if (!universityA) {
             return res.status(404).json({ error: 'universityFrom not found'});
         }
-        if (!toUniversity) {
+        if (!universityB) {
             return res.status(404).json({ error: 'universityTo not found' });
         }
 
-        const newConnection = { universityName: universityTo, unitcode: unitcodeTo};
+        // Add connection to A
+        const newConnectionAtoB = { universityName: universityNameB, unitCode: unitCodeB};
+        const filterAtoB = { universityName: universityNameA, "units.unitCode": unitCodeA };
+        const updateAtoB = {$push: { "units.$.connection": newConnectionAtoB} };
+        const existingConnectionA = await universities.findOne({ universityName: universityNameA, "units.unitCode": unitCodeA, "units.connection.universityName": universityNameB, "units.connection.unitCode": unitCodeB });
 
-        const filter = { universityName: universityFrom, "units.unitCode": unitcodeFrom };
-        const update = {$push: { "units.$.connection": newConnection} };
-        const existingConnection = await universities.findOne({ universityName: universityFrom, "units.unitCode": unitcodeFrom, "units.connection.universityName": universityTo, "units.connection.unitcode": unitcodeTo });
-        if (existingConnection) {
-            return res.status(400).json({ error: 'Connection already exists' });
+        if (!existingConnectionA) {
+            universities.updateOne(filterAtoB, updateAtoB);
         }
-        const addition = await universities.updateOne(filter, update);
         
-        // Send the inserted data as the response
-        res.json(addition);
+        // Add connection to B
+        const newConnectionBtoA = { universityName: universityNameA, unitCode: unitCodeA};
+        const filterBtoA = { universityName: universityNameB, "units.unitCode": unitCodeB };
+        const updateBtoA = {$push: { "units.$.connection": newConnectionBtoA} };
+        const existingConnectionB = await universities.findOne({ universityName: universityNameB, "units.unitCode": unitCodeB, "units.connection.universityName": universityNameA, "units.connection.unitCode": unitCodeA });
+
+        if (!existingConnectionB) {
+            universities.updateOne(filterBtoA, updateBtoA);
+        }
+
+        res.json({status : "Success"});
     } catch (error) {
         // Handle errors
         console.error('Error:', error);

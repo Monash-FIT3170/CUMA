@@ -1,18 +1,11 @@
 async function addUnitConnection(unitConnectionInfo){
     /**
-        unitConnectionInfo structure: {
-            universityFrom: str;
-            unitcodeFrom: str;
-            universityTo: str;
-            unitcodeTo: str;
-        }
-
         E.g. req.body =
         {
-            "universityFrom": "testUniversity",
-            "unitcodeFrom": "TEST1830",
-            "universityTo": "Monash",
-            "unitcodeTo": "MAT1830"
+            "universityNameA": "testUniversity",
+            "unitCodeA": "TEST1830",
+            "universityNameB": "Monash",
+            "unitCodeB": "MAT1830"
         } 
 
         works with post request to http://127.0.0.1:3000/api/unitConnection
