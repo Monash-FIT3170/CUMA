@@ -1,27 +1,29 @@
+import { addUnitInfo } from "../backend/unit";
+
 let unitConnections = {};
 let selectedUnitId = null;
 let isEditMode = false; // Track whether we're in add or edit mode
 
 
-const { MongoClient } = require("mongodb");
-require('dotenv').config();
+// const { MongoClient } = require("mongodb");
+// require('dotenv').config();
 
-const client = new MongoClient(process.env.MONGODB_URI);
+// const client = new MongoClient(process.env.MONGODB_URI);
 
-async function run() {
-  try {
-    await client.connect();
-    const database = client.db('sample_mflix');
-    const movies = database.collection('movies');
-    const query = { title: 'Back to the Future' };
-    const movie = await movies.findOne(query);
-    console.log(movie);
-  } finally {
-    await client.close();
-  }
-}
+// async function run() {
+//   try {
+//     await client.connect();
+//     const database = client.db('sample_mflix');
+//     const movies = database.collection('movies');
+//     const query = { title: 'Back to the Future' };
+//     const movie = await movies.findOne(query);
+//     console.log(movie);
+//   } finally {
+//     await client.close();
+//   }
+// }
 
-run().catch(console.dir);
+// run().catch(console.dir);
 
 // Toggle the "Add Unit" form visibility
 function toggleAddUnitForm() {
@@ -87,6 +89,8 @@ function addUnit() {
     return;
   }
 
+
+
   if (isEditMode) {
     // Modify existing unit
     const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
@@ -111,6 +115,16 @@ function addUnit() {
 
     selectedUnitId = unitCode;
   } else {
+    // unitBody = {
+    //   "unitCode" : unitCode, 
+    //   "unitName" : unitName,
+    //   "unitType" : unitType,
+    //   "unitLevel": unitLevel,
+    //   "creditPoints": unitCredit,
+    //   "unitDescription" : unitOverview
+    // }
+    // addUnitInfo(unitBody)
+
     // Create a new unit element
     const unitDiv = document.createElement('div');
     unitDiv.className = 'unit';

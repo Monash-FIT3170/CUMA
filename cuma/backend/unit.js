@@ -1,4 +1,4 @@
-async function addUnitInfo(unitInfo){
+export async function addUnitInfo(unitInfo){
     /** 
     unitInfo structure: {
         name: str;
