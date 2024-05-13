@@ -27,10 +27,6 @@ async function addUnitInfo(universityName, unitInfo){
     //             if (level) {
     //                 if (overview) {
     //                     if (link) {
-
-   
-
-                       
                             try {
                                 const response = await fetch("http://127.0.0.1:3000" + "/api/unit", {
                                   method: "POST", 
@@ -47,8 +43,6 @@ async function addUnitInfo(universityName, unitInfo){
                               } catch (error) {
                                 console.error("Error:", error);
                             }
-                            
-
     //                     } else {
     //                         fieldMissing.push("desc");
     //                     }
