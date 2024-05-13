@@ -1,4 +1,5 @@
-import { addUnitInfo } from "../backend/unit";
+
+
 
 let unitConnections = {};
 let selectedUnitId = null;
@@ -35,7 +36,7 @@ function toggleAddUnitForm() {
     addUnitForm.style.display = 'block';
   } else {
     addUnitForm.style.display = 'none';
-    isEditMode = false; // Reset to add mode when hiding the form
+    isEditMode = false; // Reset to add mode when hiding the format
     clearUnitForm();
   }
 }
@@ -115,15 +116,15 @@ function addUnit() {
 
     selectedUnitId = unitCode;
   } else {
-    // unitBody = {
-    //   "unitCode" : unitCode, 
-    //   "unitName" : unitName,
-    //   "unitType" : unitType,
-    //   "unitLevel": unitLevel,
-    //   "creditPoints": unitCredit,
-    //   "unitDescription" : unitOverview
-    // }
-    // addUnitInfo(unitBody)
+    unitBody = {
+      "unitCode" : unitCode, 
+      "unitName" : unitName,
+      "unitType" : unitType,
+      "unitLevel": unitLevel,
+      "creditPoints": unitCredit,
+      "unitDescription" : unitOverview
+    }
+    addUnitInfo("Monash", unitBody)
 
     // Create a new unit element
     const unitDiv = document.createElement('div');

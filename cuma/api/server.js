@@ -17,11 +17,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// cors
-var corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
+// body-parser
+app.use(express.json())
 
 // Mount the route handlers
 app.use('/api/unit', unit);

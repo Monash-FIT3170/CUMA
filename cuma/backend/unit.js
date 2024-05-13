@@ -1,4 +1,4 @@
-export async function addUnitInfo(unitInfo){
+async function addUnitInfo(universityName, unitInfo){
     /** 
     unitInfo structure: {
         name: str;
@@ -11,13 +11,13 @@ export async function addUnitInfo(unitInfo){
 
     }
     */
-    var name=  unitInfo.name;
-    var desc=  unitInfo.desc;
-    var type=  unitInfo.type;
-    var creditPt= unitInfo.creditPt;
-    var level= unitInfo.level;
-    var overview= unitInfo.overview;
-    var link= unitInfo.link;
+    // var name=  unitInfo.name;
+    // var desc=  unitInfo.desc;
+    // var type=  unitInfo.type;
+    // var creditPt= unitInfo.creditPt;
+    // var level= unitInfo.level;
+    // var overview= unitInfo.overview;
+    // var link= unitInfo.link;
 
     fieldMissing = []
     
@@ -27,6 +27,9 @@ export async function addUnitInfo(unitInfo){
     //             if (level) {
     //                 if (overview) {
     //                     if (link) {
+
+   
+
                        
                             try {
                                 const response = await fetch("http://127.0.0.1:3000" + "/api/unit", {
@@ -34,8 +37,10 @@ export async function addUnitInfo(unitInfo){
                                   headers: {
                                     "Content-Type": "application/json",
                                   },
-                                  body: JSON.stringify(unitInfo),
+                                  body: JSON.stringify({"universityName": universityName, unitInfo}),
                                 });
+
+                                console.log({"universityName": universityName, unitInfo})
                             
                                 const result = await response.json();
                                 console.log("Success:", result);
