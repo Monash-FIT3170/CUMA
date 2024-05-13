@@ -7,15 +7,13 @@ async function getAllUnitsFromUniversity(universityName){
      */
 
     const unitInfo = {}
+    const params = {"universityName": universityName}
     
     try {
-        const response = await fetch("http://127.0.0.1:3000" + pathname + "/getAllFromUni", {
-            method: "GET", 
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({"universityName": universityName, unitInfo}),
-        });
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
+        url.search = new URLSearchParams(params).toString();
+
+        const response = await fetch(url)
 
         console.log({"universityName": universityName, unitInfo})
     

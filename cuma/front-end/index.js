@@ -6,6 +6,7 @@ let selectedUnitId = null;
 let isEditMode = false; // Track whether we're in add or edit mode
 
 
+
 // const { MongoClient } = require("mongodb");
 // require('dotenv').config();
 
@@ -96,6 +97,7 @@ function addUnit() {
     // Modify existing unit
     const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
     if (existingUnit) {
+      
       existingUnit.dataset.name = unitName;
       existingUnit.dataset.type = unitType;
       existingUnit.dataset.credit = unitCredit;
@@ -126,20 +128,23 @@ function addUnit() {
       "creditPoints": unitCredit,
       "unitDescription" : unitOverview
     }
+    
     addUnitInfo("Monash", unitBody)
 
     // Create a new unit element
-    const unitDiv = document.createElement('div');
-    unitDiv.className = 'unit';
-    unitDiv.dataset.id = unitCode;
-    unitDiv.dataset.name = unitName;
-    unitDiv.dataset.type = unitType;
-    unitDiv.dataset.credit = unitCredit;
-    unitDiv.dataset.level = unitLevel;
-    unitDiv.dataset.overview = unitOverview;
+    // const unitDiv = document.createElement('div');
+    // unitDiv.className = 'unit';
+    // unitDiv.dataset.id = unitCode;
+    // unitDiv.dataset.name = unitName;
+    // unitDiv.dataset.type = unitType;
+    // unitDiv.dataset.credit = unitCredit;
+    // unitDiv.dataset.level = unitLevel;
+    // unitDiv.dataset.overview = unitOverview;
 
     // query all units from mongoDB
-    
+
+
+ 
 
 
     // // Populate unit content
@@ -168,6 +173,13 @@ function addUnit() {
 
   // Refresh the displayed mapped units
   displayMappedUnits(selectedUnitId);
+}
+
+async function repopulateResults() {
+
+
+  
+
 }
 
 // Set form to edit mode with the selected unit's information
@@ -325,4 +337,7 @@ function addUnitConnection() {
   // Display the updated mapped units for the selected unit
   displayMappedUnits(selectedUnitId);
 }
+
+// call every render
+repopulateResults()
 

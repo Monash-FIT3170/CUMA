@@ -1,5 +1,9 @@
-// this file handles the api request for interacting with mongoDB
-// database name: UNIT
+/**
+ * this file handles the api request for interacting with mongoDB
+ * database name: units
+ * API pathname: /api/unit
+ * 
+ */
 
 import express from 'express';
 const router = express.Router();
@@ -7,15 +11,42 @@ const router = express.Router();
 const collectionName = "testUnits";
 
 router.get('/getAllFromUni', async (req, res) => {
-/**
- * This endpoint retrieves all the units available in a university
- * param payloads = {
- *  
- * }
- * 
- * 
- */
+    /**
+     * This endpoint retrieves all the units available in a university
+     * 
+     * url param payloads = {
+     *   universityName: str
+     * }
+     * 
+     * returns json response = 
+     * code: 200 - if no error
+     * code: 500 - if server error or other errors occured
+     *  
+     */
+    
+    try {
+        // get the client
+        const client = req.client;
 
+        // get the request url params 
+        const params = req.query;
+
+        console.log(params);
+
+        //get the database and the collection
+        const database  = client.db("CUMA");
+        const units = database.collection(collectionName);
+
+        //get all the units
+        const allUnits = await units.find(params);
+        const result = await allUnits.toArray()
+        return res.json(result);
+
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json("Internal Server Error");
+    }
 
 
 })
@@ -24,7 +55,7 @@ router.post('/', async (req, res) => {
     /**
      * This endpoint inserts a unit into the database.
      * 
-     *  request payload = {
+     *  requestbody payload = {
             "universityName": str, 
             "unitInfo": {
                 "unitCode": "str",
@@ -36,9 +67,10 @@ router.post('/', async (req, res) => {
             }
         }
      *
-     * return: 
+     * returns json response: 
      * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
      * code: 200 - if successful
+     * code: 500 - if server error or other errors occured
      */
 
 
@@ -66,7 +98,10 @@ router.post('/', async (req, res) => {
         }
 
         // add the unit
-        const result = await units.insertOne({"universityName": universityNameReq, unitInfoReq})
+        const result = await units.insertOne(
+            {"universityName": universityNameReq, 
+            ...unitInfoReq}
+        )
         return res.json(result)
 
     
