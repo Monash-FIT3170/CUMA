@@ -27,6 +27,10 @@ router.post('/', async (req, res) => {
 
         const filter = { universityName: universityFrom, "units.unitCode": unitcodeFrom };
         const update = {$push: { "units.$.connection": newConnection} };
+        const existingConnection = await universities.findOne({ universityName: universityFrom, "units.unitCode": unitcodeFrom, "units.connection.universityName": universityTo, "units.connection.unitcode": unitcodeTo });
+        if (existingConnection) {
+            return res.status(400).json({ error: 'Connection already exists' });
+        }
         const addition = await universities.updateOne(filter, update);
         
         // Send the inserted data as the response
