@@ -2,8 +2,8 @@ let unitConnections = {};
 let selectedUnitId = null;
 let isEditMode = false; // Track whether we're in add or edit mode
 
-
-const { MongoClient } = require("mongodb");
+// commented out while working without db
+/* const { MongoClient } = require("mongodb");
 require('dotenv').config();
 
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -19,9 +19,47 @@ async function run() {
   } finally {
     await client.close();
   }
-}
+} 
 
-run().catch(console.dir);
+run().catch(console.dir); */
+
+document.addEventListener('DOMContentLoaded', function () {
+  const jsonUrl = 'https://raw.githubusercontent.com/Monash-FIT3170/CUMA/feature/filtering/cuma/dummyunits.json';
+
+  fetch(jsonUrl)
+    .then(response => response.json())
+    .then(data => {
+      const units = data;
+      const unitList = document.getElementById('unit-list');
+
+      units.forEach(unit => {
+        const unitDiv = document.createElement('div');
+        unitDiv.className = 'unit';
+        unitDiv.dataset.id = unit.id;
+        unitDiv.dataset.name = unit.name;
+        unitDiv.dataset.type = unit.type;
+        unitDiv.dataset.credit = unit.credit;
+        unitDiv.dataset.level = unit.level;
+        unitDiv.dataset.overview = unit.overview;
+
+        unitDiv.innerHTML = `
+                  <h4>${unit.id} - ${unit.name}</h4>
+                  <p>Type: ${unit.type}, Credits: ${unit.credit}, Level: ${unit.level}</p>
+              `;
+
+        // Add click event to show details when clicked
+        unitDiv.addEventListener('click', function () {
+          selectUnit(unitDiv);
+        });
+
+        // Initialize the connections data structure for the unit
+        unitConnections[unit.id] = [];
+
+        unitList.appendChild(unitDiv);
+      });
+    })
+    .catch(error => console.error('Error fetching data:', error));
+});
 
 // Toggle the "Add Unit" form visibility
 function toggleAddUnitForm() {

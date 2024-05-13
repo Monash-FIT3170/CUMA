@@ -1,33 +1,24 @@
-// Fetch dummy data from JSON file
-const jsonUrl = 'https://raw.githubusercontent.com/Monash-FIT3170/CUMA/feature/auto-complete-with-main/cuma/dummyunits.json';
-fetch(jsonUrl)
-    .then(response => response.json())
-    .then(data => {
-        const units = data;
-
-        // Autocomplete function
-        function autocomplete(prefix) {
-            return units.filter(unit =>
-                unit.name.toLowerCase().startsWith(prefix.toLowerCase())
-            );
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to filter units by prefix
+    function filterUnitsByPrefix(prefix) {
+      const units = document.getElementsByClassName('unit'); // Get all units in the unit list
+  
+      for (const unit of units) {
+        const unitId = unit.dataset.id.toLowerCase(); // Get the unit ID and convert to lowercase
+        if (unitId.startsWith(prefix.toLowerCase())) {
+          unit.style.display = 'block'; // Show the unit if its ID starts with the prefix
+        } else {
+          unit.style.display = 'none'; // Hide other units
         }
-
-        document.getElementById('search-unit').addEventListener('input', (event) => {
-            const prefix = event.target.value;
-            const autocompleteResults = document.getElementById('unit-list');
-            autocompleteResults.innerHTML = '';
-
-            if (prefix.length > 0) {
-                const filteredUnits = autocomplete(prefix);
-                filteredUnits.forEach(unit => {
-                    const unitDiv = document.createElement('div');
-                    unitDiv.textContent = `
-                                        <h4>${unit.code} - ${unit.name}</h4>
-                                        <p>Type: ${unit.type}, Credits: ${unit.credit}, Level: ${unit.level}</p>
-                                        `;
-                    autocompleteResults.appendChild(unitDiv);
-                });
-            }
-        });
-    })
-    .catch(error => console.error('Error fetching data:', error));
+      }
+    }
+  
+    const searchInput = document.getElementById('unit-search'); // Get the search input element
+  
+    // Add event listener for input changes to perform filtering
+    searchInput.addEventListener('input', function () {
+      const prefix = searchInput.value.trim(); // Get the input value and trim whitespace
+      filterUnitsByPrefix(prefix); // Filter units based on the prefix
+    });
+  });
+  
