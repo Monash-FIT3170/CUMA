@@ -181,7 +181,7 @@ async function run(course){
     browser.close();
 
     //write to file
-    fs.writeFile('webscraping/unitData.json', JSON.stringify(data), (err) => {
+    fs.writeFile('cuma/webscraping/unitData.json', JSON.stringify(data), (err) => {
         if (err) {
             throw err;
         }

@@ -98,8 +98,13 @@ async function addDummyUnits() {
     }
 }
 
+
+
+
+
 /*
 Add unit connections between units.
+Used when adding a connection to unitOne for unitTwo.
 */
 async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
     try {
@@ -122,6 +127,42 @@ async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unit
             await collection.updateOne(
                 { universityName: universityTwo, unitCode: unitCodeTwo },
                 { $addToSet: { connections: unitOne._id } }
+            );
+        } else {
+            console.log(`Unit: ${unitCodeTwo}, University: ${universityTwo}, Not Found!`);
+        }
+    } catch (error) {
+        console.error(`An error occured while inserting data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+/*
+Remove unit connections between units.
+Can be done from either unitOne or unitTwo.
+*/
+async function removeUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units'); 
+
+        const unitTwo = await collection.findOne({
+            universityName: universityTwo,
+            unitCode: unitCodeTwo
+        });
+
+        if (unitTwo) {
+            const unitOne = await collection.findOneAndUpdate(
+                { universityName: universityOne, unitCode: unitCodeOne },
+                { $pull: { connections: unitTwo._id } },
+                { returnDocument: 'after'}
+            );
+
+            await collection.updateOne(
+                { universityName: universityTwo, unitCode: unitCodeTwo },
+                { $pull: { connections: unitOne._id } }
             );
         } else {
             console.log(`Unit: ${unitCodeTwo}, University: ${universityTwo}, Not Found!`);
@@ -173,6 +214,7 @@ async function listConnections(university, unitCode) {
             await client.connect();
             const db = client.db('CUMA');
             const collection = db.collection('units');
+            let unitConnections = [];
 
             for (let i = 0; i < connections.length; i++) {
                 const connectedUnit = await collection.findOne({
@@ -180,10 +222,11 @@ async function listConnections(university, unitCode) {
                 });
 
                 if (connectedUnit) {
-                    console.log(connectedUnit);
-                    // return connectedUnit;
+                    unitConnections.push(connectedUnit);
                 }
             }
+
+            return unitConnections;
         } catch (error) {
             console.error(`An error occured while inserting data: ${error}`);
         } finally {
@@ -191,6 +234,10 @@ async function listConnections(university, unitCode) {
         }
     }
 }
+
+
+
+
 
 /*
 Add dummy connections.
@@ -207,8 +254,11 @@ async function addDummyConnections() {
 async function run() {
     // await addDummyConnections();
     await retrieveOneUnit("Monash", "FIT3170").then(data => console.log(data));
-    await retrieveOneUnit("Test University A", "ABC123");
-    await listConnections("Monash", "FIT3170");
+    await addUnitConnection("Monash", "FIT3170", "Test University A", "DEF456");
+    await retrieveOneUnit("Monash", "FIT3170").then(data => console.log(data));
+    await removeUnitConnection("Monash", "FIT3170", "Test University A", "DEF456");
+    await retrieveOneUnit("Monash", "FIT3170").then(data => console.log(data));
+    await listConnections("Monash", "FIT3170").then(data => console.log(data));
 }
 
 run();
