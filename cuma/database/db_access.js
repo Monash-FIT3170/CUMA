@@ -47,4 +47,40 @@ async function insertOneToCollection(database, collection, document) {
   }
 }
 
-module.exports = { getOneFromCollection, insertOneToCollection };
+/**
+ * Function to add user to database
+ * 
+ * @param {string} username - unique username for user
+ * @param {string} password - TODO: use hashed password 
+ * @param {string} role - unique username for user
+ * @param {Boolean} admin - Boolean representing whether this user is admin
+ * @param {Boolean} emailVerified - Boolean representing whether this users email is verified
+ * @returns {Promise} Promise that resolves when the user is created
+ */
+async function createUser(username, password, role, admin, emailVerified) {
+  const document = {
+    username: username,
+    password: password,
+    role: role,
+    admin: admin,
+    emailVerified: emailVerified
+  };
+  const dbName = "CUMA"
+  const collectionName = "users";
+
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const cl = db.collection(collectionName);
+    const existingDocument = await cl.findOne(document);
+    if (!existingDocument) {
+      await cl.insertOne(document);
+    }
+  } finally {
+    await client.close();
+  }
+}
+
+
+module.exports = { getOneFromCollection, insertOneToCollection, createUser };
+
