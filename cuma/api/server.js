@@ -1,6 +1,7 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import unit from './routes/unit.js';
+import unitConnection from './routes/unitConnection.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
@@ -8,6 +9,8 @@ dotenv.config();
 
 const app = express();
 const port = 3000;
+
+app.use(express.json())
 
 app.use(cors())
 
@@ -25,6 +28,7 @@ var corsOptions = {
 
 // Mount the route handlers
 app.use('/api/unit', unit);
+app.use('/api/unitConnection', unitConnection);
 
 
 async function run() {

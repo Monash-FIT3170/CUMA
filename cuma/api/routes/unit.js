@@ -12,9 +12,8 @@ router.post('/', async (req, res) => {
         const database = client.db('CUMA');
         const units = database.collection('units');
 
-        console.log(req)
         // add to units
-        const query = req.query; // Assuming you're sending data in the request body
+        const query = req.body; // Assuming you're sending data in the request body
         const addition = await units.insertOne(query);
         
         // Send the inserted data as the response
