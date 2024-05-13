@@ -116,6 +116,8 @@ function addUnit() {
 
     selectedUnitId = unitCode;
   } else {
+    
+    // add unit to mongoDB
     unitBody = {
       "unitCode" : unitCode, 
       "unitName" : unitName,
@@ -136,22 +138,26 @@ function addUnit() {
     unitDiv.dataset.level = unitLevel;
     unitDiv.dataset.overview = unitOverview;
 
-    // Populate unit content
-    unitDiv.innerHTML = `
-      <h4>${unitCode} - ${unitName}</h4>
-      <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-    `;
+    // query all units from mongoDB
+    
 
-    // Add click event to show details when clicked
-    unitDiv.addEventListener('click', function () {
-      selectUnit(unitDiv);
-    });
 
-    // Initialize the connections data structure for the unit
-    unitConnections[unitCode] = [];
+    // // Populate unit content
+    // unitDiv.innerHTML = `
+    //   <h4>${unitCode} - ${unitName}</h4>
+    //   <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+    // `;
 
-    // Add the new unit to the list
-    unitList.appendChild(unitDiv);
+    // // Add click event to show details when clicked
+    // unitDiv.addEventListener('click', function () {
+    //   selectUnit(unitDiv);
+    // });
+
+    // // Initialize the connections data structure for the unit
+    // unitConnections[unitCode] = [];
+
+    // // Add the new unit to the list
+    // unitList.appendChild(unitDiv);
   }
 
   // Clear the input fields after adding or modifying

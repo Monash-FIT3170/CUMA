@@ -1,3 +1,32 @@
+const pathname = "/api/unit"
+
+
+async function getAllUnitsFromUniversity(universityName){
+    /**
+     * universityName: str
+     */
+
+    const unitInfo = {}
+    
+    try {
+        const response = await fetch("http://127.0.0.1:3000" + pathname + "/getAllFromUni", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"universityName": universityName, unitInfo}),
+        });
+
+        console.log({"universityName": universityName, unitInfo})
+    
+        const result = await response.json();
+        return result;
+    } 
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 async function addUnitInfo(universityName, unitInfo){
     /** 
     unitInfo structure: {
@@ -20,53 +49,25 @@ async function addUnitInfo(universityName, unitInfo){
     // var link= unitInfo.link;
 
     fieldMissing = []
+             
+    try {
+        const response = await fetch("http://127.0.0.1:3000" + pathname, {
+            method: "POST", 
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({"universityName": universityName, unitInfo}),
+        });
+
+        console.log({"universityName": universityName, unitInfo})
     
-    // if (desc) {
-    //     if (type) {
-    //         if (creditPt) {
-    //             if (level) {
-    //                 if (overview) {
-    //                     if (link) {
-
-   
-
-                       
-                            try {
-                                const response = await fetch("http://127.0.0.1:3000" + "/api/unit", {
-                                  method: "POST", 
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                  },
-                                  body: JSON.stringify({"universityName": universityName, unitInfo}),
-                                });
-
-                                console.log({"universityName": universityName, unitInfo})
-                            
-                                const result = await response.json();
-                                console.log("Success:", result);
-                              } catch (error) {
-                                console.error("Error:", error);
-                            }
+        const result = await response.json();
+        console.log("Success:", result);
+        } catch (error) {
+        console.error("Error:", error);
+    }
                             
 
-    //                     } else {
-    //                         fieldMissing.push("desc");
-    //                     }
-    //                 } else {
-    //                     fieldMissing.push("type");
-    //                 }
-    //             } else {
-    //                 fieldMissing.push("creditPt");
-    //             }
-    //         } else {
-    //             fieldMissing.push("level");
-    //         }
-    //     } else {
-    //         fieldMissing.push("overview");
-    //     }
-    // } else {
-    //     fieldMissing.push("link");
-    // }
 }
 
 

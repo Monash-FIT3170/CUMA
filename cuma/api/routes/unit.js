@@ -4,6 +4,7 @@
 import express from 'express';
 const router = express.Router();
 
+const collectionName = "testUnits";
 
 router.post('/', async (req, res) => {
     /*request payload = {
@@ -36,53 +37,23 @@ router.post('/', async (req, res) => {
         const universityNameReq = query.universityName;
         const unitInfoReq = query.unitInfo;
   
+        // get the collection
+        const units = database.collection(collectionName);
 
-        // // get the collection
-        // const universities = database.collection('testUniversities');
 
+        // check if the unit in the university already exists
+        const unit = await units.findOne({"unitCode": unitInfoReq.unitCode, "universityName": universityNameReq });
 
-        // // check if the unit already exists
-        // const university = await universities.findOne({ universityName: universityNameReq });
+        // if unit already exists, return error
+        if (unit)
+        {
+            return res.status(400).json("unit already exists")
 
-        // if (!university) {
-        //     // error: no university found
-        //     return res.status(400).json({ error: "University does not exist" });
-        // } else {
-        //     // Check if unit with the same unitcode exists in the university.units array
-        //     const unitExists = university.units.some(unit => unit.unitCode == unitInfoReq.unitCode);
+        }
 
-            
-        //     if (unitExists) {
-        //         // error: unit with the unitcode already exists
-        //         return res.status(400).json({ error: "Unit is a duplicate" });
-        //     }
-        // }
-
-        // // add the unit 
-        // universities.updateOne(
-        //     { name: universityNameReq },
-        //     { $push: { units: unitInfoReq } },
-            
-        //     (err, result) => {
-        //         if (err) {
-        //             console.error('Error updating university document:', err);
-        //         } else {
-
-        //             // Send the inserted data as the response
-                   
-    
-        //             if (result.modifiedCount === 1) {
-        //                 console.log(`Unit ${unitToAppend.unitcode} appended to ${universityNameReq} successfully.`);
-        //             } else {
-        //                 console.log(`University ${universityNameReq} not found or no changes made.`);
-        //             }
-        //         }
-
-                
-        //     }
-        // );
-
-        // res.json({message: "result"});
+        // add the unit
+        const result = await units.insertOne({"universityName": universityNameReq, unitInfoReq})
+        return res.json(result)
 
     
     } catch (error) {
