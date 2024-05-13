@@ -82,6 +82,12 @@ main {
     color: #666;
 }
 
+.unit-list-wrapper {
+    max-height: 500px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+
 button, .add-unit {
     background-color: #4da5f5;
     color: white;
