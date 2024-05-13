@@ -1,15 +1,26 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <!-- Adding default font of Roboto-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles/general.css">
-        <title>CUMA</title>
-    </head>
-
-    <body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bachelor of Software Engineering - Monash University</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <script src="index.js" defer></script>
+</head>
+<body>
+<header>
+    <h1>CUMA</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Mapping</a></li>
+            <li><a href="#">Add Unit</a></li>
+            <li><a href="#">Unit Info</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
         <div class="search-container">
             <label for="search-unit">Search Units</label>
             <input type="text" id="search-unit" placeholder="Search for units...">
@@ -24,5 +35,130 @@
         
         </div>
         <script src="autocomplete.js"></script>
-    </body>
+
+    <!-- Course Units Section -->
+    <section class="course-info">
+        <h2>Bachelor of Software Engineering - Monash University</h2>
+        <input type="text" placeholder="Search Unit">
+        <div class="course-units">
+            <h3>Course Units</h3>
+            <div class="unit-list" id="unit-list">
+                <!-- Dynamic units will be appended here -->
+            </div>
+            <button class="add-unit" onclick="toggleAddUnitForm()">Add Unit</button>
+        </div>
+    </section>
+
+    <!-- Add Unit Section -->
+    <section class="add-unit-form" id="add-unit-form" style="display: none;">
+        <h3>Add Unit to Bachelor of Software Engineering</h3>
+
+        <!-- Form: Unit Name -->
+        <div class="input-container">
+            <input type="text" id="form-unit-name" required>
+            <label for="form-unit-name">Unit Name</label>
+        </div>
+
+        <!-- Form: Unit Code -->
+        <div class="input-container">
+            <input type="text" id="form-unit-code" required>
+            <label for="form-unit-code">Unit Code</label>
+        </div>
+
+        <!-- Form: Unit Type Dropdown -->
+        <div class="input-container">
+            <select id="form-unit-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-unit-type">Unit Type</label>
+        </div>
+
+        <!-- Form: Other Fields -->
+        <div class="input-container">
+            <input type="number" id="form-unit-credit" required>
+            <label for="form-unit-credit">Unit Credit Points</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="form-unit-level" required>
+            <label for="form-unit-level">Unit Level</label>
+        </div>
+        <div class="input-container">
+            <textarea id="form-unit-overview" required></textarea>
+            <label for="form-unit-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addUnit()">Add Unit to Course</button>
+        <button onclick="toggleAddUnitForm()">Cancel</button>
+    </section>
+
+    <!-- Unit Details Display Section -->
+    <section class="unit-details" id="unit-details">
+        <h3>Selected Unit Information</h3>
+        <h3 id="display-unit-title"></h3>
+        <p><strong>Type:</strong> <span id="display-unit-type">N/A</span></p>
+        <p><strong>Credits:</strong> <span id="display-unit-credits">N/A</span></p>
+        <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
+        <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
+        <p id="display-unit-description">Select a unit to see the details</p>
+        <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
+        <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
+        <button onclick="toggleAddConnectionForm()">Add Unit Connection</button>
+    </section>
+
+
+    <!-- Mapped Units Section -->
+    <section class="mapped-units">
+        <h4>Mapped Units</h4>
+        <div id="unit-connection-list">
+            <!-- Mapped units will be appended here -->
+        </div>
+    </section>
+
+    <!-- Add Unit Connection Section -->
+    <section class="add-connection-form" id="add-connection-form" style="display: none;">
+        <h3>Add Unit Connection</h3>
+
+        <!-- Form Fields -->
+        <div class="input-container">
+            <input type="text" id="form-connection-name" required>
+            <label for="form-connection-name">Unit Name</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="form-connection-institution" required>
+            <label for="form-connection-institution">Institution</label>
+        </div>
+
+        <div class="input-container">
+            <select id="form-connection-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-connection-type">Unit Type</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-credit" required>
+            <label for="form-connection-credit">Unit Credit Points</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-level" required>
+            <label for="form-connection-level">Unit Level</label>
+        </div>
+
+        <div class="input-container">
+            <textarea id="form-connection-overview" required></textarea>
+            <label for="form-connection-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addUnitConnection()">Link Unit to Selected Course</button>
+        <button onclick="toggleAddConnectionForm()">Cancel</button>
+    </section>
+
+</main>
+</body>
 </html>
