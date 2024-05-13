@@ -1,7 +1,9 @@
 "use strict";
 
 const fs = require('fs').promises;  
-const { MongoClient } = require('mongodb');
+const { connect } = require('http2');
+const { MongoClient, ObjectId } = require('mongodb');
+const { connections } = require('mongoose');
 require('dotenv').config({ override: true });
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -84,8 +86,45 @@ async function addDummyUnits() {
             }
         });
 
-        for (let i = 0; i < dummyData.dummyUnits.length; i++) {
-            await collection.insertOne(dummyData.dummyUnits[i]);
+        // for (let i = 0; i < dummyData.dummyUnits.length; i++) {
+        //     await collection.insertOne(dummyData.dummyUnits[i]);
+        // }
+
+        await collection.insertMany(dummyData.dummyUnits);
+    } catch (error) {
+        console.error(`An error occured while inserting data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+/*
+Add unit connections between units.
+*/
+async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units');
+
+        const unitTwo = await collection.findOne({
+            universityName: universityTwo,
+            unitCode: unitCodeTwo
+        });
+
+        if (unitTwo) {
+            const unitOne = await collection.findOneAndUpdate(
+                { universityName: universityOne, unitCode: unitCodeOne },
+                { $addToSet: { connections: unitTwo._id } },
+                { returnDocument: 'after'}
+            );
+
+            await collection.updateOne(
+                { universityName: universityTwo, unitCode: unitCodeTwo },
+                { $addToSet: { connections: unitOne._id } }
+            );
+        } else {
+            console.log(`Unit: ${unitCodeTwo}, University: ${universityTwo}, Not Found!`);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
@@ -94,6 +133,48 @@ async function addDummyUnits() {
     }
 }
 
+/*
+Retrieve a unit.
+*/
+async function retrieveOneUnit(university, unitCode) {
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units');
 
+        const unit = await collection.findOne({
+            universityName: university,
+            unitCode: unitCode
+        });
 
-addDummyUnits();
+        if (unit) {
+            console.log(unit)
+        } else {
+            console.log(`Unit: ${unitCode}, University: ${university}, Not Found!`);
+        }
+    } catch (error) {
+        console.error(`An error occured while inserting data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+/*
+Add dummy connections.
+*/
+async function addDummyConnections() {
+    // await addUnitConnection("Monash", "FIT3170", "_Test University A", "ABC123") // should not work
+    // await addUnitConnection("Monash", "FIT3170", "Test University A", "_ABC123") // should not work
+    // await addUnitConnection("Monash", "FIT3170", "_Test University A", "_ABC123") // should not work
+    await addUnitConnection("Monash", "FIT3170", "Test University A", "ABC123") // should work
+    await addUnitConnection("Monash", "FIT3170", "Test University C", "DEF456") // should work
+    await addUnitConnection("Test University B", "ABC123", "Monash", "FIT3170") // should work
+}
+
+async function run() {
+    await addDummyConnections();
+    await retrieveOneUnit("Monash", "FIT3170");
+    await retrieveOneUnit("Test University A", "ABC123");
+}
+
+run();
