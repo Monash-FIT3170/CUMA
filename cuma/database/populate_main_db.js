@@ -148,14 +148,47 @@ async function retrieveOneUnit(university, unitCode) {
         });
 
         if (unit) {
-            console.log(unit)
+            // console.log(unit)
+            return unit;
         } else {
-            console.log(`Unit: ${unitCode}, University: ${university}, Not Found!`);
+            console.log(`University: ${university}, Unit: ${unitCode}, Not Found!`);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
     } finally {
         await client.close();
+    }
+}
+
+/*
+List all connections of a unit.
+*/
+async function listConnections(university, unitCode) {
+    const unit = await retrieveOneUnit(university, unitCode);
+
+    if (unit) {
+        const connections = unit.connections;
+
+        try {
+            await client.connect();
+            const db = client.db('CUMA');
+            const collection = db.collection('units');
+
+            for (let i = 0; i < connections.length; i++) {
+                const connectedUnit = await collection.findOne({
+                    _id: connections[i]
+                });
+
+                if (connectedUnit) {
+                    console.log(connectedUnit);
+                    // return connectedUnit;
+                }
+            }
+        } catch (error) {
+            console.error(`An error occured while inserting data: ${error}`);
+        } finally {
+            await client.close();
+        }
     }
 }
 
@@ -172,9 +205,10 @@ async function addDummyConnections() {
 }
 
 async function run() {
-    await addDummyConnections();
-    await retrieveOneUnit("Monash", "FIT3170");
+    // await addDummyConnections();
+    await retrieveOneUnit("Monash", "FIT3170").then(data => console.log(data));
     await retrieveOneUnit("Test University A", "ABC123");
+    await listConnections("Monash", "FIT3170");
 }
 
 run();
