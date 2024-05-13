@@ -1,5 +1,5 @@
 // Fetch dummy data from JSON file
-const jsonUrl = 'https://raw.githubusercontent.com/Monash-FIT3170/CUMA/main/cuma/dummyunits.json';
+const jsonUrl = 'https://raw.githubusercontent.com/Monash-FIT3170/CUMA/feature/auto-complete-with-main/cuma/dummyunits.json';
 fetch(jsonUrl)
     .then(response => response.json())
     .then(data => {
