@@ -28,7 +28,8 @@ var corsOptions = {
 
 // Mount the route handlers
 app.use('/api/unit', unit);
-app.use('/api/unitConnection', unitConnection);
+app.use('/api/unitConnection/', unitConnection);
+
 
 
 async function run() {
