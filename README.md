@@ -51,3 +51,11 @@ Open command prompt or terminal in root dir.
 Run "node cuma/index.js".
     
 If no error, it should show results about "Back to the future" movie. 
+
+# How to run the server
+In root do: npm run server
+
+# Getting started and setting up
+## 1. Install dependencies
+in root do: npm install
+
