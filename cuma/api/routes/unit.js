@@ -6,24 +6,41 @@ const router = express.Router();
 
 const collectionName = "testUnits";
 
-router.post('/', async (req, res) => {
-    /*request payload = {
-        "universityName": str, 
-        "unitInfo": {
-            "unitCode": "str",
-            "unitName": "str",
-            "unitDescription": "str",
-            "unitType": "int",
-            "unitLevel": "int",
-            "creditPoints": "int",
-        }
-    }
-    */
+router.get('/getAllFromUni', async (req, res) => {
+/**
+ * This endpoint retrieves all the units available in a university
+ * param payloads = {
+ *  
+ * }
+ * 
+ * 
+ */
 
+
+
+})
+
+router.post('/', async (req, res) => {
     /**
+     * This endpoint inserts a unit into the database.
+     * 
+     *  request payload = {
+            "universityName": str, 
+            "unitInfo": {
+                "unitCode": "str",
+                "unitName": "str",
+                "unitDescription": "str",
+                "unitType": "int",
+                "unitLevel": "int",
+                "creditPoints": "int",
+            }
+        }
+     *
      * return: 
-     * code: 400 - if the university does not exist or if the unit already exists in the university (duplicates)
+     * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
+     * code: 200 - if successful
      */
+
 
     try {
         // Access the MongoDB client from the request object
@@ -31,9 +48,7 @@ router.post('/', async (req, res) => {
         const database = client.db('CUMA');
         
         // get request payload
-
         const query = req.body;
-   
         const universityNameReq = query.universityName;
         const unitInfoReq = query.unitInfo;
   
@@ -48,7 +63,6 @@ router.post('/', async (req, res) => {
         if (unit)
         {
             return res.status(400).json("unit already exists")
-
         }
 
         // add the unit
