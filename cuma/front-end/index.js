@@ -176,7 +176,54 @@ function addUnit() {
 }
 
 async function repopulateResults() {
+  const unitList = document.getElementById('unit-list');
+  
+  getAllUnitsFromUniversity("Monash")
+  .then(UnitArray => 
+    {
 
+  
+      for (const key in UnitArray)
+      {
+        // Create a new unit element
+        const unitDiv = document.createElement('div');
+        unitDiv.className = 'unit';
+
+        // initilise unitDiv
+        const unit = UnitArray[key];
+        unitDiv.dataset.id = unit.unitCode;
+        unitDiv.dataset.name = unit.unitName;
+        unitDiv.dataset.type = unit.unitType;
+        unitDiv.dataset.credit = unit.creditPoints;
+        unitDiv.dataset.level = unit.unitLevel;
+        unitDiv.dataset.overview = unit.unitDescription;
+
+        // Populate unit content
+        unitDiv.innerHTML = `
+        <h4>${unit.unitCode} - ${unit.unitName}</h4>
+        <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+        `;
+
+        // Add click event to show details when clicked
+          unitDiv.addEventListener('click', function () {
+            selectUnit(unitDiv);
+        });
+
+        // Initialize the connections data structure for the unit
+        unitConnections[unit.unitCode] = [];
+
+        // Add the new unit to the list
+        unitList.appendChild(unitDiv);
+    }
+
+
+    })
+  .catch(error => {
+    console.error(error); // Handle errors here
+  });;
+  
+
+  
 
   
 
