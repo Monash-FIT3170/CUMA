@@ -1,0 +1,11 @@
+.dashboard-flex{
+    display: flex;
+}
+
+.dashboard-grid{
+    display: grid;
+}
+
+.dashboard-element {
+    background-color: blue;
+}
