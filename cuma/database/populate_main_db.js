@@ -19,26 +19,18 @@ async function extractJson(filePath) {
 }
 
 async function populateSoftEngDB() {
-    const client = new MongoClient(process.env.MONGODB_URI);
-
     try {
+        const client = new MongoClient(process.env.MONGODB_URI);
         await client.connect();
         const db = client.db('CUMA');
-        const collection = db.collection('universities');
-        await collection.deleteMany({})
+        const collection = db.collection('units');
+        // await collection.deleteMany({}) // test re-inputting data and see if it updates, duplicates or prevents
         const data = await extractJson('cuma/webscraping/unitData.json');
-
-        const emptyUniversity = {
-            "universityName": data.University,
-            "faculties": [data.units[0].faculty],
-            "units": []
-        };
-
-        await collection.insertOne(emptyUniversity);
 
         for (let i = 0; i < data.units.length; i++) {
             const unit = data.units[i];
             const unitCollection =  {
+                "universityName": data.University,
                 "unitCode": unit.unitCode,
                 "unitName": unit.unitName,
                 "unitDescription": unit.unitDescription,
@@ -47,7 +39,7 @@ async function populateSoftEngDB() {
                 "creditPoints": unit.creditPoints,
                 "course": [{
                     "courseCode": data.courseCode,
-                    "courseTitle": data.CourseTitle
+                    "courseName": data.CourseTitle
                 }],
                 "faculty": unit.faculty,
                 "offering": unit.offerings,
@@ -55,10 +47,7 @@ async function populateSoftEngDB() {
                 "connection": []
             };
             
-            await collection.updateOne(
-                {"universityName": data.University},
-                { $push: { "units": unitCollection }}
-            );
+            await collection.insertOne(unitCollection);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
