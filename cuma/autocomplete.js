@@ -14,14 +14,17 @@ fetch(jsonUrl)
 
         document.getElementById('search-unit').addEventListener('input', (event) => {
             const prefix = event.target.value;
-            const autocompleteResults = document.getElementById('autocomplete-results');
+            const autocompleteResults = document.getElementById('unit-list');
             autocompleteResults.innerHTML = '';
 
             if (prefix.length > 0) {
                 const filteredUnits = autocomplete(prefix);
                 filteredUnits.forEach(unit => {
                     const unitDiv = document.createElement('div');
-                    unitDiv.textContent = `${unit.name} - ${unit.description}`;
+                    unitDiv.textContent = `
+                                        <h4>${unit.code} - ${unit.name}</h4>
+                                        <p>Type: ${unit.type}, Credits: ${unit.credit}, Level: ${unit.level}</p>
+                                        `;
                     autocompleteResults.appendChild(unitDiv);
                 });
             }
