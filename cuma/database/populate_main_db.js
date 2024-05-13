@@ -3,7 +3,11 @@
 const fs = require('fs').promises;  
 const { MongoClient } = require('mongodb');
 require('dotenv').config({ override: true });
+const client = new MongoClient(process.env.MONGODB_URI);
 
+/*
+Read a json file and return the parsed data.
+*/
 async function extractJson(filePath) {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
@@ -18,19 +22,21 @@ async function extractJson(filePath) {
     }
 }
 
+/*
+Populate the database with units from the webscraped software engineering data.
+*/
 async function populateSoftEngDB() {
     try {
-        const client = new MongoClient(process.env.MONGODB_URI);
         await client.connect();
         const db = client.db('CUMA');
         const collection = db.collection('units');
-        // await collection.deleteMany({}) // test re-inputting data and see if it updates, duplicates or prevents
-        const data = await extractJson('cuma/webscraping/unitData.json');
+        // await collection.deleteMany({})
+        const unitData = await extractJson('cuma/webscraping/unitData.json');
 
-        for (let i = 0; i < data.units.length; i++) {
-            const unit = data.units[i];
+        for (let i = 0; i < unitData.units.length; i++) {
+            const unit = unitData.units[i];
             const unitCollection =  {
-                "universityName": data.University,
+                "universityName": unitData.University,
                 "unitCode": unit.unitCode,
                 "unitName": unit.unitName,
                 "unitDescription": unit.unitDescription,
@@ -38,13 +44,13 @@ async function populateSoftEngDB() {
                 "unitLevel": unit.unitLevel,
                 "creditPoints": unit.creditPoints,
                 "course": [{
-                    "courseCode": data.courseCode,
-                    "courseName": data.CourseTitle
+                    "courseCode": unitData.courseCode,
+                    "courseName": unitData.CourseTitle
                 }],
                 "faculty": unit.faculty,
                 "offering": unit.offerings,
                 "handBookURL": unit.handbookURL,
-                "connection": []
+                "connections": []
             };
             
             await collection.insertOne(unitCollection);
@@ -56,4 +62,38 @@ async function populateSoftEngDB() {
     }
 }
 
-populateSoftEngDB();
+/*
+Add dummy units to database
+*/
+async function addDummyUnits() {
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units');
+        const dummyData = await extractJson('cuma\\database\\dummyData.json');
+
+        await collection.deleteMany({
+            universityName: {
+                $in: ["Test University A", "Test University B", "Test University C"]
+            }
+        });
+
+        await collection.deleteMany({
+            unitCode: {
+                $in: ["ABC123", "ABC456"]
+            }
+        });
+
+        for (let i = 0; i < dummyData.dummyUnits.length; i++) {
+            await collection.insertOne(dummyData.dummyUnits[i]);
+        }
+    } catch (error) {
+        console.error(`An error occured while inserting data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+
+
+addDummyUnits();

@@ -1,0 +1,106 @@
+{
+    "dummyUnits": [
+        {
+            "universityName": "Test University A",
+            "unitCode": "ABC123",
+            "unitName": "ABC123_name",
+            "unitDescription": "ABC123_desc",
+            "unitType": "Core",
+            "unitLevel": "123",
+            "creditPoints": "123",
+            "course": [{
+                "courseCode": "ABC123_course_code",
+                "courseName": "ABC123_course_name"
+            }],
+            "faculty": "ABC123_faculty",
+            "offering": ["ABC123_offering"],
+            "handBookURL": "ABC123_url",
+            "connections": []
+        },
+        {
+            "universityName": "Test University A",
+            "unitCode": "DEF456",
+            "unitName": "DEF456_name",
+            "unitDescription": "DEF456_desc",
+            "unitType": "Core",
+            "unitLevel": "456",
+            "creditPoints": "456",
+            "course": [{
+                "courseCode": "DEF456_course_code",
+                "courseName": "DEF456_course_name"
+            }],
+            "faculty": "DEF456_faculty",
+            "offering": ["DEF456_offering"],
+            "handBookURL": "DEF456_url",
+            "connections": []
+        },
+        {
+            "universityName": "Test University B",
+            "unitCode": "ABC123",
+            "unitName": "ABC123_name",
+            "unitDescription": "ABC123_desc",
+            "unitType": "Core",
+            "unitLevel": "123",
+            "creditPoints": "123",
+            "course": [{
+                "courseCode": "ABC123_course_code",
+                "courseName": "ABC123_course_name"
+            }],
+            "faculty": "ABC123_faculty",
+            "offering": ["ABC123_offering"],
+            "handBookURL": "ABC123_url",
+            "connections": []
+        },
+        {
+            "universityName": "Test University B",
+            "unitCode": "DEF456",
+            "unitName": "DEF456_name",
+            "unitDescription": "DEF456_desc",
+            "unitType": "Core",
+            "unitLevel": "456",
+            "creditPoints": "456",
+            "course": [{
+                "courseCode": "DEF456_course_code",
+                "courseName": "DEF456_course_name"
+            }],
+            "faculty": "DEF456_faculty",
+            "offering": ["DEF456_offering"],
+            "handBookURL": "DEF456_url",
+            "connections": []
+        },
+        {
+            "universityName": "Test University C",
+            "unitCode": "ABC123",
+            "unitName": "ABC123_name",
+            "unitDescription": "ABC123_desc",
+            "unitType": "Core",
+            "unitLevel": "123",
+            "creditPoints": "123",
+            "course": [{
+                "courseCode": "ABC123_course_code",
+                "courseName": "ABC123_course_name"
+            }],
+            "faculty": "ABC123_faculty",
+            "offering": ["ABC123_offering"],
+            "handBookURL": "ABC123_url",
+            "connections": []
+        },
+        {
+            "universityName": "Test University C",
+            "unitCode": "DEF456",
+            "unitName": "DEF456_name",
+            "unitDescription": "DEF456_desc",
+            "unitType": "Core",
+            "unitLevel": "456",
+            "creditPoints": "456",
+            "course": [{
+                "courseCode": "DEF456_course_code",
+                "courseName": "DEF456_course_name"
+            }],
+            "faculty": "DEF456_faculty",
+            "offering": ["DEF456_offering"],
+            "handBookURL": "DEF456_url",
+            "connections": []
+        }
+    ]
+}
