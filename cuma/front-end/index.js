@@ -284,13 +284,14 @@ function deleteUnit() {
     return;
   }
 
-  const unitElement = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
-  if (unitElement) {
-    unitElement.remove();
-  }
 
   // perform delete in mongodb
-  
+  deleteUnitInfo("Monash", selectedUnitId).then(response => {
+    if (!handleResponse(response)){
+      // if no error, repopulate the data
+      repopulateResults()
+    }
+  })
 
 
   delete unitConnections[selectedUnitId];
