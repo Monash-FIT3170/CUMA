@@ -107,9 +107,14 @@ function addUnit() {
         "unitDescription" : unitOverview
       }
 
-      modifyUnitInfo("Monash", selectedUnitId, newUnitBody);
+      modifyUnitInfo("Monash", selectedUnitId, newUnitBody).then(response => {
+          if (!handleResponse(response)){
+            // if no error
+            repopulateResults()
+          }
+        }
+      );
 
-      repopulateResults()
       
       // existingUnit.dataset.name = unitName;
       // existingUnit.dataset.type = unitType;
