@@ -117,27 +117,27 @@ async function findUnit(collection, universityName, unitCode) {
  * @returns {Array} - Resolved connections.
  */
 async function resolveConnections(collection, connectionIds) {
-    const ids = connectionIds.map(conn => conn.$oid);
-    return await collection.find({ _id: { $in: ids } }).toArray();
+    return await collection.find({ _id: { $in: connectionIds } }).toArray();
 }
 
 /**
- * This endpoint retrieves the connections of a unit from a specific university.
- *
- * URL param payloads:
- * sourceUni: str
- * unitCode: str
- *
- * Returns JSON response:
- * code: 200 - if no error
- * code: 400 - if missing parameters
- * code: 404 - if unit not found
- * code: 500 - if server error or other errors occurred
- */
+     * This endpoint retrieves the connections of a unit from a specific university
+     *
+     * URL param payloads:
+     * universityName: str
+     * unitCode: str
+     *
+     * Returns JSON response:
+     * code: 200 - if no error
+     * code: 400 - if missing parameters
+     * code: 404 - if unit not found
+     * code: 500 - if server error or other errors occurred
+     */
 router.get("/getAll", async (req, res) => {
+    
     try {
-        // Get query parameters and check if they are provided
-        const { sourceUni, unitCode } = req.query;
+        // Get the query parameters and check if they are provided
+        const { sourceUni, unitCode} = req.query;
         if (!sourceUni || !unitCode) {
             return res.status(400).json({ error: "Both sourceUni and unitCode must be provided" });
         }
@@ -149,43 +149,45 @@ router.get("/getAll", async (req, res) => {
 
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
+        
         if (!unit) {
-            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, not found!` });
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Not Found!` });
         }
 
         // Find connections of the unit and resolve them
-        const connections = unit.connections ? unit.connections.map(conn => conn.$oid) : [];
+        const connections = unit.connections;
         if (connections.length === 0) {
-            return res.status(200).json({ connections: [] });
+            return res.status(400).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!`});
         }
         const resolvedConnections = await resolveConnections(collection, connections);
-
-        // Return the resolved connections
+        
+        // Return the filtered connections
         return res.status(200).json({ connections: resolvedConnections });
-
+            
     } catch (error) {
         console.error("Error:", error);
         return res.status(500).json({ error: "Internal server error" });
     }
 });
 
-/**
- * This endpoint retrieves specific connections of a unit from a specific university.
- *
- * URL param payloads:
- * sourceUni: str
- * unitCode: str
- * targetUni: str
- *
- * Returns JSON response:
- * code: 200 - if no error
- * code: 400 - if missing parameters
- * code: 404 - if unit not found
- * code: 500 - if server error or other errors occurred
- */
+ /**
+     * This endpoint retrieves specific connections of a unit to a specific university
+     *
+     * URL param payloads:
+     * sourceUni: str
+     * unitCode: str
+     * targetUni: str
+     *
+     * Returns JSON response:
+     * code: 200 - if no error
+     * code: 400 - if missing parameters
+     * code: 404 - if any is not found
+     * code: 500 - if server error or other errors occurred
+     */
 router.get("/getSpecific", async (req, res) => {
+   
     try {
-        // Get query parameters and check if they are provided
+        // Get the query parameters and check if they are provided
         const { sourceUni, unitCode, targetUni } = req.query;
         if (!sourceUni || !unitCode || !targetUni) {
             return res.status(400).json({ error: "sourceUni, unitCode, and targetUni must be provided" });
@@ -199,25 +201,25 @@ router.get("/getSpecific", async (req, res) => {
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
         if (!unit) {
-            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, not found!` });
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Not Found!` });
         }
 
         // Find connections of the unit and resolve them
-        const connections = unit.connections ? unit.connections.map(conn => conn.$oid) : [];
+        const connections = unit.connections;
         if (connections.length === 0) {
-            return res.status(200).json({ connections: [] });
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!`});
         }
         const resolvedConnections = await resolveConnections(collection, connections);
-
+        
         // Filter the connections by targetUni and check if any connections exist
-        const filteredConnections = resolvedConnections.filter(connection => connection.universityName === targetUni);
-        if (filteredConnections.length === 0) {
-            return res.status(200).json({ connections: [] });
+        const filteredConnections = resolvedConnections.filter(connection => connection.universityName === req.query.targetUni);
+        if (!filteredConnections) {
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Target University: ${req.query.targetUni} has no connection!` });
         }
-
+        
         // Return the filtered connections
         return res.status(200).json({ connections: filteredConnections });
-
+            
     } catch (error) {
         console.error("Error:", error);
         return res.status(500).json({ error: "Internal server error" });
