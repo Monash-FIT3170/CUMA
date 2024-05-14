@@ -27,8 +27,6 @@ app.use(express.json())
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 
-
-
 async function run() {
     try {
         // Start the Express server
