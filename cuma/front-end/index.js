@@ -197,7 +197,7 @@ async function repopulateResults() {
   // remove it all child unit
   unitList.innerHTML = '';
   
-  getAllUnitsFromUniversity("Monash")
+  BackendUnit.getAllUnitsFromUniversity("Monash")
   .then(UnitArray => 
     {
 

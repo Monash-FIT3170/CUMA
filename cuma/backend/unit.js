@@ -1,6 +1,8 @@
 const pathname = "/api/unit"
 
-async function getAllUnitsFromUniversity(universityName){
+var BackendUnit = {}
+
+BackendUnit.getAllUnitsFromUniversity = async function (universityName){
     /**
      * @param {string} universityName
      * 
