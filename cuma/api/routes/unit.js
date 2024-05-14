@@ -113,6 +113,47 @@ router.post('/', async (req, res) => {
 });
 
 
+
+router.get('/retrieveUnit',async (req,res) => {
+    /**
+      This endpoint retrieves a unit from a specific university
+      
+     url param payloads = {
+        universityName: str
+        unitCode: str
+      }
+      
+      returns json response = 
+      code: 200 - if no error
+      code: 500 - if server error or other errors occured
+     **/
+    try {
+        const client = req.client;
+        const {universityName, unitCode} = req.query;
+
+        if (!universityName || !unitCode){
+            return res.status(400).json({ error: "Both university and unitcode must be provided" });
+        }
+
+        const db = client.db('CUMA');
+        const collection = db.collection('units');
+
+        const unit = await collection.findOne({universityName: universityName, unitCode: unitCode});
+
+        if (unit){
+            res.json(unit);
+        }else{
+            res.status(404).json({error: `University: ${universityName}, Unit: ${unitCode}, Not Found!`});
+        }
+
+    }catch{
+        // Handle errors
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 // router.get('/:id', (req, res) => {
 //     // Handle GET request to retrieve data by ID
 // });

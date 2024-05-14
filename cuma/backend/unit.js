@@ -25,6 +25,32 @@ async function getAllUnitsFromUniversity(universityName){
     }
 }
 
+async function retrieveUnit(universityName, unitCode){
+    /*
+        universityName: str
+        unitCode: str
+    */
+
+    const params = {universityName, unitCode};
+    
+    try {
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/retrieveUnit");
+        url.search = new URLSearchParams(params).toString();
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const unit = await response.json();
+        console.log("Retrived Unit:", unit);
+        return unit;
+    } 
+    catch (error) {
+        console.error("Error:", error);
+    }
+
+};
+
 async function addUnitInfo(universityName, unitInfo){
     /** 
     unitInfo structure: {
