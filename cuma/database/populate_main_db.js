@@ -101,78 +101,6 @@ async function addDummyUnits() {
 
 
 /*
-Add unit connections between units.
-Used when adding a connection to unitOne for unitTwo.
-*/
-async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
-    try {
-        await client.connect();
-        const db = client.db('CUMA');
-        const collection = db.collection('units');
-
-        const unitTwo = await collection.findOne({
-            universityName: universityTwo,
-            unitCode: unitCodeTwo
-        });
-
-        if (unitTwo) {
-            const unitOne = await collection.findOneAndUpdate(
-                { universityName: universityOne, unitCode: unitCodeOne },
-                { $addToSet: { connections: unitTwo._id } },
-                { returnDocument: 'after'}
-            );
-
-            await collection.updateOne(
-                { universityName: universityTwo, unitCode: unitCodeTwo },
-                { $addToSet: { connections: unitOne._id } }
-            );
-        } else {
-            console.log(`University: ${universityTwo}, Unit: ${unitCodeTwo}, Not Found!`);
-        }
-    } catch (error) {
-        console.error(`An error occured while inserting data: ${error}`);
-    } finally {
-        await client.close();
-    }
-}
-
-/*
-Remove unit connections between units.
-Can be done from either unitOne or unitTwo.
-*/
-async function removeUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
-    try {
-        await client.connect();
-        const db = client.db('CUMA');
-        const collection = db.collection('units'); 
-
-        const unitTwo = await collection.findOne({
-            universityName: universityTwo,
-            unitCode: unitCodeTwo
-        });
-
-        if (unitTwo) {
-            const unitOne = await collection.findOneAndUpdate(
-                { universityName: universityOne, unitCode: unitCodeOne },
-                { $pull: { connections: unitTwo._id } },
-                { returnDocument: 'after'}
-            );
-
-            await collection.updateOne(
-                { universityName: universityTwo, unitCode: unitCodeTwo },
-                { $pull: { connections: unitOne._id } }
-            );
-        } else {
-            console.log(`University: ${universityTwo}, Unit: ${unitCodeTwo}, Not Found!`);
-        }
-    } catch (error) {
-        console.error(`An error occured while inserting data: ${error}`);
-    } finally {
-        await client.close();
-    }
-}
-
-/*
 Retrieve a unit.
 */
 async function retrieveOneUnit(university, unitCode) {
@@ -192,7 +120,69 @@ async function retrieveOneUnit(university, unitCode) {
             console.log(`University: ${university}, Unit: ${unitCode}, Not Found!`);
         }
     } catch (error) {
+        console.error(`An error occured while retrieving data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+/*
+Add unit connections between units.
+Used when adding a connection to unitOne for unitTwo.
+*/
+async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
+    const unitTwo = await retrieveOneUnit(universityTwo, unitCodeTwo);
+
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units');
+
+        if (unitTwo) {
+            const unitOne = await collection.findOneAndUpdate(
+                { universityName: universityOne, unitCode: unitCodeOne },
+                { $addToSet: { connections: unitTwo._id } },
+                { returnDocument: 'after'}
+            );
+
+            await collection.updateOne(
+                { universityName: universityTwo, unitCode: unitCodeTwo },
+                { $addToSet: { connections: unitOne._id } }
+            );
+        }
+    } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
+    } finally {
+        await client.close();
+    }
+}
+
+/*
+Remove unit connections between units.
+Can be done from either unitOne or unitTwo.
+*/
+async function removeUnitConnection(universityOne, unitCodeOne, universityTwo, unitCodeTwo) {
+    const unitTwo = await retrieveOneUnit(universityTwo, unitCodeTwo);
+
+    try {
+        await client.connect();
+        const db = client.db('CUMA');
+        const collection = db.collection('units'); 
+
+        if (unitTwo) {
+            const unitOne = await collection.findOneAndUpdate(
+                { universityName: universityOne, unitCode: unitCodeOne },
+                { $pull: { connections: unitTwo._id } },
+                { returnDocument: 'after'}
+            );
+
+            await collection.updateOne(
+                { universityName: universityTwo, unitCode: unitCodeTwo },
+                { $pull: { connections: unitOne._id } }
+            );
+        }
+    } catch (error) {
+        console.error(`An error occured while removing data: ${error}`);
     } finally {
         await client.close();
     }
@@ -202,23 +192,19 @@ async function retrieveOneUnit(university, unitCode) {
 List all connections of a unit.
 */
 async function listConnections(university, unitCode) {
+    const unit = await retrieveOneUnit(university, unitCode);
+
     try {
         await client.connect();
         const db = client.db('CUMA');
         const collection = db.collection('units');
 
-        const unit = await collection.findOne({
-            universityName: university,
-            unitCode: unitCode
-        });
-
         if (unit) {
-            const connections = unit.connections;
             let unitConnections = [];
 
-            for (let i = 0; i < connections.length; i++) {
+            for (let i = 0; i < unit.connections.length; i++) {
                 const connectedUnit = await collection.findOne({
-                    _id: connections[i]
+                    _id: unit.connections[i]
                 });
 
                 if (connectedUnit) {
@@ -227,11 +213,9 @@ async function listConnections(university, unitCode) {
             }
 
             return unitConnections;
-        } else {
-            console.log(`University: ${university}, Unit: ${unitCode}, Not Found!`);
         }
     } catch (error) {
-        console.error(`An error occured while inserting data: ${error}`);
+        console.error(`An error occured while retrieving data: ${error}`);
     } finally {
         await client.close();
     }
