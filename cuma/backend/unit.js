@@ -1,8 +1,14 @@
+// creating a namespace
+var Backend = {
+    Unit: {}
+}
+
+// pathname for consistency
 const pathname = "/api/unit"
 
-var BackendUnit = {}
+// define namespace
 
-BackendUnit.getAllUnitsFromUniversity = async function (universityName){
+Backend.Unit.getAllUnitsFromUniversity = async function (universityName){
     /**
      * @param {string} universityName
      * 
@@ -28,7 +34,7 @@ BackendUnit.getAllUnitsFromUniversity = async function (universityName){
     }
 }
 
-async function retrieveUnit(universityName, unitCode){
+Backend.Unit.retrieveUnit =  async function (universityName, unitCode){
     /*
         universityName: str
         unitCode: str
@@ -54,7 +60,7 @@ async function retrieveUnit(universityName, unitCode){
 
 };
 
-async function addUnitInfo(universityName, unitInfo){
+Backend.Unit.addUnit=  async function (universityName, unitInfo){
     /**
      * @param {string} universityName
        @param {json} unitInfo = {
@@ -106,7 +112,7 @@ async function addUnitInfo(universityName, unitInfo){
 
 
 
-async function modifyUnitInfo(universityName, unitCode, newUnitInfo){
+Backend.Unit.modifyUnit =  async function (universityName, unitCode, newUnitInfo){
     /**
      * @param {string} universityName 
        @param {json} unitInfoChange  - the modification
@@ -152,7 +158,7 @@ async function modifyUnitInfo(universityName, unitCode, newUnitInfo){
 
 }
 
-async function deleteUnitInfo(universityName, unitCode){
+Backend.Unit.deleteUnit = async function (universityName, unitCode){
     /** 
      * @param {string} universityName
      * @param {int} unitCode

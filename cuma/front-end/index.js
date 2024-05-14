@@ -107,7 +107,7 @@ function addUnit() {
         "unitDescription" : unitOverview
       }
 
-      modifyUnitInfo("Monash", selectedUnitId, newUnitBody).then(response => {
+      Backend.Unit.modifyUnit("Monash", selectedUnitId, newUnitBody).then(response => {
           if (!handleResponse(response)){
             // if no error
             repopulateResults()
@@ -147,7 +147,7 @@ function addUnit() {
       "unitDescription" : unitOverview
     }
     
-    addUnitInfo("Monash", unitBody).then(response => {
+    Backend.Unit.addUnit("Monash", unitBody).then(response => {
         // handles any error
         if (handleResponse(response) == 0)
         {
@@ -197,7 +197,7 @@ async function repopulateResults() {
   // remove it all child unit
   unitList.innerHTML = '';
   
-  BackendUnit.getAllUnitsFromUniversity("Monash")
+  Backend.Unit.getAllUnitsFromUniversity("Monash")
   .then(UnitArray => 
     {
 
@@ -286,7 +286,7 @@ function deleteUnit() {
 
 
   // perform delete in mongodb
-  deleteUnitInfo("Monash", selectedUnitId).then(response => {
+  Backend.Unit.deleteUnit("Monash", selectedUnitId).then(response => {
     if (!handleResponse(response)){
       // if no error, repopulate the data
       repopulateResults()
