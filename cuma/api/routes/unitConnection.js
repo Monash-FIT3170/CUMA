@@ -99,5 +99,129 @@ router.post('/delete', async (req, res) => {
     }
 });
 
+/**
+ * Utility function to retrieve a unit from the database.
+ * @param {object} collection - MongoDB collection object.
+ * @param {string} universityName - The name of the university.
+ * @param {string} unitCode - The code of the unit.
+ * @returns {object|null} - The unit document or null if not found.
+ */
+async function findUnit(collection, universityName, unitCode) {
+    return await collection.findOne({ universityName, unitCode });
+}
+
+/**
+ * Utility function to retrieve unit connections.
+ * @param {object} collection - MongoDB collection object.
+ * @param {Array} connectionIds - Array of connection IDs.
+ * @returns {Array} - Resolved connections.
+ */
+async function resolveConnections(collection, connectionIds) {
+    const ids = connectionIds.map(conn => conn.$oid);
+    return await collection.find({ _id: { $in: ids } }).toArray();
+}
+
+/**
+ * This endpoint retrieves the connections of a unit from a specific university.
+ *
+ * URL param payloads:
+ * sourceUni: str
+ * unitCode: str
+ *
+ * Returns JSON response:
+ * code: 200 - if no error
+ * code: 400 - if missing parameters
+ * code: 404 - if unit not found
+ * code: 500 - if server error or other errors occurred
+ */
+router.get("/getAll", async (req, res) => {
+    try {
+        // Get query parameters and check if they are provided
+        const { sourceUni, unitCode } = req.query;
+        if (!sourceUni || !unitCode) {
+            return res.status(400).json({ error: "Both sourceUni and unitCode must be provided" });
+        }
+
+        // Access the MongoDB client from the request object and get the collection
+        const client = req.client;
+        const db = client.db("CUMA");
+        const collection = db.collection("units");
+
+        // Find the unit in the collection
+        const unit = await findUnit(collection, sourceUni, unitCode);
+        if (!unit) {
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, not found!` });
+        }
+
+        // Find connections of the unit and resolve them
+        const connections = unit.connections ? unit.connections.map(conn => conn.$oid) : [];
+        if (connections.length === 0) {
+            return res.status(200).json({ connections: [] });
+        }
+        const resolvedConnections = await resolveConnections(collection, connections);
+
+        // Return the resolved connections
+        return res.status(200).json({ connections: resolvedConnections });
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+/**
+ * This endpoint retrieves specific connections of a unit from a specific university.
+ *
+ * URL param payloads:
+ * sourceUni: str
+ * unitCode: str
+ * targetUni: str
+ *
+ * Returns JSON response:
+ * code: 200 - if no error
+ * code: 400 - if missing parameters
+ * code: 404 - if unit not found
+ * code: 500 - if server error or other errors occurred
+ */
+router.get("/getSpecific", async (req, res) => {
+    try {
+        // Get query parameters and check if they are provided
+        const { sourceUni, unitCode, targetUni } = req.query;
+        if (!sourceUni || !unitCode || !targetUni) {
+            return res.status(400).json({ error: "sourceUni, unitCode, and targetUni must be provided" });
+        }
+
+        // Access the MongoDB client from the request object and get the collection
+        const client = req.client;
+        const db = client.db("CUMA");
+        const collection = db.collection("units");
+
+        // Find the unit in the collection
+        const unit = await findUnit(collection, sourceUni, unitCode);
+        if (!unit) {
+            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, not found!` });
+        }
+
+        // Find connections of the unit and resolve them
+        const connections = unit.connections ? unit.connections.map(conn => conn.$oid) : [];
+        if (connections.length === 0) {
+            return res.status(200).json({ connections: [] });
+        }
+        const resolvedConnections = await resolveConnections(collection, connections);
+
+        // Filter the connections by targetUni and check if any connections exist
+        const filteredConnections = resolvedConnections.filter(connection => connection.universityName === targetUni);
+        if (filteredConnections.length === 0) {
+            return res.status(200).json({ connections: [] });
+        }
+
+        // Return the filtered connections
+        return res.status(200).json({ connections: filteredConnections });
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 export default router;
