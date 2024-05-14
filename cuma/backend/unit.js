@@ -57,12 +57,15 @@ async function addUnitInfo(universityName, unitInfo){
             body: JSON.stringify({"universityName": universityName, unitInfo}),
         });
 
-        console.log({"universityName": universityName, unitInfo})
+            // Extract the response code
+        const statusCode = response.status;
     
         const result = await response.json();
-        console.log("Success:", result);
+        console.log({result: result, status: statusCode})
+        return {result: result, status: statusCode};
+
         } catch (error) {
-        console.error("Error:", error);
+        console.log("Error:", error);
     }
                             
 

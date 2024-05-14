@@ -129,40 +129,15 @@ function addUnit() {
       "unitDescription" : unitOverview
     }
     
-    addUnitInfo("Monash", unitBody)
-
-    // Create a new unit element
-    // const unitDiv = document.createElement('div');
-    // unitDiv.className = 'unit';
-    // unitDiv.dataset.id = unitCode;
-    // unitDiv.dataset.name = unitName;
-    // unitDiv.dataset.type = unitType;
-    // unitDiv.dataset.credit = unitCredit;
-    // unitDiv.dataset.level = unitLevel;
-    // unitDiv.dataset.overview = unitOverview;
-
-    // query all units from mongoDB
-
-
- 
-
-
-    // // Populate unit content
-    // unitDiv.innerHTML = `
-    //   <h4>${unitCode} - ${unitName}</h4>
-    //   <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-    // `;
-
-    // // Add click event to show details when clicked
-    // unitDiv.addEventListener('click', function () {
-    //   selectUnit(unitDiv);
-    // });
-
-    // // Initialize the connections data structure for the unit
-    // unitConnections[unitCode] = [];
-
-    // // Add the new unit to the list
-    // unitList.appendChild(unitDiv);
+    addUnitInfo("Monash", unitBody).then(response => {
+        // handles any error
+        if (handleResponse(response))
+        {
+            // if no error, then repopulate the result
+            repopulateResults()
+        }
+      }
+    )
   }
 
   // Clear the input fields after adding or modifying
@@ -173,6 +148,28 @@ function addUnit() {
 
   // Refresh the displayed mapped units
   displayMappedUnits(selectedUnitId);
+}
+
+function handleResponse(response){
+  /**
+   * Handles the response from the API based on the response status code
+   * It displays the error on the web tier (front-end) if there is an error
+   * 
+   * Input - 
+   *  response: {
+   *    result: str,  
+   *    code: int
+   *  }
+   * 
+   * Returns 
+   * 1 - if there's an error in the response
+   * 0 - if there's no error
+   * 
+   */
+  if (response.status == 400){
+    alert("Error: " + response.result)
+    return 1
+  }
 }
 
 async function repopulateResults() {
