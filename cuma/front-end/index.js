@@ -107,7 +107,7 @@ function addUnit() {
         "unitDescription" : unitOverview
       }
 
-      Backend.Unit.modifyUnit("Monash", selectedUnitId, newUnitBody).then(response => {
+      Backend.Unit.modify("Monash", selectedUnitId, newUnitBody).then(response => {
           if (!handleResponse(response)){
             // if no error
             repopulateResults()
@@ -147,7 +147,7 @@ function addUnit() {
       "unitDescription" : unitOverview
     }
     
-    Backend.Unit.addUnit("Monash", unitBody).then(response => {
+    Backend.Unit.add("Monash", unitBody).then(response => {
         // handles any error
         if (handleResponse(response) == 0)
         {
@@ -286,7 +286,7 @@ function deleteUnit() {
 
 
   // perform delete in mongodb
-  Backend.Unit.deleteUnit("Monash", selectedUnitId).then(response => {
+  Backend.Unit.delete("Monash", selectedUnitId).then(response => {
     if (!handleResponse(response)){
       // if no error, repopulate the data
       repopulateResults()
