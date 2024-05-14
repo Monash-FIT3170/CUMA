@@ -1,9 +1,7 @@
 "use strict";
 
-const fs = require('fs').promises;  
-const { connect } = require('http2');
-const { MongoClient, ObjectId } = require('mongodb');
-const { connections } = require('mongoose');
+const fs = require('fs').promises;
+const { MongoClient } = require('mongodb');
 require('dotenv').config({ override: true });
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -165,7 +163,7 @@ async function removeUnitConnection(universityOne, unitCodeOne, universityTwo, u
                 { $pull: { connections: unitOne._id } }
             );
         } else {
-            console.log(`Unit: ${unitCodeTwo}, University: ${universityTwo}, Not Found!`);
+            console.log(`University: ${university}, Unit: ${unitCode}, Not Found!`);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
