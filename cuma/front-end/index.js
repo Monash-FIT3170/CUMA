@@ -131,7 +131,7 @@ function addUnit() {
     
     addUnitInfo("Monash", unitBody).then(response => {
         // handles any error
-        if (handleResponse(response))
+        if (handleResponse(response) == 0)
         {
             // if no error, then repopulate the result
             repopulateResults()
@@ -170,16 +170,19 @@ function handleResponse(response){
     alert("Error: " + response.result)
     return 1
   }
+  return 0
 }
 
 async function repopulateResults() {
   const unitList = document.getElementById('unit-list');
   
+  // remove it all child unit
+  unitList.innerHTML = '';
+  
   getAllUnitsFromUniversity("Monash")
   .then(UnitArray => 
     {
 
-  
       for (const key in UnitArray)
       {
         // Create a new unit element
