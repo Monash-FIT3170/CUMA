@@ -1,6 +1,5 @@
 const pathname = "/api/unit"
 
-
 async function getAllUnitsFromUniversity(universityName){
     /**
      * @param {string} universityName
@@ -105,7 +104,7 @@ async function addUnitInfo(universityName, unitInfo){
 
 
 
-async function modifyUnit(universityName, unitCode, unitInfoChange){
+async function modifyUnitInfo(universityName, unitCode, newUnitInfo){
     /**
      * @param {string} universityName 
        @param {json} unitInfoChange  - the modification
@@ -125,7 +124,7 @@ async function modifyUnit(universityName, unitCode, unitInfoChange){
         @return {json} API reponse
      *  */ 
 
-
+    console.log("called")
     try {
 
         const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));        
@@ -136,7 +135,7 @@ async function modifyUnit(universityName, unitCode, unitInfoChange){
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                "universityName": universityName, unitInfo}),
+                "universityName": universityName, newUnitInfo}),
         });
 
         // Extract the response code

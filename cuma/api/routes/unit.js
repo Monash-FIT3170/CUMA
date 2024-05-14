@@ -172,7 +172,7 @@ router.put('/:unitcode', async (req, res) => {
      * 
      *  requestbody payload = {
             "universityName": str, 
-            "unitInfo": {
+            "newUnitInfo": {
                 "unitCode": "str",
                 "unitName": "str",
                 "unitDescription": "str",
@@ -194,7 +194,7 @@ router.put('/:unitcode', async (req, res) => {
 
         // get requestBody
         const universityName = req.body.universityName;
-        const newUnitInfo = req.body.unitInfo
+        const newUnitInfo = req.body.newUnitInfo
         
         // Extract the unitcode from request parameters
         const unitCode = req.params.unitcode; 

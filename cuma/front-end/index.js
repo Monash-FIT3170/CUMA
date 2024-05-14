@@ -97,17 +97,30 @@ function addUnit() {
     // Modify existing unit
     const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
     if (existingUnit) {
-      
-      existingUnit.dataset.name = unitName;
-      existingUnit.dataset.type = unitType;
-      existingUnit.dataset.credit = unitCredit;
-      existingUnit.dataset.level = unitLevel;
-      existingUnit.dataset.overview = unitOverview;
+      console.log(selectedUnitId);
+      const newUnitBody = {
+        "unitCode" : unitCode, 
+        "unitName" : unitName,
+        "unitType" : unitType,
+        "unitLevel": unitLevel,
+        "creditPoints": unitCredit,
+        "unitDescription" : unitOverview
+      }
 
-      existingUnit.innerHTML = `
-        <h4>${unitCode} - ${unitName}</h4>
-        <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
-      `;
+      modifyUnitInfo("Monash", selectedUnitId, newUnitBody);
+
+      repopulateResults()
+      
+      // existingUnit.dataset.name = unitName;
+      // existingUnit.dataset.type = unitType;
+      // existingUnit.dataset.credit = unitCredit;
+      // existingUnit.dataset.level = unitLevel;
+      // existingUnit.dataset.overview = unitOverview;
+
+      // existingUnit.innerHTML = `
+      //   <h4>${unitCode} - ${unitName}</h4>
+      //   <p>Type: ${unitType}, Credits: ${unitCredit}, Level: ${unitLevel}</p>
+      // `;
     }
 
     // Update the unitConnections if the unitCode was changed
@@ -120,7 +133,7 @@ function addUnit() {
   } else {
     
     // add unit to mongoDB
-    unitBody = {
+    const unitBody = {
       "unitCode" : unitCode, 
       "unitName" : unitName,
       "unitType" : unitType,
