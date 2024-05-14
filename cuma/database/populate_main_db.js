@@ -127,7 +127,7 @@ async function addUnitConnection(universityOne, unitCodeOne, universityTwo, unit
                 { $addToSet: { connections: unitOne._id } }
             );
         } else {
-            console.log(`Unit: ${unitCodeTwo}, University: ${universityTwo}, Not Found!`);
+            console.log(`University: ${universityTwo}, Unit: ${unitCodeTwo}, Not Found!`);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
@@ -163,7 +163,7 @@ async function removeUnitConnection(universityOne, unitCodeOne, universityTwo, u
                 { $pull: { connections: unitOne._id } }
             );
         } else {
-            console.log(`University: ${university}, Unit: ${unitCode}, Not Found!`);
+            console.log(`University: ${universityTwo}, Unit: ${unitCodeTwo}, Not Found!`);
         }
     } catch (error) {
         console.error(`An error occured while inserting data: ${error}`);
