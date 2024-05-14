@@ -166,7 +166,7 @@ router.get('/retrieveUnit',async (req,res) => {
 //     // Handle POST request to add new data
 // });
 
-router.put('/:unitcode', async (req, res) => {
+router.put('/:unitCode', async (req, res) => {
     /**
      * This endpoint modify a unit base on "unitcode"
      * 
@@ -197,7 +197,7 @@ router.put('/:unitcode', async (req, res) => {
         const newUnitInfo = req.body.newUnitInfo
         
         // Extract the unitcode from request parameters
-        const unitCode = req.params.unitcode; 
+        const unitCode = req.params.unitCode; 
 
         // mongoDB
         const database = client.db('CUMA');
@@ -232,8 +232,36 @@ router.put('/:unitcode', async (req, res) => {
 
 });
 
-// router.delete('/:id', (req, res) => {
-//     // Handle DELETE request to delete data by ID
-// });
+router.delete('/:unitCode', async (req, res) => {
+    
+    // Handle DELETE request to delete unit by unitCode
+    try {
+        // get client
+        const client = req.client;
+
+        // Extract the unitcode from request parameters
+        const unitCode = req.params.unitCode; 
+
+        // mongoDB
+        const database = client.db('CUMA');
+        const units = database.collection(collectionName);
+
+        // update the unit
+        const result = await units.deleteOne({unitCode: unitCode}
+        )
+
+        // if the unitCode does not exist
+        if (result.deletedCount === 0){
+            return res.status(400).json("This unit does not exist")
+        }
+
+        return res.status(200).json(result)
+    }
+    catch(error){
+        console.error(error)
+        return res.status(500).json(error);
+
+    }
+});
 
 export default router;
