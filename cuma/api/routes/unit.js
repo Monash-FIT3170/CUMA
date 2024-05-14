@@ -5,7 +5,11 @@
  * 
  */
 
+// TODO: enforce unique on the mongo database
+
 import express from 'express';
+import mongoErrorCode from '../mongoErrorCode.js';
+
 const router = express.Router();
 
 const collectionName = "testUnits";
@@ -118,7 +122,7 @@ router.get('/retrieveUnit',async (req,res) => {
     /**
       This endpoint retrieves a unit from a specific university
       
-     url param payloads = {
+    url param payloads = {
         universityName: str
         unitCode: str
       }
@@ -162,9 +166,71 @@ router.get('/retrieveUnit',async (req,res) => {
 //     // Handle POST request to add new data
 // });
 
-// router.put('/:id', (req, res) => {
-//     // Handle PUT request to update data by ID
-// });
+router.put('/:unitcode', async (req, res) => {
+    /**
+     * This endpoint modify a unit base on "unitcode"
+     * 
+     *  requestbody payload = {
+            "universityName": str, 
+            "unitInfo": {
+                "unitCode": "str",
+                "unitName": "str",
+                "unitDescription": "str",
+                "unitType": "int",
+                "unitLevel": "int",
+                "creditPoints": "int",
+            }
+        }
+     *
+     * returns json response: 
+     * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
+     * code: 200 - if successful
+     * code: 500 - if server error or other errors occured
+     */
+
+    try {
+        // get client
+        const client = req.client;
+
+        // get requestBody
+        const universityName = req.body.universityName;
+        const newUnitInfo = req.body.unitInfo
+        
+        // Extract the unitcode from request parameters
+        const unitCode = req.params.unitcode; 
+
+        // mongoDB
+        const database = client.db('CUMA');
+        const units = database.collection(collectionName);
+
+        // update the unit
+        const result = await units.updateOne({
+                unitCode: unitCode,
+                universityName: universityName
+            }, 
+            {$set: newUnitInfo}
+        )
+
+        // if the unitCode does not exist
+        if (result.matchedCount === 0){
+            return res.status(400).json("This unit does not exist")
+        }
+
+        return res.status(200).json(result)
+    }
+    catch(error){
+        console.error(error)
+
+        //handle error
+        if (error.code === mongoErrorCode.DUPLICATION){
+            return res.status(400).json("This modification duplicates the unitcode with existing data ")
+        }
+
+    }
+
+
+
+});
 
 // router.delete('/:id', (req, res) => {
 //     // Handle DELETE request to delete data by ID

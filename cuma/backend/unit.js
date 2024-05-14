@@ -3,7 +3,9 @@ const pathname = "/api/unit"
 
 async function getAllUnitsFromUniversity(universityName){
     /**
-     * universityName: str
+     * @param {string} universityName
+     * 
+     * @return {json} API response.
      */
 
     const unitInfo = {}
@@ -52,18 +54,22 @@ async function retrieveUnit(universityName, unitCode){
 };
 
 async function addUnitInfo(universityName, unitInfo){
-    /** 
-    unitInfo structure: {
-        name: str;
-        desc: 
-        type: int;
-        creditPt: int;
-        level: int;
-        overview: str;
-        link: str
+    /**
+     * @param {string} universityName
+       @param {json} unitInfo = {
+            name: str;
+            desc: 
+            type: int;
+            creditPt: int;
+            level: int;
+            overview: str;
+            link: str
 
-    }
-    */
+        }
+
+        @return {json} API reponse
+     *  */ 
+
     // var name=  unitInfo.name;
     // var desc=  unitInfo.desc;
     // var type=  unitInfo.type;
@@ -99,23 +105,50 @@ async function addUnitInfo(universityName, unitInfo){
 
 
 
-function modifyUnit(unitCode, unitInfoChange){
-    /** 
-    unitInfo structure: {
-        name: str;
-        desc: 
-        type: int;
-        creditPt: int;
-        level: int;
-        overview: str;
-        link: str
+async function modifyUnit(universityName, unitCode, unitInfoChange){
+    /**
+     * @param {string} universityName 
+       @param {json} unitInfoChange  - the modification
+       {
+            name: str;
+            desc: 
+            type: int;
+            creditPt: int;
+            level: int;
+            overview: str;
+            link: str
 
+        }
+        
+        @param {string} unitCode : The code of the unit to update
+
+        @return {json} API reponse
+     *  */ 
+
+
+    try {
+
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));        
+
+        const response = await fetch(url, {
+            method: "PUT", 
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "universityName": universityName, unitInfo}),
+        });
+
+        // Extract the response code
+        const statusCode = response.status;
+    
+
+        const result = await response.json();
+        return {result: result, status: statusCode};
+
+        } catch (error) {
+        console.log("Error:", error);
     }
-    */
-
-    db.Unit.updateOne({unitCode: unitCode}, {$set:unitInfoChange})
-
-    return {successCode: 1, message : message.success}
 
 }
 
