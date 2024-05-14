@@ -124,7 +124,6 @@ async function modifyUnitInfo(universityName, unitCode, newUnitInfo){
         @return {json} API reponse
      *  */ 
 
-    console.log("called")
     try {
 
         const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));        
@@ -151,23 +150,35 @@ async function modifyUnitInfo(universityName, unitCode, newUnitInfo){
 
 }
 
-function deleteUnit(unitCode){
+async function deleteUnitInfo(universityName, unitCode){
     /** 
-    unitInfo structure: {
-        name: str;
-        desc: 
-        type: int;
-        creditPt: int;
-        level: int;
-        overview: str;
-        link: str
-
-    }
+     * @param {string} universityName
+     * @param {int} unitCode
     */
 
-    db.Unit.deleteOne({unitCode: unitCode})
+    try {
 
-    return {successCode: 1, message : message.success}
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));        
+
+        const response = await fetch(url, {
+            method: "Delete", 
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "universityName": universityName}),
+        });
+
+        // Extract the response code
+        const statusCode = response.status;
+    
+
+        const result = await response.json();
+        return {result: result, status: statusCode};
+
+        } catch (error) {
+        console.log("Error:", error);
+    }
 
 }
 

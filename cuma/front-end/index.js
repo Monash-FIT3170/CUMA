@@ -289,6 +289,10 @@ function deleteUnit() {
     unitElement.remove();
   }
 
+  // perform delete in mongodb
+  
+
+
   delete unitConnections[selectedUnitId];
 
   // Clear selected unit info
