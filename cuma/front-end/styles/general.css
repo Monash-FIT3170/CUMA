@@ -6,7 +6,7 @@ body {
     background-color: #f4f6f9;
 }
 
-header {
+/* header {
     background-color: #4da5f5;
     color: white;
     padding: 15px 30px;
@@ -38,7 +38,7 @@ nav ul {
 nav a {
     color: white;
     text-decoration: none;
-}
+} */
 
 main {
     display: flex;
@@ -47,6 +47,7 @@ main {
     margin: auto;
     gap: 20px;
     margin-left: 200px;
+    margin-top: 75px;
 }
 
 .course-info {
