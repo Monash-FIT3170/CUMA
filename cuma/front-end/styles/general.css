@@ -68,7 +68,7 @@ main {
     gap: 10px;
 }
 
-.unit {
+.unit, .foreign-unit {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -77,17 +77,17 @@ main {
     flex-direction: column;
 }
 
-.unit.selected {
+.unit.selected, .foreign-unit.selected {
     background-color: #d3e9ff;
     border-color: #4da5f5;
 }
 
-.unit h4 {
+.unit, .foreign-unit h4 {
     margin: 0;
     font-size: 1em;
 }
 
-.unit p {
+.unit, .foreign-unit p {
     margin: 0;
     color: #666;
 }

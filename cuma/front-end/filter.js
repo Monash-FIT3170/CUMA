@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Function to filter units by regex match on all terms
-  function filterUnitsByRegex(regex) {
-      const units = document.getElementsByClassName('unit'); // Get all units in the unit list
+  function filterUnitsByRegex(regex, elementClassName) {
+      const units = document.getElementsByClassName(elementClassName); // Get all units in the unit list
 
       for (const unit of units) {
           const unitInfo = `${unit.dataset.id} ${unit.dataset.name} ${unit.dataset.type} ${unit.dataset.credit} ${unit.dataset.level} ${unit.dataset.overview}`.toLowerCase(); // Get unit information and convert to lowercase
@@ -19,6 +19,18 @@ document.addEventListener('DOMContentLoaded', function () {
   searchInput.addEventListener('input', function () {
       const searchValue = searchInput.value.trim(); // Get the input value and trim whitespace
       const regex = new RegExp(searchValue, 'i'); // Create case-insensitive regex pattern
-      filterUnitsByRegex(regex); // Filter units based on the regex
+      filterUnitsByRegex("unit", regex); // Filter units based on the regex
   });
+
+
+
+    const searchUnitForConnection = document.getElementById('unit-search-bar-connection'); // Get the search input element
+    // add event listener for search unit in unit connection
+    searchUnitForConnection.addEventListener('input', function () {
+        const searchValue = searchUnitForConnection.value.trim(); // Get the input value and trim whitespace
+        const regex = new RegExp(searchValue, 'i'); // Create case-insensitive regex pattern
+        filterUnitsByRegex("", regex); // Filter units based on the regex
+    });
 });
+
+

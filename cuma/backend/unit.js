@@ -45,7 +45,7 @@ Backend.Unit.getAllUnitsNotInUniversity = async function (universityName){
     const params = {"universityName": universityName}
     
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllNotInUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
