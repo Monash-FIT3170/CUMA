@@ -5,6 +5,7 @@ var Backend = {
 
 const backendPath = "/api/unitConnection";
 
+
 /*
     E.g. req.body =
     {
@@ -17,13 +18,14 @@ const backendPath = "/api/unitConnection";
     works with post request to http://127.0.0.1:3000/api/unitConnection
 */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
-    console.log("here")
     await Backend.UnitConnection.update(unitConnectionInfo, "add");
 }
+
 
 Backend.UnitConnection.delete = async function (unitConnectionInfo) {
     await Backend.UnitConnection.update(unitConnectionInfo, "delete");
 }
+
 
 Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     console.log(unitConnectionInfo)
@@ -43,6 +45,7 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     }
 }
 
+
 /**
  * Fetches all unit connections from the source university.
  * @param {string} sourceUni - The source university name.
@@ -52,6 +55,7 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
 Backend.UnitConnection.getAll = async function (sourceUni, unitCode) {
     return await getUniConnection(sourceUni, unitCode);
 }
+
 
 /**
  * Fetches a specific unit connection between source and target universities.
@@ -63,6 +67,7 @@ Backend.UnitConnection.getAll = async function (sourceUni, unitCode) {
 Backend.UnitConnection.getSpecific = async function (sourceUni, unitCode, targetUni) {
     return await getUniConnection(sourceUni, unitCode, targetUni);
 }
+
 
 /**
  * Fetches unit connections from the source university. 

@@ -19,11 +19,13 @@ function toggleAddUnitForm() {
     }
 }
 
+
 // Toggle the "Add Connection" form visibility
 function toggleAddConnectionNewUnitForm() {
     const addConnectionForm = document.getElementById('add-connection-form');
     addConnectionForm.style.display = addConnectionForm.style.display === 'none' || addConnectionForm.style.display === '' ? 'block' : 'none';
 }
+
 
 // Reset input fields including select dropdowns
 function clearUnitForm() {
@@ -38,6 +40,7 @@ function clearUnitForm() {
     unitType.selectedIndex = 0;
 }
 
+
 function clearConnectionForm() {
     document.getElementById('form-connection-name').value = '';
     document.getElementById('form-connection-institution').value = '';
@@ -49,6 +52,7 @@ function clearConnectionForm() {
     const connectionType = document.getElementById('form-connection-type');
     connectionType.selectedIndex = 0;
 }
+
 
 // Add or modify a unit
 function addUnit() {
@@ -138,6 +142,7 @@ function addUnit() {
     displayMappedUnits(selectedUnitId);
 }
 
+
 function handleResponse(response) {
     /**
      * Handles the response from the API based on the response status code
@@ -160,6 +165,7 @@ function handleResponse(response) {
     }
     return 0
 }
+
 
 async function repopulateResults() {
     const unitList = document.getElementById('unit-list');
@@ -213,6 +219,7 @@ async function repopulateResults() {
 
 }
 
+
 // Set form to edit mode with the selected unit's information
 function modifyUnit() {
     if (!selectedUnitId) {
@@ -238,6 +245,7 @@ function modifyUnit() {
     toggleAddUnitForm();
     isEditMode = true;
 }
+
 
 function deleteUnit() {
     if (!selectedUnitId) {
@@ -275,6 +283,7 @@ function deleteUnit() {
     document.getElementById('delete-unit-button').style.display = 'none';
 }
 
+
 function selectUnit(unitElement) {
     // Highlight the selected unit
     const units = document.querySelectorAll('.unit');
@@ -299,6 +308,7 @@ function selectUnit(unitElement) {
     document.getElementById('modify-unit-button').style.display = 'inline-block';
     document.getElementById('delete-unit-button').style.display = 'inline-block';
 }
+
 
 // Display mapped units for the given unit ID
 function displayMappedUnits(unitId) {
@@ -329,6 +339,7 @@ function displayMappedUnits(unitId) {
     }
 }
 
+
 // Add a new unit connection
 function addConnectionNewUnit() {
     if (!selectedUnitId) {
@@ -345,13 +356,13 @@ function addConnectionNewUnit() {
     const connectionLevel = document.getElementById('form-connection-level').value.trim();
     const connectionOverview = document.getElementById('form-connection-overview').value.trim();
 
-    // Ensure fields are filled out
+    // Ensure all fields are filled out
     if (!connectionName || !connectionCode || !connectionInstitution || !connectionType || !connectionCredit || !connectionLevel || !connectionOverview) {
         alert("Please fill out all fields.");
         return;
     }
 
-    // Add new unit to DB
+    // Create new unit object
     const unitBody = {
         "unitCode": connectionCode,
         "unitName": connectionName,
@@ -361,6 +372,7 @@ function addConnectionNewUnit() {
         "unitDescription": connectionOverview
     }
 
+    // Add new unit to DB
     Backend.Unit.add(connectionInstitution, unitBody).then(response => {
         // Handle error in adding new unit  
         if (handleResponse(response) == 0) {
@@ -371,7 +383,8 @@ function addConnectionNewUnit() {
                 "universityNameB": "Monash",
                 "unitCodeB": selectedUnitId
             }
-            // Add new connection
+
+            // Add new connection to DB
             Backend.UnitConnection.add(unitConnectionInfo).then(response => {
                 // Handel error in adding new connection
                 if (handleResponse(response) == 0) {
@@ -405,6 +418,7 @@ function addConnectionNewUnit() {
     });
 }
 
+
 // toggle add conection
 function toggleAddConnection() {
     // close any exisiting add connection forms
@@ -423,17 +437,20 @@ function toggleAddConnection() {
     addConnectionSection.style.display = addConnectionSection.style.display === 'none' || addConnectionSection.style.display === '' ? 'block' : 'none';
 }
 
+
 function toggleAddConnectionNewUnit() {
     // replace the current entry modal with add connection form (new unit) instead
     toggleAddConnection()
     toggleAddConnectionNewUnitForm()
 }
 
+
 function toggleAddConnectionExisitingUnit() {
     // replace the current entry modal with add connection form (existing unit) instead
     toggleAddConnection()
     toggleAddConnectionExistingUnitForm()
 }
+
 
 function toggleAddConnectionExistingUnitForm() {
     // replace the current entry modal with add connection form (new unit) instead
@@ -452,13 +469,14 @@ function toggleAddConnectionExistingUnitForm() {
     showAllForeignUnits()
 }
 
+
 function clearUnitSearchBarConnection() {
     const searchConnectionBar = document.getElementById("unit-search-bar-connection");
     searchConnectionBar.innerHTML = '';
 }
 
-function showAllForeignUnits() {
 
+function showAllForeignUnits() {
     // foriegn connection
     const foreignUnitsSection = document.getElementById("foreign-unit-list")
 
@@ -501,6 +519,7 @@ function showAllForeignUnits() {
         });
 
 }
+
 
 function addConnectionExistingUnit(foeignUnitDiv) {
     console.log(foeignUnitDiv.dataset)

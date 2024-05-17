@@ -14,6 +14,7 @@ const router = express.Router();
 
 const collectionName = "testUnits";
 
+
 router.get('/getAllFromUni', async (req, res) => {
     /**
      * This endpoint retrieves all the units available in a university
@@ -27,7 +28,7 @@ router.get('/getAllFromUni', async (req, res) => {
      * code: 500 - if server error or other errors occured
      *  
      */
-    
+
     try {
         // get the client
         const client = req.client;
@@ -35,37 +36,34 @@ router.get('/getAllFromUni', async (req, res) => {
         // get the request url params 
         const params = req.query;
 
-
-
         //get the database and the collection
-        const database  = client.db("CUMA");
+        const database = client.db("CUMA");
         const units = database.collection(collectionName);
-
 
         //get all the units, then join connections to unit objects
         const allUnits = await units.aggregate([
             {
-              $match: {
-                universityName: params.universityName
-              }
+                $match: {
+                    universityName: params.universityName
+                }
             },
             {
-              $unwind: {path: "$connections", preserveNullAndEmptyArrays: true }
+                $unwind: { path: "$connections", preserveNullAndEmptyArrays: true }
             },
             {
-              "$lookup": {
-                "from": collectionName,
-                "localField": "connections",
-                "foreignField": "_id",
-                "as": "connections"
-              }
+                "$lookup": {
+                    "from": collectionName,
+                    "localField": "connections",
+                    "foreignField": "_id",
+                    "as": "connections"
+                }
             },
             {
-                $unwind: {path: "$connections", preserveNullAndEmptyArrays: true }
+                $unwind: { path: "$connections", preserveNullAndEmptyArrays: true }
             },
             {
                 $group: {
-                     _id: "$_id", // Group by the unique identifier of each document
+                    _id: "$_id", // Group by the unique identifier of each document
                     universityName: { $first: "$universityName" },
                     unitCode: { $first: "$unitCode" },
                     unitName: { $first: "$unitName" },
@@ -80,22 +78,18 @@ router.get('/getAllFromUni', async (req, res) => {
                     connections: { $push: "$connections" } // Restore the connections array
                 }
             }
-          ])
+        ])
         const result = await allUnits.toArray()
 
         // get connections
-        
         return res.json(result);
-
-
     }
-    catch(error){
+    catch (error) {
         console.error(error);
         return res.status(500).json("Internal Server Error");
     }
-
-
 })
+
 
 router.post('/', async (req, res) => {
     /**
@@ -124,33 +118,31 @@ router.post('/', async (req, res) => {
         // Access the MongoDB client from the request object
         const client = req.client;
         const database = client.db('CUMA');
-        
+
         // get request payload
         const query = req.body;
         const universityNameReq = query.universityName;
         const unitInfoReq = query.unitInfo;
-  
+
         // get the collection
         const units = database.collection(collectionName);
 
-
         // check if the unit in the university already exists
-        const unit = await units.findOne({"unitCode": unitInfoReq.unitCode, "universityName": universityNameReq });
+        const unit = await units.findOne({ "unitCode": unitInfoReq.unitCode, "universityName": universityNameReq });
 
         // if unit already exists, return error
-        if (unit)
-        {
+        if (unit) {
             return res.status(400).json("unit already exists")
         }
 
         // add the unit
         const result = await units.insertOne(
-            {"universityName": universityNameReq, 
-            ...unitInfoReq}
+            {
+                "universityName": universityNameReq,
+                ...unitInfoReq
+            }
         )
-        return res.status(200).json(result)
-
-    
+        return res.status(200).json(result);
     } catch (error) {
         // Handle errors
         console.error('Error:', error);
@@ -159,8 +151,7 @@ router.post('/', async (req, res) => {
 });
 
 
-
-router.get('/retrieveUnit',async (req,res) => {
+router.get('/retrieveUnit', async (req, res) => {
     /**
       This endpoint retrieves a unit from a specific university
       
@@ -175,24 +166,24 @@ router.get('/retrieveUnit',async (req,res) => {
      **/
     try {
         const client = req.client;
-        const {universityName, unitCode} = req.query;
+        const { universityName, unitCode } = req.query;
 
-        if (!universityName || !unitCode){
+        if (!universityName || !unitCode) {
             return res.status(400).json({ error: "Both university and unitcode must be provided" });
         }
 
         const db = client.db('CUMA');
         const collection = db.collection('units');
 
-        const unit = await collection.findOne({universityName: universityName, unitCode: unitCode});
+        const unit = await collection.findOne({ universityName: universityName, unitCode: unitCode });
 
-        if (unit){
+        if (unit) {
             res.json(unit);
-        }else{
-            res.status(404).json({error: `University: ${universityName}, Unit: ${unitCode}, Not Found!`});
+        } else {
+            res.status(404).json({ error: `University: ${universityName}, Unit: ${unitCode}, Not Found!` });
         }
 
-    }catch{
+    } catch {
         // Handle errors
         console.error('Error:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -204,9 +195,11 @@ router.get('/retrieveUnit',async (req,res) => {
 //     // Handle GET request to retrieve data by ID
 // });
 
+
 // router.post('/', (req, res) => {
 //     // Handle POST request to add new data
 // });
+
 
 router.put('/:unitCode', async (req, res) => {
     /**
@@ -237,9 +230,9 @@ router.put('/:unitCode', async (req, res) => {
         // get requestBody
         const universityName = req.body.universityName;
         const newUnitInfo = req.body.newUnitInfo
-        
+
         // Extract the unitcode from request parameters
-        const unitCode = req.params.unitCode; 
+        const unitCode = req.params.unitCode;
 
         // mongoDB
         const database = client.db('CUMA');
@@ -247,64 +240,61 @@ router.put('/:unitCode', async (req, res) => {
 
         // update the unit
         const result = await units.updateOne({
-                unitCode: unitCode,
-                universityName: universityName
-            }, 
-            {$set: newUnitInfo}
-        )
+            unitCode: unitCode,
+            universityName: universityName
+        },
+            { $set: newUnitInfo }
+        );
 
         // if the unitCode does not exist
-        if (result.matchedCount === 0){
+        if (result.matchedCount === 0) {
             return res.status(400).json("This unit does not exist")
         }
 
-        return res.status(200).json(result)
+        return res.status(200).json(result);
     }
-    catch(error){
-        console.error(error)
+    catch (error) {
+        console.error(error);
 
         //handle error
-        if (error.code === mongoErrorCode.DUPLICATION){
+        if (error.code === mongoErrorCode.DUPLICATION) {
             return res.status(400).json("This modification duplicates the unitcode with existing data ")
         }
-
     }
-
-
-
 });
 
+
 router.delete('/:unitCode', async (req, res) => {
-    
     // Handle DELETE request to delete unit by unitCode
     try {
         // get client
         const client = req.client;
 
         // Extract the unitcode from request parameters
-        const unitCode = req.params.unitCode; 
+        const unitCode = req.params.unitCode;
 
         // mongoDB
         const database = client.db('CUMA');
         const units = database.collection(collectionName);
 
         // update the unit
-        const result = await units.deleteOne({unitCode: unitCode}
+        const result = await units.deleteOne({ unitCode: unitCode }
         )
 
         // if the unitCode does not exist
-        if (result.deletedCount === 0){
+        if (result.deletedCount === 0) {
             return res.status(400).json("This unit does not exist")
         }
 
-        return res.status(200).json(result)
+        return res.status(200).json(result);
     }
-    catch(error){
+    catch (error) {
         console.error(error)
         return res.status(500).json(error);
 
     }
 });
+
 
 router.get('/getAllNotInUni', async (req, res) => {
     /**
@@ -319,7 +309,7 @@ router.get('/getAllNotInUni', async (req, res) => {
      * code: 500 - if server error or other errors occured
      *  
      */
-    
+
     try {
         // get the client
         const client = req.client;
@@ -327,24 +317,20 @@ router.get('/getAllNotInUni', async (req, res) => {
         // get the request url params 
         const params = req.query;
 
-
-
         //get the database and the collection
-        const database  = client.db("CUMA");
+        const database = client.db("CUMA");
         const units = database.collection(collectionName);
 
         //get all the units
         const allUnits = await units.find({ universityName: { $ne: params.universityName } });;
         const result = await allUnits.toArray()
         return res.json(result);
-
     }
-    catch(error){
+    catch (error) {
         console.error(error);
         return res.status(500).json("Internal Server Error");
     }
-
-
 })
+
 
 export default router;
