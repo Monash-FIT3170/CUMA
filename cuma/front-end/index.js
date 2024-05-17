@@ -346,7 +346,7 @@ function addConnectionNewUnit() {
     const connectionOverview = document.getElementById('form-connection-overview').value.trim();
 
     // Ensure fields are filled out
-    if (!connectionName || !connectionInstitution || !connectionType || !connectionCredit || !connectionLevel || !connectionOverview) {
+    if (!connectionName || !connectionCode || !connectionInstitution || !connectionType || !connectionCredit || !connectionLevel || !connectionOverview) {
         alert("Please fill out all fields.");
         return;
     }
@@ -378,6 +378,7 @@ function addConnectionNewUnit() {
                     // Create a new connection object
                     const newConnection = {
                         name: connectionName,
+                        code: connectionCode,
                         institution: connectionInstitution,
                         type: connectionType,
                         credit: connectionCredit,
