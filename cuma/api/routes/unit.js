@@ -35,16 +35,60 @@ router.get('/getAllFromUni', async (req, res) => {
         // get the request url params 
         const params = req.query;
 
-        console.log(params);
+
 
         //get the database and the collection
         const database  = client.db("CUMA");
         const units = database.collection(collectionName);
 
+        
+          
+
         //get all the units
-        const allUnits = await units.find(params);
+        const allUnits = await units.aggregate([
+            {
+              $match: {
+                universityName: "Monash"
+              }
+            },
+            {
+              $unwind: {path: "$connections", preserveNullAndEmptyArrays: true }
+            },
+            {
+              "$lookup": {
+                "from": collectionName,
+                "localField": "connections",
+                "foreignField": "_id",
+                "as": "connections"
+              }
+            },
+            {
+                $unwind: {path: "$connections", preserveNullAndEmptyArrays: true }
+            },
+            {
+                $group: {
+                     _id: "$_id", // Group by the unique identifier of each document
+                    universityName: { $first: "$universityName" },
+                    unitCode: { $first: "$unitCode" },
+                    unitName: { $first: "$unitName" },
+                    unitDescription: { $first: "$unitDescription" },
+                    unitType: { $first: "$unitType" },
+                    unitLevel: { $first: "$unitLevel" },
+                    creditPoints: { $first: "$creditPoints" },
+                    course: { $first: "$course" },
+                    faculty: { $first: "$faculty" },
+                    offering: { $first: "$offering" },
+                    handBookURL: { $first: "$handBookURL" },
+                    connections: { $push: "$connections" } // Restore the connections array
+                }
+            }
+          ])
         const result = await allUnits.toArray()
+
+        // get connections
+        
         return res.json(result);
+
 
     }
     catch(error){
@@ -263,5 +307,46 @@ router.delete('/:unitCode', async (req, res) => {
 
     }
 });
+
+router.get('/getAllNotInUni', async (req, res) => {
+    /**
+     * This endpoint retrieves all the units available in a university
+     * 
+     * url param payloads = {
+     *   universityName: str
+     * }
+     * 
+     * returns json response = 
+     * code: 200 - if no error
+     * code: 500 - if server error or other errors occured
+     *  
+     */
+    
+    try {
+        // get the client
+        const client = req.client;
+
+        // get the request url params 
+        const params = req.query;
+
+
+
+        //get the database and the collection
+        const database  = client.db("CUMA");
+        const units = database.collection(collectionName);
+
+        //get all the units
+        const allUnits = await units.find({ universityName: { $ne: params.universityName } });;
+        const result = await allUnits.toArray()
+        return res.json(result);
+
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json("Internal Server Error");
+    }
+
+
+})
 
 export default router;

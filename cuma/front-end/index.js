@@ -1,9 +1,11 @@
 
 
 
+
 let unitConnections = {};
 let selectedUnitId = null;
 let isEditMode = false; // Track whether we're in add or edit mode
+let foreignUnit = [];
 
 
 // Toggle the "Add Unit" form visibility
@@ -207,10 +209,11 @@ async function repopulateResults() {
         });
 
         // Initialize the connections data structure for the unit
-        unitConnections[unit.unitCode] = [];
+        unitConnections[unit.unitCode] = unit.connections;
 
         // Add the new unit to the list
         unitList.appendChild(unitDiv);
+        console.log(unit)
     }
 
 
@@ -319,19 +322,22 @@ function displayMappedUnits(unitId) {
     mappedUnitsSection.style.display = 'block';
 
     const connections = unitConnections[unitId];
+
     if (connections && connections.length > 0) {
-        connections.forEach((connection, index) => {
-            const connectionDiv = document.createElement('div');
-            connectionDiv.className = 'connection';
-            connectionDiv.innerHTML = `
-        <h5>${connection.name}</h5>
-        <p>Institution: ${connection.institution}</p>
-        <p>Type: ${connection.type}, Credits: ${connection.credit}, Level: ${connection.level}</p>
-        <p>${connection.overview}</p>
-      `;
-            unitConnectionList.appendChild(connectionDiv);
-        });
-    } else {
+      connections.map(connection => {
+        console.log(connection)
+          const connectionDiv = document.createElement('div');
+          connectionDiv.className = 'connection';
+          connectionDiv.innerHTML = `
+              <h5>${connection.unitName}</h5>
+              <p>Institution: ${connection.universityName}</p>
+              <p>Type: ${connection.type}, Credits: ${connection.creditPoints}, Level: ${connection.unitLevel}</p>
+              <p>${connection.unitDescription}</p>
+          `;
+          unitConnectionList.appendChild(connectionDiv);
+      });
+  }
+  else {
         unitConnectionList.innerHTML = '<p>No mapped units available.</p>';
     }
 }
@@ -434,6 +440,15 @@ function clearUnitSearchBarConnection(){
   const searchConnectionBar = document.getElementById("unit-search-bar-connection");
   searchConnectionBar.innerHTML = '';
 }
+
+function showAllForeignUnits () {
+  Backend.Unit.getAllUnitsFromUniversity("Monash").then(units => {
+
+  })
+
+}
+
+
 
 
 // call every render

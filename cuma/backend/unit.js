@@ -34,6 +34,32 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName){
     }
 }
 
+Backend.Unit.getAllUnitsNotInUniversity = async function (universityName){
+    /**
+     * @param {string} universityName
+     * 
+     * @return {json} API response.
+     */
+
+    const unitInfo = {}
+    const params = {"universityName": universityName}
+    
+    try {
+        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
+        url.search = new URLSearchParams(params).toString();
+
+        const response = await fetch(url)
+
+        console.log({"universityName": universityName, unitInfo})
+    
+        const result = await response.json();
+        return result;
+    } 
+    catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 Backend.Unit.retrieveUnit =  async function (universityName, unitCode){
     /*
         universityName: str
