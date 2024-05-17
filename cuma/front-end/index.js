@@ -22,7 +22,7 @@ function toggleAddUnitForm() {
 }
 
 // Toggle the "Add Connection" form visibility
-function toggleAddConnectionForm() {
+function toggleAddConnectionNewUnitForm() {
     const addConnectionForm = document.getElementById('add-connection-form');
     addConnectionForm.style.display = addConnectionForm.style.display === 'none' || addConnectionForm.style.display === '' ? 'block' : 'none';
 }
@@ -219,11 +219,6 @@ async function repopulateResults() {
     console.error(error); // Handle errors here
   });;
   
-
-  
-
-  
-
 }
 
 // Set form to edit mode with the selected unit's information
@@ -381,11 +376,58 @@ function addUnitConnection() {
     clearConnectionForm();
 
     // Hide the form again
-    toggleAddConnectionForm();
+    toggleAddConnectionNewUnitForm();
 
     // Display the updated mapped units for the selected unit
     displayMappedUnits(selectedUnitId);
 }
+
+// toggle add conection
+function toggleAddConnection(){
+  // close any exisiting add connection forms
+  const addConnectionNewUnitSection = document.getElementById('add-connection-form');
+  if (addConnectionNewUnitSection)
+  {
+    addConnectionNewUnitSection.style.display = 'none'
+  }
+  const addConnectionExistingUnitSection = document.getElementById('add-connection-existing-unit-form');
+  if (addConnectionExistingUnitSection)
+  {
+    addConnectionExistingUnitSection.style.display = 'none'
+  }
+
+  // open add connection entry modal
+  const addConnectionSection = document.getElementById('add-connection');
+  addConnectionSection.style.display = addConnectionSection.style.display === 'none' || addConnectionSection.style.display === '' ? 'block' : 'none';
+}
+
+function toggleAddConnectionNewUnit(){
+  // replace the current entry modal with add connection form (new unit) instead
+  toggleAddConnection()
+  toggleAddConnectionNewUnitForm()
+}
+
+function toggleAddConnectionExisitingUnit(){
+  // replace the current entry modal with add connection form (existing unit) instead
+  toggleAddConnection()
+  toggleAddConnectionExistingUnitForm()
+}
+
+function toggleAddConnectionExistingUnitForm()
+{
+  // replace the current entry modal with add connection form (new unit) instead
+  const addConnectionExistingUnitForm = document.getElementById('add-connection-existing-unit-form');
+  const displayStyle = addConnectionExistingUnitForm.style.display;
+
+  // Toggle visibility
+  if (displayStyle === 'none' || displayStyle === '') {
+      addConnectionExistingUnitForm.style.display = 'block';
+  } else {
+      addConnectionExistingUnitForm.style.display = 'none';
+      clearUnitForm();
+  }
+}
+
 
 // call every render
 repopulateResults()
