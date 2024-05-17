@@ -1,13 +1,7 @@
-// creating a namespace
-var Backend = {
-    Unit: {}
-}
-
 // pathname for consistency
 const pathname = "/api/unit"
 
 // define namespace
-
 Backend.Unit.getAllUnitsFromUniversity = async function (universityName){
     /**
      * @param {string} universityName
@@ -26,8 +20,8 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName){
 
         console.log({"universityName": universityName, unitInfo})
     
-        const result = await response.json();
-        return result;
+        const result = await response.json()
+        return result
     } 
     catch (error) {
         console.error("Error:", error);

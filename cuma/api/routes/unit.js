@@ -41,14 +41,12 @@ router.get('/getAllFromUni', async (req, res) => {
         const database  = client.db("CUMA");
         const units = database.collection(collectionName);
 
-        
-          
 
         //get all the units
         const allUnits = await units.aggregate([
             {
               $match: {
-                universityName: "Monash"
+                universityName: params.universityName
               }
             },
             {

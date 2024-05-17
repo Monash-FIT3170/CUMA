@@ -196,6 +196,7 @@ async function repopulateResults() {
         unitDiv.dataset.credit = unit.creditPoints;
         unitDiv.dataset.level = unit.unitLevel;
         unitDiv.dataset.overview = unit.unitDescription;
+        unitDiv.dataset.universityName = unit.universityName;
 
         // Populate unit content
         unitDiv.innerHTML = `
@@ -213,7 +214,6 @@ async function repopulateResults() {
 
         // Add the new unit to the list
         unitList.appendChild(unitDiv);
-        console.log(unit)
     }
 
 
@@ -443,83 +443,7 @@ function clearUnitSearchBarConnection(){
   searchConnectionBar.innerHTML = '';
 }
 
-function showAllForeignUnits () {
 
-  console.log('called')
-  // foriegn connection
-  const foreignUnitsSection = document.getElementById("foreign-unit-list")
-
-  Backend.Unit.getAllUnitsNotInUniversity("Monash")
-  .then(UnitArray => 
-    {
-
-      for (const key in UnitArray)
-      {
-        // Create a new unit element
-        const unitDiv = document.createElement('div');
-        unitDiv.className = 'foreign-unit';
-
-        // initilise unitDiv
-        const unit = UnitArray[key];
-        unitDiv.dataset.id = unit.unitCode;
-        unitDiv.dataset.name = unit.unitName;
-        unitDiv.dataset.type = unit.unitType;
-        unitDiv.dataset.credit = unit.creditPoints;
-        unitDiv.dataset.level = unit.unitLevel;
-        unitDiv.dataset.overview = unit.unitDescription;
-
-        // Populate unit content
-        unitDiv.innerHTML = `
-          <h4>${unit.unitCode} - ${unit.unitName}</h4>
-          <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
-        `;
-
-        // Add click event to show details when clicked
-          unitDiv.addEventListener('click', function () {
-            addConnection(unitDiv);
-        });
-
-        // Initialize the connections data structure for the unit
-        unitConnections[unit.unitCode] = unit.connections;
-
-        // Add the new unit to the list
-        foreignUnitsSection.appendChild(unitDiv);
-        console.log(unit)
-    }
-
-
-    })
-  .catch(error => {
-    console.error(error); // Handle errors here
-  });
-  
-}
-
-// function addConnectionExistingUnit(foeignUnitDiv){
-//     if (!selectedUnitId) {
-//       alert("Please select a course unit to add the connection to.");
-//       return;
-//   }
-
-//   const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
-
-
-//   const universityNameA = existingUnit.dataset.universityName;
-//   const unitCodeA = foeignUnitDiv.dataset.unitCode;
-//   const universityNameB = foeignUnitDiv.dataset.universityName;
-//   const unitCodeB = foeignUnitDiv.dataset.unitCode;
-
-
-//   const unitInfo= {
-//     "universityNameA": universityNameA,
-//     "unitCodeA": unitCodeA,
-//     "universityNameB":universityNameB,
-//     "unitCodeB": unitCodeB
-//   }
-
-//   Backend.UnitConnection.add(unitInfo)
-
-// }
 
 
 

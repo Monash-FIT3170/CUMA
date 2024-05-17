@@ -35,7 +35,7 @@ router.post('/add', async (req, res) => {
 
         let numChanges = 0;
         if (!anyConnectionToB) {
-            units.updateOne({universityName: universityNameA, "unitCode": unitCodeA}, { $push: { "connections": {_id : unitB._id }} });
+            units.updateOne({universityName: universityNameA, "unitCode": unitCodeA}, { $push: { "connections": unitB._id } });
             numChanges += 1;
         }
         
@@ -43,7 +43,7 @@ router.post('/add', async (req, res) => {
         const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections._id": unitA._id });
 
         if (!anyConnectionToA) {
-            units.updateOne({universityName: universityNameB, "unitCode": unitCodeB}, { $push: { "connections":{ _id : unitA._id } } });
+            units.updateOne({universityName: universityNameB, "unitCode": unitCodeB}, { $push: { "connections": unitA._id } });
             numChanges += 1;
         }
 

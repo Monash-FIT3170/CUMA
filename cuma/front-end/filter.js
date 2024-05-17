@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
   searchInput.addEventListener('input', function () {
       const searchValue = searchInput.value.trim(); // Get the input value and trim whitespace
       const regex = new RegExp(searchValue, 'i'); // Create case-insensitive regex pattern
-      filterUnitsByRegex("unit", regex); // Filter units based on the regex
+      filterUnitsByRegex("units", regex); // Filter units based on the regex
   });
 
 
