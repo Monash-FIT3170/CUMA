@@ -337,7 +337,7 @@ function displayMappedUnits(unitId) {
 }
 
 // Add a new unit connection
-function addUnitConnection() {
+function addConnectionNewUnit() {
     if (!selectedUnitId) {
         alert("Please select a course unit to add the connection to.");
         return;
