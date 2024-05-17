@@ -42,7 +42,7 @@ router.get('/getAllFromUni', async (req, res) => {
         const units = database.collection(collectionName);
 
 
-        //get all the units
+        //get all the units, then join connections to unit objects
         const allUnits = await units.aggregate([
             {
               $match: {

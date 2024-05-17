@@ -216,6 +216,12 @@ async function repopulateResults() {
         unitList.appendChild(unitDiv);
     }
 
+    if (selectedUnitId)
+    {
+      // Display the updated mapped units for the selected unit
+      displayMappedUnits(selectedUnitId);
+    }
+
 
     })
   .catch(error => {
@@ -528,7 +534,7 @@ function addConnectionExistingUnit(foeignUnitDiv){
 
   console.log("here")
   Backend.UnitConnection.add(unitInfo).then( result => {
-    repopulateResults()
+    repopulateResults();
   });
 
 
