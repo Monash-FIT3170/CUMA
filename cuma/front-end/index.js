@@ -443,7 +443,98 @@ function clearUnitSearchBarConnection(){
   searchConnectionBar.innerHTML = '';
 }
 
+function showAllForeignUnits () {
 
+  // foriegn connection
+  const foreignUnitsSection = document.getElementById("foreign-unit-list")
+
+  Backend.Unit.getAllUnitsNotInUniversity("Monash").then(UnitArray => 
+    {
+
+      for (const key in UnitArray)
+      {
+        // Create a new unit element
+        const unitDiv = document.createElement('div');
+        unitDiv.className = 'foreign-unit';
+
+        // initilise unitDiv
+        const unit = UnitArray[key];
+        unitDiv.dataset.id = unit.unitCode;
+        unitDiv.dataset.name = unit.unitName;
+        unitDiv.dataset.type = unit.unitType;
+        unitDiv.dataset.credit = unit.creditPoints;
+        unitDiv.dataset.level = unit.unitLevel;
+        unitDiv.dataset.overview = unit.unitDescription;
+        unitDiv.dataset.universityName = unit.universityName
+
+        // Populate unit content
+        unitDiv.innerHTML = `
+          <h4>${unit.unitCode} - ${unit.unitName}</h4>
+          <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+        `;
+
+        // Add click event to show details when clicked
+          unitDiv.addEventListener('click', function () {
+            addConnectionExistingUnit(unitDiv);
+        });
+
+
+        // Add the new unit to the list
+        foreignUnitsSection.appendChild(unitDiv);
+    }
+
+
+    })
+  .catch(error => {
+    console.error(error); // Handle errors here
+  });
+  
+}
+
+function addConnectionExistingUnit(foeignUnitDiv){
+  console.log(foeignUnitDiv.dataset)
+
+    if (!selectedUnitId) {
+      alert("Please select a course unit to add the connection to.");
+      return;
+  }
+
+  foeignUnitDiv.classList.add("selected");
+  
+  const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+
+
+
+  const universityNameA = existingUnit.dataset.universityName;
+  const unitCodeA = existingUnit.dataset.id;
+  const universityNameB = foeignUnitDiv.dataset.universityName;
+  const unitCodeB = foeignUnitDiv.dataset.id;
+
+  //confirm 
+
+  if (!confirm(`Confirm add ${unitCodeB} as a connection to ${unitCodeA}?`))
+  {
+      return;
+  }
+
+  foeignUnitDiv.classList.remove("selected");
+
+  const unitInfo= {
+    "universityNameA": universityNameA,
+    "unitCodeA": unitCodeA,
+    "universityNameB":universityNameB,
+    "unitCodeB": unitCodeB
+  }
+
+  console.log("here")
+  Backend.UnitConnection.add(unitInfo).then( result => {
+    repopulateResults()
+  });
+
+
+
+
+}
 
 
 
