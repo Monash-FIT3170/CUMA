@@ -475,9 +475,13 @@ function showAllForeignUnits () {
 
         // Populate unit content
         unitDiv.innerHTML = `
-          <h4>${unit.unitCode} - ${unit.unitName}</h4>
-          <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+          <h4>${unit.unitName}</h4>
+          <p>Institution: ${unit.universityName}</p>
+          <p>Type: ${unit.type}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+          <p>${unit.unitDescription}</p>
         `;
+
+
 
         // Add click event to show details when clicked
           unitDiv.addEventListener('click', function () {
@@ -504,8 +508,6 @@ function addConnectionExistingUnit(foeignUnitDiv){
       alert("Please select a course unit to add the connection to.");
       return;
   }
-
-  foeignUnitDiv.classList.add("selected");
   
   const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
 
@@ -518,7 +520,7 @@ function addConnectionExistingUnit(foeignUnitDiv){
 
   //confirm 
 
-  if (!confirm(`Confirm add ${unitCodeB} as a connection to ${unitCodeA}?`))
+  if (!confirm(`Confirm add unit "${unitCodeB}" as a connection to unit "${unitCodeA}"?`))
   {
       return;
   }

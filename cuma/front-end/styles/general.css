@@ -77,10 +77,12 @@ main {
     flex-direction: column;
 }
 
-.unit.selected, .foreign-unit.selected {
+.unit.selected{
     background-color: #d3e9ff;
     border-color: #4da5f5;
 }
+
+
 
 .unit, .foreign-unit h4 {
     margin: 0;
@@ -91,6 +93,14 @@ main {
     margin: 0;
     color: #666;
 }
+
+.foreign-unit:hover{
+    background-color: #d8e8f8;
+    border-color: #88a4bd;
+}
+
+
+
 
 .unit-list-wrapper {
     max-height: 500px; /* Adjust the height as needed */
