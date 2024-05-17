@@ -4,13 +4,15 @@
 import express from 'express';
 const router = express.Router();
 
+const collectionName = "testUnits"
+
 router.post('/add', async (req, res) => {
     try {
         // Access the MongoDB client from the request object
         const client = req.client;
         const database = client.db('CUMA');
         // const universities = database.collection('universities');
-        const units = database.collection('units');
+        const units = database.collection(collectionName);
 
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
         if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
@@ -59,7 +61,7 @@ router.post('/delete', async (req, res) => {
         const client = req.client;
         const database = client.db('CUMA');
         // const universities = database.collection('universities');
-        const units = database.collection('units');
+        const units = database.collection(collectionName);
 
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
@@ -145,7 +147,7 @@ router.get("/getAll", async (req, res) => {
         // Access the MongoDB client from the request object and get the collection
         const client = req.client;
         const db = client.db("CUMA");
-        const collection = db.collection("units");
+        const collection = db.collection(collectionName);
 
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
@@ -196,7 +198,7 @@ router.get("/getSpecific", async (req, res) => {
         // Access the MongoDB client from the request object and get the collection
         const client = req.client;
         const db = client.db("CUMA");
-        const collection = db.collection("units");
+        const collection = db.collection(collectionName);
 
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
