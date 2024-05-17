@@ -393,6 +393,7 @@ function toggleAddConnection(){
   const addConnectionExistingUnitSection = document.getElementById('add-connection-existing-unit-form');
   if (addConnectionExistingUnitSection)
   {
+    clearUnitSearchBarConnection()
     addConnectionExistingUnitSection.style.display = 'none'
   }
 
@@ -424,8 +425,14 @@ function toggleAddConnectionExistingUnitForm()
       addConnectionExistingUnitForm.style.display = 'block';
   } else {
       addConnectionExistingUnitForm.style.display = 'none';
-      clearUnitForm();
+      clearUnitSearchBarConnection()
+
   }
+}
+
+function clearUnitSearchBarConnection(){
+  const searchConnectionBar = document.getElementById("unit-search-bar-connection");
+  searchConnectionBar.innerHTML = '';
 }
 
 
