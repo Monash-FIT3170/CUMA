@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
   searchInput.addEventListener('input', function () {
       const searchValue = searchInput.value.trim(); // Get the input value and trim whitespace
       const regex = new RegExp(searchValue, 'i'); // Create case-insensitive regex pattern
-      filterUnitsByRegex("units", regex); // Filter units based on the regex
+      filterUnitsByRegex( regex, "unit"); // Filter units based on the regex
   });
 
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     searchUnitForConnection.addEventListener('input', function () {
         const searchValue = searchUnitForConnection.value.trim(); // Get the input value and trim whitespace
         const regex = new RegExp(searchValue, 'i'); // Create case-insensitive regex pattern
-        filterUnitsByRegex("", regex); // Filter units based on the regex
+        filterUnitsByRegex(regex, "foreign-unit"); // Filter units based on the regex
     });
 });
 
