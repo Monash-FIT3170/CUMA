@@ -1,3 +1,11 @@
+// creating a namespace
+var Backend = {
+    UnitConnection: {}
+}
+
+// Import the Backend object from unit.js
+const BackendUnit = require('./unit.js').Unit;
+
 const backendPath = "/api/unitConnection";
 
 /*
