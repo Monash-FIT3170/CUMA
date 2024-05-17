@@ -357,6 +357,7 @@ function addConnectionNewUnit() {
 
     // Collect input values
     const connectionName = document.getElementById('form-connection-name').value.trim();
+    const connectionCode = document.getElementById('form-connection-code').value.trim();
     const connectionInstitution = document.getElementById('form-connection-institution').value.trim();
     const connectionType = document.getElementById('form-connection-type').value.trim();
     const connectionCredit = document.getElementById('form-connection-credit').value.trim();
@@ -369,29 +370,60 @@ function addConnectionNewUnit() {
         return;
     }
 
-    // Create a new connection object
-    const newConnection = {
-        name: connectionName,
-        institution: connectionInstitution,
-        type: connectionType,
-        credit: connectionCredit,
-        level: connectionLevel,
-        overview: connectionOverview
-    };
-
-    // Add the new connection to the appropriate unit
-    if (unitConnections[selectedUnitId]) {
-        unitConnections[selectedUnitId].push(newConnection);
+    // Add new unit to DB
+    const unitBody = {
+      "unitCode" : connectionCode, 
+      "unitName" : connectionName,
+      "unitType" : connectionType,
+      "unitLevel": connectionLevel,
+      "creditPoints": connectionCredit,
+      "unitDescription" : connectionOverview
     }
+    
+    Backend.Unit.add(connectionInstitution, unitBody).then(response => {
+      // Handle error in adding new unit  
+      if (handleResponse(response) == 0)
+        {
+          // Create unitConnectionInfo
+          const unitConnectionInfo = {
+            "universityNameA": connectionInstitution,
+            "unitCodeA": connectionCode,
+            "universityNameB": "Monash",
+            "unitCodeB": selectedUnitId
+          }
+            // Add new connection
+            Backend.UnitConnection.add(unitConnectionInfo).then(response => {
+              // Handel error in adding new connection
+              if (handleResponse(response) == 0)
+                {
+                  // Create a new connection object
+                  const newConnection = {
+                    name: connectionName,
+                    institution: connectionInstitution,
+                    type: connectionType,
+                    credit: connectionCredit,
+                    level: connectionLevel,
+                    overview: connectionOverview
+                };
 
-    // Clear the input fields after adding
-    clearConnectionForm();
+                  // Add the new connection to the appropriate unit
+                  if (unitConnections[selectedUnitId]) {
+                      unitConnections[selectedUnitId].push(newConnection);
+                  }
 
-    // Hide the form again
-    toggleAddConnectionNewUnitForm();
+                  // Clear the input fields after adding
+                  clearConnectionForm();
 
-    // Display the updated mapped units for the selected unit
-    displayMappedUnits(selectedUnitId);
+                  // Hide the form again
+                  toggleAddConnectionNewUnitForm();
+
+                  // Display the updated mapped units for the selected unit
+                  displayMappedUnits(selectedUnitId);
+                }
+            })
+        }
+      }
+    );
 }
 
 // toggle add conection
