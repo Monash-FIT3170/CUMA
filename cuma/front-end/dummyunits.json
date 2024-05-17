@@ -1,7 +1,82 @@
 [
-    { "name": "FIT1011", "description": "Random FIT Unit 1" },
-    { "name": "FIT1022", "description": "Random FIT Unit 2" },
-    { "name": "FIT2011", "description": "Random FIT Unit 3" },
-    { "name": "FIT2022", "description": "Random FIT Unit 4" }
-  ]
-  
+  {
+    "id": "FIT1001",
+    "name": "Introduction to Computer Science",
+    "type": "Core",
+    "credit": "6",
+    "level": 1,
+    "overview": "This unit provides an introduction to the fundamental concepts of computer science."
+  },
+  {
+    "id": "FIT1002",
+    "name": "Web Development Fundamentals",
+    "type": "Core",
+    "credit": "6",
+    "level": 1,
+    "overview": "This unit covers the basics of web development, including HTML, CSS, and JavaScript."
+  },
+  {
+    "id": "FIT2001",
+    "name": "Database Management Systems",
+    "type": "Core",
+    "credit": "6",
+    "level": 2,
+    "overview": "This unit explores the concepts and principles of database management systems."
+  },
+  {
+    "id": "FIT2002",
+    "name": "Software Engineering Principles",
+    "type": "Core",
+    "credit": "6",
+    "level": 2,
+    "overview": "This unit covers software engineering methodologies and best practices."
+  },
+  {
+    "id": "FIT3001",
+    "name": "Advanced Algorithms",
+    "type": "Elective",
+    "credit": "6",
+    "level": 3,
+    "overview": "This unit covers advanced algorithms and data structures."
+  },
+  {
+    "id": "FIT3002",
+    "name": "Cloud Computing Technologies",
+    "type": "Elective",
+    "credit": "6",
+    "level": 3,
+    "overview": "This unit explores cloud computing technologies and platforms."
+  },
+  {
+    "id": "FIT4001",
+    "name": "Machine Learning Applications",
+    "type": "Elective",
+    "credit": "6",
+    "level": 4,
+    "overview": "This unit focuses on practical applications of machine learning algorithms."
+  },
+  {
+    "id": "FIT4002",
+    "name": "Cybersecurity Strategies",
+    "type": "Elective",
+    "credit": "6",
+    "level": 4,
+    "overview": "This unit covers cybersecurity strategies and risk management."
+  },
+  {
+    "id": "FIT5001",
+    "name": "Big Data Analytics",
+    "type": "Specialization",
+    "credit": "6",
+    "level": 5,
+    "overview": "This unit focuses on analytics techniques for handling big data."
+  },
+  {
+    "id": "FIT5002",
+    "name": "Digital Transformation Strategies",
+    "type": "Specialization",
+    "credit": "6",
+    "level": 5,
+    "overview": "This unit explores strategies for digital transformation in organizations."
+  }
+]

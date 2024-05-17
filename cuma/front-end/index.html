@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
     <script src="index.js" defer></script>
+    <script src="filter.js"></script>
 </head>
 <body>
     <header>
@@ -39,29 +40,16 @@
     </nav>
     
 <main>
-<!--        <div class="search-container">-->
-<!--            <label for="search-unit">Search Units</label>-->
-<!--            <input type="text" id="search-unit" placeholder="Search for units...">-->
-<!--            <label for="search-university">University</label>-->
-<!--            <input type="search" id="search-university">-->
-<!--            <label for="search-course">Course</label>-->
-<!--            <input type="search" id="search-course">-->
-<!--            <label for="search-degree">Degree</label>-->
-<!--            <input type="search" id="search-degree">-->
-<!--        </div>-->
-<!--        <div id="autocomplete-results"></div>-->
-<!--        -->
-<!--        </div>-->
-<!--        <script src="autocomplete.js"></script>-->
-
     <!-- Course Units Section -->
     <section class="course-info">
         <h2>Bachelor of Software Engineering - Monash University</h2>
-        <input type="text" placeholder="Search Unit">
+        <input type="text" placeholder="Search Unit" id="unit-search">
         <div class="course-units">
             <h3>Course Units</h3>
-            <div class="unit-list" id="unit-list">
-                <!-- Dynamic units will be appended here -->
+            <div class="unit-list-wrapper">
+                <div class="unit-list" id="unit-list">
+                    <!-- Dynamic units will be appended here -->
+                </div>
             </div>
             <button class="add-unit" onclick="toggleAddUnitForm()">Add Unit</button>
         </div>
