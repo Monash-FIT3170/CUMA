@@ -5,6 +5,8 @@ var Backend = {
 
 // Import the Backend object from unit.js
 const BackendUnit = require('./unit.js').Unit;
+// import BackendUnit from './unit.js';
+
 
 const backendPath = "/api/unitConnection";
 
@@ -32,6 +34,16 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath){
 
     console.log(unitConnectionInfo)
     try {
+        universityName = unitConnectionInfo.universityNameA;
+        unitCode = unitConnectionInfo.unitCodeA;
+        unitInfo = {"unitCode": unitCode}
+
+        // Add foreign/non-monash unit if it doesn't already exist in db
+        if (subpath == "add") {
+            BackendUnit.add(universityName, unitInfo)
+        }
+        console.log(unitInfo)
+
         const response = await fetch("http://127.0.0.1:3000" + "/api/unitConnection/" + subpath, {
             method: "POST", 
             headers: {
