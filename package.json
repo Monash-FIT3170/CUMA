@@ -1,16 +1,20 @@
 {
   "name": "node",
+  "type": "module",
   "version": "1.0.0",
-  "description": "",
-  "main": "cuma/index.js",
+  "description": "## Project 6 - FIT3170",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node ./cuma/api/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "mongodb": "^6.6.1"
+    "express": "^4.19.2",
+    "mongodb": "6.5"
   }
 }

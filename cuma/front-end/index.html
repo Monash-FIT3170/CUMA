@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bachelor of Software Engineering - Monash University</title>
     <link rel="stylesheet" href="styles/general.css">
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/unitConnection.js" defer></script>
+    <script src="../backend/unit.js" defer></script>
+
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
-    <script src="index.js" defer></script>
+    <script src="./index.js" defer></script>>
     <script src="filter.js"></script>
 </head>
 <body>
@@ -110,7 +114,7 @@
         <p id="display-unit-description">Select a unit to see the details</p>
         <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
         <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
-        <button onclick="toggleAddConnectionForm()">Add Unit Connection</button>
+        <button onclick="toggleAddConnection()">Add Unit Connection</button>
     </section>
 
 
@@ -130,6 +134,11 @@
         <div class="input-container">
             <input type="text" id="form-connection-name" required>
             <label for="form-connection-name">Unit Name</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="form-connection-code" required>
+            <label for="form-connection-code">Unit Code</label>
         </div>
 
         <div class="input-container">
@@ -161,9 +170,31 @@
             <label for="form-connection-overview">Unit Overview</label>
         </div>
 
-        <button onclick="addUnitConnection()">Link Unit to Selected Course</button>
-        <button onclick="toggleAddConnectionForm()">Cancel</button>
+        <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
+        <button onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
     </section>
+
+    <section class="add-connection-form" id="add-connection" style="display: none;">
+        <button onclick="toggleAddConnectionExisitingUnit()">Add to exisiting unit</button>
+        <button onclick="toggleAddConnectionNewUnit()">Add to a new unit</button>
+    </section>
+
+    <section class="add-connection-form" id="add-connection-existing-unit-form" style="display: none;">
+        <h3>Search Existing Unit</h3>
+        <input type="text" placeholder="Search Unit" id="unit-search-bar-connection">
+        <button onclick="toggleAddConnectionExistingUnitForm()">Cancel</button>
+        <div class="foeign-units-units">
+            <h3>Foreign Units</h3>
+            <div class="unit-list-wrapper">
+                <div class="unit-list" id="foreign-unit-list">
+                    <!-- Dynamic units will be appended here -->
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
 
 </main>
 </body>

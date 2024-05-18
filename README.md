@@ -43,11 +43,53 @@ Run "npm install" in root directory (CUMA).
 Download the .env file and remove the "_", then place into the root dir.
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
+ 
+# Getting started and setting up
+## 1. Install dependencies
+in root do: npm install
 
-### 4. Test
+## 2. Ensure .env is valid
+Download the .env file and place into the root dir (make sure it is up to date).
 
-Open command prompt or terminal in root dir.
+https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
-Run "node cuma/index.js".
-    
-If no error, it should show results about "Back to the future" movie. 
+# How to run the server
+In root do: `npm run server`
+
+# How to run the web
+## Live Server 
+Install "Live Server" extension on vscode
+
+## Run the web
+Navigate to `index.html`.
+This file is located in /cuma/front-end/index.html
+
+Run this html using Live Server
+
+
+
+The server runs the API and connects to mongoDB. Therefore, this command must be run first
+before npm install can be queried. 
+
+
+
+
+# Project structrue
+
+## Root Directory
+The root directory is defined to be in the same hierarchy as app.js and package.json.
+
+## cuma directory
+`cuma` directory is separated as: 
+    - `front-end`: contains the View and Controller. For example, `index.html` (view) will have a matching `index.js` file (for the controller logic). 
+    -  `back-end`: Contains the interaction with the API tier
+    - `api`: Contains the API logics, route handlers and the connection to the database. 
+
+This web is designed to be a three-tier application, where `front-end` makes a call to `backend`. `backend` will then make a fetch request to the API. 
+
+The API is handled by `api` where it will query the database. 
+
+
+
+
+
