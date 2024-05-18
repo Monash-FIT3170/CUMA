@@ -1,3 +1,4 @@
+const serverPath = "http://127.0.0.1:3000";
 const backendPath = "/api/unitConnection";
 
 
@@ -73,7 +74,7 @@ Backend.UnitConnection.getSpecific = async function (sourceUni, unitCode, target
  * @param {string|null} [targetUni=null] - The target university name (optional).
  * @returns {Promise<object>} The unit connection result.
  */
-Backend.UnitConnection.getUniConnection = async function (sourceUni, unitCode, targetUni = null) {
+Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, targetUni = null) {
     // Validate parameters
     if (sourceUni == null || unitCode == null) {
         console.error("Error: sourceUni and unitCode cannot be null");
@@ -88,7 +89,6 @@ Backend.UnitConnection.getUniConnection = async function (sourceUni, unitCode, t
 
     // Endpoint paths
     const serverPath = "http://127.0.0.1:3000";
-    const backendPath = "/api/unitConnection";
     const subpath = targetUni == null ? "/getAll" : "/getSpecific";
 
     try {

@@ -136,18 +136,20 @@ async function resolveConnections(collection, connectionIds) {
 
 
 /**
-     * This endpoint retrieves the connections of a unit from a specific university
-     *
-     * URL param payloads:
-     * universityName: str
-     * unitCode: str
-     *
-     * Returns JSON response:
-     * code: 200 - if no error
-     * code: 400 - if missing parameters
-     * code: 404 - if unit not found
-     * code: 500 - if server error or other errors occurred
-     */
+ * This endpoint retrieves the connections of a unit from a specific university
+ *
+ * URL param payloads:
+ * {
+ *   sourceUni: str
+ *   unitCode: str
+ * }
+ * 
+ * Returns JSON response:
+ * code: 200 - if no error
+ * code: 400 - if missing parameters
+ * code: 404 - if unit not found
+ * code: 500 - if server error or other errors occurred
+ */
 router.get("/getAll", async (req, res) => {
     try {
         // Get the query parameters and check if they are provided
@@ -186,19 +188,21 @@ router.get("/getAll", async (req, res) => {
 
 
 /**
-    * This endpoint retrieves specific connections of a unit to a specific university
-    *
-    * URL param payloads:
-    * sourceUni: str
-    * unitCode: str
-    * targetUni: str
-    *
-    * Returns JSON response:
-    * code: 200 - if no error
-    * code: 400 - if missing parameters
-    * code: 404 - if any is not found
-    * code: 500 - if server error or other errors occurred
-    */
+* This endpoint retrieves specific connections of a unit to a specific university
+*
+* URL param payloads:
+* {
+*   sourceUni: str
+*   unitCode: str
+*   targetUni: str
+* }
+*
+* Returns JSON response:
+* code: 200 - if no error
+* code: 400 - if missing parameters
+* code: 404 - if any is not found
+* code: 500 - if server error or other errors occurred
+*/
 router.get("/getSpecific", async (req, res) => {
     try {
         // Get the query parameters and check if they are provided
@@ -221,14 +225,14 @@ router.get("/getSpecific", async (req, res) => {
         // Find connections of the unit and resolve them
         const connections = unit.connections;
         if (connections.length === 0) {
-            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!` });
+            return res.status(404).json({ error: `University: '${sourceUni}', Unit: '${unitCode}', does not have any connection!` });
         }
         const resolvedConnections = await resolveConnections(collection, connections);
 
         // Filter the connections by targetUni and check if any connections exist
         const filteredConnections = resolvedConnections.filter(connection => connection.universityName === req.query.targetUni);
-        if (!filteredConnections) {
-            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Target University: ${req.query.targetUni} has no connection!` });
+        if (filteredConnections.length === 0) {
+            return res.status(404).json({ error: `University: '${sourceUni}', Unit: '${unitCode}', Target University: '${targetUni}', has no connection!` });
         }
 
         // Return the filtered connections
