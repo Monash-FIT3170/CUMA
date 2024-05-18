@@ -55,7 +55,7 @@
                     <!-- Dynamic units will be appended here -->
                 </div>
             </div>
-            <button class="spaced-button" onclick="toggleAddUnitForm()">Add Unit</button>
+            <button class="add-unit" onclick="toggleAddUnitForm()">Add Unit</button>
         </div>
     </section>
 
@@ -99,8 +99,8 @@
             <label for="form-unit-overview">Unit Overview</label>
         </div>
 
-        <button class="spaced-button" onclick="addUnit()">Add Unit to Course</button>
-        <button class="spaced-button" onclick="toggleAddUnitForm()">Cancel</button>
+        <button onclick="addUnit()">Add Unit to Course</button>
+        <button onclick="toggleAddUnitForm()">Cancel</button>
     </section>
 
     <!-- Unit Details Display Section -->
@@ -112,10 +112,11 @@
         <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
         <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
         <p id="display-unit-description">Select a unit to see the details</p>
-        <button class="spaced-button" id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
-        <button class="spaced-button" id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
-        <button class="spaced-button" onclick="toggleAddConnection()">Add Unit Connection</button>
+        <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
+        <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
+        <button onclick="toggleAddConnection()">Add Unit Connection</button>
     </section>
+
 
     <!-- Mapped Units Section -->
     <section class="mapped-units">
@@ -169,17 +170,32 @@
             <label for="form-connection-overview">Unit Overview</label>
         </div>
 
-        <button class="spaced-button" onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
-        <button class="spaced-button" onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
+        <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
+        <button onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
     </section>
 
-    <!-- Add Connection Options Section -->
-    <section class="add-connection-options" id="add-connection-options" style="display: none;">
-        <h4>Add a Connection to:</h4>
-        <button class="spaced-button" onclick="toggleAddConnectionExistingUnit()">Existing Unit</button>
-        <button class="spaced-button" onclick="toggleAddConnectionNewUnit()">New Unit</button>
-        <button class="spaced-button" onclick="toggleAddConnectionExistingUnitForm()">Cancel</button>
+    <section class="add-connection-form" id="add-connection" style="display: none;">
+        <button onclick="toggleAddConnectionExisitingUnit()">Add to exisiting unit</button>
+        <button onclick="toggleAddConnectionNewUnit()">Add to a new unit</button>
     </section>
+
+    <section class="add-connection-form" id="add-connection-existing-unit-form" style="display: none;">
+        <h3>Search Existing Unit</h3>
+        <input type="text" placeholder="Search Unit" id="unit-search-bar-connection">
+        <button onclick="toggleAddConnectionExistingUnitForm()">Cancel</button>
+        <div class="foeign-units-units">
+            <h3>Foreign Units</h3>
+            <div class="unit-list-wrapper">
+                <div class="unit-list" id="foreign-unit-list">
+                    <!-- Dynamic units will be appended here -->
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
 </main>
 </body>
 </html>
