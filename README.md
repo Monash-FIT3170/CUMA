@@ -49,7 +49,7 @@ https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=shari
 in root do: npm install
 
 ## 2. Ensure .env is valid
-Download the .env file and place into the root dir.
+Download the .env file and place into the root dir (make sure it is up to date).
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
