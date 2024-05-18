@@ -207,6 +207,7 @@ button,
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    margin-bottom: 15px;
 }
 
 button:hover,
@@ -277,6 +278,7 @@ button:last-of-type:hover,
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    margin-bottom: 15px;
 }
 
 #modify-unit-button:hover, #delete-unit-button:hover {
