@@ -23,33 +23,21 @@
 | Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-## How to connect to MongoDB:
+# Getting started and setting up
 
-install mongodb: 
-    in root dir do: 
-    npm install mongodb@6.5
-### 1. Install Node.js and npm
+## 1. Install Node.js and npm
 
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-### 2. Setup Local Repository
+## 2. Setup Local Repository
 
 Open command prompt or terminal in root dir.
 
 Run "npm install" in root directory (CUMA).
 
-### 3. Allow Database Access
+## 3. Allow Database Access
 
 Download the .env file and remove the "_", then place into the root dir.
-
-https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
- 
-# Getting started and setting up
-## 1. Install dependencies
-in root do: npm install
-
-## 2. Ensure .env is valid
-Download the .env file and place into the root dir (make sure it is up to date).
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
