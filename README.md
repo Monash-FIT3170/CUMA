@@ -40,7 +40,7 @@ Run "npm install" in root directory (CUMA).
 
 ### 3. Allow Database Access
 
-Download the .env file and place into the root dir.
+Download the .env file and remove the "_", then place into the root dir.
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
