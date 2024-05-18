@@ -567,8 +567,9 @@ function addConnectionExistingUnit(foeignUnitDiv) {
         "unitCodeB": unitCodeB
     }
 
-    console.log("here")
-    Backend.UnitConnection.add(unitInfo).then(result => {
+    // console.log("here")
+    Backend.UnitConnection.add(unitInfo).then(response => {
+        handleResponse(response);
         repopulateResults();
     });
 }

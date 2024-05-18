@@ -49,7 +49,7 @@ router.post('/add', async (req, res) => {
         }
 
         if (numChanges == 0) {
-            return res.status(400).json({ error: "Connection already exists between these units"});
+            return res.status(400).json({ result: "Connection already exists between these units", status: 400 });
         }
 
         res.json({ status: "Success", numberOfChanges: numChanges });
@@ -100,7 +100,7 @@ router.post('/delete', async (req, res) => {
         }
 
         if (numChanges == 0) {
-            return res.status(400).json({ error: "Connection doesn't exist between these units"});
+            return res.status(400).json({ result: "Connection doesn't exist between these units", status: 400 });
         }
 
         res.json({ status: "Success", numberOfChanges: numChanges });

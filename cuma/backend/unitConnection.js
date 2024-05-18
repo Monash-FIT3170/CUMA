@@ -13,12 +13,12 @@ const backendPath = "/api/unitConnection";
     works with post request to http://127.0.0.1:3000/api/unitConnection
 */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
-    await Backend.UnitConnection.update(unitConnectionInfo, "add");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "add");
 }
 
 
 Backend.UnitConnection.delete = async function (unitConnectionInfo) {
-    await Backend.UnitConnection.update(unitConnectionInfo, "delete");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "delete");
 }
 
 
@@ -33,8 +33,9 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
             body: JSON.stringify(unitConnectionInfo),
         });
 
-        const result = await response.json();
-        console.log("Success:", result);
+        // const result = await response.json();
+        // console.log("Success:", result);
+        return response.json();
     } catch (error) {
         console.error("Error:", error);
     }
