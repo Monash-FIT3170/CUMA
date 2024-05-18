@@ -9,40 +9,62 @@ dotenv.config();
 
 const app = express();
 const port = 3000;
+const client = new MongoClient(process.env.MONGODB_URI);
+// body parser
+app.use(express.json());
 
-app.use(express.json())
-
-app.use(cors())
+app.use(cors());
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
-    req.client = new MongoClient(process.env.MONGODB_URI);
+    req.client = client;
     next();
 });
-
-// body-parser
-app.use(express.json())
 
 // Mount the route handlers
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 
-async function run() {
-    try {
-        // Start the Express server
-        app.listen(port, () => {
-            console.log(`Server is running on http://localhost:${port}`);
-        });
-    } finally {
-        // Ensure that the client will close when the application exits
-        // await app.locals.client.close();
-    }
-}
-
-
-
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-run().catch(console.dir);
+async function run() {
+    try {
+        // connect to DB
+        await client.connect();
+        console.log("Connected to MongoDB");
+        // Start the Express server
+        const server = app.listen(port, () => {
+            console.log(`Server is running on http://localhost:${port}`);
+        });
+        //function to close server
+        const closeServer = async () => {
+            //closing server
+            await server.close(() => {
+                console.log("HTTP server closed.");
+            });
+            //closing database
+            await client.close();
+            console.log("MongoDB connection closed.");
+        };
+        // signal to close ctr + c
+        process.on('SIGINT', async () => {
+            console.log("Shutting down server");
+            await closeServer();
+            process.exit(0);
+        });
+
+    } catch(error) {
+        // catch any error
+        console.error("Failed to start the application", error);
+        await client.close();
+        process.exit(1);
+    }
+}
+
+run().catch(async (error) => {
+    console.error("An error occurred while running the server", error);
+    await client.close();
+    process.exit(1);
+});

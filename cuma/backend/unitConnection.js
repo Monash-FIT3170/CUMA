@@ -1,3 +1,4 @@
+const serverPath = "http://127.0.0.1:3000";
 const backendPath = "/api/unitConnection";
 
 
@@ -13,12 +14,12 @@ const backendPath = "/api/unitConnection";
     works with post request to http://127.0.0.1:3000/api/unitConnection
 */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
-    await Backend.UnitConnection.update(unitConnectionInfo, "add");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "add");
 }
 
 
 Backend.UnitConnection.delete = async function (unitConnectionInfo) {
-    await Backend.UnitConnection.update(unitConnectionInfo, "delete");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "delete");
 }
 
 
@@ -33,8 +34,9 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
             body: JSON.stringify(unitConnectionInfo),
         });
 
-        const result = await response.json();
-        console.log("Success:", result);
+        // const result = await response.json();
+        // console.log("Success:", result);
+        return response.json();
     } catch (error) {
         console.error("Error:", error);
     }
@@ -72,7 +74,7 @@ Backend.UnitConnection.getSpecific = async function (sourceUni, unitCode, target
  * @param {string|null} [targetUni=null] - The target university name (optional).
  * @returns {Promise<object>} The unit connection result.
  */
-Backend.UnitConnection.getUniConnection = async function (sourceUni, unitCode, targetUni = null) {
+Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, targetUni = null) {
     // Validate parameters
     if (sourceUni == null || unitCode == null) {
         console.error("Error: sourceUni and unitCode cannot be null");
@@ -87,7 +89,6 @@ Backend.UnitConnection.getUniConnection = async function (sourceUni, unitCode, t
 
     // Endpoint paths
     const serverPath = "http://127.0.0.1:3000";
-    const backendPath = "/api/unitConnection";
     const subpath = targetUni == null ? "/getAll" : "/getSpecific";
 
     try {
