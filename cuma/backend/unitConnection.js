@@ -1,8 +1,3 @@
-// creating a namespace
-var Backend = {
-    UnitConnection: {}
-}
-
 const backendPath = "/api/unitConnection";
 
 

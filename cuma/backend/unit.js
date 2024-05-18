@@ -1,6 +1,6 @@
 // pathname for consistency
 const pathname = "/api/unit"
-
+console.log(Backend.Unit)
 
 // define namespace
 Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
@@ -11,19 +11,19 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
      */
 
     const unitInfo = {}
-    const params = { "universityName": universityName }
-
+    const params = {"universityName": universityName}
+    
     try {
         const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
 
-        console.log({ "universityName": universityName, unitInfo })
-
+        console.log({"universityName": universityName, unitInfo})
+    
         const result = await response.json()
         return result
-    }
+    } 
     catch (error) {
         console.error("Error:", error);
     }

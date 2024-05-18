@@ -168,55 +168,66 @@ function handleResponse(response) {
 
 
 async function repopulateResults() {
-    const unitList = document.getElementById('unit-list');
+  const unitList = document.getElementById('unit-list');
+  
+  // remove all child units
+  unitList.innerHTML = '';
 
-    // remove all child units
-    unitList.innerHTML = '';
 
-    Backend.Unit.getAllUnitsFromUniversity("Monash")
-        .then(UnitArray => {
-            for (const key in UnitArray) {
-                // Create a new unit element
-                const unitDiv = document.createElement('div');
-                unitDiv.className = 'unit';
+  Backend.Unit.getAllUnitsFromUniversity("Monash")
+  .then(UnitArray => 
+    {
 
-                // initilise unitDiv
-                const unit = UnitArray[key];
-                unitDiv.dataset.id = unit.unitCode;
-                unitDiv.dataset.name = unit.unitName;
-                unitDiv.dataset.type = unit.unitType;
-                unitDiv.dataset.credit = unit.creditPoints;
-                unitDiv.dataset.level = unit.unitLevel;
-                unitDiv.dataset.overview = unit.unitDescription;
-                unitDiv.dataset.universityName = unit.universityName;
+      for (const key in UnitArray)
+      {
+        // Create a new unit element
+        const unitDiv = document.createElement('div');
+        unitDiv.className = 'unit';
 
-                // Populate unit content
-                unitDiv.innerHTML = `
+        // initilise unitDiv
+        const unit = UnitArray[key];
+        unitDiv.dataset.id = unit.unitCode;
+        unitDiv.dataset.name = unit.unitName;
+        unitDiv.dataset.type = unit.unitType;
+        unitDiv.dataset.credit = unit.creditPoints;
+        unitDiv.dataset.level = unit.unitLevel;
+        unitDiv.dataset.overview = unit.unitDescription;
+        unitDiv.dataset.universityName = unit.universityName;
+        
+        if (unit.unitCode == "FIT4165"){
+          console.log("")
+        }
+
+        // Populate unit content
+        unitDiv.innerHTML = `
         <h4>${unit.unitCode} - ${unit.unitName}</h4>
         <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
         `;
 
-                // Add click event to show details when clicked
-                unitDiv.addEventListener('click', function () {
-                    selectUnit(unitDiv);
-                });
+        // Add click event to show details when clicked
+          unitDiv.addEventListener('click', function () {
+            selectUnit(unitDiv);
+        });
 
-                // Initialize the connections data structure for the unit
-                unitConnections[unit.unitCode] = unit.connections;
+        // Initialize the connections data structure for the unit
+        unitConnections[unit.unitCode] = unit.connections;
 
-                // Add the new unit to the list
-                unitList.appendChild(unitDiv);
-            }
+        // Add the new unit to the list
+        unitList.appendChild(unitDiv);
+    }
 
-            if (selectedUnitId) {
-                // Display the updated mapped units for the selected unit
-                displayMappedUnits(selectedUnitId);
-            }
-        })
-        .catch(error => {
-            console.error(error); // Handle errors here
-        });;
+    if (selectedUnitId)
+    {
+      // Display the updated mapped units for the selected unit
+      displayMappedUnits(selectedUnitId);
+    }
 
+
+    })
+  .catch(error => {
+    console.error(error); // Handle errors here
+  });
+  
 }
 
 
@@ -312,6 +323,8 @@ function selectUnit(unitElement) {
 
 // Display mapped units for the given unit ID
 function displayMappedUnits(unitId) {
+    console.log(unitConnections)
+    console.log(selectedUnitId)
     const unitConnectionList = document.getElementById('unit-connection-list');
     unitConnectionList.innerHTML = '';
 
@@ -387,7 +400,7 @@ function addConnectionNewUnit() {
             // Add new connection to DB
             Backend.UnitConnection.add(unitConnectionInfo).then(response => {
                 // Handel error in adding new connection
-                if (handleResponse(response) == 0) {
+                // TODO: fix after
                     // Create a new connection object
                     const newConnection = {
                         name: connectionName,
@@ -410,10 +423,13 @@ function addConnectionNewUnit() {
                     // Hide the form again
                     toggleAddConnectionNewUnitForm();
 
-                    // Display the updated mapped units for the selected unit
-                    displayMappedUnits(selectedUnitId);
+                                // Display the updated mapped units for the selected unit
+                      repopulateResults()
+                
                 }
-            });
+
+            );
+
         }
     });
 }
