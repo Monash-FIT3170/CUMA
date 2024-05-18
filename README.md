@@ -44,6 +44,14 @@ Download the .env file and place into the root dir.
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
  
+# Getting started and setting up
+## 1. Install dependencies
+in root do: npm install
+
+## 2. Ensure .env is valid
+Download the .env file and place into the root dir.
+
+https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
 # How to run the server
 In root do: `npm run server`
@@ -63,14 +71,7 @@ Run this html using Live Server
 The server runs the API and connects to mongoDB. Therefore, this command must be run first
 before npm install can be queried. 
 
-# Getting started and setting up
-## 1. Install dependencies
-in root do: npm install
 
-## 2. Ensure .env is valid
-Download the .env file and place into the root dir.
-
-https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
 
 # Project structrue
