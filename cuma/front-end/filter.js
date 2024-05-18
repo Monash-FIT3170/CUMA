@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const units = document.getElementsByClassName(elementClassName); // Get all units in the unit list
 
       for (const unit of units) {
-          const unitInfo = `${unit.dataset.id} ${unit.dataset.name} ${unit.dataset.type} ${unit.dataset.credit} ${unit.dataset.level} ${unit.dataset.overview}`.toLowerCase(); // Get unit information and convert to lowercase
+          const unitInfo = `${unit.dataset.id} ${unit.dataset.name} ${unit.dataset.type} ${unit.dataset.credit} ${unit.dataset.level} ${unit.dataset.overview} ${unit.dataset.universityName}`.toLowerCase(); // Get unit information and convert to lowercase
           if (regex.test(unitInfo)) {
               unit.style.display = 'block'; // Show the unit if it matches the regex
           } else {
