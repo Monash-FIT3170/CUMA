@@ -32,7 +32,7 @@ router.post('/add', async (req, res) => {
         }
 
         // Add connection to A
-        const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections._id": unitB._id });
+        const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
 
         let numChanges = 0;
         if (!anyConnectionToB) {
@@ -41,7 +41,7 @@ router.post('/add', async (req, res) => {
         }
 
         // Add connection to B
-        const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections._id": unitA._id });
+        const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections": unitA._id });
 
         if (!anyConnectionToA) {
             units.updateOne({ universityName: universityNameB, "unitCode": unitCodeB }, { $push: { "connections": unitA._id } });
@@ -79,7 +79,7 @@ router.post('/delete', async (req, res) => {
         }
 
         // Add connection to A
-        const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections._id": unitB._id });
+        const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
 
         let numChanges = 0;
         if (anyConnectionToB) {
@@ -88,7 +88,7 @@ router.post('/delete', async (req, res) => {
         }
 
         // Add connection to B
-        const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections._id": unitA._id });
+        const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections": unitA._id });
 
         if (anyConnectionToA) {
             units.updateOne({ universityName: universityNameB, "unitCode": unitCodeB }, { $pull: { "connections": { _id: unitA._id } } });
