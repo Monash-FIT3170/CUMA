@@ -4,20 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles/login.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styles/login.css">
+    <script src="login.js" defer></script>
 </head>
 <body>
-<main>
-    <form id="login-form" action="submit_login.php" method="post">
-        <h1>Login</h1>
-        <div class="input-container">
-            <input type="email" id="email" name="email" placeholder="Email" required>
+    <div class="container">
+        <div class="left-section">
+            <div class="content">
+                <h1>Course Unit Mapping Automation</h1>
+                <p>Welcome to course unit mapping automation.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae eros eget tellus tristique bibendum.</p>
+            </div>
         </div>
-        <div class="input-container">
-            <input type="password" id="password" name="password" placeholder="Password" required>
+        <div class="right-section">
+            <div class="login-form">
+                <h2>Login</h2>
+                <div class="input-container">
+                    <input type="email" id="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-container">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                </div>
+                <button onclick="handleLoginFormSubmission()">Login</button>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                <button class="signup-btn" onclick="location.href='signup.html'">Sign Up</button>
+                <button class="guest-btn">Continue as Guest</button>
+            </div>
         </div>
-        <button type="submit">Login</button>
-    </form>
-</main>
+    </div>
 </body>
 </html>
