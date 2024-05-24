@@ -17,15 +17,24 @@ body, html {
 }
 
 .left-section {
-    background-color: #4da5f5;
+    background-color: #58c4f4;
     color: white;
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     flex-direction: column;
     padding: 20px;
     text-align: center;
+}
+
+.left-section h1 {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.left-section img {
+    width: 60%;
 }
 
 .right-section {
@@ -87,13 +96,25 @@ button:hover {
     background-color: #2a75bb;
 }
 
-.forgot-password, .signup-btn, .guest-btn {
+.forgot-password {
     display: block;
     margin: 10px 0;
-    color: #4da5f5;
+    color: #4DA5F5;
     text-decoration: none;
 }
 
-.forgot-password:hover, .signup-btn:hover, .guest-btn:hover {
-    text-decoration: underline;
+.signup-btn {
+    display: block;
+    margin: 10px 0;
+    color: white;
+    text-decoration: none;
+}
+
+.guest-btn {
+    background-color: gainsboro;
+    color: black;
+}
+
+.guest-btn:hover {
+    background-color: lightgray;
 }
