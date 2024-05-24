@@ -86,7 +86,7 @@ function addUnit() {
                 "unitDescription": unitOverview
             }
 
-            Controller.Unit.modify("Monash", selectedUnitId, newUnitBody).then(response => {
+            Backend.Unit.modify("Monash", selectedUnitId, newUnitBody).then(response => {
                 if (!handleResponse(response)) {
                     // if no error
                     repopulateResults()
@@ -123,7 +123,7 @@ function addUnit() {
             "unitDescription": unitOverview
         }
 
-        Controller.Unit.add("Monash", unitBody).then(response => {
+        Backend.Unit.add("Monash", unitBody).then(response => {
             // handles any error
             if (handleResponse(response) == 0) {
                 // if no error, then repopulate the result
@@ -174,7 +174,7 @@ async function repopulateResults() {
   unitList.innerHTML = '';
 
 
-  Controller.Unit.getAllUnitsFromUniversity("Monash")
+  Backend.Unit.getAllUnitsFromUniversity("Monash")
   .then(UnitArray => 
     {
 
@@ -270,7 +270,7 @@ function deleteUnit() {
     }
 
     // perform delete in mongodb
-    Controller.Unit.delete("Monash", selectedUnitId).then(response => {
+    Backend.Unit.delete("Monash", selectedUnitId).then(response => {
         if (!handleResponse(response)) {
             // if no error, repopulate the data
             repopulateResults()
@@ -386,7 +386,7 @@ function addConnectionNewUnit() {
     }
 
     // Add new unit to DB
-    Controller.Unit.add(connectionInstitution, unitBody).then(response => {
+    Backend.Unit.add(connectionInstitution, unitBody).then(response => {
         // Handle error in adding new unit  
         if (handleResponse(response) == 0) {
             // Create unitConnectionInfo
@@ -398,7 +398,7 @@ function addConnectionNewUnit() {
             }
 
             // Add new connection to DB
-            Controller.UnitConnection.add(unitConnectionInfo).then(response => {
+            Backend.UnitConnection.add(unitConnectionInfo).then(response => {
                 // Handel error in adding new connection
                 // TODO: fix after
                     // Create a new connection object
@@ -496,7 +496,7 @@ function showAllForeignUnits() {
     // foriegn connection
     const foreignUnitsSection = document.getElementById("foreign-unit-list")
 
-    Controller.Unit.getAllUnitsNotInUniversity("Monash").then(UnitArray => {
+    Backend.Unit.getAllUnitsNotInUniversity("Monash").then(UnitArray => {
 
         for (const key in UnitArray) {
             // Create a new unit element
@@ -568,7 +568,7 @@ function addConnectionExistingUnit(foeignUnitDiv) {
     }
 
     // console.log("here")
-    Controller.UnitConnection.add(unitInfo).then(response => {
+    Backend.UnitConnection.add(unitInfo).then(response => {
         handleResponse(response);
         repopulateResults();
     });

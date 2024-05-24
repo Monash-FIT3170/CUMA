@@ -1,5 +1,5 @@
 // creating a namespace
-var Controller = {
+var Backend = {
     Unit: {},
     UnitConnection: {}
 }

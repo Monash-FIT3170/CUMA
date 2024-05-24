@@ -13,17 +13,17 @@ const backendPath = "/api/unitConnection";
 
     works with post request to http://127.0.0.1:3000/api/unitConnection
 */
-Controller.UnitConnection.add = async function (unitConnectionInfo) {
-    return await Controller.UnitConnection.update(unitConnectionInfo, "add");
+Backend.UnitConnection.add = async function (unitConnectionInfo) {
+    return await Backend.UnitConnection.update(unitConnectionInfo, "add");
 }
 
 
-Controller.UnitConnection.delete = async function (unitConnectionInfo) {
-    return await Controller.UnitConnection.update(unitConnectionInfo, "delete");
+Backend.UnitConnection.delete = async function (unitConnectionInfo) {
+    return await Backend.UnitConnection.update(unitConnectionInfo, "delete");
 }
 
 
-Controller.UnitConnection.update = async function (unitConnectionInfo, subpath) {
+Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     console.log(unitConnectionInfo)
     try {
         const response = await fetch("http://127.0.0.1:3000" + "/api/unitConnection/" + subpath, {
@@ -49,7 +49,7 @@ Controller.UnitConnection.update = async function (unitConnectionInfo, subpath) 
  * @param {string} unitCode - The unit code.
  * @returns {Promise<object>} The unit connection result.
  */
-Controller.UnitConnection.getAll = async function (sourceUni, unitCode) {
+Backend.UnitConnection.getAll = async function (sourceUni, unitCode) {
     return await getUniConnection(sourceUni, unitCode);
 }
 
@@ -61,7 +61,7 @@ Controller.UnitConnection.getAll = async function (sourceUni, unitCode) {
  * @param {string} targetUni - The target university name.
  * @returns {Promise<object>} The unit connection result.
  */
-Controller.UnitConnection.getSpecific = async function (sourceUni, unitCode, targetUni) {
+Backend.UnitConnection.getSpecific = async function (sourceUni, unitCode, targetUni) {
     return await getUniConnection(sourceUni, unitCode, targetUni);
 }
 
@@ -74,7 +74,7 @@ Controller.UnitConnection.getSpecific = async function (sourceUni, unitCode, tar
  * @param {string|null} [targetUni=null] - The target university name (optional).
  * @returns {Promise<object>} The unit connection result.
  */
-Controller.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, targetUni = null) {
+Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, targetUni = null) {
     // Validate parameters
     if (sourceUni == null || unitCode == null) {
         console.error("Error: sourceUni and unitCode cannot be null");

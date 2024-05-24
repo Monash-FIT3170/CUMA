@@ -1,9 +1,9 @@
 // pathname for consistency
 const pathname = "/api/unit"
-console.log(Controller.Unit)
+console.log(Backend.Unit)
 
 // define namespace
-Controller.Unit.getAllUnitsFromUniversity = async function (universityName) {
+Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
     /**
      * @param {string} universityName
      * 
@@ -30,7 +30,7 @@ Controller.Unit.getAllUnitsFromUniversity = async function (universityName) {
 }
 
 
-Controller.Unit.getAllUnitsNotInUniversity = async function (universityName) {
+Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
     /**
      * @param {string} universityName
      * 
@@ -57,7 +57,7 @@ Controller.Unit.getAllUnitsNotInUniversity = async function (universityName) {
 }
 
 
-Controller.Unit.retrieveUnit = async function (universityName, unitCode) {
+Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
     /*
         universityName: str
         unitCode: str
@@ -84,7 +84,7 @@ Controller.Unit.retrieveUnit = async function (universityName, unitCode) {
 }
 
 
-Controller.Unit.add = async function (universityName, unitInfo) {
+Backend.Unit.add = async function (universityName, unitInfo) {
     /**
      * @param {string} universityName
        @param {json} unitInfo = {
@@ -132,7 +132,7 @@ Controller.Unit.add = async function (universityName, unitInfo) {
 }
 
 
-Controller.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
+Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
     /**
      * @param {string} universityName 
        @param {json} unitInfoChange  - the modification
@@ -175,7 +175,7 @@ Controller.Unit.modify = async function (universityName, unitCode, newUnitInfo) 
     }
 }
 
-Controller.Unit.delete = async function (universityName, unitCode) {
+Backend.Unit.delete = async function (universityName, unitCode) {
     /** 
      * @param {string} universityName
      * @param {int} unitCode
