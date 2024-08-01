@@ -1,3 +1,11 @@
+// for testing gpt call
+
+// First generate an openAI api key using your own account. 
+// Then, copy and paste the api key into ".env" file under the name "OPENAI_API_KEY".
+
+// To run, 
+// pull up terminal, navigate to this file, then do "node gptTest.js"
+
 
 import dotenv from 'dotenv';
 dotenv.config();
