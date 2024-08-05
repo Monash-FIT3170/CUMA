@@ -1,14 +1,12 @@
-// for testing gpt call
+// for testing ai call
 
 // instructions: 
 
-// do: npm install openai@^4.0.0
+// do: npm install @google/generative-ai
 
-// generate an openAI api key using your own account. 
-// Then, copy and paste the api key into ".env" file under the name "OPENAI_API_KEY".
+// generate an api key using your own account. 
+// Then, copy and paste the api key into ".env" file under the name "AI_API_KEY".
 
-// To run, 
-// pull up terminal, navigate to this file, then do "node gptTest.js"
 
 
 import dotenv from 'dotenv';

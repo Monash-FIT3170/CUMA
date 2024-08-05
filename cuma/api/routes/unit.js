@@ -9,7 +9,7 @@
 
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
-import gemini from '../../openAiApi/geminiTest.js';
+import gemini from '../../ai/geminiTest.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const router = express.Router();
