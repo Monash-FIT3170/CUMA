@@ -13,6 +13,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 // body parser
 app.use(express.json());
 
+
 app.use(cors());
 
 // Middleware to attach MongoDB client to requests

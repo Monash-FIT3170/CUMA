@@ -9,6 +9,8 @@
 
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
+import gemini from '../../openAiApi/geminiTest.js';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const router = express.Router();
 
@@ -83,6 +85,8 @@ router.get('/getAllFromUni', async (req, res) => {
 
         // get connections
         return res.json(result);
+
+
     }
     catch (error) {
         console.error(error);
@@ -135,13 +139,20 @@ router.post('/', async (req, res) => {
             return res.status(400).json("unit already exists")
         }
 
+        // call gemini to create keywords for the unit
+        const aiGenUnitKeyword = await gemini(unitInfoReq.unitDescription)
+
         // add the unit
         const result = await units.insertOne(
             {
                 "universityName": universityNameReq,
+                "aiGenKeyWord": aiGenUnitKeyword,
                 ...unitInfoReq
             }
         )
+
+
+
         return res.status(200).json(result);
     } catch (error) {
         // Handle errors
@@ -334,3 +345,4 @@ router.get('/getAllNotInUni', async (req, res) => {
 
 
 export default router;
+
