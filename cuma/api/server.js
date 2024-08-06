@@ -48,8 +48,10 @@ app.get('/oauth2callback', async (req, res) => {
     const userInfo = await getUserInfo(code);
     req.session.user = userInfo;
 
+    // TODO: Add validation/connection to database for proper autorisation
     console.log('User Info:', userInfo);
     res.redirect('/'); // Redirect to home page after authentication
+
   } catch (error) {
     console.error('Error retrieving access token or user info', error);
     res.status(500).send('Error retrieving access token or user info');
