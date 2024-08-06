@@ -6,6 +6,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
 import { generateAuthUrl, getUserInfo } from './googleAuth.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 dotenv.config();
 
@@ -21,6 +27,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+app.use(express.static(path.join(__dirname, '..', 'front-end'), { index: false })); // Using all the static files within front-end
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
@@ -50,7 +57,7 @@ app.get('/oauth2callback', async (req, res) => {
 
     // TODO: Add validation/connection to database for proper autorisation
     console.log('User Info:', userInfo);
-    res.redirect('/'); // Redirect to home page after authentication
+    res.redirect('/index.html'); // Redirect to home page after authentication
 
   } catch (error) {
     console.error('Error retrieving access token or user info', error);
@@ -62,13 +69,18 @@ app.get('/oauth2callback', async (req, res) => {
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 
+app.get('/index', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
+});
+
 // Example route that uses the authenticated user's info
 app.get('/', (req, res) => {
-  if (req.session.user) {
-    res.send(`Hello, ${req.session.user.name}! Your email is ${req.session.user.email}. <a href="/logout">logout</a>`);
-  } else {
-    res.send('Hello World! Please <a href="/auth/google">login</a>.');
-  }
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'login.html'));
+  // if (req.session.user) {
+  //   res.send(`Hello, ${req.session.user.name}! Your email is ${req.session.user.email}. <a href="/logout">logout</a>`);
+  // } else {
+  //   res.send('Hello World! Please <a href="/auth/google">login</a>.');
+  // }
 });
 
 // logout route
