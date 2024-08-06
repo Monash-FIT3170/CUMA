@@ -16,6 +16,11 @@ function validateEmailAndPassword(email, password) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    if (!email || !password) {
+        alert('Email and password cannot be empty.');
+        return false;
+    }
+
     if (!emailPattern.test(email)) {
         alert('Invalid email format');
         return false;
@@ -26,48 +31,33 @@ function validateEmailAndPassword(email, password) {
         return false;
     }
 
-    if (email.length === 0) {
-        alert('Email cannot be empty.');
-        return false;
-    }
-
-    if (password.length === 0) {
-        alert('Password cannot be empty.');
-        return false;
-    }
-
     return true;
 }
 
 // Function to handle login form submission
-function handleLoginFormSubmission(event) {
-    event.preventDefault();
-
-    const email = document.getElementById('email').value;
+function handleLoginFormSubmission(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     
-    if (validateCredentials(email, password)) {
-        alert('Login successful!');
-        window.location.href = 'index.html'; 
-    } else {
-        alert('Invalid email or password.');
+    if (validateEmailAndPassword(email, password)) {
+        if (validateCredentials(email, password)) {
+            alert('Login successful!');
+            window.location.href = 'index.html'; 
+        } else {
+            alert('Invalid email or password.');
+        }
     }
 }
 
 // Function to handle signup form submission
-function handleSignupFormSubmission(event) {
-    event.preventDefault();
-
-    const email = document.getElementById('signup-email').value;
+function handleSignupFormSubmission(e) {
+    e.preventDefault();
+    const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 
     if (validateEmailAndPassword(email, password)) {
-        if (confirmPassword.length === 0) {
-            alert('Confirm password cannot be empty.');
-            return;
-        }
-
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             return;
@@ -79,6 +69,14 @@ function handleSignupFormSubmission(event) {
     }
 }
 
-// Event listeners for form submissions
-document.getElementById('login-form').addEventListener('submit', handleLoginFormSubmission);
-document.getElementById('signup-form').addEventListener('submit', handleSignupFormSubmission);
+document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.querySelector('.login-button');
+    if (loginButton) {
+        loginButton.addEventListener('click', handleLoginFormSubmission);
+    }
+
+    const signupForm = document.querySelector('.signup-button');
+    if (signupForm) {
+        signupForm.addEventListener('click', handleSignupFormSubmission);
+    }
+});

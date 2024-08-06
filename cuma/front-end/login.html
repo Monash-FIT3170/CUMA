@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="styles/login.css">
-    <script src="login.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -51,12 +50,13 @@
                     <input type="password" id="password" required>
                     <label for="password">Password</label>
                 </div>
-                <button onclick="handleLoginFormSubmission()">Login</button>
+                <button class="login-button">Login</button>
                 <a href="#" class="forgot-password">Forgot Password?</a>
                 <button class="signup-btn" onclick="location.href='signup.html'">Sign Up</button>
                 <button class="guest-btn">Continue as Guest</button>
             </div>
         </div>
     </div>
+    <script src="login.js" defer></script>
 </body>
 </html>
