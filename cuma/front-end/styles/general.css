@@ -6,31 +6,39 @@ body {
     background-color: #f4f6f9;
 }
 
-header {
+/* header {
     background-color: #4da5f5;
     color: white;
     padding: 15px 30px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    width: 100px;
+    height: 100%;
+    position: absolute;
 }
 
 header h1 {
     margin: 0;
+    width: 100px;
+}
+
+nav {
+    flex: 1;
+    vertical-align: top;
 }
 
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
+    display: block;
     gap: 15px;
 }
 
 nav a {
     color: white;
     text-decoration: none;
-}
+} */
 
 main {
     display: flex;
@@ -38,6 +46,8 @@ main {
     max-width: 1400px;
     margin: auto;
     gap: 20px;
+    margin-left: 200px;
+    margin-top: 75px;
 }
 
 .course-info {
@@ -58,7 +68,7 @@ main {
     gap: 10px;
 }
 
-.unit {
+.unit, .foreign-unit {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -67,20 +77,36 @@ main {
     flex-direction: column;
 }
 
-.unit.selected {
+.unit.selected{
     background-color: #d3e9ff;
     border-color: #4da5f5;
 }
 
-.unit h4 {
+
+
+.unit, .foreign-unit h4 {
     margin: 0;
     font-size: 1em;
 }
 
-.unit p {
+.unit, .foreign-unit p {
     margin: 0;
     color: #666;
 }
+
+.foreign-unit:hover{
+    background-color: #d8e8f8;
+    border-color: #88a4bd;
+}
+
+
+
+
+.unit-list-wrapper {
+    max-height: 500px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
 
 button, .add-unit {
     background-color: #4da5f5;
@@ -181,6 +207,7 @@ button,
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    margin-bottom: 15px;
 }
 
 button:hover,
@@ -251,6 +278,7 @@ button:last-of-type:hover,
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    margin-bottom: 15px;
 }
 
 #modify-unit-button:hover, #delete-unit-button:hover {

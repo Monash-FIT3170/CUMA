@@ -23,31 +23,61 @@
 | Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
 | Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-## How to connect to MongoDB:
+# Getting started and setting up
 
-install mongodb: 
-    in root dir do: 
-    npm install mongodb@6.5
-### 1. Install Node.js and npm
+## 1. Install Node.js and npm
 
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-### 2. Setup Local Repository
+## 2. Setup Local Repository
 
 Open command prompt or terminal in root dir.
 
 Run "npm install" in root directory (CUMA).
 
-### 3. Allow Database Access
+## 3. Allow Database Access
 
-Download the .env file and place into the root dir.
+Download the .env file and remove the "_", then place into the root dir.
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
-### 4. Test
+# How to run the server
+In root do: `npm run server`
 
-Open command prompt or terminal in root dir.
+# How to run the web
+## Live Server 
+Install "Live Server" extension on vscode
 
-Run "node cuma/index.js".
-    
-If no error, it should show results about "Back to the future" movie. 
+## Run the web
+Navigate to `index.html`.
+This file is located in /cuma/front-end/index.html
+
+Run this html using Live Server
+
+
+
+The server runs the API and connects to mongoDB. Therefore, this command must be run first
+before npm install can be queried. 
+
+
+
+
+# Project structrue
+
+## Root Directory
+The root directory is defined to be in the same hierarchy as app.js and package.json.
+
+## cuma directory
+`cuma` directory is separated as: 
+    - `front-end`: contains the View and Controller. For example, `index.html` (view) will have a matching `index.js` file (for the controller logic). 
+    -  `back-end`: Contains the interaction with the API tier
+    - `api`: Contains the API logics, route handlers and the connection to the database. 
+
+This web is designed to be a three-tier application, where `front-end` makes a call to `backend`. `backend` will then make a fetch request to the API. 
+
+The API is handled by `api` where it will query the database. 
+
+
+
+
+
