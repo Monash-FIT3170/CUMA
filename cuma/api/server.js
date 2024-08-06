@@ -17,7 +17,7 @@ const client = new MongoClient(process.env.MONGODB_URI);
 app.use(express.json());
 app.use(cors());
 app.use(session({
-  secret: 'your_secure_secret_key', // Replace with a strong secret
+  secret: 'your_secure_secret_key', // Replace with a strong secret during production and reference from .env
   resave: false,
   saveUninitialized: false,
 }));
@@ -63,10 +63,29 @@ app.use('/api/unitConnection/', unitConnection);
 // Example route that uses the authenticated user's info
 app.get('/', (req, res) => {
   if (req.session.user) {
-    res.send(`Hello, ${req.session.user.name}! Your email is ${req.session.user.email}.`);
+    res.send(`Hello, ${req.session.user.name}! Your email is ${req.session.user.email}. <a href="/logout">logout</a>`);
   } else {
     res.send('Hello World! Please <a href="/auth/google">login</a>.');
   }
+});
+
+// logout route
+app.get('/logout', (req, res) => {
+  // Revoke the OAuth token if needed
+  if (req.session.user && req.session.user.access_token) {
+    revokeToken(req.session.user.access_token);
+  }
+
+  // Destroy the session
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Failed to destroy session during logout:', err);
+      return res.status(500).send('Failed to log out.');
+    }
+
+    // Redirect to home or login page
+    res.redirect('/');
+  });
 });
 
 // Connect to MongoDB and start the server
