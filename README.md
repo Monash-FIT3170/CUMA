@@ -49,22 +49,7 @@ For any of the command, access the terminal in the root directory "..\CUMA".
 
 `npm run dev`
 
-The command tracks changed to both front-end and back-end and automatically reloads any changes made.
-
-Currently the web opens to "index.html" automatically.
-
-## Running Server Only
-
-`npm run dev:server`
-
-To run only the server (auto-reloading on changes).
-
-## Running Frontend Only
-
-`npm run dev:front`
-
-To run only the frontend with live-server.
-
+The command tracks changed and automatically reloads any changes made, mostly on backend and api calls.
 
 ## Production Mode
 `npm run server`
@@ -94,8 +79,6 @@ This web is designed to be a three-tier application, where `front-end` makes a c
 - The server runs the API and connects to MongoDB. Ensure the server is running before making any API queries.
 
 - In development mode, the server will automatically restart when changes are detected in the `cuma/api` and `cuma/backend` directory.
-
-- The frontend will automatically reload in the browser when changes are detected in the `cuma/front-end` directory.
 
 - Make sure all required dependencies are installed by running `npm install` before starting the development or production servers.
 
