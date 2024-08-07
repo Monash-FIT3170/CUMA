@@ -2,6 +2,7 @@ import express from 'express';
 import { MongoClient } from 'mongodb';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
+import authentication from './routes/authentication.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
@@ -68,6 +69,7 @@ app.get('/oauth2callback', async (req, res) => {
 // Mount the route handlers
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
+app.use('/api/authentication/', authentication);
 
 app.get('/index', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
