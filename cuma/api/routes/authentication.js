@@ -1,15 +1,40 @@
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
 import bcrypt from 'bcryptjs'
+import crypto from 'crypto';
+import { google } from 'googleapis';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 const collectionName = 'users'
+
+// OAuth2 Client Configuration
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
+
+// Create an OAuth2 client
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+);
+
+// Access scopes for user profile and email
+const scopes = [
+  'https://www.googleapis.com/auth/userinfo.email',
+  'https://www.googleapis.com/auth/userinfo.profile',
+  'openid'
+];
+
 router.post('/signup', async (req, res) => {
 
     try {
         // get the client
         const client = req.client;
-        //get the database and the collection
+        // get the database and the collection
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
@@ -47,7 +72,7 @@ router.post('/login', async (req, res) => {
 
         // get the client
         const client = req.client;
-        //get the database and the collection
+        // get the database and the collection
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
@@ -72,4 +97,47 @@ router.post('/login', async (req, res) => {
 
 });
 
+router.get('/google', (req, res) => {
+    const state = crypto.randomBytes(32).toString('hex');
+    req.session.state = state;
+  
+    const authorizationUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: scopes,
+      include_granted_scopes: true,
+      state: state
+    });
+  
+    res.redirect(authorizationUrl);
+  });
+  
+
+router.get('/oauth2callback', async (req, res) => {
+const { code, state } = req.query;
+
+    if (state !== req.session.state) {
+        console.log('State mismatch. Possible CSRF attack');
+        res.status(400).send('State mismatch. Possible CSRF attack');
+        return;
+    }
+
+    try {
+        const { tokens } = await oauth2Client.getToken(code);
+        oauth2Client.setCredentials(tokens);
+
+        const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
+        const userInfo = await oauth2.userinfo.get();
+
+        console.log('User Info:', userInfo.data);
+        res.redirect('/index')
+
+    } catch (error) {
+
+        console.error('Error retrieving access token or user info', error);
+        res.status(500).send('Error retrieving access token or user info');
+    }
+});
+
 export default router;
+
+
