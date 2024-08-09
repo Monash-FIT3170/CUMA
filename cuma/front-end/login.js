@@ -1,16 +1,3 @@
-// Function to store email and password from signup
-function storeCredentials(email, password) {
-    let credentials = JSON.parse(localStorage.getItem('credentials')) || [];
-    credentials.push({ email, password });
-    localStorage.setItem('credentials', JSON.stringify(credentials));
-}
-
-// Function to validate email and password on login
-function validateCredentials(email, password) {
-    let credentials = JSON.parse(localStorage.getItem('credentials')) || [];
-    return credentials.some(cred => cred.email === email && cred.password === password);
-}
-
 // Function to validate email and password format
 function validateEmailAndPassword(email, password) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
