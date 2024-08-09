@@ -143,7 +143,26 @@ const { code, state } = req.query;
         if (!existingUser) {
             console.log("New User...Creating new user in database")
             
-            // Create a new user in database
+            // TODO: Update database structure once finalised
+            // Create a new user data
+            const newUser = {
+                userGoogleID: userData.id,
+                email: userData.email,
+                emailVerified: userData.verified_email,
+                emailHD: userData.hd,
+                firstName: userData.given_name,
+                lastName: userData.family_name,
+                role: 'general_user',
+                createAt: new Date(),
+                updatedAt: new Date(),
+                lastLogin: new Date(),
+            };
+
+            // Insert the data in the database
+            const result = await users.insertOne(newUser);
+            console.log("New User created successfully: ", result)
+
+            // TODO: Redirect to Profile form and ask user to fill in additional information to complete profile.
         } else {
             console.log("Exisiting User...Updating Database")
             // Update Metadata
