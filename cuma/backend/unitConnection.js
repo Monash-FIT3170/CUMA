@@ -1,4 +1,4 @@
-const serverPath = "http://127.0.0.1:3000";
+const serverPath = "http://3.25.70.20";
 const backendPath = "/api/unitConnection";
 
 
@@ -26,7 +26,7 @@ Backend.UnitConnection.delete = async function (unitConnectionInfo) {
 Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     console.log(unitConnectionInfo)
     try {
-        const response = await fetch("http://127.0.0.1:3000" + "/api/unitConnection/" + subpath, {
+        const response = await fetch("http://3.25.70.20" + "/api/unitConnection/" + subpath, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -88,7 +88,7 @@ Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, 
     }
 
     // Endpoint paths
-    const serverPath = "http://127.0.0.1:3000";
+    const serverPath = "http://3.25.70.20";
     const subpath = targetUni == null ? "/getAll" : "/getSpecific";
 
     try {
