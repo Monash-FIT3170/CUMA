@@ -122,12 +122,17 @@ router.get('/oauth2callback', async (req, res) => {
     }
 
     try {
+        // Retrieve the token from google auth
         const { tokens } = await oauth2Client.getToken(code);
         oauth2Client.setCredentials(tokens);
 
+        // Exchange the token for user info data
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data
+
+        // update the session details
+        req.session.user = userInfo;
 
         // Print user data
         console.log('User Info:', userData);
