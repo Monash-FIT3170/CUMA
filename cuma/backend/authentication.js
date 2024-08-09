@@ -1,16 +1,16 @@
 const pathname = "/api/authentication"
 console.log(Backend.Auth)
 
-Backend.Auth.signup = async function (email, password) {
+Backend.Auth.signup = async function (firstName, lastName, email, password) {
     try {
-      const url = new URL("http://127.0.0.1:3000"+ pathname + "/signup");
+      const url = new URL("http://localhost:3000"+ pathname + "/signup");
 
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ firstName, lastName, email, password }),
       });
   
       const result = await response.json();
@@ -29,7 +29,7 @@ Backend.Auth.signup = async function (email, password) {
 
 Backend.Auth.login = async function (email, password) {
     try {
-      const url = new URL("http://127.0.0.1:3000"+ pathname + "/login");
+      const url = new URL("http://localhost:3000"+ pathname + "/login");
 
       const response = await fetch(url, {
         method: "POST",
@@ -54,7 +54,7 @@ Backend.Auth.login = async function (email, password) {
 
 Backend.Auth.googleAuth = async function () {
   try {
-    const url = new URL("http://127.0.0.1:3000"+ pathname + "/google");
+    const url = new URL("http://localhost:3000"+ pathname + "/google");
 
     const response = await fetch(url, {
       method: "GET",

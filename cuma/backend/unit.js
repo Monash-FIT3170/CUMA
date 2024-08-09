@@ -14,7 +14,7 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
     const params = {"universityName": universityName}
     
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
+        const url = new URL("http://localhost:3000" + pathname + "/getAllFromUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
@@ -41,7 +41,7 @@ Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
     const params = { "universityName": universityName }
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllNotInUni");
+        const url = new URL("http://localhost:3000" + pathname + "/getAllNotInUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
@@ -66,7 +66,7 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
     const params = { universityName, unitCode };
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/retrieveUnit");
+        const url = new URL("http://localhost:3000" + pathname + "/retrieveUnit");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url);
@@ -112,7 +112,7 @@ Backend.Unit.add = async function (universityName, unitInfo) {
     fieldMissing = []
 
     try {
-        const response = await fetch("http://127.0.0.1:3000" + pathname, {
+        const response = await fetch("http://localhost:3000" + pathname, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -153,7 +153,7 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
      *  */
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL("http://localhost:3000" + pathname + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "PUT",
@@ -182,7 +182,7 @@ Backend.Unit.delete = async function (universityName, unitCode) {
     */
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL("http://localhost:3000" + pathname + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "Delete",

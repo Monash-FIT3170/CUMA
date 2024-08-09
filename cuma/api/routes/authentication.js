@@ -38,7 +38,7 @@ router.post('/signup', async (req, res) => {
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
-        const { email, password} = req.body;
+        const { firstName, lastName, email, password } = req.body;
         const existingUser = await users.findOne({ email });
 
         if (existingUser) {
@@ -49,15 +49,21 @@ router.post('/signup', async (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, salt);
 
         const newUser = {
-            email,
             hashedPassword,
+            email,
             emailVerified: false,
+            emailHD: email.split('@')[1],
+            firstName,
+            lastName,
             role: 'general_user',
             createAt: new Date(),
             updatedAt: new Date(),
+            lastLogin: new Date()
         };
 
-        await users.insertOne(newUser);
+        const result = await users.insertOne(newUser);
+        console.log(result)
+        console.log("Successfully updated Database")
         res.status(201).json({ message: 'User created successfully' });
 
     } catch (error) {
@@ -80,19 +86,38 @@ router.post('/login', async (req, res) => {
         const existingUser = await users.findOne({ email });
 
         if (!existingUser) {
+
             return res.status(400).json({ error: 'Invalid email or password' });
+            
         }
 
         const isMatch = bcrypt.compareSync(password, existingUser.hashedPassword);
 
         if (!isMatch) {
+            
             return res.status(400).json({ message: 'Invalid credentials'});
+
         }
 
+        console.log("Exisiting User...Updating Database")
+        // Create query to update user profile database
+        const filter = { email: existingUser.email };
+        const update = {
+            $set: {
+                lastLogin: new Date()
+            }
+        };
+
+        // update the user profile
+        const result = await users.updateOne(filter, update);
+        console.log(result)
+        console.log("Successfully updated Database")
         res.json({ message: 'Login successful' });
 
     } catch (error) {
+
         res.status(500).json({ message: 'Error loggin in', error: error.message});
+
     }
 
 });
@@ -109,7 +134,7 @@ router.get('/google', (req, res) => {
     });
   
     res.redirect(authorizationUrl);
-  });
+});
   
 
 router.get('/oauth2callback', async (req, res) => {
