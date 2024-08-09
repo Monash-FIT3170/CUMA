@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="styles/signup.css">
-
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/authentication.js" defer></script>
+    <script src="login.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -55,10 +57,9 @@
                     <label for="confirm-password">Confirm Password</label>
                 </div>
                 <button class="signup-button">Sign Up</button>
-                <button class="login-btn" onclick="location.href='login.html'">Return to Login</button>
+                <button class="login-btn" onclick="window.location.href='/login'">Return to Login</button>
             </div>
         </div>
     </div>
-    <script src="login.js" defer></script>
 </body>
 </html>

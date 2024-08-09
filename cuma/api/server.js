@@ -28,7 +28,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+
 app.use(express.static(path.join(__dirname, '..', 'front-end'), { index: false })); // Using all the static files within front-end
+// Serve backend JavaScript files
+app.use('/backend', express.static(path.join(__dirname, '../backend'))); 
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
@@ -41,21 +44,23 @@ app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 
+// Page Link
 app.get('/index', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
 // Example route that uses the authenticated user's info
 app.get('/', (req, res) => {
+  res.redirect('/login')
+});
+
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'login.html'));
 });
 
-// // logout route
-// app.get('/logout', (req, res) => {
-//   // Revoke the OAuth token if needed
-//   if (req.session.user && req.session.user.access_token) {
-//     revokeToken(req.session.user.access_token);
-//   }
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'signup.html'));
+});
 
 //   // Destroy the session
 //   req.session.destroy((err) => {
