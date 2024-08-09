@@ -127,8 +127,30 @@ const { code, state } = req.query;
 
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
+        const userData = userInfo.data
 
-        console.log('User Info:', userInfo.data);
+        // get the client
+        const client = req.client;
+        // get the database and the collection
+        const database = client.db("CUMA");
+        const users = database.collection(collectionName);
+
+        // Extract the User Google ID and validate against database
+        const userGoogleID = userData.id
+        const existingUser = await users.findOne({ userGoogleID });
+
+        // Create a new user if the user does not exit in the database
+        if (!existingUser) {
+            console.log("New User...Creating new user in database")
+            
+            // Create a new user in database
+        } else {
+            console.log("Exisiting User...Updating Database")
+            // Update Metadata
+            
+        }
+
+        console.log('User Info:', userData);
         res.redirect('/index')
 
     } catch (error) {
