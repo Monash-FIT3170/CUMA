@@ -32,22 +32,24 @@ const scopes = [
 router.post('/signup', async (req, res) => {
 
     try {
-        // get the client
+        // get the client, database and collection
         const client = req.client;
-        // get the database and the collection
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
         const { firstName, lastName, email, password } = req.body;
+        
+        // Check if user exist
         const existingUser = await users.findOne({ email });
-
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
 
+        // Encrypt password
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
+        // Create query to insert new user in database
         const newUser = {
             hashedPassword,
             email,
@@ -60,11 +62,14 @@ router.post('/signup', async (req, res) => {
             updatedAt: new Date(),
             lastLogin: new Date()
         };
-
         const result = await users.insertOne(newUser);
-        console.log(result)
-        console.log("Successfully updated Database")
-        res.status(201).json({ message: 'User created successfully' });
+
+        // Send successful response
+        res.status(201).json({ 
+            message: 'Signup successfully',
+            data: { email: email},
+            result: result
+        });
 
     } catch (error) {
         console.error('Error signing up: ', error);
@@ -76,48 +81,47 @@ router.post('/login', async (req, res) => {
 
     try {
 
-        // get the client
+        // get the client, database and collection
         const client = req.client;
-        // get the database and the collection
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
         const { email, password} = req.body;
+        
+        // Check if user exist
         const existingUser = await users.findOne({ email });
-
         if (!existingUser) {
-
             return res.status(400).json({ error: 'Invalid email or password' });
-            
         }
 
+        // Compare if password match
         const isMatch = bcrypt.compareSync(password, existingUser.hashedPassword);
-
         if (!isMatch) {
-            
             return res.status(400).json({ message: 'Invalid credentials'});
-
         }
 
-        console.log("Exisiting User...Updating Database")
-        // Create query to update user profile database
+        // Create query and update user profile database
         const filter = { email: existingUser.email };
         const update = {
             $set: {
                 lastLogin: new Date()
             }
         };
-
-        // update the user profile
         const result = await users.updateOne(filter, update);
-        console.log(result)
-        console.log("Successfully updated Database")
-        res.json({ message: 'Login successful' });
+
+        // update the session details
+        req.session.user = {email: email};
+
+        // Send successful response
+        res.status(201).json({ 
+            message: 'Signup successfully',
+            data: { email: email},
+            result: result
+        });
 
     } catch (error) {
-
+        console.error('Error loging in: ', error);
         res.status(500).json({ message: 'Error loggin in', error: error.message});
-
     }
 
 });
