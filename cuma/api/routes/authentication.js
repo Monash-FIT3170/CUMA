@@ -113,7 +113,7 @@ router.get('/google', (req, res) => {
   
 
 router.get('/oauth2callback', async (req, res) => {
-const { code, state } = req.query;
+    const { code, state } = req.query;
 
     if (state !== req.session.state) {
         console.log('State mismatch. Possible CSRF attack');
@@ -128,6 +128,9 @@ const { code, state } = req.query;
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data
+
+        // Print user data
+        console.log('User Info:', userData);
 
         // get the client
         const client = req.client;
@@ -165,11 +168,21 @@ const { code, state } = req.query;
             // TODO: Redirect to Profile form and ask user to fill in additional information to complete profile.
         } else {
             console.log("Exisiting User...Updating Database")
-            // Update Metadata
-            
+            // Create query to update user profile database
+            const filter = { userGoogleID: userData.id };
+            const update = {
+                $set: {
+                    lastLogin: new Date()
+                }
+            };
+
+            // update the user profile
+            const result = await users.updateOne(filter, update);
+            console.log(result)
+            console.log("Successfully updated Database")
         }
 
-        console.log('User Info:', userData);
+        // Redirect to index
         res.redirect('/index')
 
     } catch (error) {
