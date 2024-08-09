@@ -36,36 +36,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// // OAuth 2.0 route to initiate the authentication process
-// app.get('/auth/google', (req, res) => {
-//   const authorizationUrl = generateAuthUrl(req);
-//   res.redirect(authorizationUrl);
-// });
-
-// // OAuth 2.0 callback route
-// app.get('/oauth2callback', async (req, res) => {
-//   const { code, state } = req.query;
-
-//   if (state !== req.session.state) {
-//     console.log('State mismatch. Possible CSRF attack');
-//     res.status(400).send('State mismatch. Possible CSRF attack');
-//     return;
-//   }
-
-//   try {
-//     const userInfo = await getUserInfo(code);
-//     req.session.user = userInfo;
-
-//     // TODO: Add validation/connection to database for proper autorisation
-//     console.log('User Info:', userInfo);
-//     res.redirect('/index.html'); // Redirect to home page after authentication
-
-//   } catch (error) {
-//     console.error('Error retrieving access token or user info', error);
-//     res.status(500).send('Error retrieving access token or user info');
-//   }
-// });
-
 // Mount the route handlers
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
