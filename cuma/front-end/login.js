@@ -57,15 +57,30 @@ function handleSignupFormSubmission(e) {
     const password = document.getElementById('signup-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 
+    // Validate the email and password pattern
     if (validateEmailAndPassword(email, password)) {
+
+        // Validate both password entry is the same
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             return;
-        } 
+        }
 
-        storeCredentials(email, password);
-        alert('Signup successful!');
-        window.location.href = 'login.html'; 
+        // request api to authenticate and signup
+        Backend.Auth.signup("", "", email, password).then(response => {
+            // Check if the login was successful
+            if (response.status === 201) {
+                // Redirect to the homepage
+                window.location.href = '/login';
+            } else {
+                alert("Error ", response.status, ": ", response.result.error)
+            }
+        })
+        .catch(error => {
+            console.error("An error occurred:", error);
+            // Handle the error, e.g., show an error message to the user
+        });
+        console.log("Signup Successful")
     }
 }
 
