@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
         // Compare if password match
         const isMatch = bcrypt.compareSync(password, existingUser.hashedPassword);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials'});
+            return res.status(400).json({ error: 'Invalid password'});
         }
 
         // Create query and update user profile database
@@ -114,14 +114,14 @@ router.post('/login', async (req, res) => {
 
         // Send successful response
         res.status(201).json({ 
-            message: 'Signup successfully',
+            message: 'Login successfully',
             data: { email: email},
             result: result
         });
 
     } catch (error) {
         console.error('Error loging in: ', error);
-        res.status(500).json({ message: 'Error loggin in', error: error.message});
+        res.status(500).json({ error: error.message});
     }
 
 });

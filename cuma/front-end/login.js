@@ -34,6 +34,7 @@ function handleLoginFormSubmission(e) {
             // Check if the login was successful
             if (response.status === 201) {
                 // Redirect to the homepage
+                alert("Success: " + response.result.message)
                 window.location.href = '/index';
             } else {
                 alert("Error " + response.status + ": " + response.result.error)
