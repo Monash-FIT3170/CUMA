@@ -2,5 +2,5 @@
 var Backend = {
     Unit: {},
     UnitConnection: {},
-    Auth
+    Auth: {}
 }
