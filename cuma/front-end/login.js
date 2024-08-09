@@ -28,15 +28,15 @@ function handleLoginFormSubmission(e) {
     const password = document.getElementById('password').value;
     
     if (validateEmailAndPassword(email, password)) {
-        
+
         // request api to authenticate and login
         Backend.Auth.login(email, password).then(response => {
             // Check if the login was successful
             if (response.status === 201) {
                 // Redirect to the homepage
-                window.location.href = '/';
+                window.location.href = '/index';
             } else {
-                alert("Error ", response.status, ": ", response.result.error)
+                alert("Error " + response.status + ": " + response.result.error)
             }
         })
         .catch(error => {
@@ -68,9 +68,10 @@ function handleSignupFormSubmission(e) {
             // Check if the login was successful
             if (response.status === 201) {
                 // Redirect to the homepage
+                alert("Success: " + response.result.message)
                 window.location.href = '/login';
             } else {
-                alert("Error ", response.status, ": ", response.result.error)
+                alert("Error " + response.status + ": " + response.result.error)
             }
         })
         .catch(error => {
