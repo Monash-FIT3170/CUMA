@@ -45,20 +45,10 @@ https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=shari
 In root do: `npm run server`
 
 # How to run the web
-## Live Server 
-Install "Live Server" extension on vscode
-
-## Run the web
-Navigate to `index.html`.
-This file is located in /cuma/front-end/index.html
-
-Run this html using Live Server
-
-
-
-The server runs the API and connects to mongoDB. Therefore, this command must be run first
-before npm install can be queried. 
-
+This is intended to be used for deployment to a server only
+To run without the server:
+Update all IP addresses frpm 3.25.70.20 to 127.0.0.1:3000
+Click on or go to http://localhost:3000
 
 
 
