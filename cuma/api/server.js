@@ -54,7 +54,7 @@ app.get('/index', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  if (!req.session.user) {
+  if (req.session.user) {
     res.redirect('/index')
   } else {
     res.redirect('/login')
