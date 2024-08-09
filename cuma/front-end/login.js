@@ -41,13 +41,23 @@ function handleLoginFormSubmission(e) {
     const password = document.getElementById('password').value;
     
     if (validateEmailAndPassword(email, password)) {
-        if (validateCredentials(email, password)) {
-            alert('Login successful!');
-            window.location.href = 'index.html'; 
-        } else {
-            alert('Invalid email or password.');
-        }
+        
+        // request api to authenticate and login
+        Backend.Auth.login(email, password).then(response => {
+            // Check if the login was successful
+            if (response.status === 201) {
+                // Redirect to the homepage
+                window.location.href = '/';
+            } else {
+                alert("Error ", response.status, ": ", response.result.error)
+            }
+        })
+        .catch(error => {
+            console.error("An error occurred:", error);
+            // Handle the error, e.g., show an error message to the user
+        });
     }
+    console.log("Login Successful")
 }
 
 // Function to handle signup form submission
