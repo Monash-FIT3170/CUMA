@@ -30,12 +30,10 @@ app.use(session({
 }));
 
 app.use(express.static(path.join(__dirname, '..', 'front-end'), { index: false })); // Using all the static files within front-end
-// Serve backend JavaScript files
-app.use('/backend', express.static(path.join(__dirname, '../backend'))); 
+app.use('/backend', express.static(path.join(__dirname, '../backend')));  // Serve backend JavaScript files
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
-  console.log(req.session.user);
   req.client = client;
   next();
 });
@@ -68,6 +66,18 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'signup.html'));
+});
+
+app.get('/signup/mfa-init', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-init.html'));
+});
+
+app.get('/signup/mfa-setup-qr', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-setup-qr.html'));
+});
+
+app.get('/signup/mfa-verify-totp', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-verify-totp.html'));
 });
 
 // Connect to MongoDB and start the server
