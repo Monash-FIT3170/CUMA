@@ -184,26 +184,36 @@ body, html {
 }
 
 .input-container {
-    position: relative;
-    margin-bottom: 20px;
-    text-align: left;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .input-container input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-top: 5px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 .input-container label {
-    position: absolute;
-    top: -20px;
-    left: 10px;
-    background: white;
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 12px;
+    background-color: white;
     padding: 0 5px;
-    color: #666;
 }
 
 button {

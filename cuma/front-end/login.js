@@ -51,6 +51,8 @@ function handleLoginFormSubmission(e) {
 // Function to handle signup form submission
 function handleSignupFormSubmission(e) {
     e.preventDefault();
+    const firstName = document.getElementById('signup-firstname').value.trim();
+    const lastName = document.getElementById('signup-lastname').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
@@ -65,7 +67,7 @@ function handleSignupFormSubmission(e) {
         }
 
         // request api to authenticate and signup
-        Backend.Auth.signup("", "", email, password).then(response => {
+        Backend.Auth.signup(firstName, lastName, email, password).then(response => {
             // Check if the login was successful
             if (response.status === 201) {
                 // Redirect to the homepage
