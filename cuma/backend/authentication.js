@@ -141,3 +141,27 @@ Backend.Auth.enableMFA = async function (token) {
     throw error;
   }
 };
+
+Backend.Auth.verifyMFA = async function (token) {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/verify-mfa");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+    console.log("Error enabling MFA:", error);
+    throw error;
+  }
+};

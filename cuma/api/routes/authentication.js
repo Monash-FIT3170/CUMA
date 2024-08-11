@@ -107,6 +107,14 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ error: 'Invalid password'});
         }
 
+        // If MFA is enabled, verify the token
+        if (existingUser.mfaEnabled) {
+            // MFA is enabled, return a special status to indicate that TOTP is needed
+            req.session.pendingLoginUser = { email: email }; // Store user info in session for TOTP verification
+            console.log(req.session)
+            return res.status(206).json({ message: 'MFA required' });
+        }
+
         // Create query and update user profile database
         const filter = { email: existingUser.email };
         const update = {
@@ -306,6 +314,46 @@ router.post('/enable-mfa', async (req, res) => {
     if (isValid) {
         await users.updateOne({ email: userEmail }, { $set: { mfaEnabled: true } });
         res.json({ success: true, message: 'MFA enabled' });
+    } else {
+        res.status(400).json({ error: 'Invalid MFA token' });
+    }
+});
+
+router.post('/verify-mfa', async (req, res) => {
+    const { token } = req.body;
+    console.log(req.session)
+    const userEmail = req.session.pendingLoginUser.email;
+
+    const client = req.client;
+    const database = client.db("CUMA");
+    const users = database.collection('users');
+
+    const existingUser = await users.findOne({ email: userEmail });
+    if (!existingUser) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isValid = authenticator.verify({ token, secret: existingUser.mfaSecret });
+
+    if (isValid) {
+        // Create query and update user profile database
+        const filter = { email: existingUser.email };
+        const update = {
+            $set: {
+                lastLogin: new Date()
+            }
+        };
+        const result = await users.updateOne(filter, update);
+
+        // update the session details
+        req.session.user = {email: userEmail};
+
+        // Send successful response
+        res.status(201).json({ 
+            message: 'Login successfully',
+            data: { email: userEmail},
+            result: result
+        });
     } else {
         res.status(400).json({ error: 'Invalid MFA token' });
     }
