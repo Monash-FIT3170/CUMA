@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 import crypto from 'crypto';
 import { google } from 'googleapis';
 import dotenv from 'dotenv';
+import { authenticator } from 'otplib';
+import QRCode from 'qrcode';
 
 dotenv.config();
 
@@ -58,11 +60,16 @@ router.post('/signup', async (req, res) => {
             firstName,
             lastName,
             role: 'general_user',
+            mfaEnabled: false,
+            mfaSecret: null,
             createAt: new Date(),
             updatedAt: new Date(),
             lastLogin: new Date()
         };
         const result = await users.insertOne(newUser);
+
+        // Store user email in session
+        req.session.pendingSignupUser = { email: email };
 
         // Send successful response
         res.status(201).json({ 
@@ -243,6 +250,65 @@ router.get('/logout' , async (req, res) => {
         // Send a JSON response instead of redirecting
         res.status(200).json({ message: 'Logged out successfully' });
     });
+});
+
+router.get('/setup-mfa', async (req, res) => {
+
+    // Fetch email from session
+    const userEmail = req.session.pendingSignupUser.email;
+
+    // Fetch the user from the database
+    const client = req.client;
+    const database = client.db("CUMA");
+    const users = database.collection('users');
+    const user = await users.findOne({ email: userEmail });
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found, please log in again' });
+    }
+
+    // Generate and store the secret in the user's profile (securely)
+    const secret = authenticator.generateSecret();
+    const updateResult = await users.updateOne({ email: userEmail }, { $set: { mfaSecret: secret } });
+
+    const otpauth = authenticator.keyuri(userEmail, 'Cuma', secret);
+
+    // Generate QR Code and send response
+    QRCode.toDataURL(otpauth, (e, imageUrl) => {
+        if (e) {
+            res.status(500).json({ error: e});
+        }
+
+        // Send successful response
+        res.status(201).json({ 
+            secret,
+            imageUrl,
+            message: "Successfully Setup MFA"
+        });
+    });
+});
+
+router.post('/enable-mfa', async (req, res) => {
+    const { token } = req.body;
+    const userEmail = req.session.pendingSignupUser.email;
+
+    const client = req.client;
+    const database = client.db("CUMA");
+    const users = database.collection('users');
+
+    const existingUser = await users.findOne({ email: userEmail });
+    if (!existingUser) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isValid = authenticator.verify({ token, secret: existingUser.mfaSecret });
+
+    if (isValid) {
+        await users.updateOne({ email: userEmail }, { $set: { mfaEnabled: true } });
+        res.json({ success: true, message: 'MFA enabled' });
+    } else {
+        res.status(400).json({ error: 'Invalid MFA token' });
+    }
 });
 
 export default router;
