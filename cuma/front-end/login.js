@@ -36,6 +36,11 @@ function handleLoginFormSubmission(e) {
                 // Redirect to the homepage
                 alert("Success: " + response.result.message)
                 window.location.href = '/index';
+            // Login require MFA
+            } else if (response.status === 206) {
+                // Redirect to the homepage
+                alert("Success: " + response.result.message)
+                window.location.href = '/login/verify-totp'; 
             } else {
                 alert("Error " + response.status + ": " + response.result.error)
             }

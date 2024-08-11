@@ -80,6 +80,10 @@ app.get('/signup/mfa-verify-totp', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-verify-totp.html'));
 });
 
+app.get('/login/verify-totp', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'login-verify-totp.html'));
+});
+
 // Connect to MongoDB and start the server
 async function run() {
   try {
