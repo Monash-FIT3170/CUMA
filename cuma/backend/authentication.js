@@ -1,5 +1,4 @@
 const pathName = "/api/authentication"
-console.log(Backend.Auth)
 
 Backend.Auth.signup = async function (firstName, lastName, email, password) {
     try {
@@ -94,5 +93,51 @@ Backend.Auth.logout = async function () {
   } catch (error) {
       console.log("Error:", error);
       throw error; // Re-throw the error so it can be caught in the calling function
+  }
+};
+
+Backend.Auth.setupMFA = async function () {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/setup-mfa");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+    
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result };  // Contains QR code image URL and secret
+
+  } catch (error) {
+    console.log("Error setting up MFA:", error);
+  }
+};
+
+Backend.Auth.enableMFA = async function (token) {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/enable-mfa");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token }),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+    console.log("Error enabling MFA:", error);
+    throw error;
   }
 };
