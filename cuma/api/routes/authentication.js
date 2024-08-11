@@ -226,6 +226,25 @@ router.get('/oauth2callback', async (req, res) => {
     }
 });
 
+router.get('/logout' , async (req, res) => {
+    // This code is unusable since revokeToken does not exist
+    // TODO: need actual revoking of token and not just destroying
+    //
+    // if (req.session.user && req.session.user.access_token) {
+    //     revokeToken(req.session.user.access_token);
+    // }
+
+    // Destroy the session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Failed to destroy session during logout:', err);
+            return res.status(500).json({ error: 'Failed to log out.' });
+        }
+        // Send a JSON response instead of redirecting
+        res.status(200).json({ message: 'Logged out successfully' });
+    });
+});
+
 export default router;
 
 

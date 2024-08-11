@@ -35,6 +35,7 @@ app.use('/backend', express.static(path.join(__dirname, '../backend')));
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
+  console.log(req.session.user);
   req.client = client;
   next();
 });
@@ -67,25 +68,6 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'signup.html'));
-});
-
-// logout route
-app.get('/logout', (req, res) => {
-  // Revoke the OAuth token if needed
-  if (req.session.user && req.session.user.access_token) {
-    revokeToken(req.session.user.access_token);
-  }
-
-  // Destroy the session
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Failed to destroy session during logout:', err);
-      return res.status(500).send('Failed to log out.');
-    }
-
-    // Redirect to home or login page
-    res.redirect('/');
-  });
 });
 
 // Connect to MongoDB and start the server
