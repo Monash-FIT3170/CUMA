@@ -72,7 +72,7 @@ function handleSignupFormSubmission(e) {
             if (response.status === 201) {
                 // Redirect to the homepage
                 alert("Success: " + response.result.message)
-                window.location.href = '/login';
+                window.location.href = '/signup/mfa-init';
             } else {
                 alert("Error " + response.status + ": " + response.result.error)
             }
