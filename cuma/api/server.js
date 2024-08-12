@@ -84,6 +84,14 @@ app.get('/login/verify-totp', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'login-verify-totp.html'));
 });
 
+app.get('/login/request-password-reset', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'request-pw-reset.html'));
+});
+
+app.get('/login/request-password-reset-success', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'request-pw-reset-success.html'));
+});
+
 // Connect to MongoDB and start the server
 async function run() {
   try {

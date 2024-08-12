@@ -165,3 +165,27 @@ Backend.Auth.verifyMFA = async function (token) {
     throw error;
   }
 };
+
+Backend.Auth.requestPasswordReset = async function (email) {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/request-password-reset");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+    console.log("Error requesting password reset:", error);
+    throw error;
+  }
+};

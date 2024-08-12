@@ -6,6 +6,7 @@ import { google } from 'googleapis';
 import dotenv from 'dotenv';
 import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
+import nodemailer from 'nodemailer';
 
 dotenv.config();
 
@@ -356,6 +357,75 @@ router.post('/verify-mfa', async (req, res) => {
         });
     } else {
         res.status(400).json({ error: 'Invalid MFA token' });
+    }
+});
+
+router.post('/request-password-reset', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const client = req.client;
+        const database = client.db("CUMA");
+        const users = database.collection(collectionName);
+
+        const user = await users.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Generate a secure token and set an expiration time
+        const token = crypto.randomBytes(32).toString('hex');
+        const expiration = Date.now() + 3600000; // Token valid for 1 hour
+
+        // Store the token and expiration in the user's record under passwordReset
+        await users.updateOne(
+            { email }, 
+            { $set: { 
+                'passwordReset.resetToken': token, 
+                'passwordReset.resetTokenExpiry': expiration 
+              }
+            }
+        );
+
+        // Create a user reset link
+        const resetLink = `http://localhost:3000/reset-password?token=${token}&email=${email}`;
+        
+        // Setup Email service
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_APP_PASSWORD
+            }
+        });
+
+        // Compile the password reset email
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Reset your CUMA account password',
+            text: `Hi, ${user.firstName},\n\nWe got your request to reset your CUMA account password.\nClick the link to reset your password: ${resetLink}.\nYour password reset link is valid for 1 hours.`
+        };
+
+        // Send the password reset email to user
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                res.status(500).json({ error: 'Error sending email' });
+            }
+
+            // store the email in the session
+            req.session.resetPasswordEmail = { email }
+
+            res.status(200).json({ 
+                valid: true,
+                info, 
+                message: 'Password reset link has been sent to your email.' 
+            });
+        });
+
+    } catch (error) {
+        console.error('Error handling password reset request:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
