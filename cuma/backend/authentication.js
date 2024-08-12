@@ -189,3 +189,51 @@ Backend.Auth.requestPasswordReset = async function (email) {
     throw error;
   }
 };
+
+Backend.Auth.validateResetPasswordLink = async function (token, email) {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/reset-password");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, email }),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+    console.log("Error requesting password reset:", error);
+    throw error;
+  }
+};
+
+Backend.Auth.updateNewPassword = async function (token, email, password) {
+  try {
+    const url = new URL("http://localhost:3000" + pathName + "/update-new-password");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, email, password }),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+    console.log("Error updating password:", error);
+    throw error;
+  }
+};

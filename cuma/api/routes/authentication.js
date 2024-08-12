@@ -429,6 +429,83 @@ router.post('/request-password-reset', async (req, res) => {
     }
 });
 
+router.post('/reset-password', async (req, res) => {
+    const { token, email } = req.body;
+
+    if (!token || !email) {
+        return res.status(400).json({ error: 'Missing token or email value.' });
+    }
+
+    try {
+        const client = req.client;
+        const database = client.db("CUMA");
+        const users = database.collection(collectionName);
+
+        // Find the user based on the email and token
+        const user = await users.findOne({
+            email,
+            'passwordReset.resetToken': token
+        });
+
+        // Check if the user exists and the token is still valid
+        if (!user || user.passwordReset.resetTokenExpiry < Date.now()) {
+            return res.status(400).json({ error: 'Invalid or expired password reset token. Please request another password reset.' });
+        }
+
+        // Send successful response
+        res.status(200).json({ message: 'Successfully validated password reset token.' });
+
+    } catch (error) {
+        console.error('Error validating reset password token:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+router.post('/update-new-password', async (req, res) => {
+    const { email, password, token } = req.body;
+
+    if (!email || !password || !token) {
+        return res.status(400).json({ error: 'Email, password, and token are required.' });
+    }
+
+    try {
+        const client = req.client;
+        const database = client.db("CUMA");
+        const users = database.collection(collectionName);
+
+        // Verify the token and check if it is associated with the user
+        const user = await users.findOne({ 
+            email,
+            'passwordReset.resetToken': token 
+        });
+
+        if (!user || user.passwordReset.resetTokenExpiry < Date.now()) {
+            return res.status(400).json({ error: 'Invalid or expired token.' });
+        }
+
+        // Encrypt the new password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // Update the user's password in the database and remove the reset token
+        await users.updateOne(
+            { email },
+            { 
+                $set: { hashedPassword },
+                $unset: { 'passwordReset.resetToken': "", 'passwordReset.resetTokenExpiry': "" }
+            }
+        );
+
+        // Send successful response
+        res.status(200).json({ message: 'Successfully updated new password.' });
+
+    } catch (error) {
+        console.error('Error updating new password:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 export default router;
 
 
