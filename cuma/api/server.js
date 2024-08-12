@@ -93,11 +93,11 @@ app.get('/login/request-password-reset-success', (req, res) => {
 });
 
 app.get('/reset-password', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-password.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-pw.html'));
 });
 
 app.get('/reset-password-success', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-password-success.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-pw-success.html'));
 });
 
 // Connect to MongoDB and start the server
