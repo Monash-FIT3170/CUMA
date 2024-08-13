@@ -1,4 +1,3 @@
-// Function to validate email and password format
 function validateEmailAndPassword(email, password) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -21,7 +20,6 @@ function validateEmailAndPassword(email, password) {
     return true;
 }
 
-// Function to handle login form submission
 function handleLoginFormSubmission(e) {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
@@ -53,7 +51,6 @@ function handleLoginFormSubmission(e) {
     console.log("Login Successful")
 }
 
-// Function to handle signup form submission
 function handleSignupFormSubmission(e) {
     e.preventDefault();
     const firstName = document.getElementById('signup-firstname').value.trim();
@@ -90,6 +87,24 @@ function handleSignupFormSubmission(e) {
     }
 }
 
+function verifyLoginTOTPToken() {
+    // Get the input token value
+    const token = document.getElementById('login-totp-code').value;
+    
+    // Request MFA Enable
+    Backend.Auth.verifyMFA(token).then(response => {
+        if (response.status === 201) { // Assuming backend uses 200 for success
+            alert("Success: " + response.message);
+            window.location.href = "/index";
+        } else {
+            alert("Error " + response.status + ": " + response.error);
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.querySelector('.login-button');
     if (loginButton) {
@@ -99,5 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.querySelector('.signup-button');
     if (signupForm) {
         signupForm.addEventListener('click', handleSignupFormSubmission);
+    }
+
+    const verifyLoginTOTP = document.getElementById('login-verify-totp');
+    if (verifyLoginTOTP) {
+        verifyLoginTOTP.addEventListener('click', verifyLoginTOTPToken)
     }
 });

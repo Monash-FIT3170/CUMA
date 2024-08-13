@@ -62,11 +62,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'login.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-login.html'));
+});
+
+app.get('/login/verify-totp', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-login-verify-totp.html'));
 });
 
 app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'signup.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-signup.html'));
 });
 
 app.get('/signup/mfa-init', (req, res) => {
@@ -79,10 +83,6 @@ app.get('/signup/mfa-setup-qr', (req, res) => {
 
 app.get('/signup/mfa-verify-totp', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-verify-totp.html'));
-});
-
-app.get('/login/verify-totp', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'login-verify-totp.html'));
 });
 
 app.get('/login/request-password-reset', (req, res) => {
