@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="styles/signup.css">
+    <link rel="stylesheet" href="styles/auth.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
     <script src="../auth.js" defer></script>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="right-section">
-            <div class="signup-form">
+            <div class="form">
                 <h2>Sign Up</h2>
                 <a href="/api/authentication/google">
                     <button class="gsi-material-button">
@@ -67,8 +67,8 @@
                     <input type="password" id="confirm-password" required>
                     <label for="confirm-password">Confirm Password</label>
                 </div>
-                <button class="signup-button">Sign Up</button>
-                <button class="login-btn" onclick="window.location.href='/login'">Return to Login</button>
+                <button class="primary-btn" id="signup-btn">Sign Up</button>
+                <button class="secondary-btn" onclick="window.location.href='/login'">Return to Login</button>
             </div>
         </div>
     </div>

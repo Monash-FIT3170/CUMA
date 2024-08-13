@@ -44,7 +44,7 @@ body, html {
     align-items: center;
 }
 
-.login-form {
+.form {
     background: white;
     padding: 40px;
     border-radius: 10px;
@@ -52,6 +52,14 @@ body, html {
     width: 80%;
     max-width: 400px;
     text-align: center;
+}
+
+.form h2 {
+    margin-bottom: 20px;
+}
+
+.form p {
+    padding: 10px;
 }
 
 .gsi-material-button {
@@ -179,10 +187,6 @@ body, html {
     font-size: 14px;
 }
 
-.login-form h2 {
-    margin-bottom: 20px;
-}
-
 .input-container {
   position: relative;
   margin-bottom: 20px;
@@ -216,7 +220,7 @@ body, html {
     padding: 0 5px;
 }
 
-button {
+.primary-btn {
     background-color: #3b90d5;
     color: white;
     border: none;
@@ -227,29 +231,26 @@ button {
     margin-bottom: 10px;
 }
 
-button:hover {
+.primary-btn:hover {
     background-color: #2a75bb;
 }
 
-.forgot-password {
-    display: block;
-    margin: 10px 0;
-    color: #4DA5F5;
-    text-decoration: none;
-}
-
-.signup-btn {
-    display: block;
-    margin: 10px 0;
-    color: white;
-    text-decoration: none;
-}
-
-.guest-btn {
+.secondary-btn {
     background-color: gainsboro;
     color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
-.guest-btn:hover {
+.secondary-btn:hover {
     background-color: lightgray;
+}
+
+.mfa-qr-code {
+    max-width: 200px;
+    padding: 10px;
 }

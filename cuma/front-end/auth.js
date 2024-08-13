@@ -106,12 +106,12 @@ function verifyLoginTOTPToken() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const loginButton = document.querySelector('.login-button');
+    const loginButton = document.getElementById('login-btn');
     if (loginButton) {
         loginButton.addEventListener('click', handleLoginFormSubmission);
     }
 
-    const signupForm = document.querySelector('.signup-button');
+    const signupForm = document.getElementById('signup-btn');
     if (signupForm) {
         signupForm.addEventListener('click', handleSignupFormSubmission);
     }
