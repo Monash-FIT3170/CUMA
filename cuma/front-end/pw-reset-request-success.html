@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../styles/mfa-auth.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
-    <script src="../request-pw-reset.js" defer></script>
+    <script src="../pw-reset.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -21,14 +21,9 @@
         </div>
         <div class="right-section">
             <div class="mfa-auth-form">
-                <h2>Reset your password</h2>
-                <p>Don’t worry, we’ve got your back! Just enter your email address and we’ll send you a link to reset your password.</p>
-                <div class="input-container">
-                    <input type="email" id="email-input" required>
-                    <label for="email">Email</label>
-                </div>
-                <button class="primary-btn" id="submit-btn">Submit</button>
-                <button class="secondary-btn" id="req-pw-return-to-login">Return to login</button>
+                <h2>Email Sent</h2>
+                <p id="pw-request-response">A link to reset your password has been sent to you on </p>
+                <button class="primary-btn" id="return-login-btn">Return to Login</button>
             </div>
         </div>
     </div>

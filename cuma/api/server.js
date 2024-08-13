@@ -86,19 +86,19 @@ app.get('/login/verify-totp', (req, res) => {
 });
 
 app.get('/login/request-password-reset', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'request-pw-reset.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'pw-reset-request.html'));
 });
 
 app.get('/login/request-password-reset-success', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'request-pw-reset-success.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'pw-reset-request-success.html'));
 });
 
 app.get('/reset-password', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-pw.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'pw-create-new.html'));
 });
 
 app.get('/reset-password-success', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'create-new-pw-success.html'));
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'pw-create-new-success.html'));
 });
 
 // Connect to MongoDB and start the server

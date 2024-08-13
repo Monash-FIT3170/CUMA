@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../styles/mfa-auth.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
-    <script src="../create-new-pw.js" defer></script>
+    <script src="../pw-reset.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -20,12 +20,12 @@
             </div>
         </div>
         <div class="right-section">
-            <div class="mfa-auth-form" id="new-pw-error-form" style="display:none;">
+            <div class="mfa-auth-form" id="pw-new-error-form" style="display:none;">
                 <h2>Reset your password</h2>
                 <div id="new-pw-error-message"></div>
-                <button class="primary-btn" id="reset-pw-again">Reset Password Again</button>
+                <button class="primary-btn" id="pw-reset-again-btn">Reset Password Again</button>
             </div>
-            <div class="mfa-auth-form" id="new-pw-form" style="display:none;">
+            <div class="mfa-auth-form" id="pw-new-form" style="display:none;">
                 <h2>Reset your password</h2>
                 <p>Enter your new password below.</p>
                 <div class="input-container">
@@ -36,7 +36,7 @@
                     <input type="password" id="reset-confirm-password" required>
                     <label for="reset-confirm-password">Confirm Password</label>
                 </div>
-                <button class="primary-btn" id="new-pw-submit-btn">Submit</button>
+                <button class="primary-btn" id="pw-new-submit-btn">Submit</button>
             </div>
         </div>
     </div>
