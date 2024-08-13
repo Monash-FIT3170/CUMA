@@ -5,11 +5,14 @@ function renderMFAQRCode() {
         console.log(response);
         if (response.status === 201) {
             // Extract the imageURL and set the QR Code
-            const { imageUrl, secret } = response;
+            const { imageUrl, secret, email } = response;
             const qrCodeImage = document.getElementById('qrcode');
-
+            const accountNameText = document.getElementById('mfa-acc-name')
+            const secretKeyText = document.getElementById('mfa-secret-key');
             if (imageUrl && qrCodeImage) {
                 qrCodeImage.src = imageUrl;
+                accountNameText.textContent += email;
+                secretKeyText.textContent += secret;
             }
         } else {
             alert("Error " + response.status + ": " + response.error);

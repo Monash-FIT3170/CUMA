@@ -292,6 +292,7 @@ router.get('/setup-mfa', async (req, res) => {
 
         // Send successful response
         res.status(201).json({ 
+            email: userEmail,
             secret,
             imageUrl,
             message: "Successfully Setup MFA"
