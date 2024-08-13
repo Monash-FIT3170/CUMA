@@ -12,6 +12,8 @@ dotenv.config();
 
 const router = express.Router();
 const collectionName = 'users'
+const port = process.env.PORT || 3000;
+const host = 'localhost:' + port
 
 // OAuth2 Client Configuration
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -388,7 +390,7 @@ router.post('/request-password-reset', async (req, res) => {
         );
 
         // Create a user reset link
-        const resetLink = `http://localhost:3000/reset-password?token=${token}&email=${email}`;
+        const resetLink = `http://${host}/reset-password?token=${token}&email=${email}`;
         
         // Setup Email service
         const transporter = nodemailer.createTransport({

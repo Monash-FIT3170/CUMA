@@ -1,6 +1,6 @@
-const serverPath = "http://localhost:3000";
-const backendPath = "/api/unitConnection";
-
+const port = 3000;
+const serverPath = "http://localhost:" + port;
+const backendPath = "/api/unitConnection"
 
 /*
     E.g. req.body =
@@ -11,7 +11,7 @@ const backendPath = "/api/unitConnection";
         "unitCodeB": "MAT1830"
     } 
 
-    works with post request to http://localhost:3000/api/unitConnection
+    works with post request to /api/unitConnection
 */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
     return await Backend.UnitConnection.update(unitConnectionInfo, "add");
@@ -26,7 +26,7 @@ Backend.UnitConnection.delete = async function (unitConnectionInfo) {
 Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     console.log(unitConnectionInfo)
     try {
-        const response = await fetch("http://localhost:3000" + "/api/unitConnection/" + subpath, {
+        const response = await fetch(serverPath + backendPath + subpath, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -87,8 +87,6 @@ Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, 
         params.targetUni = targetUni;
     }
 
-    // Endpoint paths
-    const serverPath = "http://localhost:3000";
     const subpath = targetUni == null ? "/getAll" : "/getSpecific";
 
     try {

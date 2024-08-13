@@ -18,6 +18,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+const host = 'localhost:' + port
 const client = new MongoClient(process.env.MONGODB_URI);
 
 // Middleware setup
@@ -108,7 +109,7 @@ async function run() {
     console.log("Connected to MongoDB");
     // Start the Express server
     const server = app.listen(port, () => {
-      console.log(`Server is running in ${process.env.NODE_ENV} mode on http://localhost:${port}`);
+      console.log(`Server is running in ${process.env.NODE_ENV} mode on http://${host}`);
     });
     // Function to close server
     const closeServer = async () => {

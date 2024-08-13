@@ -1,8 +1,10 @@
-const pathName = "/api/authentication"
+const port = 3000;
+const serverPath = "http://localhost:" + port;
+const backendPath = "/api/authentication"
 
 Backend.Auth.signup = async function (firstName, lastName, email, password) {
     try {
-      const url = new URL("http://localhost:3000"+ pathName + "/signup");
+      const url = new URL(serverPath + backendPath + "/signup");
 
       const response = await fetch(url, {
         method: "POST",
@@ -28,7 +30,7 @@ Backend.Auth.signup = async function (firstName, lastName, email, password) {
 
 Backend.Auth.login = async function (email, password) {
     try {
-      const url = new URL("http://localhost:3000"+ pathName + "/login");
+      const url = new URL(serverPath + backendPath + "/login");
 
       const response = await fetch(url, {
         method: "POST",
@@ -53,7 +55,7 @@ Backend.Auth.login = async function (email, password) {
 
 Backend.Auth.googleAuth = async function () {
   try {
-    const url = new URL("http://localhost:3000"+ pathName + "/google");
+    const url = new URL(serverPath + backendPath + "/google");
 
     const response = await fetch(url, {
       method: "GET",
@@ -70,7 +72,7 @@ Backend.Auth.googleAuth = async function () {
 
 Backend.Auth.logout = async function () {
   try {
-      const url = new URL("http://localhost:3000" + pathName + "/logout");
+      const url = new URL(serverPath + backendPath + "/logout");
 
       const response = await fetch(url, {
           method: "GET",
@@ -98,7 +100,7 @@ Backend.Auth.logout = async function () {
 
 Backend.Auth.setupMFA = async function () {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/setup-mfa");
+    const url = new URL(serverPath + backendPath + "/setup-mfa");
 
     const response = await fetch(url, {
       method: "GET",
@@ -120,7 +122,7 @@ Backend.Auth.setupMFA = async function () {
 
 Backend.Auth.enableMFA = async function (token) {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/enable-mfa");
+    const url = new URL(serverPath + backendPath + "/enable-mfa");
 
     const response = await fetch(url, {
       method: "POST",
@@ -144,7 +146,7 @@ Backend.Auth.enableMFA = async function (token) {
 
 Backend.Auth.verifyMFA = async function (token) {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/verify-mfa");
+    const url = new URL(serverPath + backendPath + "/verify-mfa");
 
     const response = await fetch(url, {
       method: "POST",
@@ -168,7 +170,7 @@ Backend.Auth.verifyMFA = async function (token) {
 
 Backend.Auth.requestPasswordReset = async function (email) {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/request-password-reset");
+    const url = new URL(serverPath + backendPath + "/request-password-reset");
 
     const response = await fetch(url, {
       method: "POST",
@@ -192,7 +194,7 @@ Backend.Auth.requestPasswordReset = async function (email) {
 
 Backend.Auth.validateResetPasswordLink = async function (token, email) {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/reset-password");
+    const url = new URL(serverPath + backendPath + "/reset-password");
 
     const response = await fetch(url, {
       method: "POST",
@@ -216,7 +218,7 @@ Backend.Auth.validateResetPasswordLink = async function (token, email) {
 
 Backend.Auth.updateNewPassword = async function (token, email, password) {
   try {
-    const url = new URL("http://localhost:3000" + pathName + "/update-new-password");
+    const url = new URL(serverPath + backendPath + "/update-new-password");
 
     const response = await fetch(url, {
       method: "POST",
