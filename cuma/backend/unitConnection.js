@@ -1,6 +1,4 @@
-const port = 3000;
-const serverPath = "http://localhost:" + port;
-const backendPath = "/api/unitConnection"
+const unitConnectionBackendPath = "/api/unitConnection"
 
 /*
     E.g. req.body =
@@ -26,7 +24,7 @@ Backend.UnitConnection.delete = async function (unitConnectionInfo) {
 Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     console.log(unitConnectionInfo)
     try {
-        const response = await fetch(serverPath + backendPath + subpath, {
+        const response = await fetch(serverPath + unitConnectionBackendPath + subpath, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -93,7 +91,7 @@ Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, 
         console.log(params);
 
         // Construct the URL with query parameters
-        const url = new URL(serverPath + backendPath + subpath);
+        const url = new URL(serverPath + unitConnectionBackendPath + subpath);
         url.search = new URLSearchParams(params).toString();
 
         // Fetch the response

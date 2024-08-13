@@ -1,6 +1,4 @@
-const port = 3000;
-const serverPath = "http://localhost:" + port;
-const backendPath = "/api/unit"
+const unitBackendPath = "/api/unit"
 
 // define namespace
 Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
@@ -14,7 +12,7 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
     const params = {"universityName": universityName}
     
     try {
-        const url = new URL("http://" + host + pathname + "/getAllFromUni");
+        const url = new URL(serverPath + unitBackendPath + "/getAllFromUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
@@ -41,7 +39,7 @@ Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
     const params = { "universityName": universityName }
 
     try {
-        const url = new URL("http://" + host + pathname + "/getAllNotInUni");
+        const url = new URL(serverPath + unitBackendPath + "/getAllNotInUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
@@ -66,7 +64,7 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
     const params = { universityName, unitCode };
 
     try {
-        const url = new URL("http://" + host + pathname + "/retrieveUnit");
+        const url = new URL(serverPath + unitBackendPath + "/retrieveUnit");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url);
@@ -112,7 +110,7 @@ Backend.Unit.add = async function (universityName, unitInfo) {
     fieldMissing = []
 
     try {
-        const response = await fetch("http://" + host + pathname, {
+        const response = await fetch(serverPath + unitBackendPath, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -153,7 +151,7 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
      *  */
 
     try {
-        const url = new URL("http://" + host + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL(unitBackendPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "PUT",
@@ -182,7 +180,7 @@ Backend.Unit.delete = async function (universityName, unitCode) {
     */
 
     try {
-        const url = new URL("http://" + host + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL(serverPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "Delete",

@@ -1,6 +1,4 @@
-const port = 3000;
-const serverPath = "http://localhost:" + port;
-const backendPath = "/api/authentication"
+const authBackendPath = "/api/authentication"
 
 Backend.Auth.signup = async function (firstName, lastName, email, password) {
     try {
