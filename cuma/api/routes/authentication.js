@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -33,6 +34,29 @@ const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
   'openid'
 ];
+
+// Generate AccessToken for authentication
+function generateAccessToken(email, role) {
+    userInfo = { email, role, reauthenticated: false }
+    return jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+}
+
+// Generate refresh token for reauthentication
+function generateRefreshToken(email) {
+    return jwt.sign(email, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
+}
+
+// Update User login related info in database
+async function updateUserLogin(users, email, refreshToken) {
+    const filter = { email };
+    const update = {
+        $set: {
+            lastLogin: new Date(),
+            refreshToken
+        }
+    };
+    await users.updateOne(filter, update);
+}
 
 router.post('/signup', async (req, res) => {
 
@@ -69,17 +93,13 @@ router.post('/signup', async (req, res) => {
             updatedAt: new Date(),
             lastLogin: new Date()
         };
-        const result = await users.insertOne(newUser);
+        await users.insertOne(newUser);
 
         // Store user email in session
-        req.session.pendingSignupUser = { email: email };
+        req.session.pendingSignupUser = { email: email, expiresIn: Date.now() + 5 * 60 * 1000};
 
         // Send successful response
-        res.status(201).json({ 
-            message: 'Signup successfully',
-            data: { email: email},
-            result: result
-        });
+        res.status(201).json({ message: 'Signup successfully' });
 
     } catch (error) {
         console.error('Error signing up: ', error);
@@ -96,7 +116,7 @@ router.post('/login', async (req, res) => {
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
-        const { email, password} = req.body;
+        const { email, password } = req.body;
         
         // Check if user exist
         const existingUser = await users.findOne({ email });
@@ -113,28 +133,34 @@ router.post('/login', async (req, res) => {
         // If MFA is enabled, verify the token
         if (existingUser.mfaEnabled) {
             // MFA is enabled, return a special status to indicate that TOTP is needed
-            req.session.pendingLoginUser = { email: email }; // Store user info in session for TOTP verification
-            console.log(req.session)
+            req.session.pendingLoginUser = { email };
             return res.status(206).json({ message: 'MFA required' });
         }
 
-        // Create query and update user profile database
-        const filter = { email: existingUser.email };
-        const update = {
-            $set: {
-                lastLogin: new Date()
-            }
-        };
-        const result = await users.updateOne(filter, update);
+        // update the token details
+        const accessToken = generateAccessToken(existingUser.email, existingUser.role)
+        const refreshToken = generateRefreshToken(existingUser.email)
 
-        // update the session details
-        req.session.user = {email: email};
+        await updateUserLogin(users, existingUser.email, refreshToken)
+
+        // Set cookies
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 15 * 60 * 1000, // 15mins
+            sameSite: 'Strict'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
+            sameSite: 'Strict'
+        });
 
         // Send successful response
         res.status(201).json({ 
-            message: 'Login successfully',
-            data: { email: email},
-            result: result
+            message: 'Login successfully'
         });
 
     } catch (error) {
@@ -146,7 +172,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/google', (req, res) => {
     const state = crypto.randomBytes(32).toString('hex');
-    req.session.state = state;
+    req.session.googleState = state;
   
     const authorizationUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
@@ -157,13 +183,11 @@ router.get('/google', (req, res) => {
   
     res.redirect(authorizationUrl);
 });
-  
 
 router.get('/oauth2callback', async (req, res) => {
     const { code, state } = req.query;
 
-    if (state !== req.session.state) {
-        console.log('State mismatch. Possible CSRF attack');
+    if (state !== req.session.googleState) {
         res.status(400).send('State mismatch. Possible CSRF attack');
         return;
     }
@@ -178,12 +202,6 @@ router.get('/oauth2callback', async (req, res) => {
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data
 
-        // update the session details
-        req.session.user = userInfo;
-
-        // Print user data
-        console.log('User Info:', userData);
-
         // get the client
         const client = req.client;
         // get the database and the collection
@@ -194,11 +212,12 @@ router.get('/oauth2callback', async (req, res) => {
         const userGoogleID = userData.id
         const existingUser = await users.findOne({ userGoogleID });
 
+        // update the token details
+        const accessToken = generateAccessToken(existingUser.email, existingUser.role)
+        const refreshToken = generateRefreshToken(existingUser.email)
+
         // Create a new user if the user does not exit in the database
         if (!existingUser) {
-            console.log("New User...Creating new user in database")
-            
-            // TODO: Update database structure once finalised
             // Create a new user data
             const newUser = {
                 userGoogleID: userData.id,
@@ -211,34 +230,40 @@ router.get('/oauth2callback', async (req, res) => {
                 createAt: new Date(),
                 updatedAt: new Date(),
                 lastLogin: new Date(),
+                refreshToken
             };
-
-            // Insert the data in the database
-            const result = await users.insertOne(newUser);
-            console.log("New User created successfully: ", result)
-
-            // TODO: Redirect to Profile form and ask user to fill in additional information to complete profile.
+            await users.insertOne(newUser);
         } else {
-            console.log("Exisiting User...Updating Database")
-            // Create query to update user profile database
+            // Update existing user
             const filter = { userGoogleID: userData.id };
             const update = {
                 $set: {
-                    lastLogin: new Date()
+                    lastLogin: new Date(),
+                    refreshToken
                 }
             };
-
-            // update the user profile
-            const result = await users.updateOne(filter, update);
-            console.log(result)
-            console.log("Successfully updated Database")
+            await users.updateOne(filter, update);
         }
+
+        // Set cookies
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 15 * 60 * 1000, // 15mins
+            sameSite: 'Strict'
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
+            sameSite: 'Strict'
+        });
 
         // Redirect to index
         res.redirect('/index')
 
     } catch (error) {
-
         console.error('Error retrieving access token or user info', error);
         res.status(500).send('Error retrieving access token or user info');
     }
@@ -272,15 +297,15 @@ router.get('/setup-mfa', async (req, res) => {
     const client = req.client;
     const database = client.db("CUMA");
     const users = database.collection('users');
-    const user = await users.findOne({ email: userEmail });
 
+    const user = await users.findOne({ email: userEmail });
     if (!user) {
         return res.status(404).json({ error: 'User not found, please log in again' });
     }
 
     // Generate and store the secret in the user's profile (securely)
     const secret = authenticator.generateSecret();
-    const updateResult = await users.updateOne({ email: userEmail }, { $set: { mfaSecret: secret } });
+    await users.updateOne({ email: userEmail }, { $set: { mfaSecret: secret } });
 
     const otpauth = authenticator.keyuri(userEmail, 'Cuma', secret);
 
@@ -307,17 +332,15 @@ router.post('/enable-mfa', async (req, res) => {
     const client = req.client;
     const database = client.db("CUMA");
     const users = database.collection('users');
-
     const existingUser = await users.findOne({ email: userEmail });
     if (!existingUser) {
         return res.status(404).json({ error: 'User not found' });
     }
 
     const isValid = authenticator.verify({ token, secret: existingUser.mfaSecret });
-
     if (isValid) {
         await users.updateOne({ email: userEmail }, { $set: { mfaEnabled: true } });
-        res.json({ success: true, message: 'MFA enabled' });
+        res.status(200).json({ message: 'MFA enabled' });
     } else {
         res.status(400).json({ error: 'Invalid MFA token' });
     }
@@ -325,7 +348,7 @@ router.post('/enable-mfa', async (req, res) => {
 
 router.post('/verify-mfa', async (req, res) => {
     const { token } = req.body;
-    console.log(req.session)
+
     const userEmail = req.session.pendingLoginUser.email;
 
     const client = req.client;
@@ -333,34 +356,33 @@ router.post('/verify-mfa', async (req, res) => {
     const users = database.collection('users');
 
     const existingUser = await users.findOne({ email: userEmail });
-    if (!existingUser) {
-        return res.status(404).json({ error: 'User not found' });
-    }
+    if (!existingUser) return res.status(404).json({ error: 'User not found' });
 
-    const isValid = authenticator.verify({ token, secret: existingUser.mfaSecret });
+    const isValid = authenticator.verify({ token: token, secret: existingUser.mfaSecret });
+    if (!isValid) return res.status(400).json({ error: 'Invalid MFA token' });
 
-    if (isValid) {
-        // Create query and update user profile database
-        const filter = { email: existingUser.email };
-        const update = {
-            $set: {
-                lastLogin: new Date()
-            }
-        };
-        const result = await users.updateOne(filter, update);
+    // update the token details
+    const accessToken = generateAccessToken(existingUser.email, existingUser.role)
+    const refreshToken = generateRefreshToken(existingUser.email)
 
-        // update the session details
-        req.session.user = {email: userEmail};
+    await updateUserLogin(users, existingUser.email, refreshToken)
 
-        // Send successful response
-        res.status(201).json({ 
-            message: 'Login successfully',
-            data: { email: userEmail},
-            result: result
-        });
-    } else {
-        res.status(400).json({ error: 'Invalid MFA token' });
-    }
+    // Set cookies
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 15 * 60 * 1000, // 15mins
+        sameSite: 'Strict'
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
+        sameSite: 'Strict'
+    });
+
+    res.status(201).json({ message: 'Login successfully' });
 });
 
 router.post('/request-password-reset', async (req, res) => {
@@ -463,7 +485,6 @@ router.post('/reset-password', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 router.post('/update-new-password', async (req, res) => {
     const { email, password, token } = req.body;

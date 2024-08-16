@@ -9,6 +9,7 @@ import session from 'express-session';
 // import { generateAuthUrl, getUserInfo } from './googleAuth.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '..', 'front-end'), { index: false })); // Using all the static files within front-end
 app.use('/backend', express.static(path.join(__dirname, '../backend')));  // Serve backend JavaScript files
