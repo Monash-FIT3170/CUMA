@@ -76,7 +76,6 @@ function addUnit() {
         // Modify existing unit
         const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
         if (existingUnit) {
-            console.log(selectedUnitId);
             const newUnitBody = {
                 "unitCode": unitCode,
                 "unitName": unitName,
@@ -194,10 +193,6 @@ async function repopulateResults() {
         unitDiv.dataset.overview = unit.unitDescription;
         unitDiv.dataset.universityName = unit.universityName;
         
-        if (unit.unitCode == "FIT4165"){
-          console.log("")
-        }
-
         // Populate unit content
         unitDiv.innerHTML = `
         <h4>${unit.unitCode} - ${unit.unitName}</h4>
@@ -323,8 +318,6 @@ function selectUnit(unitElement) {
 
 // Display mapped units for the given unit ID
 function displayMappedUnits(unitId) {
-    console.log(unitConnections)
-    console.log(selectedUnitId)
     const unitConnectionList = document.getElementById('unit-connection-list');
     unitConnectionList.innerHTML = '';
 
@@ -335,7 +328,6 @@ function displayMappedUnits(unitId) {
 
     if (connections && connections.length > 0) {
         connections.map(connection => {
-            console.log(connection)
             const connectionDiv = document.createElement('div');
             connectionDiv.className = 'connection';
             connectionDiv.innerHTML = `
@@ -538,8 +530,6 @@ function showAllForeignUnits() {
 
 
 function addConnectionExistingUnit(foeignUnitDiv) {
-    console.log(foeignUnitDiv.dataset)
-
     if (!selectedUnitId) {
         alert("Please select a course unit to add the connection to.");
         return;
@@ -574,6 +564,7 @@ function addConnectionExistingUnit(foeignUnitDiv) {
     });
 }
 
+
 function userLogout() {
     Backend.Auth.logout().then(() => {
             console.log("Logout successful");
@@ -581,6 +572,14 @@ function userLogout() {
             console.error("An error occurred during logout:", error);
             alert("An error occurred during logout. Please try again.");
     });
+}
+
+
+function userSendConnections() {
+    // TODO: Perhaps change email to be dynamic, or to admin CUMA email
+    const email = "change@me.com";
+    const emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n\n" + JSON.stringify(unitConnections, null, 2);
+    window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
 }
 
 // call every render

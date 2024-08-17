@@ -40,30 +40,6 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
     }
 }
 
-
-/**
- * Fetches all unit connections from the source university.
- * @param {string} sourceUni - The source university name.
- * @param {string} unitCode - The unit code.
- * @returns {Promise<object>} The unit connection result.
- */
-Backend.UnitConnection.getAll = async function (sourceUni, unitCode) {
-    return await getUniConnection(sourceUni, unitCode);
-}
-
-
-/**
- * Fetches a specific unit connection between source and target universities.
- * @param {string} sourceUni - The source university name.
- * @param {string} unitCode - The unit code.
- * @param {string} targetUni - The target university name.
- * @returns {Promise<object>} The unit connection result.
- */
-Backend.UnitConnection.getSpecific = async function (sourceUni, unitCode, targetUni) {
-    return await getUniConnection(sourceUni, unitCode, targetUni);
-}
-
-
 /**
  * Fetches unit connections from the source university. 
  * If target university is specified, fetches the specific connection between source and target universities.
