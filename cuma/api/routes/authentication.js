@@ -96,7 +96,7 @@ router.post('/login', async (req, res) => {
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
-        const { email, password} = req.body;
+        const { email, password } = req.body;
         
         // Check if user exist
         const existingUser = await users.findOne({ email });

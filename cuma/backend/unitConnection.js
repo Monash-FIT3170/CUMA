@@ -1,6 +1,8 @@
 const unitConnectionBackendPath = "/api/unitConnection"
 
 /*
+    unitConnectionInfo:
+
     E.g. req.body =
     {
         "universityNameA": "testUniversity",
@@ -11,18 +13,31 @@ const unitConnectionBackendPath = "/api/unitConnection"
 
     works with post request to /api/unitConnection
 */
+/**
+ * Adds unit connection
+ * @param {Object} unitConnectionInfo Information about connection (as structured above)
+ * @returns error message or success message
+ */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
     return await Backend.UnitConnection.update(unitConnectionInfo, "add");
 }
 
-
+/**
+ * Deletes unit connection
+ * @param {Object} unitConnectionInfo Information about connection (as structured above)
+ * @returns error message or success message
+ */
 Backend.UnitConnection.delete = async function (unitConnectionInfo) {
     return await Backend.UnitConnection.update(unitConnectionInfo, "delete");
 }
 
-
+/**
+ * Updates unit connections (either adding or delete a connection)
+ * @param {Object} unitConnectionInfo Information about connection (as structured above)
+ * @param {String} subpath subpath (add or delete)
+ * @returns error message or success message
+ */
 Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
-    console.log(unitConnectionInfo)
     try {
         const response = await fetch(serverPath + unitConnectionBackendPath + subpath, {
             method: "POST",
@@ -31,9 +46,6 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
             },
             body: JSON.stringify(unitConnectionInfo),
         });
-
-        // const result = await response.json();
-        // console.log("Success:", result);
         return response.json();
     } catch (error) {
         console.error("Error:", error);
@@ -85,6 +97,15 @@ Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, 
             result
         );
         return result;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+Backend.UnitConnection.getAllUserConnections = async function () {
+    try {
+        const response = await fetch(serverPath + unitConnectionBackendPath + "/getAllUserConnections");
+        return response.json();
     } catch (error) {
         console.error("Error:", error);
     }

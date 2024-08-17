@@ -4,7 +4,7 @@
 import express from 'express';
 const router = express.Router();
 
-const collectionName = "testUnits"
+const unitsCollectionName = "testUnits"
 
 
 router.post('/add', async (req, res) => {
@@ -13,7 +13,7 @@ router.post('/add', async (req, res) => {
         const client = req.client;
         const database = client.db('CUMA');
         // const universities = database.collection('universities');
-        const units = database.collection(collectionName);
+        const units = database.collection(unitsCollectionName);
 
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
         if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
@@ -67,7 +67,7 @@ router.post('/delete', async (req, res) => {
         const client = req.client;
         const database = client.db('CUMA');
         // const universities = database.collection('universities');
-        const units = database.collection(collectionName);
+        const units = database.collection(unitsCollectionName);
 
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
@@ -113,29 +113,6 @@ router.post('/delete', async (req, res) => {
 
 
 /**
- * Utility function to retrieve a unit from the database.
- * @param {object} collection - MongoDB collection object.
- * @param {string} universityName - The name of the university.
- * @param {string} unitCode - The code of the unit.
- * @returns {object|null} - The unit document or null if not found.
- */
-async function findUnit(collection, universityName, unitCode) {
-    return await collection.findOne({ universityName, unitCode });
-}
-
-
-/**
- * Utility function to retrieve unit connections.
- * @param {object} collection - MongoDB collection object.
- * @param {Array} connectionIds - Array of connection IDs.
- * @returns {Array} - Resolved connections.
- */
-async function resolveConnections(collection, connectionIds) {
-    return await collection.find({ _id: { $in: connectionIds } }).toArray();
-}
-
-
-/**
  * This endpoint retrieves the connections of a unit from a specific university
  *
  * URL param payloads:
@@ -161,7 +138,7 @@ router.get("/getAll", async (req, res) => {
         // Access the MongoDB client from the request object and get the collection
         const client = req.client;
         const db = client.db("CUMA");
-        const collection = db.collection(collectionName);
+        const collection = db.collection(unitsCollectionName);
 
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
@@ -175,10 +152,38 @@ router.get("/getAll", async (req, res) => {
         if (connections.length === 0) {
             return res.status(400).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!` });
         }
-        const resolvedConnections = await resolveConnections(collection, connections);
+        const resolvedConnections = await resolveIdsToUnits(collection, connections);
 
         // Return the filtered connections
         return res.status(200).json({ connections: resolvedConnections });
+
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+/**
+ * This endpoint retrieves all connections of a user
+ */
+router.get("/getAllUserConnections", async (req, res) => {
+    try {
+        // Get user's email
+        const userEmail = getEmail(req);
+        if (!userEmail) {
+            return res.status(401).json({ error: "No User Detected" });
+        }
+
+        // Fetch user's connections using the email from the users collection
+        const db = req.client.db("CUMA");
+        const usersCollection = db.collection("users");
+        const user = await usersCollection.findOne({ email: userEmail });
+        const objectIdConnections = user.connections;
+        const unitsConnection = db.collection(unitsCollectionName);
+
+        // Resolve connections
+        const userConnections = await resolveConnections(unitsConnection, objectIdConnections);
+        return res.status(200).json({ connections: userConnections });
 
     } catch (error) {
         console.error("Error:", error);
@@ -214,7 +219,7 @@ router.get("/getSpecific", async (req, res) => {
         // Access the MongoDB client from the request object and get the collection
         const client = req.client;
         const db = client.db("CUMA");
-        const collection = db.collection(collectionName);
+        const collection = db.collection(unitsCollectionName);
 
         // Find the unit in the collection
         const unit = await findUnit(collection, sourceUni, unitCode);
@@ -227,7 +232,7 @@ router.get("/getSpecific", async (req, res) => {
         if (connections.length === 0) {
             return res.status(404).json({ error: `University: '${sourceUni}', Unit: '${unitCode}', does not have any connection!` });
         }
-        const resolvedConnections = await resolveConnections(collection, connections);
+        const resolvedConnections = await resolveIdsToUnits(collection, connections);
 
         // Filter the connections by targetUni and check if any connections exist
         const filteredConnections = resolvedConnections.filter(connection => connection.universityName === req.query.targetUni);
@@ -243,5 +248,94 @@ router.get("/getSpecific", async (req, res) => {
     }
 });
 
+
+// Helper functions
+/**
+ * Utility function to retrieve a unit from the database.
+ * @param {object} collection - MongoDB collection object.
+ * @param {string} universityName - The name of the university.
+ * @param {string} unitCode - The code of the unit.
+ * @returns {object|null} - The unit document or null if not found.
+ */
+async function findUnit(collection, universityName, unitCode) {
+    return await collection.findOne({ universityName, unitCode });
+}
+
+
+/**
+ * Utility function to retrieve unit connections.
+ * @param {object} collection - MongoDB collection object.
+ * @param {Array} connectionIds - Array of connection IDs.
+ * @returns {Array} - Resolved connections.
+ */
+async function resolveIdsToUnits(collection, connectionIds) {
+    return await collection.find({ _id: { $in: connectionIds } }).toArray();
+}
+
+/**
+ * Utility function to resolve ObjectIds in connections using the database collection to units's data
+ * Format of each connection returned in the list
+    {
+        "universityNameA": "testUniversity",
+        "unitCodeA": "TEST1830",
+        "universityNameB": "Monash",
+        "unitCodeB": "MAT1830"
+    } 
+ * @param {Object} unitsCollection database collection to retrieve unit data from
+ * @param {Object} objectIdConnections list of {"unitAId": ObjectId, "unitBId": ObjectId}
+ * @returns list of connections (shown format above)
+ */
+async function resolveConnections(collection, objectIdConnections) {
+    // Create array of dictionaries
+    if (!objectIdConnections) {
+        return null;
+    }
+
+    const connectionPromises = objectIdConnections.map(async (objectIdConnection) => {
+        const unitAId = objectIdConnection.unitAId;
+        const unitBId = objectIdConnection.unitBId;
+        if (unitAId && unitBId) {
+            const unitA = await collection.findOne({ _id: unitAId });
+            const unitB = await collection.findOne({ _id: unitBId });
+
+            if (unitA && unitB) {
+                const universityNameA = unitA.universityName;
+                const unitCodeA = unitA.unitCode;
+                const universityNameB = unitB.universityName;
+                const unitCodeB = unitB.unitCode;
+
+                return {
+                    universityNameA: universityNameA,
+                    unitCodeA: unitCodeA,
+                    universityNameB: universityNameB,
+                    unitCodeB: unitCodeB
+                };
+            }
+        }
+        return null;
+    });
+    return (await Promise.all(connectionPromises)).filter(connection => connection !== null);
+}
+
+
+/**
+ * Utility function to retrieve the email of the user.
+ * @param {Object} req request
+ * @returns 
+ */
+function getEmail(req) {
+    // No user detected
+    if (!req.session.user) {
+        return null;
+    }
+
+    // Google login
+    if (req.session.user.data.email) {
+        return req.session.user.data.email;
+    }
+
+    // Local login
+    return req.session.user.email;
+}
 
 export default router;

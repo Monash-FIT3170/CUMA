@@ -168,7 +168,6 @@ function handleResponse(response) {
 
 async function repopulateResults() {
   const unitList = document.getElementById('unit-list');
-  
   // remove all child units
   unitList.innerHTML = '';
 
@@ -578,8 +577,21 @@ function userLogout() {
 function userSendConnections() {
     // TODO: Perhaps change email to be dynamic, or to admin CUMA email
     const email = "change@me.com";
-    const emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n\n" + JSON.stringify(unitConnections, null, 2);
-    window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
+    emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n";
+
+    Backend.UnitConnection.getAllUserConnections().then(req => {
+        if (!req.connections || req.connections.length === 0 || req.error) {
+            alert("Ensure you are logged in and have added connections to send.");
+            return;
+        }
+        req.connections.map(connection => {
+            const { universityNameA, unitCodeA, universityNameB, unitCodeB } = connection;
+            if (universityNameA && unitCodeA && universityNameB && unitCodeB) {
+                emailBody += "\n" + universityNameA + " - " + unitCodeA + " to " + universityNameB + " - " + unitCodeB;
+            }
+        });
+        window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
+    });
 }
 
 // call every render
