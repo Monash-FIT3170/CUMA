@@ -274,24 +274,54 @@ router.get('/oauth2callback', async (req, res) => {
     }
 });
 
-// logout routers
-router.get('/logout' , async (req, res) => {
-    // This code is unusable since revokeToken does not exist
-    // TODO: need actual revoking of token and not just destroying
-    //
-    // if (req.session.user && req.session.user.access_token) {
-    //     revokeToken(req.session.user.access_token);
-    // }
+// Logout router
+router.get('/logout', async (req, res) => {
+    try {
+        // Invalidate the refresh token in the database (optional)
+        const refreshToken = req.cookies.refreshToken;
+        if (refreshToken) {
+            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            const email = decoded.email;
 
-    // Destroy the session
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Failed to destroy session during logout:', err);
-            return res.status(500).json({ error: 'Failed to log out.' });
+            const { users, existingUser } = await fetchExistingUserfromDB(req, email);
+            if (!existingUser) {
+                return res.status(400).json({ error: 'User does not exist' });
+            }
+
+            await users.updateOne(
+                { email },
+                { $unset: { refreshToken: "" } }
+            );
         }
-        // Send a JSON response instead of redirecting
-        res.status(200).json({ message: 'Logged out successfully' });
-    });
+
+        // Clear JWT cookies
+        res.clearCookie('accessToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict'
+        });
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict'
+        });
+
+        // Destroy the session
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Failed to destroy session during logout:', err);
+                return res.status(500).json({ error: 'Failed to log out.' });
+            }
+
+            // Send a JSON response confirming the logout after the session is destroyed
+            return res.status(200).json({ message: 'Logged out successfully' });
+        });
+
+    } catch (error) {
+        console.error('Error during logout:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // Request new password routers
