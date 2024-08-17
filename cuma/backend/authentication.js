@@ -192,7 +192,7 @@ Backend.Auth.requestPasswordReset = async function (email) {
 
 Backend.Auth.validateResetPasswordLink = async function (token, email) {
   try {
-    const url = new URL(serverPath + authBackendPath + "/reset-password");
+    const url = new URL(serverPath + authBackendPath + "/validate-password-reset-link");
 
     const response = await fetch(url, {
       method: "POST",
