@@ -394,6 +394,38 @@ router.post('/update-new-password', async (req, res) => {
     }
 });
 
+// Access Token Refresh router
+app.post('/refresh-token', async (req, res) => {
+
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Refresh token is missing' });
+    }
+
+    try {
+
+        const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+        const newAccessToken = jwt.sign({ email: decodedRefreshToken.email, role: decodedRefreshToken.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
+
+        res.cookie('accessToken', newAccessToken, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 15 * 60 * 1000, // 15 minutes
+            sameSite: 'Strict'
+        });
+
+        return res.status(200).json({ message: 'Access token refreshed successfully' });
+
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(403).json({ message: 'Refresh token has expired. Please log in again.' });
+        } else {
+            return res.status(403).json({ message: 'Invalid refresh token' });
+        }
+    }
+});
+
 /// Utility Functions ///
 
 // Generate AccessToken for authentication
