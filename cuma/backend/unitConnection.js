@@ -19,7 +19,7 @@ const unitConnectionBackendPath = "/api/unitConnection"
  * @returns error message or success message
  */
 Backend.UnitConnection.add = async function (unitConnectionInfo) {
-    return await Backend.UnitConnection.update(unitConnectionInfo, "add");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "/add");
 }
 
 /**
@@ -28,7 +28,7 @@ Backend.UnitConnection.add = async function (unitConnectionInfo) {
  * @returns error message or success message
  */
 Backend.UnitConnection.delete = async function (unitConnectionInfo) {
-    return await Backend.UnitConnection.update(unitConnectionInfo, "delete");
+    return await Backend.UnitConnection.update(unitConnectionInfo, "/delete");
 }
 
 /**
@@ -53,31 +53,24 @@ Backend.UnitConnection.update = async function (unitConnectionInfo, subpath) {
 }
 
 /**
- * Fetches unit connections from the source university. 
+ * Fetches unit connections from the source university for specific user
  * If target university is specified, fetches the specific connection between source and target universities.
  * @param {string} sourceUni - The source university name.
  * @param {string} unitCode - The unit code.
  * @param {string|null} [targetUni=null] - The target university name (optional).
  * @returns {Promise<object>} The unit connection result.
  */
-Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, targetUni = null) {
+Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode) {
     // Validate parameters
     if (sourceUni == null || unitCode == null) {
-        console.error("Error: sourceUni and unitCode cannot be null");
         return;
     }
 
     // Build parameters object
     const params = { sourceUni, unitCode };
-    if (targetUni !== null) {
-        params.targetUni = targetUni;
-    }
-
-    const subpath = targetUni == null ? "/getAll" : "/getSpecific";
+    const subpath = "/getSpecific";
 
     try {
-        console.log(params);
-
         // Construct the URL with query parameters
         const url = new URL(serverPath + unitConnectionBackendPath + subpath);
         url.search = new URLSearchParams(params).toString();
@@ -89,14 +82,8 @@ Backend.UnitConnection.getUnitConnection = async function (sourceUni, unitCode, 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         // Parse and log the result
-        const result = await response.json();
-        console.log(
-            targetUni == null ? "All Connections:" : "Specific Connection:",
-            result
-        );
-        return result;
+        return response.json();
     } catch (error) {
         console.error("Error:", error);
     }
