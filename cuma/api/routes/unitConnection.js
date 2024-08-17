@@ -60,47 +60,52 @@ router.post('/add', async (req, res) => {
 
 router.post('/delete', async (req, res) => {
     try {
-        // Access the MongoDB client from the request object
-        const client = req.client;
-        const database = client.db('CUMA');
-        // const universities = database.collection('universities');
-        const units = database.collection(unitsCollectionName);
+        return await getUser(req).then(async (user) => {
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+            // Access the MongoDB client from the request object
+            const client = req.client;
+            const database = client.db('CUMA');
+            const units = database.collection(unitsCollectionName);
+            const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
-        const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
+            if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
+                return res.status(404).json({ error: 'Cannot add connection to self' });
+            }
+            // Check if unitCodes exists
+            const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
+            const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
 
-        // Check if unitCodes exists
-        const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
-        const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
+            if (!unitA) {
+                return res.status(404).json({ error: 'unitA not found' });
+            }
+            if (!unitB) {
+                return res.status(404).json({ error: 'unitB not found' });
+            }
+            // Add connection to B
+            const anyConnectionToB = user.connections.find(connection => connection.unitAId == unitA._id && connection.unitBId == unitB._id);
 
-        if (!unitA) {
-            return res.status(404).json({ error: 'unitA not found' });
-        }
-        if (!unitB) {
-            return res.status(404).json({ error: 'unitB not found' });
-        }
+            // Add connection to A
+            const anyConnectionToA = user.connections.find(connection => connection.unitAId == unitB._id && connection.unitBId == unitA._id);
 
-        // Add connection to A
-        const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
+            const db = req.client.db("CUMA");
+            const usersCollection = db.collection("users");
+            const userEmail = getEmail(req);
 
-        let numChanges = 0;
-        if (anyConnectionToB) {
-            units.updateOne({ universityName: universityNameA, "unitCode": unitCodeA }, { $pull: { "connections": { _id: unitB._id } } });
-            numChanges += 1;
-        }
+            if (!anyConnectionToA && !anyConnectionToB) {
+                return res.status(400).json({ result: "There already exists no connection between these units", status: 400 });
 
-        // Add connection to B
-        const anyConnectionToA = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB, "connections": unitA._id });
+            // Delete connection from user
+            } else if (anyConnectionToA) {
+                await usersCollection.updateOne({ email: userEmail }, { $pull: { connections: { unitAId: unitB._id, unitBId: unitA._id } } });
 
-        if (anyConnectionToA) {
-            units.updateOne({ universityName: universityNameB, "unitCode": unitCodeB }, { $pull: { "connections": { _id: unitA._id } } });
-            numChanges += 1;
-        }
-
-        if (numChanges == 0) {
-            return res.status(400).json({ result: "Connection doesn't exist between these units", status: 400 });
-        }
-
-        res.json({ status: "Success", numberOfChanges: numChanges });
+            } else if (anyConnectionToB) {
+                await usersCollection.updateOne({ email: userEmail }, { $pull: { connections: { unitAId: unitA._id, unitBId: unitB._id } } });
+            }
+            return res.json({ status: "Success" });
+        });
+        
     } catch (error) {
         // Handle errors
         console.error('Error:', error);
