@@ -133,7 +133,7 @@ router.post('/login', async (req, res) => {
         // If MFA is enabled, verify the token
         if (existingUser.mfaEnabled) {
             // MFA is enabled, return a special status to indicate that TOTP is needed
-            req.session.pendingLoginUser = { email };
+            req.session.pendingLoginUser = { email, expiresIn: Date.now() + 5 * 60 * 1000 };
             return res.status(206).json({ message: 'MFA required' });
         }
 
@@ -172,8 +172,8 @@ router.post('/login', async (req, res) => {
 
 router.get('/google', (req, res) => {
     const state = crypto.randomBytes(32).toString('hex');
-    req.session.googleState = state;
-  
+    req.session.googleState = { state, expiresIn: Date.now() + 5 * 60 * 1000  };
+
     const authorizationUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
@@ -187,7 +187,14 @@ router.get('/google', (req, res) => {
 router.get('/oauth2callback', async (req, res) => {
     const { code, state } = req.query;
 
-    if (state !== req.session.googleState) {
+    const sessionGoogle = req.session.googleState;
+    if (!sessionGoogle || sessionGoogle.expiresIn <= Date.now()) {
+        delete req.session.googleState;  // Delete the session if it has expired
+        res.status(400).send('State mismatch. Possible CSRF attack');
+        return res.redirect('/login');
+    }
+
+    if (state !== sessionGoogle.state) {
         res.status(400).send('State mismatch. Possible CSRF attack');
         return;
     }
@@ -200,25 +207,23 @@ router.get('/oauth2callback', async (req, res) => {
         // Exchange the token for user info data
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
-        const userData = userInfo.data
+        const userData = userInfo.data;
 
-        // get the client
+        // Get the client, database, and collection
         const client = req.client;
-        // get the database and the collection
         const database = client.db("CUMA");
         const users = database.collection(collectionName);
 
-        // Extract the User Google ID and validate against database
-        const userGoogleID = userData.id
+        // Extract User Google ID and validate against database
+        const userGoogleID = userData.id;
         const existingUser = await users.findOne({ userGoogleID });
 
-        // update the token details
-        const accessToken = generateAccessToken(existingUser.email, existingUser.role)
-        const refreshToken = generateRefreshToken(existingUser.email)
+        // Generate tokens
+        const accessToken = generateAccessToken(existingUser.email, existingUser.role);
+        const refreshToken = generateRefreshToken(existingUser.email);
 
-        // Create a new user if the user does not exit in the database
+        // Create or update user in the database
         if (!existingUser) {
-            // Create a new user data
             const newUser = {
                 userGoogleID: userData.id,
                 email: userData.email,
@@ -234,7 +239,6 @@ router.get('/oauth2callback', async (req, res) => {
             };
             await users.insertOne(newUser);
         } else {
-            // Update existing user
             const filter = { userGoogleID: userData.id };
             const update = {
                 $set: {
@@ -245,23 +249,26 @@ router.get('/oauth2callback', async (req, res) => {
             await users.updateOne(filter, update);
         }
 
+        // Delete googleState value from session
+        delete req.session.googleState;
+
         // Set cookies
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: true,
-            maxAge: 15 * 60 * 1000, // 15mins
+            maxAge: 15 * 60 * 1000, // 15 minutes
             sameSite: 'Strict'
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             sameSite: 'Strict'
         });
 
         // Redirect to index
-        res.redirect('/index')
+        res.redirect('/index');
 
     } catch (error) {
         console.error('Error retrieving access token or user info', error);
@@ -289,9 +296,15 @@ router.get('/logout' , async (req, res) => {
 });
 
 router.get('/setup-mfa', async (req, res) => {
+    // Check if session data exists and is valid
+    const sessionUser = req.session.pendingSignupUser;
+    if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+        delete req.session.pendingSignupUser;  // Delete the session if it has expired
+        return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+    }
 
     // Fetch email from session
-    const userEmail = req.session.pendingSignupUser.email;
+    const userEmail = sessionUser.email;
 
     // Fetch the user from the database
     const client = req.client;
@@ -312,23 +325,34 @@ router.get('/setup-mfa', async (req, res) => {
     // Generate QR Code and send response
     QRCode.toDataURL(otpauth, (e, imageUrl) => {
         if (e) {
-            res.status(500).json({ error: e});
+            return res.status(500).json({ error: 'Error generating QR code' });
         }
+
+        // Renew the session expiry time for another 5 minutes
+        req.session.pendingSignupUser.expiresIn = Date.now() + 5 * 60 * 1000;
 
         // Send successful response
         res.status(201).json({ 
             email: userEmail,
             secret,
             imageUrl,
-            message: "Successfully Setup MFA"
+            message: "Successfully setup MFA"
         });
     });
 });
 
 router.post('/enable-mfa', async (req, res) => {
-    const { token } = req.body;
-    const userEmail = req.session.pendingSignupUser.email;
+    // Check if session data exists and is valid
+    const sessionUser = req.session.pendingSignupUser;
+    if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+        delete req.session.pendingSignupUser;  // Delete the session if it has expired
+        return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+    }
 
+    const { token } = req.body;
+    const userEmail = sessionUser.email;
+
+    // Fetch the user from the database
     const client = req.client;
     const database = client.db("CUMA");
     const users = database.collection('users');
@@ -337,19 +361,31 @@ router.post('/enable-mfa', async (req, res) => {
         return res.status(404).json({ error: 'User not found' });
     }
 
+    // Verify the MFA token
     const isValid = authenticator.verify({ token, secret: existingUser.mfaSecret });
     if (isValid) {
         await users.updateOne({ email: userEmail }, { $set: { mfaEnabled: true } });
-        res.status(200).json({ message: 'MFA enabled' });
+
+        // Delete the session data after successful MFA enabling
+        delete req.session.pendingSignupUser;
+
+        res.status(200).json({ message: 'MFA enabled successfully' });
     } else {
         res.status(400).json({ error: 'Invalid MFA token' });
     }
 });
 
 router.post('/verify-mfa', async (req, res) => {
-    const { token } = req.body;
 
-    const userEmail = req.session.pendingLoginUser.email;
+    // Check if session data exists and is valid
+    const sessionUser = req.session.pendingLoginUser;
+    if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+        delete req.session.pendingLoginUser;  // Delete the session if it has expired
+        return res.status(400).json({ error: 'Session expired or invalid. Please log in again.' });
+    }
+
+    const { token } = req.body;
+    const userEmail = sessionUser.email;
 
     const client = req.client;
     const database = client.db("CUMA");
