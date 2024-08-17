@@ -395,7 +395,7 @@ router.post('/update-new-password', async (req, res) => {
 });
 
 // Access Token Refresh router
-app.post('/refresh-token', async (req, res) => {
+router.post('/refresh-token', async (req, res) => {
 
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
