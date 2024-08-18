@@ -6,10 +6,11 @@ import authentication from './routes/authentication.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
-// import { generateAuthUrl, getUserInfo } from './googleAuth.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
+import authenticateToken from './middleware/authenticateToken.js'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,20 +48,12 @@ app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 
 // Page Link
-app.get('/index', (req, res) => {
-  if (req.session.user) {
-    res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
-  } else {
-    res.redirect('/login')
-  }
+app.get('/index', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
-app.get('/', (req, res) => {
-  if (req.session.user) {
-    res.redirect('/index')
-  } else {
-    res.redirect('/login')
-  }
+app.get('/', authenticateToken, (req, res) => {
+  res.redirect('/index')
 });
 
 app.get('/login', (req, res) => {

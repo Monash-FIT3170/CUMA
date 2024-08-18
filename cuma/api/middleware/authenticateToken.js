@@ -14,24 +14,27 @@ function authenticateToken(req, res, next) {
 
     // Check if the token exists
     if (!token) {
-        return res.status(401).json({ message: 'Access token is missing' });
+        console.error('Error authenticating token: Access token is missing')
+        return res.redirect('/login')
     }
 
     try {
         // Verify the token
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decodedAccessToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
         // Attach the decoded user information to the request object
-        req.user = decoded;
+        req.user = decodedAccessToken;
 
         // Proceed to the next middleware or route handler
         next();
     } catch (error) {
         // Handle token verification errors
         if (error.name === 'TokenExpiredError') {
-            return res.status(403).json({ message: 'Access token has expired' });
+            console.error('Error authenticating token: Access token has expired')
+            return res.redirect('/login')
         } else {
-            return res.status(403).json({ message: 'Invalid access token' });
+            console.error('Error authenticating token: Invalid access token')
+            return res.redirect('/login')
         }
     }
 }
