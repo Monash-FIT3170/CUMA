@@ -11,16 +11,16 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const router = express.Router();
-const serverPath = "http://localhost:" + (process.env.PORT || 3000)
+const serverPath = "http://localhost:" + (process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Cookies Expiry
-const ACCESS_TOKEN_AGE = 5 * 1000;
-const REFRESH_TOKEN_AGE = 60 * 1000;
+const ACCESS_TOKEN_AGE = 15 * 60 * 1000;    // 15mins
+const REFRESH_TOKEN_AGE = 60 * 60 * 1000;   // 1hr
 
 // Users Database value
-const DB_NAME = 'CUMA'
-const DB_COLLECTION_NAME = 'users'
+const DB_NAME = 'CUMA';
+const DB_COLLECTION_NAME = 'users';
 
 
 // OAuth2 Client Configuration
@@ -427,8 +427,8 @@ router.post('/refresh-token', async (req, res) => {
             return res.status(403).json({ message: 'Refresh token has expired. Please log in again.' });
         } else {
             return res.status(403).json({ message: 'Invalid refresh token' });
-        }
-    }
+        };
+    };
 });
 
 /// Utility Functions ///

@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 
 const serverPath = "http://localhost:" + (process.env.PORT || 3000)
 const isProduction = process.env.NODE_ENV === 'production';
-const ACCESS_TOKEN_AGE = 5 * 1000
-const authBackendPath = "/api/authentication"
+const ACCESS_TOKEN_AGE = 15 * 60 * 1000;    // 15mins
+const authBackendPath = "/api/authentication";
 
 /**
  * Authenticate the accessToken cookie to allow user access to protected routes.
@@ -34,13 +34,13 @@ async function authenticateToken(req, res, next) {
     } catch (error) {
         // Handle token verification errors
         if (error.name === 'TokenExpiredError') {
-            console.error('Error authenticating token: Access token has expired');
+            console.log('Access token has expired');
         } else {
-            console.error('Error authenticating token: ', error);
+            console.log(error);
         };
 
         if (!refreshToken) {
-            console.error('Error authenticating token: Refresh token is missing');
+            console.log('Refresh token is missing');
             return res.redirect('/login?error=missing-refresh-token');
         }
 
@@ -56,20 +56,21 @@ async function authenticateToken(req, res, next) {
 
             const result = await response.json();
             if (!response.ok) {
-                console.error("Error refreshing token:", response.message);
+                console.log(response.message);
                 return res.redirect('/login?error=failed-refresh-token');
             }
 
             if (!result.accessToken) {
-                console.error("Error refreshing token:", response.message);
+                console.log(response.message);
                 return res.redirect('/login?error=failed-refresh-access-token');
             }
 
-            createAccessTokenCookie(res, result.accessToken)
+            createAccessTokenCookie(res, result.accessToken);
+
             next();
 
         } catch(error) {
-            console.error("Error refreshing token:", error);
+            console.log(error);
             return res.redirect('/login?error=failed-refresh-token');
         };
     };
