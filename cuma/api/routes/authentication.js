@@ -508,8 +508,9 @@ async function processLoginAccessToken(res, users, existingUser){
     };
     await users.updateOne(filter, update);
 
-    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
-    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
+    // Set cookies
+    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000)
+    createCookie(res, 'refreshToken', refreshToken, 7 * 24 * 60 * 60 * 1000)
 }
 
 // Process Google Login access token
@@ -547,8 +548,9 @@ async function processGoogleLoginAccessToken(res, users, existingUser, userData)
     // Generate access token
     const accessToken = generateAccessToken(userData.email, userData.role);
 
-    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
-    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
+    // Set cookies
+    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000)
+    createCookie(res, 'refreshToken', refreshToken, 7 * 24 * 60 * 60 * 1000)
 }
 
 // Process setting password reset link and send it to user
