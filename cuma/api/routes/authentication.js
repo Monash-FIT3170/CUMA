@@ -15,8 +15,8 @@ const serverPath = "http://localhost:" + (process.env.PORT || 3000)
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Cookies Expiry
-const ACCESS_TOKEN_AGE = 15 * 60 * 1000
-const REFRESH_TOKEN_AGE = 15 * 60 * 1000
+const ACCESS_TOKEN_AGE = 5 * 1000;
+const REFRESH_TOKEN_AGE = 60 * 1000;
 
 // Users Database value
 const DB_NAME = 'CUMA'
@@ -402,19 +402,24 @@ router.post('/update-new-password', async (req, res) => {
 // Access Token Refresh router
 router.post('/refresh-token', async (req, res) => {
 
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = req.body;
     if (!refreshToken) return res.status(401).json({ message: 'Refresh token is missing' });
 
     try {
-
-        const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
             if (err) return res.status(403).json({ message: 'Invalid refresh token' });
 
-            const newAccessToken = generateAccessToken(user.email, user.role);
-            createAccessTokenCookie(res, newAccessToken);
+            // Fetch the existing user and their refresh token from the database
+            const { existingUser } = await fetchExistingWithUserRefreshTokenfromDB(req, user.email, refreshToken);
 
-            return res.status(200).json({ message: 'Access token refreshed successfully' });
+            if (!existingUser || existingUser.refreshToken.expiresIn < Date.now()) {
+                return res.status(400).json({ error: 'Invalid or expired refresh token. Please log in again.' });
+            }
+
+            // Generate a new access token
+            const newAccessToken = generateAccessToken(existingUser.email, existingUser.role);
+
+            return res.status(200).json({ accessToken: newAccessToken, message: 'Access token refreshed successfully' });
         });
 
     } catch (error) {
@@ -490,7 +495,7 @@ async function fetchExistingGoogleUserfromDB(req, userGoogleID) {
     return { users, existingUser };
 }
 
-// Fectch exiting user with matching password reset token
+// Fetch exiting user with matching password reset token
 async function fetchExistingWithUserPWRestTokenfromDB(req, email, token) {
     // Get the client, database, and collection
     const client = req.client;
@@ -501,6 +506,21 @@ async function fetchExistingWithUserPWRestTokenfromDB(req, email, token) {
     const existingUser = await users.findOne({ 
         email,
         'passwordReset.resetToken': token 
+    });
+    return { users, existingUser };
+}
+
+// Fetch exiting user with matching refresh token
+async function fetchExistingWithUserRefreshTokenfromDB(req, email, refreshToken) {
+    // Get the client, database, and collection
+    const client = req.client;
+    const database = client.db(DB_NAME);
+    const users = database.collection(DB_COLLECTION_NAME);
+    
+    // Check if user exists
+    const existingUser = await users.findOne({ 
+        email,
+        'refreshToken.token': refreshToken 
     });
     return { users, existingUser };
 }
@@ -516,7 +536,7 @@ async function processLoginAccessToken(res, users, existingUser){
     const update = {
         $set: {
             lastLogin: new Date(),
-            refreshToken
+            refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
         }
     };
     await users.updateOne(filter, update);
@@ -544,7 +564,7 @@ async function processGoogleLoginAccessToken(res, users, existingUser, userData)
             createAt: new Date(),
             updatedAt: new Date(),
             lastLogin: new Date(),
-            refreshToken
+            refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
         };
         await users.insertOne(newUser);
     } else {
@@ -552,7 +572,7 @@ async function processGoogleLoginAccessToken(res, users, existingUser, userData)
         const update = {
             $set: {
                 lastLogin: new Date(),
-                refreshToken
+                refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
             }
         };
         await users.updateOne(filter, update);
