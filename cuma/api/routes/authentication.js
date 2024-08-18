@@ -14,6 +14,10 @@ const router = express.Router();
 const serverPath = "http://localhost:" + (process.env.PORT || 3000)
 const isProduction = process.env.NODE_ENV === 'production';
 
+// Cookies Expiry
+const ACCESS_TOKEN_AGE = 15 * 60 * 1000
+const REFRESH_TOKEN_AGE = 15 * 60 * 1000
+
 // Users Database value
 const DB_NAME = 'CUMA'
 const DB_COLLECTION_NAME = 'users'
@@ -399,19 +403,19 @@ router.post('/update-new-password', async (req, res) => {
 router.post('/refresh-token', async (req, res) => {
 
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
-        return res.status(401).json({ message: 'Refresh token is missing' });
-    }
+    if (!refreshToken) return res.status(401).json({ message: 'Refresh token is missing' });
 
     try {
 
         const decodedRefreshToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+            if (err) return res.status(403).json({ message: 'Invalid refresh token' });
 
-        const newAccessToken = jwt.sign({ email: decodedRefreshToken.email, role: decodedRefreshToken.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
+            const newAccessToken = generateAccessToken(user.email, user.role);
+            createAccessTokenCookie(res, newAccessToken);
 
-        createCookie(res, 'accessToken', newAccessToken, 15 * 60 * 1000) //15mins
-
-        return res.status(200).json({ message: 'Access token refreshed successfully' });
+            return res.status(200).json({ message: 'Access token refreshed successfully' });
+        });
 
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
@@ -426,13 +430,12 @@ router.post('/refresh-token', async (req, res) => {
 
 // Generate AccessToken for authentication
 function generateAccessToken(email, role) {
-    const userInfo = { email, role, reauthenticated: false }
-    return jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
-}
+    return jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+} 
 
 // Generate refresh token for reauthentication
-function generateRefreshToken(email) {
-    return jwt.sign({email}, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
+function generateRefreshToken(email, role) {
+    return jwt.sign({ email, role }, process.env.REFRESH_TOKEN_SECRET, {expiresIn: '7d'})
 }
 
 // Encrypt password
@@ -443,13 +446,23 @@ function encryptPassword(password) {
 }
 
 // create and add cookies
-function createCookie(res, cookieName, cookieToken, age) {
+function createAccessTokenCookie(res, cookieToken) {
      // Set cookies
-    res.cookie(cookieName, cookieToken, {
+    res.cookie('accessToken', cookieToken, {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? 'strict' : 'lax',
-        maxAge: age
+        maxAge: ACCESS_TOKEN_AGE
+    });
+}
+
+function createRefreshTokenCookie(res, cookieToken) {
+     // Set cookies
+    res.cookie('refreshToken', cookieToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'strict' : 'lax',
+        maxAge: REFRESH_TOKEN_AGE
     });
 }
 
@@ -496,7 +509,7 @@ async function fetchExistingWithUserPWRestTokenfromDB(req, email, token) {
 async function processLoginAccessToken(res, users, existingUser){
     // Generate token details
     const accessToken = generateAccessToken(existingUser.email, existingUser.role)
-    const refreshToken = generateRefreshToken(existingUser.email)
+    const refreshToken = generateRefreshToken(existingUser.email, existingUser.role)
     
     // update database
     const filter = { email: existingUser.email };
@@ -508,14 +521,15 @@ async function processLoginAccessToken(res, users, existingUser){
     };
     await users.updateOne(filter, update);
 
-    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
-    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
+    // Set cookies
+    createAccessTokenCookie(res, accessToken);
+    createRefreshTokenCookie(res, refreshToken);
 }
 
 // Process Google Login access token
 async function processGoogleLoginAccessToken(res, users, existingUser, userData){
     // Generate refresh tokens
-    const refreshToken = generateRefreshToken(userData.email);
+    const refreshToken = generateRefreshToken(userData.email, 'general_user');
 
     // Create or update user in the database
     if (!existingUser) {
@@ -547,8 +561,9 @@ async function processGoogleLoginAccessToken(res, users, existingUser, userData)
     // Generate access token
     const accessToken = generateAccessToken(userData.email, userData.role);
 
-    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
-    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
+    // Set cookies
+    createAccessTokenCookie(res, accessToken)
+    createRefreshTokenCookie(res, refreshToken)
 }
 
 // Process setting password reset link and send it to user
