@@ -7,8 +7,6 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
      * 
      * @return {json} API response.
      */
-
-    const unitInfo = {}
     const params = {"universityName": universityName}
     
     try {
@@ -16,9 +14,6 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
-
-        console.log({"universityName": universityName, unitInfo})
-    
         const result = await response.json()
         return result
     } 
@@ -35,7 +30,6 @@ Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
      * @return {json} API response.
      */
 
-    const unitInfo = {}
     const params = { "universityName": universityName }
 
     try {
@@ -43,9 +37,6 @@ Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
-
-        console.log({ "universityName": universityName, unitInfo })
-
         const result = await response.json();
         return result;
     }
@@ -72,7 +63,6 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const unit = await response.json();
-        console.log("Retrived Unit:", unit);
         return unit;
     }
     catch (error) {
@@ -98,17 +88,6 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
         @return {json} API reponse
      *  */
-
-    // var name=  unitInfo.name;
-    // var desc=  unitInfo.desc;
-    // var type=  unitInfo.type;
-    // var creditPt= unitInfo.creditPt;
-    // var level= unitInfo.level;
-    // var overview= unitInfo.overview;
-    // var link= unitInfo.link;
-
-    fieldMissing = []
-
     try {
         const response = await fetch(serverPath + unitBackendPath, {
             method: "POST",
