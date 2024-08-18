@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 
 /**
- * Authenticate the accessToken cookies to allow user access to protected route
- * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @returns 
+ * Authenticate the accessToken cookie to allow user access to protected routes.
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
  */
 function authenticateToken(req, res, next) {
     // Get the token from the cookies
@@ -14,8 +14,8 @@ function authenticateToken(req, res, next) {
 
     // Check if the token exists
     if (!token) {
-        console.error('Error authenticating token: Access token is missing')
-        return res.redirect('/login')
+        console.error('Error authenticating token: Access token is missing');
+        return res.redirect('/login?error=missing-token');
     }
 
     try {
@@ -30,11 +30,11 @@ function authenticateToken(req, res, next) {
     } catch (error) {
         // Handle token verification errors
         if (error.name === 'TokenExpiredError') {
-            console.error('Error authenticating token: Access token has expired')
-            return res.redirect('/login')
+            console.error('Error authenticating token: Access token has expired');
+            return res.redirect('/login?error=token-expired');
         } else {
-            console.error('Error authenticating token: Invalid access token')
-            return res.redirect('/login')
+            console.error('Error authenticating token: Invalid access token');
+            return res.redirect('/login?error=invalid-token');
         }
     }
 }
