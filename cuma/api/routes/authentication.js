@@ -12,6 +12,7 @@ dotenv.config();
 
 const router = express.Router();
 const serverPath = "http://localhost:" + (process.env.PORT || 3000)
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Users Database value
 const DB_NAME = 'CUMA'
@@ -408,12 +409,7 @@ router.post('/refresh-token', async (req, res) => {
 
         const newAccessToken = jwt.sign({ email: decodedRefreshToken.email, role: decodedRefreshToken.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '7d' });
 
-        res.cookie('accessToken', newAccessToken, {
-            httpOnly: true,
-            secure: true,
-            maxAge: 15 * 60 * 1000, // 15 minutes
-            sameSite: 'Strict'
-        });
+        createCookie(res, 'accessToken', newAccessToken, 15 * 60 * 1000) //15mins
 
         return res.status(200).json({ message: 'Access token refreshed successfully' });
 
@@ -444,6 +440,17 @@ function encryptPassword(password) {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
     return hashedPassword
+}
+
+// create and add cookies
+function createCookie(res, cookieName, cookieToken, age) {
+     // Set cookies
+    res.cookie(cookieName, cookieToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'strict' : 'lax',
+        maxAge: age
+    });
 }
 
 // Fetch existing user from users collection
@@ -501,20 +508,8 @@ async function processLoginAccessToken(res, users, existingUser){
     };
     await users.updateOne(filter, update);
 
-    // Set cookies
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 15 * 60 * 1000, // 15mins
-        sameSite: 'Strict'
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
-        sameSite: 'Strict'
-    });
+    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
+    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
 }
 
 // Process Google Login access token
@@ -552,20 +547,8 @@ async function processGoogleLoginAccessToken(res, users, existingUser, userData)
     // Generate access token
     const accessToken = generateAccessToken(userData.email, userData.role);
 
-    // Set cookies
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 15 * 60 * 1000, // 15 minutes
-        sameSite: 'Strict'
-    });
-
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: 'Strict'
-    });
+    createCookie(res, 'accessToken', accessToken, 15 * 60 * 1000) //15mins
+    createCookie(res, 'refreshToken', refreshToken, 15 * 60 * 1000) //15mins
 }
 
 // Process setting password reset link and send it to user
