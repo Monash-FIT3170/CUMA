@@ -140,6 +140,7 @@ router.post('/', async (req, res) => {
         }
 
         // call gemini to create keywords for the unit
+        console.log(aiGenUnitKeyword)
         const aiGenUnitKeyword = await gemini(unitInfoReq.unitDescription)
 
         // add the unit
