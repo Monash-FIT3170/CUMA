@@ -1,50 +1,39 @@
 import jwt from 'jsonwebtoken';
 
-const serverPath = "http://localhost:" + (process.env.PORT || 3000)
+const serverPath = "http://localhost:" + (process.env.PORT || 3000);
 const isProduction = process.env.NODE_ENV === 'production';
-const ACCESS_TOKEN_AGE = 15 * 60 * 1000;    // 15mins
+const ACCESS_TOKEN_AGE = 15 * 60 * 1000; // 15mins
 const authBackendPath = "/api/authentication";
 
 /**
  * Authenticate the accessToken cookie to allow user access to protected routes.
- *
+ * 
+ * If accessToken exist, verify the accessToken and authenticate.
+ * If accessToken is missing or failed verification, use refreshToken to issue a new accessToken.
+ * If both accessToken and requestToken are missing, then user need to authenticate again to issue new accessToken and refreshToken.
+ * 
  * @param {*} req
  * @param {*} res
  * @param {*} next
  * @returns
  */
 async function authenticateToken(req, res, next) {
-    const accessToken = req.cookies.accessToken;
-    const refreshToken = req.cookies.refreshToken;
+    const accessToken = req.cookies?.accessToken;
+    const refreshToken = req.cookies?.refreshToken;
 
-    try {
-        // Check if the token exists
-        if (!accessToken) {
-            throw Error('Access token is missing');
-        };
-
-        // Verify the token
-        const decodedAccessToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-
-        // Attach the decoded user information to the request object
-        req.user = decodedAccessToken;
-
-        // Proceed to the next middleware or route handler
-        next();
-    } catch (error) {
-        // Handle token verification errors
-        if (error.name === 'TokenExpiredError') {
-            console.log('Access token has expired');
-        } else {
-            console.log(error);
-        };
-
-        if (!refreshToken) {
-            console.log('Refresh token is missing');
-            return res.redirect('/login?error=missing-refresh-token');
-        }
-
+    if (accessToken) {
         try {
+            const decodedAccessToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            req.user = decodedAccessToken;
+            console.log('Authenticated')
+            return next();
+        } catch (error) {
+            console.log("Error verifying access token:", error);
+            return res.redirect("/login?error=invalid-access-token");
+        };
+    } else if (refreshToken) {
+        try {
+            // Call api to refresh the access token using refreshToken
             const url = new URL(serverPath + authBackendPath + "/refresh-token");
             const response = await fetch(url, {
                 method: "POST",
@@ -54,36 +43,39 @@ async function authenticateToken(req, res, next) {
                 body: JSON.stringify({ refreshToken }),
             });
 
+            // Validate token refresh response
             const result = await response.json();
-            if (!response.ok) {
-                console.log(response.message);
-                return res.redirect('/login?error=failed-refresh-token');
-            }
+            if (!response.ok || !result.accessToken) {
+                console.log("Failed to refresh token:", result.message || "Unknown error");
+                return res.redirect('/login?error=invalid-token-refresh');
+            };
 
-            if (!result.accessToken) {
-                console.log(response.message);
-                return res.redirect('/login?error=failed-refresh-access-token');
-            }
-
+            // Verify the new access token and store in cookie
+            const decodedAccessToken = jwt.verify(result.accessToken, process.env.ACCESS_TOKEN_SECRET);
             createAccessTokenCookie(res, result.accessToken);
 
-            next();
+            // Add user info to api request
+            req.user = decodedAccessToken;
 
-        } catch(error) {
-            console.log(error);
-            return res.redirect('/login?error=failed-refresh-token');
+            return next();
+
+        } catch (error) {
+            console.log("Error refreshing Token: ", error);
+            return res.redirect('/login?error=invalid-token-refresh');
         };
-    };
-};
 
-// create and add cookies
+    } else {
+        return res.redirect("/login?error=expired-tokens");
+    };
+}
+
+// Create and add cookies
 function createAccessTokenCookie(res, cookieToken) {
-     // Set cookies
     res.cookie('accessToken', cookieToken, {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? 'strict' : 'lax',
-        maxAge: ACCESS_TOKEN_AGE
+        maxAge: ACCESS_TOKEN_AGE,
     });
 }
 
