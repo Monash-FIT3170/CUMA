@@ -142,7 +142,7 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
      *  */
 
     try {
-        const url = new URL(unitBackendPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
+        const url = new URL(serverPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "PUT",

@@ -28,6 +28,11 @@ const gemini = async (unitInfo) => {
       const result = await model.generateContent(prompt);
       const response = result.response;
       const text = await response.text();
+
+      // filter response
+      text.match(/\[.*?\]/s)[0];
+
+
       return text;
     } catch (error) {
       console.error("Error generating content:", error);
