@@ -10,7 +10,6 @@
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
 import gemini from '../../ai/geminiTest.js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const router = express.Router();
 
@@ -241,7 +240,7 @@ router.put('/:unitCode', async (req, res) => {
 
         // get requestBody
         const universityName = req.body.universityName;
-        const newUnitInfo = req.body.newUnitInfo
+        var newUnitInfo = req.body.newUnitInfo
 
         // Extract the unitcode from request parameters
         const unitCode = req.params.unitCode;
@@ -250,18 +249,29 @@ router.put('/:unitCode', async (req, res) => {
         const database = client.db('CUMA');
         const units = database.collection(collectionName);
 
+        // gemini
+        var aiGenKeyWord = null;
+        if (newUnitInfo.unitDescription) {
+            aiGenKeyWord = await gemini(newUnitInfo.unitDescription);
+            newUnitInfo = {
+                ...newUnitInfo,
+                aiGenKeyWord: aiGenKeyWord
+            };
+        }
+
         // update the unit
         const result = await units.updateOne({
             unitCode: unitCode,
-            universityName: universityName
+            universityName: universityName,
         },
-            { $set: newUnitInfo }
+            { $set: newUnitInfo}
         );
 
         // if the unitCode does not exist
         if (result.matchedCount === 0) {
             return res.status(400).json("This unit does not exist")
         }
+
 
         return res.status(200).json(result);
     }

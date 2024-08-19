@@ -7,8 +7,6 @@
 // generate an api key using your own account. 
 // Then, copy and paste the api key into ".env" file under the name "AI_API_KEY".
 
-
-
 import dotenv from 'dotenv';
 
 import {GoogleGenerativeAI} from "@google/generative-ai"
@@ -22,7 +20,7 @@ const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
 const gemini = async (unitInfo) => {
-    const prompt = "Summarise this unit into small keywords: " + unitInfo;
+    const prompt = "Summarise this unit into small keywords: " + unitInfo + ". \nExtract keywords as an array only from the description.";
   
     try {
       const result = await model.generateContent(prompt);
