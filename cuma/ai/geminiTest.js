@@ -2,10 +2,12 @@
 
 // instructions: 
 
-// do: npm install @google/generative-ai
+// do: npm install
 
-// generate an api key using your own account. 
-// Then, copy and paste the api key into ".env" file under the name "AI_API_KEY".
+// generate an api key using your own account. Generate on the Gemini site. 
+// Then, copy and paste the api key into ".env" file under the name "AI_API_KEY". 
+// For example, 
+// AI_API_KEY = [ur api key]
 
 import dotenv from 'dotenv';
 
