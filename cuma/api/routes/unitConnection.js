@@ -2,12 +2,13 @@
 // database name: universities
 
 import express from 'express';
+import authenticateToken from '../middleware/authenticateToken.js';
 const router = express.Router();
 
 const unitsCollectionName = "testUnits"
 
 
-router.post('/add', async (req, res) => {
+router.post('/add', authenticateToken, async (req, res) => {
     try {
         return await getUser(req).then(async (user) => {
             if (!user) {
@@ -58,7 +59,7 @@ router.post('/add', async (req, res) => {
 });
 
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', authenticateToken, async (req, res) => {
     try {
         return await getUser(req).then(async (user) => {
             if (!user) {
@@ -129,46 +130,46 @@ router.post('/delete', async (req, res) => {
  * code: 404 - if unit not found
  * code: 500 - if server error or other errors occurred
  */
-router.get("/getAll", async (req, res) => {
-    try {
-        // Get the query parameters and check if they are provided
-        const { sourceUni, unitCode } = req.query;
-        if (!sourceUni || !unitCode) {
-            return res.status(400).json({ error: "Both sourceUni and unitCode must be provided" });
-        }
+// router.get("/getAll", async (req, res) => {
+//     try {
+//         // Get the query parameters and check if they are provided
+//         const { sourceUni, unitCode } = req.query;
+//         if (!sourceUni || !unitCode) {
+//             return res.status(400).json({ error: "Both sourceUni and unitCode must be provided" });
+//         }
 
-        // Access the MongoDB client from the request object and get the collection
-        const client = req.client;
-        const db = client.db("CUMA");
-        const collection = db.collection(unitsCollectionName);
+//         // Access the MongoDB client from the request object and get the collection
+//         const client = req.client;
+//         const db = client.db("CUMA");
+//         const collection = db.collection(unitsCollectionName);
 
-        // Find the unit in the collection
-        const unit = await findUnit(collection, sourceUni, unitCode);
+//         // Find the unit in the collection
+//         const unit = await findUnit(collection, sourceUni, unitCode);
 
-        if (!unit) {
-            return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Not Found!` });
-        }
+//         if (!unit) {
+//             return res.status(404).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, Not Found!` });
+//         }
 
-        // Find connections of the unit and resolve them
-        const connections = unit.connections;
-        if (connections.length === 0) {
-            return res.status(400).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!` });
-        }
-        const resolvedConnections = await resolveIdsToUnits(collection, connections);
+//         // Find connections of the unit and resolve them
+//         const connections = unit.connections;
+//         if (connections.length === 0) {
+//             return res.status(400).json({ error: `University: ${sourceUni}, Unit: ${unitCode}, does not have any connection!` });
+//         }
+//         const resolvedConnections = await resolveIdsToUnits(collection, connections);
 
-        // Return the filtered connections
-        return res.status(200).json({ connections: resolvedConnections });
+//         // Return the filtered connections
+//         return res.status(200).json({ connections: resolvedConnections });
 
-    } catch (error) {
-        console.error("Error:", error);
-        return res.status(500).json({ error: "Internal server error" });
-    }
-});
+//     } catch (error) {
+//         console.error("Error:", error);
+//         return res.status(500).json({ error: "Internal server error" });
+//     }
+// });
 
 /**
  * This endpoint retrieves all connections of a user
  */
-router.get("/getAllUserConnections", async (req, res) => {
+router.get("/getAllUserConnections", authenticateToken, async (req, res) => {
     try {
         return await getUser(req).then(async (user) => {
             if (!user) {
@@ -206,7 +207,7 @@ router.get("/getAllUserConnections", async (req, res) => {
 * code: 404 - if any is not found
 * code: 500 - if server error or other errors occurred
 */
-router.get("/getSpecific", async (req, res) => {
+router.get("/getSpecific", authenticateToken, async (req, res) => {
     try {
         return await getUser(req).then(async (user) => {
             if (!user) {
@@ -333,17 +334,12 @@ async function resolveConnections(collection, objectIdConnections) {
  */
 function getEmail(req) {
     // No user detected
-    if (!req.session.user) {
+    if (!req.user.email) {
         return null;
     }
 
-    // Google login
-    if (req.session.user.data.email) {
-        return req.session.user.data.email;
-    }
-
     // Local login
-    return req.session.user.email;
+    return req.user.email;
 }
 
 
