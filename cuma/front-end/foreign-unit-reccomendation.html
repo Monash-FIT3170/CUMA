@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foreign Unit Recommendation</title>
+</head>
+<body>
+    <div id="foreign-unit-recommendation">
+        <h1>Find Equivalent Units at Monash</h1>
+        <form id="unit-form">
+            <div class="form-group">
+                <label for="foreign-unit-name">Foreign Unit Name:</label>
+                <input type="text" id="foreign-unit-name" placeholder="Enter foreign unit name" required>
+            </div>
+            <div class="form-group">
+                <label for="foreign-unit-code">Foreign Unit Code:</label>
+                <input type="text" id="foreign-unit-code" placeholder="Enter foreign unit code" required>
+            </div>
+            <div class="form-group">
+                <label for="foreign-unit-description">Foreign Unit Description:</label>
+                <textarea id="foreign-unit-description" placeholder="Enter foreign unit description" required></textarea>
+            </div>
+            <button type="submit">Get Recommendations</button>
+        </form>
+        <div id="recommendations">
+            <!-- Recommended units will appear here -->
+        </div>
+    </div>
+
+    <script src="foreign-unit-reccomendation.js"></script>
+</body>
+</html>
