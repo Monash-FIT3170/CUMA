@@ -25,8 +25,8 @@ async function getMonashEquivalent(unitName, unitCode, unitDescription) {
     recommendationsContainer.appendChild(unitDiv);
 
 
-    //fetch monash equivalent
-    
+    //fetch and display monash equivalent - TODO
+
 
 }
 
