@@ -3,31 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foreign Unit Recommendation</title>
+    <title>Foreign Unit Recommendation - Monash University</title>
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/nav.css">
+    <script src="../backend/namespace.js" defer></script>
+    <script src="./foreign-unit-recommendation.js" defer></script>
+
 </head>
 <body>
-    <div id="foreign-unit-recommendation">
-        <h1>Find Equivalent Units at Monash</h1>
-        <form id="unit-form">
-            <div class="form-group">
-                <label for="foreign-unit-name">Foreign Unit Name:</label>
-                <input type="text" id="foreign-unit-name" placeholder="Enter foreign unit name" required>
-            </div>
-            <div class="form-group">
-                <label for="foreign-unit-code">Foreign Unit Code:</label>
-                <input type="text" id="foreign-unit-code" placeholder="Enter foreign unit code" required>
-            </div>
-            <div class="form-group">
-                <label for="foreign-unit-description">Foreign Unit Description:</label>
-                <textarea id="foreign-unit-description" placeholder="Enter foreign unit description" required></textarea>
-            </div>
-            <button type="submit">Get Recommendations</button>
-        </form>
-        <div id="recommendations">
-            <!-- Recommended units will appear here -->
+    <header>
+        <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
+        <h1>CUMA</h1>
+    </header>
+    
+    <nav class="sidebar">
+        <div class="sidebar-link">
+            <img src="images/icons8-navigation-96.png" class="sidebar-img">
+            Mapping
         </div>
-    </div>
+        <div class="sidebar-link">
+            <img src="images/icons8-navigation-96.png" class="sidebar-img">
+            Add Unit
+        </div>
+        <div class="sidebar-link">
+            <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img">
+            Unit Info
+        </div>
+        <div class="sidebar-link">
+            <img src="images/icons8-person-96.png" class="sidebar-img">
+            Profile
+        </div>
+        <div class="sidebar-link">
+            <img src="images/icons8-cog-96.png" class="sidebar-img">
+            Settings
+        </div>
+        <button id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
+        <button id="logout-button" onclick="userLogout()">Logout</button>
+    </nav>
 
-    <script src="foreign-unit-reccomendation.js"></script>
+    <main>
+        <section class="foreign-unit-recommendation">
+            <h2>Find Equivalent Units at Monash University</h2>
+            <form id="unit-form">
+                <div class="form-group">
+                    <label for="foreign-unit-name">Foreign Unit Name:</label>
+                    <input type="text" id="foreign-unit-name" placeholder="Enter foreign unit name" required>
+                </div>
+                <div class="form-group">
+                    <label for="foreign-unit-code">Foreign Unit Code:</label>
+                    <input type="text" id="foreign-unit-code" placeholder="Enter foreign unit code" required>
+                </div>
+                <div class="form-group">
+                    <label for="foreign-unit-description">Foreign Unit Description:</label>
+                    <textarea id="foreign-unit-description" placeholder="Enter foreign unit description" required></textarea>
+                </div>
+                <button type="submit">Get Recommendations</button>
+            </form>
+
+            <div id="recommendations">
+                <!-- Recommended units will appear here -->
+            </div>
+        </section>
+    </main>
 </body>
 </html>

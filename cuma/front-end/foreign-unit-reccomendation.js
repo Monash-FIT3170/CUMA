@@ -1,6 +1,8 @@
 
 // Function to display user input as a recommendation
 async function getMonashEquivalent(unitName, unitCode, unitDescription) {
+
+    
     console.log("getMonashEquivalent called");
     const recommendationsContainer = document.getElementById('recommendations');
 
@@ -15,7 +17,8 @@ async function getMonashEquivalent(unitName, unitCode, unitDescription) {
     console.log("Creating unitDiv element");
     const unitDiv = document.createElement('div');
     unitDiv.className = 'recommended-unit';
-
+    
+    //display what was just searched
     unitDiv.innerHTML = `
         <h4>${unitCode} - ${unitName}</h4>
         <p>${unitDescription}</p>
