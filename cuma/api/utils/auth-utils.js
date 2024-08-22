@@ -25,17 +25,17 @@ export function generateRefreshToken(email, role) {
 
 // Cookie deletion
 export function clearTokenCookies(res, isProduction) {
-    res.cookie('accessToken', {
+    res.clearCookie('accessToken', {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? 'strict' : 'lax',
-        path: '/',
+        path: '/'
     });
-    res.cookie('refreshToken', {
+    res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: isProduction,
         sameSite: isProduction ? 'strict' : 'lax',
-        path: '/',
+        path: '/'
     });
 }
 
