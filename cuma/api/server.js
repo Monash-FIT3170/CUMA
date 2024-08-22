@@ -1,5 +1,6 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
@@ -100,9 +101,13 @@ app.get('/reset-password-success', (req, res) => {
 // Connect to MongoDB and start the server
 async function run() {
   try {
-    // Connect to DB
+    // Connect to MongoDB native client
     await client.connect();
-    console.log("Connected to MongoDB");
+    console.log("Connected to MongoDB client");
+
+    // Connect to MongoDB using Mongoose
+    await mongoose.connect(process.env.TEST_MONGODB_URI);
+    console.log("Connected to MongoDB using Mongoose");
 
     // Setup AdminJS
     await setupAdminJS(app, client);
@@ -118,9 +123,10 @@ async function run() {
       await server.close(() => {
         console.log("HTTP server closed.");
       });
-      // Closing database
       await client.close();
-      console.log("MongoDB connection closed.");
+      console.log("MongoDB native client connection closed.");
+      await mongoose.connection.close();
+      console.log("Mongoose connection closed.");
     };
     // Signal to close ctrl + c
     process.on('SIGINT', async () => {
@@ -132,6 +138,7 @@ async function run() {
     // Catch any error
     console.error("Failed to start the application", error);
     await client.close();
+    await mongoose.connection.close();
     process.exit(1);
   }
 }
@@ -139,5 +146,6 @@ async function run() {
 run().catch(async (error) => {
   console.error("An error occurred while running the server", error);
   await client.close();
+  await mongoose.connection.close();
   process.exit(1);
 });
