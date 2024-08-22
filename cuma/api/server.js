@@ -10,6 +10,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authenticateToken from './middleware/authenticateToken.js'
+import { setupAdminJS } from './admin/adminConfig.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -102,6 +103,11 @@ async function run() {
     // Connect to DB
     await client.connect();
     console.log("Connected to MongoDB");
+
+    // Setup AdminJS
+    await setupAdminJS(app, client);
+    console.log("AdminJS setup complete");
+
     // Start the Express server
     const server = app.listen(port, () => {
       console.log(`Server is running in ${process.env.NODE_ENV} mode on ${serverPath}`);

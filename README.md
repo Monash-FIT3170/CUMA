@@ -86,7 +86,7 @@ The API is handled by `api` where it will query the database.
 
 # Updating the Repository
 
-**IMPORTANT:** After pulling updates from the repository, always run `npm install` in the root directory. This is to ensures that any new or updated node modules are properly installed. Failure to do so may result in missing dependencies and application errors.
+**IMPORTANT:** After pulling updates from the repository, always run `npm install` in the root directory. This is to ensure that any new or updated node modules are properly installed. Failure to do so may result in missing dependencies and application errors.
 
 
 # Handover Documentation
