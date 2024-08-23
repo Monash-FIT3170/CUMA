@@ -630,6 +630,7 @@ async function getMostSimilarUnit() {
     let highestSimilarity = 0;
 
     function getSimilarity(s1, s2) {
+        //get similarity using cosine similarity
         const tokenize = text => {
             return text.toLowerCase().match(/\b(\w+)\b/g);
         }
