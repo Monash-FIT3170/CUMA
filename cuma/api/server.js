@@ -116,6 +116,7 @@ async function run() {
     // Start the Express server
     const server = app.listen(port, () => {
       console.log(`Server is running in ${process.env.NODE_ENV} mode on ${serverPath}`);
+      console.log(`Admin is running in ${process.env.NODE_ENV} mode on ${serverPath}/admin`);
     });
     // Function to close server
     const closeServer = async () => {

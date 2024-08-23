@@ -1,35 +1,55 @@
 import AdminJS from 'adminjs'
 import AdminJSExpress from '@adminjs/express'
+import * as AdminJSMongoose from '@adminjs/mongoose'
+import PendingStudent from '../models/PendingStudentModel.js'
+import PendingCourseDirector from '../models/PendingCourseDirectorModel.js'
 
-const DEFAULT_ADMIN = {
-  email: 'admin@example.com',
-  password: 'password',
-}
+AdminJS.registerAdapter(AdminJSMongoose)
 
-const authenticate = async (email, password) => {
-  if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
-    return Promise.resolve(DEFAULT_ADMIN)
-  }
-  return null
+const adminJsOptions = {
+  resources: [
+    {
+      resource: PendingStudent,
+      options: {
+        navigation: {
+          name: 'User Management',
+          icon: 'User',
+        },
+        properties: {
+          proofOfEnrollment: {
+            isVisible: { list: false, filter: false, show: true, edit: true },
+          },
+        },
+      },
+    },
+    {
+      resource: PendingCourseDirector,
+      options: {
+        navigation: {
+          name: 'User Management',
+          icon: 'User',
+        },
+        properties: {
+          proofOfEmployment: {
+            isVisible: { list: false, filter: false, show: true, edit: true },
+          },
+        },
+      },
+    },
+  ],
+  rootPath: '/admin',
+  branding: {
+    companyName: 'CUMA Admin Panel',
+    logo: false,
+    softwareBrothers: false,
+  },
 }
 
 export const setupAdminJS = async (app, client) => {
-  const admin = new AdminJS({})
+  const admin = new AdminJS(adminJsOptions)
 
-  const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
-    admin,
-    {
-      authenticate,
-      cookieName: 'adminjs',
-      cookiePassword: 'sessionsecret'
-    },
-    null,
-    {
-      resave: false,
-      saveUninitialized: true,
-      secret: 'sessionsecret'
-    }
-  )
+  // Use non-authenticated router for development
+  const adminRouter = AdminJSExpress.buildRouter(admin)
 
   app.use(admin.options.rootPath, adminRouter)
 
