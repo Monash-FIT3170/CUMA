@@ -630,16 +630,63 @@ async function getMostSimilarUnit() {
     let highestSimilarity = 0;
 
     function getSimilarity(s1, s2) {
-        console.log(foreignUnitDescription);
-        return
+        const tokenize = text => {
+            return text.toLowerCase().match(/\b(\w+)\b/g);
+        }
+        const termFreqMap = tokens => {
+            const freqMap = {};
+            tokens.forEach(token => {
+                freqMap[token] = (freqMap[token] || 0) + 1;
+            });
+            return freqMap;
+        }
+        const addKeysToDict = (map, dict) => {
+            for (let key in map) {
+                dict[key] = true;
+            }
+        }
+
+        const dotProduct = (mapA, mapB) => {
+            let sum = 0;
+            for (let key in mapA) {
+                if (mapB.hasOwnProperty(key)) {
+                    sum += mapA[key] * mapB[key];
+                }
+            }
+            return sum;
+        }
+        const magnitude = map => {
+            let sum = 0;
+            for (let key in map) {
+                sum += map[key] * map[key];
+            }
+            return Math.sqrt(sum);
+        }
+        const tokensA = tokenize(s1);
+        const tokensB = tokenize(s2);
+
+        const freqMapA = termFreqMap(tokensA);
+        const freqMapB = termFreqMap(tokensB);
+
+        const dict = {};
+        addKeysToDict(freqMapA, dict);
+        addKeysToDict(freqMapB, dict);
+
+        const dotProd = dotProduct(freqMapA, freqMapB);
+        const magnitudeA = magnitude(freqMapA);
+        const magnitudeB = magnitude(freqMapB);
+
+        if (magnitudeA === 0 || magnitudeB === 0) {
+            return 0;
+        }
+
+        return dotProd / (magnitudeA * magnitudeB);
     }
 
     // Iterate through Monash units to find the most similar one
     for (const key in monashUnits) {
         const unit = monashUnits[key];
         const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
-
-        console.log(unit)
 
         if (similarity > highestSimilarity) {
             highestSimilarity = similarity;
