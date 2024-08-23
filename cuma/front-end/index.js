@@ -615,7 +615,7 @@ function userSendConnections() {
     });
 }
 
-async function getMostSimilarUnit() {
+async function getTopThreeSimilarUnits() {
     const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
 
     if (!foreignUnitDescription) {
@@ -626,27 +626,25 @@ async function getMostSimilarUnit() {
     // Fetch all units from Monash
     const monashUnits = await Backend.Unit.getAllUnitsFromUniversity(default_university);
 
-    let mostSimilarUnit = null;
-    let highestSimilarity = 0;
+    const similarityScores = [];
 
     function getSimilarity(s1, s2) {
-        //get similarity using cosine similarity
+        // Get similarity using cosine similarity
         const tokenize = text => {
             return text.toLowerCase().match(/\b(\w+)\b/g);
-        }
+        };
         const termFreqMap = tokens => {
             const freqMap = {};
             tokens.forEach(token => {
                 freqMap[token] = (freqMap[token] || 0) + 1;
             });
             return freqMap;
-        }
+        };
         const addKeysToDict = (map, dict) => {
             for (let key in map) {
                 dict[key] = true;
             }
-        }
-
+        };
         const dotProduct = (mapA, mapB) => {
             let sum = 0;
             for (let key in mapA) {
@@ -655,14 +653,14 @@ async function getMostSimilarUnit() {
                 }
             }
             return sum;
-        }
+        };
         const magnitude = map => {
             let sum = 0;
             for (let key in map) {
                 sum += map[key] * map[key];
             }
             return Math.sqrt(sum);
-        }
+        };
         const tokensA = tokenize(s1);
         const tokensB = tokenize(s2);
 
@@ -683,28 +681,36 @@ async function getMostSimilarUnit() {
         return dotProd / (magnitudeA * magnitudeB);
     }
 
-    // Iterate through Monash units to find the most similar one
+    // Iterate through Monash units and calculate similarity scores
     for (const key in monashUnits) {
         const unit = monashUnits[key];
         const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
-        if (similarity > highestSimilarity) {
-            highestSimilarity = similarity;
-            mostSimilarUnit = unit;
-        }
+        similarityScores.push({ unit, similarity });
     }
 
-    const recommendedUnitDiv = document.getElementById('recommended-unit');
+    // Sort by similarity in descending order
+    similarityScores.sort((a, b) => b.similarity - a.similarity);
 
-    // Display the most similar unit in the recommendations section
-    if (mostSimilarUnit) {
-        recommendedUnitDiv.innerHTML = `
-            <h4>${mostSimilarUnit.unitCode} - ${mostSimilarUnit.unitName}</h4>
-            <p>Type: ${mostSimilarUnit.unitType}, Credits: ${mostSimilarUnit.creditPoints}, Level: ${mostSimilarUnit.unitLevel}</p>
-            <p>${mostSimilarUnit.unitDescription}</p>
+    const recommendedUnitDiv = document.getElementById('recommended-unit');
+    recommendedUnitDiv.innerHTML = ''; // Clear previous results
+
+    // Display the top 3 most similar units
+    const topThree = similarityScores.slice(0, 3);
+    topThree.forEach(({ unit, similarity }, index) => {
+        recommendedUnitDiv.innerHTML += `
+            <div class="recommended-unit">
+                <h4>${index + 1}. ${unit.unitCode} - ${unit.unitName}</h4>
+                <p>Similarity Score: ${(similarity * 100).toFixed(2)}%</p>
+                <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+                <p>${unit.unitDescription}</p>
+            </div>
         `;
-        recommendedUnitDiv.style.backgroundColor = '#e0f7fa';
+    });
+
+    if (topThree.length === 0) {
+        recommendedUnitDiv.innerHTML = '<p>No similar units found.</p>';
     } else {
-        recommendedUnitDiv.innerHTML = '<p>No similar unit found.</p>';
+        recommendedUnitDiv.style.backgroundColor = '#e0f7fa';
     }
 }
 
@@ -712,8 +718,13 @@ async function getMostSimilarUnit() {
 if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     document.getElementById('foreign-unit-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        getMostSimilarUnit();
+        getTopThreeSimilarUnits();
     });
+}
+
+// Call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
 }
 
 
