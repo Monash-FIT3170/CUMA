@@ -618,6 +618,12 @@ function userSendConnections() {
 async function getTopThreeSimilarUnits() {
     const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
 
+    // Check if the description is too short
+    if (foreignUnitDescription.length < 100) { // Adjust the length threshold as needed
+        alert("Please enter a longer unit description (at least 100 characters).");
+        return;
+    }
+
     if (!foreignUnitDescription) {
         alert("Please enter a unit description.");
         return;
