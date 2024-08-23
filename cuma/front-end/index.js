@@ -615,5 +615,63 @@ function userSendConnections() {
     });
 }
 
-// call every render
-repopulateResults()
+async function getMostSimilarUnit() {
+    const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
+
+    if (!foreignUnitDescription) {
+        alert("Please enter a unit description.");
+        return;
+    }
+
+    // Fetch all units from Monash
+    const monashUnits = await Backend.Unit.getAllUnitsFromUniversity(default_university);
+
+    let mostSimilarUnit = null;
+    let highestSimilarity = 0;
+
+    function getSimilarity(s1, s2) {
+        console.log(foreignUnitDescription);
+        return
+    }
+
+    // Iterate through Monash units to find the most similar one
+    for (const key in monashUnits) {
+        const unit = monashUnits[key];
+        const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
+
+        console.log(unit)
+
+        if (similarity > highestSimilarity) {
+            highestSimilarity = similarity;
+            mostSimilarUnit = unit;
+        }
+    }
+
+    const recommendedUnitDiv = document.getElementById('recommended-unit');
+
+    // Display the most similar unit in the recommendations section
+    if (mostSimilarUnit) {
+        recommendedUnitDiv.innerHTML = `
+            <h4>${mostSimilarUnit.unitCode} - ${mostSimilarUnit.unitName}</h4>
+            <p>Type: ${mostSimilarUnit.unitType}, Credits: ${mostSimilarUnit.creditPoints}, Level: ${mostSimilarUnit.unitLevel}</p>
+            <p>${mostSimilarUnit.unitDescription}</p>
+        `;
+        recommendedUnitDiv.style.backgroundColor = '#e0f7fa';
+    } else {
+        recommendedUnitDiv.innerHTML = '<p>No similar unit found.</p>';
+    }
+}
+
+// Attach the function to the form submission
+if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
+    document.getElementById('foreign-unit-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        getMostSimilarUnit();
+    });
+}
+
+
+// call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}

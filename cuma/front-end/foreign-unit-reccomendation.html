@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
     <script src="./index.js" defer></script>
+
 </head>
 <body>
 <header>
@@ -24,33 +25,31 @@
     <main>
         <section>
             <h2>Enter Foreign Unit Details</h2>
-            <form id="unit-form">
+            <form id="foreign-unit-form">
                 <div class="form-group">
                     <label for="foreign-unit-name">Unit Name:</label>
-                    <input type="text" id="foreign-unit-name" placeholder="Enter unit name" required>
+                    <input type="text" id="foreign-unit-name" placeholder="Enter unit name">
                 </div>
                 <div class="form-group">
                     <label for="foreign-unit-code">Unit Code:</label>
-                    <input type="text" id="foreign-unit-code" placeholder="Enter unit code" required>
+                    <input type="text" id="foreign-unit-code" placeholder="Enter unit code">
                 </div>
                 <div class="form-group">
                     <label for="foreign-unit-description">Unit Description:</label>
-                    <textarea id="foreign-unit-description" placeholder="Enter unit description" required></textarea>
+                    <textarea id="foreign-unit-description" placeholder="Enter unit description"></textarea>
                 </div>
                 <button type="submit">Get Recommendations</button>
             </form>
-    <section class="course-info">
-        <h2>Monash University Foreign to Domestic Unit Reccomendations</h2>
-<!--        <input type="text" placeholder="Search Unit" id="unit-search">-->
-        <div class="course-units">
-            <h3>Course Units</h3>
-            <div class="unit-list-wrapper">
-                <div class="unit-list" id="unit-list">
-                    <!-- Dynamic units will be appended here -->
+
+
+            <section class="foreign-unit-recommendations">
+                <h2>Recommended Monash Unit Based on Your Foreign Unit</h2>
+                <div class="recommended-unit-wrapper">
+                    <div class="recommended-unit" id="recommended-unit">
+                        <!-- The most similar Monash unit will be displayed here -->
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
 </main>
 </body>
