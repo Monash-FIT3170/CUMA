@@ -615,5 +615,34 @@ function userSendConnections() {
     });
 }
 
+async function fetchAndDisplayUserInfo() {
+    try {
+        const response = await Backend.Auth.getUserInfo();
+        if (response.status === 200 && response.data) {
+            updateUserDisplay(response.data);
+        } else {
+            console.error('Failed to fetch user info:', response);
+        }
+    } catch (error) {
+        console.error('An error occurred while fetching user info:', error);
+
+    }
+}
+
+function updateUserDisplay(userData) {
+    const userInfoDiv = document.querySelector('.user-info');
+    if (userInfoDiv) {
+        userInfoDiv.innerHTML = `
+            <p>User: <strong>${userData.name}</strong></p>
+            <p>Role: <strong>${userData.role}</strong></p>
+        `;
+    } else {
+        console.error('User info display container not found.');
+    }d
+}
+
+
+
 // call every render
 repopulateResults()
+document.addEventListener('DOMContentLoaded', fetchAndDisplayUserInfo);
