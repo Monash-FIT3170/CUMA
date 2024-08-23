@@ -4,11 +4,11 @@ const unitBackendPath = "/api/unit"
 Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
     /**
      * @param {string} universityName
-     * 
+     *
      * @return {json} API response.
      */
     const params = {"universityName": universityName}
-    
+
     try {
         const url = new URL(serverPath + unitBackendPath + "/getAllFromUni");
         url.search = new URLSearchParams(params).toString();
@@ -16,7 +16,7 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
         const response = await fetch(url)
         const result = await response.json()
         return result
-    } 
+    }
     catch (error) {
         console.error("Error:", error);
     }
@@ -26,7 +26,7 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
 Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
     /**
      * @param {string} universityName
-     * 
+     *
      * @return {json} API response.
      */
 
@@ -75,9 +75,9 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
 Backend.Unit.add = async function (universityName, unitInfo) {
     /**
      * @param {string} universityName
-       @param {json} unitInfo = {
+     @param {json} unitInfo = {
             name: str;
-            desc: 
+            desc:
             type: int;
             creditPt: int;
             level: int;
@@ -86,7 +86,7 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
         }
 
-        @return {json} API reponse
+     @return {json} API reponse
      *  */
 
     // var name=  unitInfo.name;
@@ -123,11 +123,11 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
 Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
     /**
-     * @param {string} universityName 
-       @param {json} unitInfoChange  - the modification
-       {
+     * @param {string} universityName
+     @param {json} unitInfoChange  - the modification
+     {
             name: str;
-            desc: 
+            desc:
             type: int;
             creditPt: int;
             level: int;
@@ -135,10 +135,10 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
             link: str
 
         }
-        
-        @param {string} unitCode : The code of the unit to update
 
-        @return {json} API reponse
+     @param {string} unitCode : The code of the unit to update
+
+     @return {json} API reponse
      *  */
 
     try {
@@ -165,10 +165,10 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
 }
 
 Backend.Unit.delete = async function (universityName, unitCode) {
-    /** 
+    /**
      * @param {string} universityName
      * @param {int} unitCode
-    */
+     */
 
     try {
         const url = new URL(serverPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
