@@ -679,7 +679,6 @@ async function getMostSimilarUnit() {
         if (magnitudeA === 0 || magnitudeB === 0) {
             return 0;
         }
-
         return dotProd / (magnitudeA * magnitudeB);
     }
 
@@ -687,7 +686,6 @@ async function getMostSimilarUnit() {
     for (const key in monashUnits) {
         const unit = monashUnits[key];
         const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
-
         if (similarity > highestSimilarity) {
             highestSimilarity = similarity;
             mostSimilarUnit = unit;
