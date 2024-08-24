@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const router = express.Router();
-const serverPath = "http://localhost:" + (process.env.PORT || 3000);
+const serverPath = "https://3.25.70.20"
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Cookies Expiry
