@@ -236,6 +236,7 @@ async function repopulateResults() {
     {
       // Display the updated mapped units for the selected unit
       displayMappedUnits(selectedUnitCode);
+
     }
 
 
