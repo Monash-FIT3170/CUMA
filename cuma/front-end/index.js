@@ -331,9 +331,11 @@ function selectUnit(unitElement) {
     // Display mapped units for this selected unit
     displayMappedUnits(selectedUnitCode);
 
-    // Show the Modify and Delete buttons
-    document.getElementById('modify-unit-button').style.display = 'inline-block';
-    document.getElementById('delete-unit-button').style.display = 'inline-block';
+    // Show the Modify and Delete buttons only for non-student roles
+    if (userRole === 'course_director') {
+        document.getElementById('modify-unit-button').style.display = 'inline-block';
+        document.getElementById('delete-unit-button').style.display = 'inline-block';
+    }
 }
 
 
@@ -620,12 +622,13 @@ async function fetchAndDisplayUserInfo() {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
             updateUserDisplay(response.data);
+            userRole = response.data.role;
+            updateUIBasedOnRole();
         } else {
             console.error('Failed to fetch user info:', response);
         }
     } catch (error) {
         console.error('An error occurred while fetching user info:', error);
-
     }
 }
 
@@ -641,8 +644,24 @@ function updateUserDisplay(userData) {
     }
 }
 
+function updateUIBasedOnRole() {
+    const addUnitButton = document.querySelector('.add-unit');
+    const modifyUnitButton = document.getElementById('modify-unit-button');
+    const deleteUnitButton = document.getElementById('delete-unit-button');
+
+    if (userRole === 'student' || userRole !== 'course_director') {
+        if (addUnitButton) addUnitButton.style.display = 'none';
+        if (modifyUnitButton) modifyUnitButton.style.display = 'none';
+        if (deleteUnitButton) deleteUnitButton.style.display = 'none';
+    } else {
+        if (addUnitButton) addUnitButton.style.display = 'block';
+    }
+}
+
 
 
 // call every render
-repopulateResults()
-document.addEventListener('DOMContentLoaded', fetchAndDisplayUserInfo);
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndDisplayUserInfo();
+    repopulateResults();
+});
