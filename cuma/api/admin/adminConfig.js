@@ -3,8 +3,14 @@ import AdminJSExpress from '@adminjs/express'
 import * as AdminJSMongoose from '@adminjs/mongoose'
 import PendingStudent from '../models/PendingStudentModel.js'
 import PendingCourseDirector from '../models/PendingCourseDirectorModel.js'
+import dotenv from 'dotenv'
 
-AdminJS.registerAdapter(AdminJSMongoose)
+dotenv.config()
+
+AdminJS.registerAdapter({
+  Resource: AdminJSMongoose.Resource,
+  Database: AdminJSMongoose.Database,
+})
 
 const adminJsOptions = {
   resources: [
@@ -15,11 +21,6 @@ const adminJsOptions = {
           name: 'User Management',
           icon: 'User',
         },
-        properties: {
-          proofOfEnrollment: {
-            isVisible: { list: false, filter: false, show: true, edit: true },
-          },
-        },
       },
     },
     {
@@ -28,11 +29,6 @@ const adminJsOptions = {
         navigation: {
           name: 'User Management',
           icon: 'User',
-        },
-        properties: {
-          proofOfEmployment: {
-            isVisible: { list: false, filter: false, show: true, edit: true },
-          },
         },
       },
     },
