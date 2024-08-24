@@ -3,6 +3,7 @@ import { google } from 'googleapis';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import * as AuthUtils from '../utils/auth-utils.js';
+import authenticateToken from '../middleware/authenticateToken.js';
 
 dotenv.config();
 
@@ -198,7 +199,7 @@ router.post('/verify-mfa', async (req, res) => {
 router.get('/google', (req, res) => {
     try {
 
-        const state = AuthUtils.generaRandomToken();
+        const state = AuthUtils.generateRandomToken();
         req.session.googleState = { state, expiresIn: Date.now() + 5 * 60 * 1000  };
 
         const authorizationUrl = oauth2Client.generateAuthUrl({
@@ -386,6 +387,30 @@ router.post('/refresh-token', async (req, res) => {
         } else {
             return res.status(403).json({ message: 'Invalid refresh token' });
         }
+    }
+});
+
+// Get user information endpoint
+router.get('/user-info', authenticateToken, async (req, res) => {
+    try {
+
+        // Fetch user from database
+        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, req.user.email);
+        if (!existingUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Construct user information
+        const userInfo = {
+            name: existingUser.firstName,
+            role: existingUser.role
+        };
+
+        res.json(userInfo);
+
+    } catch (error) {
+        console.error("Failed to retrieve user information:", error);
+        res.status(500).json({ message: "Failed to retrieve user information." });
     }
 });
 

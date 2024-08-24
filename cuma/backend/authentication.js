@@ -237,3 +237,26 @@ Backend.Auth.updateNewPassword = async function (token, email, password) {
     throw error;
   }
 };
+
+Backend.Auth.getUserInfo = async function () {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/user-info");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, data: result }; 
+
+  } catch (error) {
+    console.log("Error fetching user info:", error);
+    throw error;
+  }
+};

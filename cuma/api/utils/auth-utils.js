@@ -5,7 +5,6 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { authenticator } from 'otplib';
-import path from 'path';
 import QRCode from 'qrcode';
 
 // Constants
@@ -128,6 +127,7 @@ export async function processLoginAccessToken(res, users, existingUser, isProduc
     createRefreshTokenCookie(res, refreshToken, isProduction);
 }
 
+// Process Google login
 export async function processGoogleLoginAccessToken(res, users, existingUser, userData, isProduction) {
     const refreshToken = generateRefreshToken(userData.email, 'general_user');
 

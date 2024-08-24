@@ -638,7 +638,7 @@ function updateUserDisplay(userData) {
         `;
     } else {
         console.error('User info display container not found.');
-    }d
+    }
 }
 
 
