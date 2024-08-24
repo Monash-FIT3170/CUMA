@@ -53,7 +53,7 @@ app.get('/index', authenticateToken, (req, res) => {
 });
 
 app.get('/', authenticateToken, (req, res) => {
-  res.redirect('/index')
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
 });
 
 app.get('/login', (req, res) => {
