@@ -616,5 +616,126 @@ function userSendConnections() {
     });
 }
 
-// call every render
-repopulateResults()
+async function getTopThreeSimilarUnits() {
+    const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
+
+    // Check if the description is too short
+    if (foreignUnitDescription.length < 100) { // Adjust the length threshold as needed
+        alert("Please enter a longer unit description (at least 100 characters).");
+        return;
+    }
+
+    if (!foreignUnitDescription) {
+        alert("Please enter a unit description.");
+        return;
+    }
+
+    // Fetch all units from Monash
+    const monashUnits = await Backend.Unit.getAllUnitsFromUniversity(default_university);
+
+    const similarityScores = [];
+
+    function getSimilarity(s1, s2) {
+        // Get similarity using cosine similarity
+        const tokenize = text => {
+            return text.toLowerCase().match(/\b(\w+)\b/g);
+        };
+        const termFreqMap = tokens => {
+            const freqMap = {};
+            tokens.forEach(token => {
+                freqMap[token] = (freqMap[token] || 0) + 1;
+            });
+            return freqMap;
+        };
+        const addKeysToDict = (map, dict) => {
+            for (let key in map) {
+                dict[key] = true;
+            }
+        };
+        const dotProduct = (mapA, mapB) => {
+            let sum = 0;
+            for (let key in mapA) {
+                if (mapB.hasOwnProperty(key)) {
+                    sum += mapA[key] * mapB[key];
+                }
+            }
+            return sum;
+        };
+        const magnitude = map => {
+            let sum = 0;
+            for (let key in map) {
+                sum += map[key] * map[key];
+            }
+            return Math.sqrt(sum);
+        };
+        const tokensA = tokenize(s1);
+        const tokensB = tokenize(s2);
+
+        const freqMapA = termFreqMap(tokensA);
+        const freqMapB = termFreqMap(tokensB);
+
+        const dict = {};
+        addKeysToDict(freqMapA, dict);
+        addKeysToDict(freqMapB, dict);
+
+        const dotProd = dotProduct(freqMapA, freqMapB);
+        const magnitudeA = magnitude(freqMapA);
+        const magnitudeB = magnitude(freqMapB);
+
+        if (magnitudeA === 0 || magnitudeB === 0) {
+            return 0;
+        }
+        return dotProd / (magnitudeA * magnitudeB);
+    }
+
+    // Iterate through Monash units and calculate similarity scores
+    for (const key in monashUnits) {
+        const unit = monashUnits[key];
+        const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
+        similarityScores.push({ unit, similarity });
+    }
+
+    // Sort by similarity in descending order
+    similarityScores.sort((a, b) => b.similarity - a.similarity);
+
+    const recommendedUnitDiv = document.getElementById('recommended-unit');
+    recommendedUnitDiv.innerHTML = ''; // Clear previous results
+
+    // Display the top 3 most similar units
+    const topThree = similarityScores.slice(0, 3);
+    topThree.forEach(({ unit, similarity }, index) => {
+        recommendedUnitDiv.innerHTML += `
+            <div class="recommended-unit">
+                <h4>${index + 1}. ${unit.unitCode} - ${unit.unitName}</h4>
+                <p>Similarity Score: ${(similarity * 100).toFixed(2)}%</p>
+                <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+                <p>${unit.unitDescription}</p>
+            </div>
+        `;
+    });
+
+    if (topThree.length === 0) {
+        recommendedUnitDiv.innerHTML = '<p>No similar units found.</p>';
+    } else {
+        recommendedUnitDiv.style.backgroundColor = '#e0f7fa';
+    }
+}
+
+// Attach the function to the form submission
+if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
+    document.getElementById('foreign-unit-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        getTopThreeSimilarUnits();
+    });
+}
+
+// Call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}
+
+
+// call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}

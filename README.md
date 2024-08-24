@@ -1,4 +1,4 @@
-# CUMA (Course Unit Mapping Automation) 
+# CUMA (Course Unit Mapping Automation)
 
 ## Project 6 - FIT3170
 
@@ -27,7 +27,7 @@
 
 ## 1. Install Node.js and npm
 
-Please have a read at the guide: 
+Please have a read at the guide:
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 ## 2. Setup Local Repository
@@ -37,7 +37,7 @@ Run "npm install" in root directory (CUMA).
 
 ## 3. Allow Database Access
 
-Download the .env file and remove the "_", then place into the root dir.
+Download the .env file and remove the "\_", then place into the root dir.
 
 https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
 
@@ -52,11 +52,13 @@ For any of the command, access the terminal in the root directory "..\CUMA".
 The command tracks changed and automatically reloads any changes made, mostly on backend and api calls.
 
 ## Production Mode
+
 `npm run server`
 
 To run the server in production mode.
 
 # Project structrue
+
 ## Root Directory
 
 The root directory is defined to be in the same hierarchy as "app.js" and "package.json".
@@ -71,7 +73,6 @@ The root directory is defined to be in the same hierarchy as "app.js" and "packa
 
 - `api`: Contains the API logics, route handlers and the connection to the database.
 
-  
 This web is designed to be a three-tier application, where `front-end` makes a call to `backend`. `backend` will then make a fetch request to the API.
 
 # Important Notes
@@ -88,14 +89,10 @@ The API is handled by `api` where it will query the database.
 
 **IMPORTANT:** After pulling updates from the repository, always run `npm install` in the root directory. This is to ensures that any new or updated node modules are properly installed. Failure to do so may result in missing dependencies and application errors.
 
-
 # Handover Documentation
+
 ## Software/Hardware required to run the project
 
 ## How to set up the project and run it - previous sections
 
 ## Additional notes
-
-
-
-
