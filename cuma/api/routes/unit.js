@@ -9,13 +9,15 @@
 
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
+import authenticateToken from '../middleware/authenticateToken.js';
+import authorize from '../middleware/roleAuth.js';
 
 const router = express.Router();
 
 const collectionName = "testUnits";
 
 
-router.get('/getAllFromUni', async (req, res) => {
+router.get('/getAllFromUni', authenticateToken, async (req, res) => {
     /**
      * This endpoint retrieves all the units available in a university
      * 
@@ -91,7 +93,7 @@ router.get('/getAllFromUni', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorize(['course_director']), async (req, res) => {
     /**
      * This endpoint inserts a unit into the database.
      * 
@@ -151,7 +153,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.get('/retrieveUnit', async (req, res) => {
+router.get('/retrieveUnit', authenticateToken, async (req, res) => {
     /**
       This endpoint retrieves a unit from a specific university
       
@@ -201,7 +203,7 @@ router.get('/retrieveUnit', async (req, res) => {
 // });
 
 
-router.put('/:unitCode', async (req, res) => {
+router.put('/:unitCode', authenticateToken, authorize(['course_director']), async (req, res) => {
     /**
      * This endpoint modify a unit base on "unitcode"
      * 
@@ -264,7 +266,7 @@ router.put('/:unitCode', async (req, res) => {
 });
 
 
-router.delete('/:unitCode', async (req, res) => {
+router.delete('/:unitCode', authenticateToken, authorize(['course_director']), async (req, res) => {
     // Handle DELETE request to delete unit by unitCode
     try {
         // get client
@@ -296,7 +298,7 @@ router.delete('/:unitCode', async (req, res) => {
 });
 
 
-router.get('/getAllNotInUni', async (req, res) => {
+router.get('/getAllNotInUni', authenticateToken, async (req, res) => {
     /**
      * This endpoint retrieves all the units available in a university
      * 

@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import * as AuthUtils from '../utils/auth-utils.js';
 
 const serverPath = "http://localhost:" + (process.env.PORT || 3000);
-const isProduction = process.env.NODE_ENV === 'production';
 const authBackendPath = "/api/authentication";
 
 /**
