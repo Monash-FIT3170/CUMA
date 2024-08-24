@@ -11,7 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authenticateToken from './middleware/authenticateToken.js'
-import { setupAdminJS } from './admin/adminConfig.js';
+import { setupAdminJS } from '../admin/adminConfig.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -103,14 +103,14 @@ async function run() {
   try {
     // Connect to MongoDB native client
     await client.connect();
-    console.log("Connected to MongoDB client");
+    console.log("Connected to MongoDB");
 
     // Connect to MongoDB using Mongoose
     await mongoose.connect(process.env.TEST_MONGODB_URI);
     console.log("Connected to MongoDB using Mongoose");
 
     // Setup AdminJS
-    await setupAdminJS(app, client);
+    await setupAdminJS(app);
     console.log("AdminJS setup complete");
 
     // Start the Express server
@@ -124,8 +124,11 @@ async function run() {
       await server.close(() => {
         console.log("HTTP server closed.");
       });
+      // Closing Mongodb connection
       await client.close();
-      console.log("MongoDB native client connection closed.");
+      console.log("MongoDB connection closed.");
+
+      // Closing Mongoose connection
       await mongoose.connection.close();
       console.log("Mongoose connection closed.");
     };
