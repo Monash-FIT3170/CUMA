@@ -23,6 +23,7 @@
     align-items: center;
     color: rgb(80, 80, 80);
     font-size: 20px;
+    transition: 0.3s;
     text-decoration: none;
 }
 
@@ -34,4 +35,36 @@
 .sidebar-img {
     height: 30px;
     margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
+body button.openbtn {
+    background-color: transparent;
+    margin: 0;
+}
+
+body button.closebtn{
+    margin-bottom: 0;
+    align-self:flex-end;
+    padding: 0;
+    font-size: x-large;
+    color: black;
+    background-color: transparent;
+}
+
+body button.closebtn:hover{
+    color: #3b90d5;
+    background-color: transparent;
+}
+
+nav .closebtn-block{
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav #sidebar-content{
+    display: block;
+    padding-left: 10px;
 }

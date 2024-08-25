@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CUMA</title>
+    <title>Unit Information - CUMA</title>
     <link rel="stylesheet" href="styles/general.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/unitConnection.js" defer></script>
@@ -49,17 +49,28 @@
     </nav>
     
     <main id="main">
-        <section class="profile-section">
+        <section class="unit-info-section">
             <div class="bubble">
-                <h2>User Profile</h2>
-                <p><strong>Name:</strong></p>
-                <p><strong>Email:</strong></p>
-                <p><strong>Institution:</strong></p>
-                <button class="secondary-btn" onclick="editProfile()">Edit Profile</button>
+                <h2>Search for Unit Information</h2>
+                <form id="search-unit-form">
+                    <div class="input-container">
+                        <select id="search-institution">
+                            <option value="" disabled selected>Select Institution (Optional)</option>
+                            <option value="Institution 1">Institution 1</option>
+                            <option value="Institution 2">Institution 2</option>
+                        </select>
+                        <label for="search-institution">Institution</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="search-unit" required>
+                        <label for="search-unit">Search for Existing Unit</label>
+                    </div>
+                    <button type="submit" class="primary-btn">Search</button>
+                </form>
             </div>
         </section>
     </main>
     
-    
+
 </body>
 </html>

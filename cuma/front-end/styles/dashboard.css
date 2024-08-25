@@ -22,8 +22,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .courses-paragraph {
     font-size: 40px;
+    margin: auto;
 }
