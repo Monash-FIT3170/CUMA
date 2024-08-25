@@ -622,8 +622,7 @@ async function fetchAndDisplayUserInfo() {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
             updateUserDisplay(response.data);
-            userRole = response.data.role;
-            updateUIBasedOnRole();
+            updateUIBasedOnRole(response.data.role);
         } else {
             console.error('Failed to fetch user info:', response);
         }
@@ -632,29 +631,60 @@ async function fetchAndDisplayUserInfo() {
     }
 }
 
+function getRoleName(role) {
+    const roleMap = {
+        course_director: "Course Director",
+        general_user: "General User",
+        student: "Student"
+    };
+    return roleMap[role] || "Unknown Role";
+}
+
+
 function updateUserDisplay(userData) {
     const userInfoDiv = document.querySelector('.user-info');
     if (userInfoDiv) {
+        const roleName = getRoleName(userData.role);
         userInfoDiv.innerHTML = `
-            <p>User: <strong>${userData.name}</strong></p>
-            <p>Role: <strong>${userData.role}</strong></p>
+            <p><strong>User</strong>: ${userData.name}</p>
+            <p><strong>Role</strong>: ${roleName}</p>
         `;
     } else {
         console.error('User info display container not found.');
     }
 }
 
-function updateUIBasedOnRole() {
+function updateUIBasedOnRole(userRole) {
     const addUnitButton = document.querySelector('.add-unit');
     const modifyUnitButton = document.getElementById('modify-unit-button');
     const deleteUnitButton = document.getElementById('delete-unit-button');
+    const sendConnectionsButton = document.getElementById('send-connections-button');
 
-    if (userRole === 'student' || userRole !== 'course_director') {
-        if (addUnitButton) addUnitButton.style.display = 'none';
-        if (modifyUnitButton) modifyUnitButton.style.display = 'none';
-        if (deleteUnitButton) deleteUnitButton.style.display = 'none';
-    } else {
-        if (addUnitButton) addUnitButton.style.display = 'block';
+    // hide all buttons
+    if (addUnitButton) addUnitButton.style.display = 'none';
+    if (modifyUnitButton) modifyUnitButton.style.display = 'none';
+    if (deleteUnitButton) deleteUnitButton.style.display = 'none';
+    if (sendConnectionsButton) sendConnectionsButton.style.display = 'none';
+
+    // Configure UI based on user role
+    switch (userRole) {
+        case 'course_director':
+            // Course directors can do everything
+            if (addUnitButton) addUnitButton.style.display = 'block';
+            if (modifyUnitButton) modifyUnitButton.style.display = 'block';
+            if (deleteUnitButton) deleteUnitButton.style.display = 'block';
+            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
+            break;
+        case 'student':
+            // Students cannot add, modify, or delete units
+            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
+            break;
+        case 'general_user':
+            // General users cannot add, modify, delete units or send connections
+            break;
+
+        default:
+            break;
     }
 }
 

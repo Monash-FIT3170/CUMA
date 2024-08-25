@@ -1,5 +1,3 @@
-// auth-utils.js
-
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -13,11 +11,12 @@ const REFRESH_TOKEN_AGE = 60 * 60 * 1000;   // 1hr
 const DB_NAME = 'CUMA';
 const DB_COLLECTION_NAME = 'users';
 
-// Token generation
+// Token access generation
 export function generateAccessToken(email, role) {
     return jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 }
 
+// Token refresh generation
 export function generateRefreshToken(email, role) {
     return jwt.sign({ email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 }
@@ -64,6 +63,7 @@ export function createAccessTokenCookie(res, cookieToken, isProduction) {
     });
 }
 
+// Create refresh token cookie
 export function createRefreshTokenCookie(res, cookieToken, isProduction) {
     res.cookie('refreshToken', cookieToken, {
         httpOnly: true,
@@ -81,6 +81,7 @@ export async function fetchExistingUserFromDB(client, email) {
     return { users, existingUser };
 }
 
+// fecth google users
 export async function fetchExistingGoogleUserFromDB(client, userGoogleID) {
     const database = client.db(DB_NAME);
     const users = database.collection(DB_COLLECTION_NAME);
@@ -88,6 +89,7 @@ export async function fetchExistingGoogleUserFromDB(client, userGoogleID) {
     return { users, existingUser };
 }
 
+// fecth user with password reset token
 export async function fetchExistingUserWithPwResetTokenFromDB(client, email, token) {
     const database = client.db(DB_NAME);
     const users = database.collection(DB_COLLECTION_NAME);
@@ -98,6 +100,7 @@ export async function fetchExistingUserWithPwResetTokenFromDB(client, email, tok
     return { users, existingUser };
 }
 
+// fecth user with refresh token
 export async function fetchExistingUserWithRefreshTokenFromDB(client, email, refreshToken) {
     const database = client.db(DB_NAME);
     const users = database.collection(DB_COLLECTION_NAME);
@@ -118,6 +121,7 @@ export async function processLoginAccessToken(res, users, existingUser, isProduc
         {
             $set: {
                 lastLogin: new Date(),
+                role: existingUser.role,
                 refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
             }
         }
@@ -130,6 +134,7 @@ export async function processLoginAccessToken(res, users, existingUser, isProduc
 // Process Google login
 export async function processGoogleLogin(res, users, existingUser, userData, isProduction) {
     const refreshToken = generateRefreshToken(userData.email, userData.role);
+    const accessToken = generateAccessToken(userData.email, userData.role);
 
     if (!existingUser) {
         const newUser = {
@@ -158,8 +163,6 @@ export async function processGoogleLogin(res, users, existingUser, userData, isP
             }
         );
     }
-
-    const accessToken = generateAccessToken(userData.email, userData.role);
 
     createAccessTokenCookie(res, accessToken, isProduction);
     createRefreshTokenCookie(res, refreshToken, isProduction);
@@ -222,6 +225,7 @@ export async function setupMFA(users, email) {
     });
 }
 
+// MFA verification
 export function verifyMFA(token, secret) {
     return authenticator.verify({ token, secret });
 }

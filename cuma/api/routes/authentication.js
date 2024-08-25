@@ -40,6 +40,14 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'User already exists' });
         }
 
+        // Role checking via email domain
+        let userRole = 'general_user';
+        if (email.endsWith('@student.monash.edu')) {
+            userRole = 'student';
+        } else if (email.endsWith('@monash.edu')) {
+            userRole = 'course_director';
+        }
+
         const hashedPassword = AuthUtils.encryptPassword(password);
 
         const newUser = {
@@ -49,7 +57,7 @@ router.post('/signup', async (req, res) => {
             emailHD: email.split('@')[1],
             firstName,
             lastName,
-            role: 'general_user',
+            role: userRole,
             mfaEnabled: false,
             mfaSecret: null,
             createAt: new Date(),
@@ -243,11 +251,13 @@ router.get('/oauth2callback', async (req, res) => {
         const userData = userInfo.data;
         const userGoogleID = userData.id;
 
-        // Role checking via email domain
+        // Verification of user role
         const userEmail = userData.email;
         let userRole = 'general_user';
         if (userEmail.endsWith('@student.monash.edu')) {
             userRole = 'student';
+        } else if (userEmail.endsWith('@monash.edu')) {
+            userRole = 'course_director';
         }
 
         userData.role = userRole;
