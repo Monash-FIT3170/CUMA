@@ -17,37 +17,44 @@
 </head>
 <body>
     <header>
-        <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
+        <button onclick="openNav()" class="openbtn">
+            <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
+        </button>
         <h1>CUMA</h1>
     </header>
     
-    <nav class="sidebar">
-        <div class="sidebar-link">
-            <img src="images/icons8-navigation-96.png" class="sidebar-img">
-            Mapping
+    <nav class="sidebar" id="sidebar">
+        <div id="sidebar-content">
+            <button class="closebtn" onclick="closeNav()">
+                X
+            </button>
+            <div class="sidebar-link">
+                <img src="images/icons8-navigation-96.spng" class="sidebar-img">
+                Mapping
+            </div>
+            <div class="sidebar-link">
+                <img src="images/icons8-navigation-96.png" class="sidebar-img">
+                Add Unit
+            </div>
+            <div class="sidebar-link">
+                <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img">
+                Unit Info
+            </div>
+            <div class="sidebar-link">
+                <img src="images/icons8-person-96.png" class="sidebar-img">
+                Profile
+            </div>
+            <div class="sidebar-link">
+                <img src="images/icons8-cog-96.png" class="sidebar-img">
+                Settings
+            </div>
+            <!--Temporary buttons, please fix if required-->
+            <button id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
+            <button id="logout-button", onclick="userLogout()">Logout</button>
         </div>
-        <div class="sidebar-link">
-            <img src="images/icons8-navigation-96.png" class="sidebar-img">
-            Add Unit
-        </div>
-        <div class="sidebar-link">
-            <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img">
-            Unit Info
-        </div>
-        <div class="sidebar-link">
-            <img src="images/icons8-person-96.png" class="sidebar-img">
-            Profile
-        </div>
-        <div class="sidebar-link">
-            <img src="images/icons8-cog-96.png" class="sidebar-img">
-            Settings
-        </div>
-        <!--Temporary buttons, please fix if required-->
-        <button id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
-        <button id="logout-button", onclick="userLogout()">Logout</button>
     </nav>
     
-<main>
+<main id="main">
     <!-- Course Units Section -->
     <section class="course-info">
         <h2>Bachelor of Software Engineering - Monash University</h2>
