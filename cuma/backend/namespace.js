@@ -1,5 +1,6 @@
 // creating a namespace
 var Backend = {
     Unit: {},
-    UnitConnection: {}
+    UnitConnection: {},
+    AI: {}
 }

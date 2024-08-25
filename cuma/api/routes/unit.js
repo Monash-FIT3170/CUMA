@@ -9,11 +9,20 @@
 
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
+import dotenv from 'dotenv';
+import {GoogleGenerativeAI} from "@google/generative-ai"
 
 const router = express.Router();
 
 const collectionName = "testUnits";
 
+
+dotenv.config();
+
+// Access your API key as an environment variable (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
+
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
 
 router.get('/getAllFromUni', async (req, res) => {
     /**
@@ -330,6 +339,46 @@ router.get('/getAllNotInUni', async (req, res) => {
         console.error(error);
         return res.status(500).json("Internal Server Error");
     }
+})
+
+router.post('/geminiMatch', async (req, res) => { 
+    /**
+     * This queries Gemini AI to determine best matching unit Y to unit X, from set [Y,Z,...]
+     * 
+     *  requestbody payload = {
+            TODO
+        }
+     * 
+     * returns json response = 
+     * code: 200 - if no error
+     * code: 500 - if server error or other errors occured
+     *  
+     */
+        try {
+            // get the client
+            const client = req.client;
+    
+            // get the request url params 
+            const params = req.query;
+
+            const unitSRC = req.body.unitSRC
+            const unitsToCompare = req.body.unitsToCompare
+
+            console.log("hi")
+            alert("hi")
+            const prompt = "Please analyse the similarity between this unit: " + JSON.stringify(unitSRC) + "And the following units: " + JSON.stringify(unitsToCompare) + "Please provide your results in a json object with the keys being the unit codes of each unit and their respective value an integer in range [1,10]. Do not provide any other text aside from this json object."
+            
+            const result = await model.generateContent(prompt);
+            const response = result.response;
+            const text = await response.text();
+
+
+            return res.json(text);
+        }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json("Internal Server Error");
+        }
 })
 
 
