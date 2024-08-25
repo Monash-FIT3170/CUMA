@@ -739,3 +739,43 @@ if (window.location.pathname.includes('index.html')) {
 if (window.location.pathname.includes('index.html')) {
     repopulateResults();
 }
+// call every render
+repopulateResults()
+
+// Navigation bar tracker
+let navOpen = false;
+
+//handle nav stuff
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+
+    document.getElementById("sidebar-content").style.display = "none";
+
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+
+    document.getElementById("sidebar-content").style.display = "block";
+
+    document.getElementById("main").style.marginLeft= "200px";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+})
+
