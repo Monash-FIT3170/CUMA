@@ -243,8 +243,17 @@ router.get('/oauth2callback', async (req, res) => {
         const userData = userInfo.data;
         const userGoogleID = userData.id;
 
+        // Role checking via email domain
+        const userEmail = userData.email;
+        let userRole = 'general_user';
+        if (userEmail.endsWith('@student.monash.edu')) {
+            userRole = 'student';
+        }
+
+        userData.role = userRole;
+
         const { users, existingUser } = await AuthUtils.fetchExistingGoogleUserFromDB(req.client, userGoogleID);
-        await AuthUtils.processGoogleLoginAccessToken(res, users, existingUser, userData, isProduction);
+        await AuthUtils.processGoogleLogin(res, users, existingUser, userData, isProduction);
 
         delete req.session.googleState;
         return res.redirect('/index');

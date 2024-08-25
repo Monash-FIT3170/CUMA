@@ -128,8 +128,8 @@ export async function processLoginAccessToken(res, users, existingUser, isProduc
 }
 
 // Process Google login
-export async function processGoogleLoginAccessToken(res, users, existingUser, userData, isProduction) {
-    const refreshToken = generateRefreshToken(userData.email, 'general_user');
+export async function processGoogleLogin(res, users, existingUser, userData, isProduction) {
+    const refreshToken = generateRefreshToken(userData.email, userData.role);
 
     if (!existingUser) {
         const newUser = {
@@ -139,7 +139,7 @@ export async function processGoogleLoginAccessToken(res, users, existingUser, us
             emailHD: userData.hd,
             firstName: userData.given_name,
             lastName: userData.family_name,
-            role: 'general_user',
+            role: userData.role,
             createAt: new Date(),
             updatedAt: new Date(),
             lastLogin: new Date(),
@@ -152,6 +152,7 @@ export async function processGoogleLoginAccessToken(res, users, existingUser, us
             {
                 $set: {
                     lastLogin: new Date(),
+                    role: userData.role,
                     refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
                 }
             }
