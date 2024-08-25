@@ -617,3 +617,22 @@ function userSendConnections() {
 
 // call every render
 repopulateResults()
+
+
+//handle nav stuff
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+
+    document.getElementById("sidebar-content").style.display = "none";
+
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+
+    document.getElementById("sidebar-content").style.display = "block";
+
+    document.getElementById("main").style.marginLeft= "200px";
+}

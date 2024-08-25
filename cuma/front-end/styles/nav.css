@@ -21,15 +21,24 @@
     padding-bottom: 15px;
     padding-left: 15px;
     cursor: pointer;
-    display: flex;
+    display: block;
     flex-direction: row;
     align-items: center;
     color: rgb(80, 80, 80);
     font-size: 20px;
+    transition: 0.3s;
 }
 
 .sidebar-img {
     height: 30px;
     margin-right: 10px;
 
+}
+
+body button.openbtn {
+    background-color: transparent;
+}
+
+body button.closebtn{
+    float: right;
 }
