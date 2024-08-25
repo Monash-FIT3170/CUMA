@@ -1,7 +1,8 @@
 let unitConnections = {};
-let selectedUnitId = null;
+let selectedUnitCode = null;
 let isEditMode = false; // Track whether we're in add or edit mode
 let foreignUnit = [];
+const default_university = "Monash";
 
 
 // Toggle the "Add Unit" form visibility
@@ -74,9 +75,8 @@ function addUnit() {
 
     if (isEditMode) {
         // Modify existing unit
-        const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+        const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitCode}']`);
         if (existingUnit) {
-            console.log(selectedUnitId);
             const newUnitBody = {
                 "unitCode": unitCode,
                 "unitName": unitName,
@@ -86,7 +86,7 @@ function addUnit() {
                 "unitDescription": unitOverview
             }
 
-            Backend.Unit.modify("Monash", selectedUnitId, newUnitBody).then(response => {
+            Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
                 if (!handleResponse(response)) {
                     // if no error
                     repopulateResults()
@@ -106,12 +106,12 @@ function addUnit() {
         }
 
         // Update the unitConnections if the unitCode was changed
-        if (selectedUnitId !== unitCode) {
-            unitConnections[unitCode] = unitConnections[selectedUnitId];
-            delete unitConnections[selectedUnitId];
+        if (selectedUnitCode !== unitCode) {
+            unitConnections[unitCode] = unitConnections[selectedUnitCode];
+            delete unitConnections[selectedUnitCode];
         }
 
-        selectedUnitId = unitCode;
+        selectedUnitCode = unitCode;
     } else {
         // add unit to mongoDB
         const unitBody = {
@@ -123,7 +123,7 @@ function addUnit() {
             "unitDescription": unitOverview
         }
 
-        Backend.Unit.add("Monash", unitBody).then(response => {
+        Backend.Unit.add(default_university, unitBody).then(response => {
             // handles any error
             if (handleResponse(response) == 0) {
                 // if no error, then repopulate the result
@@ -139,7 +139,7 @@ function addUnit() {
     toggleAddUnitForm();
 
     // Refresh the displayed mapped units
-    displayMappedUnits(selectedUnitId);
+    displayMappedUnits(selectedUnitCode);
 }
 
 
@@ -169,22 +169,20 @@ function handleResponse(response) {
 
 async function repopulateResults() {
   const unitList = document.getElementById('unit-list');
-  
   // remove all child units
   unitList.innerHTML = '';
 
 
-  Backend.Unit.getAllUnitsFromUniversity("Monash")
+  Backend.Unit.getAllUnitsFromUniversity(default_university)
   .then(UnitArray => 
     {
-
       for (const key in UnitArray)
       {
         // Create a new unit element
         const unitDiv = document.createElement('div');
         unitDiv.className = 'unit';
 
-        // initilise unitDiv
+        // initialize unitDiv
         const unit = UnitArray[key];
         unitDiv.dataset.id = unit.unitCode;
         unitDiv.dataset.name = unit.unitName;
@@ -194,10 +192,6 @@ async function repopulateResults() {
         unitDiv.dataset.overview = unit.unitDescription;
         unitDiv.dataset.universityName = unit.universityName;
         
-        if (unit.unitCode == "FIT4165"){
-          console.log("")
-        }
-
         // Populate unit content
         unitDiv.innerHTML = `
         <h4>${unit.unitCode} - ${unit.unitName}</h4>
@@ -205,21 +199,43 @@ async function repopulateResults() {
         `;
 
         // Add click event to show details when clicked
-          unitDiv.addEventListener('click', function () {
+        unitDiv.addEventListener('click', function () {
             selectUnit(unitDiv);
         });
-
-        // Initialize the connections data structure for the unit
-        unitConnections[unit.unitCode] = unit.connections;
-
         // Add the new unit to the list
         unitList.appendChild(unitDiv);
     }
 
-    if (selectedUnitId)
+    Backend.UnitConnection.getAllUserConnections().then(req => {
+        if (req.connections && !req.error) {
+            // Add the connections to the unitConnections object
+            req.connections.map(connection => {
+                const { unitAId, unitBId } = connection;
+                if (unitAId && unitBId) {
+                    // Add unit ids to both units if they don't exist
+                    if (!unitConnections[unitAId]) {
+                        unitConnections[unitAId] = [];
+                    }
+                    if (!unitConnections[unitBId]) {
+                        unitConnections[unitBId] = [];
+                    }
+                    // Add the connection to both units ensuring no duplicates
+                    if (!unitConnections[unitAId].includes(unitBId)) {
+                        unitConnections[unitAId].push(unitBId);
+                    }
+                    if (!unitConnections[unitBId].includes(unitAId)) {
+                        unitConnections[unitBId].push(unitAId);
+                    }
+                }
+            });
+        }
+    });
+    
+
+    if (selectedUnitCode)
     {
       // Display the updated mapped units for the selected unit
-      displayMappedUnits(selectedUnitId);
+      displayMappedUnits(selectedUnitCode);
     }
 
 
@@ -233,12 +249,12 @@ async function repopulateResults() {
 
 // Set form to edit mode with the selected unit's information
 function modifyUnit() {
-    if (!selectedUnitId) {
+    if (!selectedUnitCode) {
         alert("No unit selected.");
         return;
     }
 
-    const unitElement = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+    const unitElement = document.querySelector(`.unit[data-id='${selectedUnitCode}']`);
     if (!unitElement) {
         alert("Invalid unit selected.");
         return;
@@ -259,28 +275,28 @@ function modifyUnit() {
 
 
 function deleteUnit() {
-    if (!selectedUnitId) {
+    if (!selectedUnitCode) {
         alert("No unit selected.");
         return;
     }
 
     // Confirm before deleting
-    if (!confirm(`Are you sure you want to delete unit ${selectedUnitId}?`)) {
+    if (!confirm(`Are you sure you want to delete unit ${selectedUnitCode}?`)) {
         return;
     }
 
     // perform delete in mongodb
-    Backend.Unit.delete("Monash", selectedUnitId).then(response => {
+    Backend.Unit.delete(default_university, selectedUnitCode).then(response => {
         if (!handleResponse(response)) {
             // if no error, repopulate the data
             repopulateResults()
         }
     })
 
-    delete unitConnections[selectedUnitId];
+    delete unitConnections[selectedUnitCode];
 
     // Clear selected unit info
-    selectedUnitId = null;
+    selectedUnitCode = null;
     document.getElementById('display-unit-title').textContent = '';
     document.getElementById('display-unit-id').textContent = 'N/A';
     document.getElementById('display-unit-type').textContent = 'N/A';
@@ -310,10 +326,10 @@ function selectUnit(unitElement) {
     document.getElementById('display-unit-description').textContent = unitElement.dataset.overview;
 
     // Set the current selected unit ID
-    selectedUnitId = unitElement.dataset.id;
+    selectedUnitCode = unitElement.dataset.id;
 
     // Display mapped units for this selected unit
-    displayMappedUnits(selectedUnitId);
+    displayMappedUnits(selectedUnitCode);
 
     // Show the Modify and Delete buttons
     document.getElementById('modify-unit-button').style.display = 'inline-block';
@@ -322,40 +338,37 @@ function selectUnit(unitElement) {
 
 
 // Display mapped units for the given unit ID
-function displayMappedUnits(unitId) {
-    console.log(unitConnections)
-    console.log(selectedUnitId)
+function displayMappedUnits(unitCode) {
     const unitConnectionList = document.getElementById('unit-connection-list');
     unitConnectionList.innerHTML = '';
 
     const mappedUnitsSection = document.querySelector('.mapped-units');
     mappedUnitsSection.style.display = 'block';
 
-    const connections = unitConnections[unitId];
-
-    if (connections && connections.length > 0) {
-        connections.map(connection => {
-            console.log(connection)
-            const connectionDiv = document.createElement('div');
-            connectionDiv.className = 'connection';
-            connectionDiv.innerHTML = `
+    Backend.UnitConnection.getUnitConnection(default_university, unitCode).then(response => {
+        if (response && response.connections) {
+            response.connections.map(connection => {
+                const connectionDiv = document.createElement('div');
+                connectionDiv.className = 'connection';
+                connectionDiv.innerHTML = `
               <h5>${connection.unitName}</h5>
               <p>Institution: ${connection.universityName}</p>
               <p>Type: ${connection.type}, Credits: ${connection.creditPoints}, Level: ${connection.unitLevel}</p>
               <p>${connection.unitDescription}</p>
           `;
-            unitConnectionList.appendChild(connectionDiv);
-        });
-    }
-    else {
-        unitConnectionList.innerHTML = '<p>No mapped units available.</p>';
-    }
+                unitConnectionList.appendChild(connectionDiv);
+            });
+        }
+        else {
+            unitConnectionList.innerHTML = '<p>No mapped units available.</p>';
+        }
+    });
 }
 
 
 // Add a new unit connection
 function addConnectionNewUnit() {
-    if (!selectedUnitId) {
+    if (!selectedUnitCode) {
         alert("Please select a course unit to add the connection to.");
         return;
     }
@@ -393,8 +406,8 @@ function addConnectionNewUnit() {
             const unitConnectionInfo = {
                 "universityNameA": connectionInstitution,
                 "unitCodeA": connectionCode,
-                "universityNameB": "Monash",
-                "unitCodeB": selectedUnitId
+                "universityNameB": default_university,
+                "unitCodeB": selectedUnitCode
             }
 
             // Add new connection to DB
@@ -413,8 +426,8 @@ function addConnectionNewUnit() {
                     };
 
                     // Add the new connection to the appropriate unit
-                    if (unitConnections[selectedUnitId]) {
-                        unitConnections[selectedUnitId].push(newConnection);
+                    if (unitConnections[selectedUnitCode]) {
+                        unitConnections[selectedUnitCode].push(newConnection);
                     }
 
                     // Clear the input fields after adding
@@ -496,7 +509,7 @@ function showAllForeignUnits() {
     // foriegn connection
     const foreignUnitsSection = document.getElementById("foreign-unit-list")
 
-    Backend.Unit.getAllUnitsNotInUniversity("Monash").then(UnitArray => {
+    Backend.Unit.getAllUnitsNotInUniversity(default_university).then(UnitArray => {
 
         for (const key in UnitArray) {
             // Create a new unit element
@@ -538,14 +551,12 @@ function showAllForeignUnits() {
 
 
 function addConnectionExistingUnit(foeignUnitDiv) {
-    console.log(foeignUnitDiv.dataset)
-
-    if (!selectedUnitId) {
+    if (!selectedUnitCode) {
         alert("Please select a course unit to add the connection to.");
         return;
     }
 
-    const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitId}']`);
+    const existingUnit = document.querySelector(`.unit[data-id='${selectedUnitCode}']`);
 
     const universityNameA = existingUnit.dataset.universityName;
     const unitCodeA = existingUnit.dataset.id;
@@ -567,13 +578,42 @@ function addConnectionExistingUnit(foeignUnitDiv) {
         "unitCodeB": unitCodeB
     }
 
-    // console.log("here")
     Backend.UnitConnection.add(unitInfo).then(response => {
         handleResponse(response);
         repopulateResults();
     });
 }
 
+
+function userLogout() {
+    Backend.Auth.logout().then(() => {
+            console.log("Logout successful");
+        }).catch(error => {
+            console.error("An error occurred during logout:", error);
+            alert("An error occurred during logout. Please try again.");
+    });
+}
+
+
+function userSendConnections() {
+    // TODO: Perhaps change email to be dynamic, or to admin CUMA email
+    const email = "change@me.com";
+    emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n";
+
+    Backend.UnitConnection.getAllUserConnections().then(req => {
+        if (!req.connections || req.connections.length === 0 || req.error) {
+            alert("Ensure you are logged in and have added connections to send.");
+            return;
+        }
+        req.connections.map(connection => {
+            const { universityNameA, unitCodeA, universityNameB, unitCodeB } = connection;
+            if (universityNameA && unitCodeA && universityNameB && unitCodeB) {
+                emailBody += "\n" + universityNameA + " - " + unitCodeA + " to " + universityNameB + " - " + unitCodeB;
+            }
+        });
+        window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
+    });
+}
 
 // call every render
 repopulateResults()

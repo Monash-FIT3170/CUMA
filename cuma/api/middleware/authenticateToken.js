@@ -1,0 +1,82 @@
+import jwt from 'jsonwebtoken';
+
+const serverPath = "http://localhost:" + (process.env.PORT || 3000);
+const isProduction = process.env.NODE_ENV === 'production';
+const ACCESS_TOKEN_AGE = 15 * 60 * 1000; // 15mins
+const authBackendPath = "/api/authentication";
+
+/**
+ * Authenticate the accessToken cookie to allow user access to protected routes.
+ * 
+ * If accessToken exist, verify the accessToken and authenticate.
+ * If accessToken is missing or failed verification, use refreshToken to issue a new accessToken.
+ * If both accessToken and requestToken are missing, then user need to authenticate again to issue new accessToken and refreshToken.
+ * 
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
+async function authenticateToken(req, res, next) {
+    const accessToken = req.cookies?.accessToken;
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (accessToken) {
+        try {
+            const decodedAccessToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+            req.user = decodedAccessToken;
+            console.log('Authenticated')
+            return next();
+        } catch (error) {
+            console.log("Error verifying access token:", error);
+            return res.redirect("/login?error=invalid-access-token");
+        };
+    } else if (refreshToken) {
+        try {
+            // Call api to refresh the access token using refreshToken
+            const url = new URL(serverPath + authBackendPath + "/refresh-token");
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ refreshToken }),
+            });
+
+            // Validate token refresh response
+            const result = await response.json();
+            if (!response.ok || !result.accessToken) {
+                console.log("Failed to refresh token:", result.message || "Unknown error");
+                return res.redirect('/login?error=invalid-token-refresh');
+            };
+
+            // Verify the new access token and store in cookie
+            const decodedAccessToken = jwt.verify(result.accessToken, process.env.ACCESS_TOKEN_SECRET);
+            createAccessTokenCookie(res, result.accessToken);
+
+            // Add user info to api request
+            req.user = decodedAccessToken;
+
+            return next();
+
+        } catch (error) {
+            console.log("Error refreshing Token: ", error);
+            return res.redirect('/login?error=invalid-token-refresh');
+        };
+
+    } else {
+        return res.redirect("/login?error=expired-tokens");
+    };
+}
+
+// Create and add cookies
+function createAccessTokenCookie(res, cookieToken) {
+    res.cookie('accessToken', cookieToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'strict' : 'lax',
+        maxAge: ACCESS_TOKEN_AGE,
+    });
+}
+
+export default authenticateToken;
