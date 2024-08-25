@@ -52,8 +52,12 @@ app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
+// app.get('/', authenticateToken, (req, res) => {
+//   res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
+// });
+
 app.get('/', authenticateToken, (req, res) => {
-  res.redirect('/index')
+  res.redirect('/index');
 });
 
 app.get('/login', (req, res) => {
