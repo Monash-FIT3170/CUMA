@@ -33,3 +33,41 @@
     margin-right: 10px;
 
 }
+
+.sidebar button {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    text-align: left;
+    width: 100%;
+    padding: 0;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(80, 80, 80);
+    width: 100%;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(154,179,251,0.5);
+    border-radius: 10px;
+}
+
+.sidebar-img {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+}
