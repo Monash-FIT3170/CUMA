@@ -67,4 +67,46 @@ nav .closebtn-block{
 nav #sidebar-content{
     display: block;
     padding-left: 10px;
+    width: 150px;
 }
+
+nav button.sidebar-button {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+nav button.sidebar-button:hover{
+    background-color: #3b90d5;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgb(80, 80, 80);
+
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    font-size: 20px;
+    width: 100%;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(154,179,251,0.5);
+    border-radius: 10px;
+    
+}
+
+.sidebar-img {
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+}
+
