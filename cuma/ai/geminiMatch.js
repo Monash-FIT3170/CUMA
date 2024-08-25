@@ -1,18 +1,13 @@
 Backend.Unit.AIMatch = async function (unitSRC, unitsToCompare) {
     /** 
-     * @param {string} universityName
-     * @param {int} unitCode
+     * @param {JSON} unitSRC
+     * @param {JSON} unitsToCompare
+     * 
+     * Makes a post request to server side gemini api code
     */
 
     try {
         const url = new URL("http://127.0.0.1:3000" + pathname + "/geminiMatch");
-
-        console.log(url)
-
-        console.log(JSON.stringify({
-            "unitSRC":unitSRC,
-            "unitsToCompare":unitsToCompare
-        }))
 
         const response = await fetch(url, {
             method: "POST",
