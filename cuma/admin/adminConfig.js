@@ -3,6 +3,7 @@ import AdminJSExpress from '@adminjs/express'
 import * as AdminJSMongoose from '@adminjs/mongoose'
 import PendingStudent  from '../api/models/PendingStudentModel.js'
 import PendingCourseDirector from '../api/models/PendingCourseDirectorModel.js'
+import { sendApprovalEmail, sendRejectionEmail } from '../api/utils/auth-utils.js'
 
 AdminJS.registerAdapter({
     Resource: AdminJSMongoose.Resource,
@@ -19,12 +20,14 @@ AdminJS.registerAdapter({
           icon: 'CheckCircle',
           component: false,
           handler: async (request, response, context) => {
+            // Update the application status to 'approved'
             const { record, currentAdmin } = context;
             await record.update({ applicationStatus: 'approved' });
-            const name = `${record.params.firstName} ${record.params.lastName}`;
+            const { firstName, lastName, email } = record.params;
+            await sendApprovalEmail(email, firstName, lastName, 'Student');
             return {
               record: record.toJSON(currentAdmin),
-              notice: { message: `${name} has been approved and sent an email`, type: 'success' }
+              notice: { message: `${firstName} ${lastName} has been approved and sent an email`, type: 'success' }
             };
           }
         },
@@ -35,10 +38,11 @@ AdminJS.registerAdapter({
           handler: async (request, response, context) => {
             const { record, currentAdmin } = context;
             await record.update({ applicationStatus: 'rejected' });
-            const name = `${record.params.firstName} ${record.params.lastName}`;
+            const { firstName, lastName, email } = record.params;
+            await sendRejectionEmail(email, firstName, lastName, 'Student');
             return {
               record: record.toJSON(currentAdmin),
-              notice: { message: `${name} has been rejected and sent an email`, type: 'danger' }
+              notice: { message: `${firstName} ${lastName} has been rejected and sent an email`, type: 'danger' }
             };
           }
         }
@@ -58,10 +62,11 @@ AdminJS.registerAdapter({
           handler: async (request, response, context) => {
             const { record, currentAdmin } = context;
             await record.update({ applicationStatus: 'approved' });
-            const name = `${record.params.firstName} ${record.params.lastName}`;
+            const { firstName, lastName, email } = record.params;
+            await sendApprovalEmail(email, firstName, lastName, 'Course Director');
             return {
               record: record.toJSON(currentAdmin),
-              notice: { message: `${name} has been approved and sent an email`, type: 'success' }
+              notice: { message: `${firstName} ${lastName} has been approved and sent an email`, type: 'success' }
             };
           }
         },
@@ -72,10 +77,11 @@ AdminJS.registerAdapter({
           handler: async (request, response, context) => {
             const { record, currentAdmin } = context;
             await record.update({ applicationStatus: 'rejected' });
-            const name = `${record.params.firstName} ${record.params.lastName}`;
+            const { firstName, lastName, email } = record.params;
+            await sendRejectionEmail(email, firstName, lastName, 'Course Director');
             return {
               record: record.toJSON(currentAdmin),
-              notice: { message: `${name} has been rejected and sent an email`, type: 'danger' }
+              notice: { message: `${firstName} ${lastName} has been rejected and sent an email`, type: 'danger' }
             };
           }
         }

@@ -224,3 +224,66 @@ export async function setupMFA(users, email) {
 export function verifyMFA(token, secret) {
     return authenticator.verify({ token, secret });
 }
+
+// Send approval email
+export const sendApprovalEmail = async (email, firstName, lastName, role) => {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'CUMA: Manual Verification Approved',
+      html: `
+        <p>Dear ${firstName} ${lastName},</p>
+        <p>Thank you for signing up to CUMA. After manually verifying your information, we are pleased to inform you that your application to join as a ${role} has been approved.</p>
+        <p>You can now log in to your account and start using our services.</p>
+        <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+        <p>Welcome to the CUMA community!</p>
+        <p>Best regards,<br>The CUMA Team</p>
+      `
+    };
+
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Approval email sent to ${email}`);
+    } catch (error) {
+      console.error(`Error sending approval email to ${email}:`, error);
+    }
+  };
+
+// Send rejection email
+export const sendRejectionEmail = async (email, firstName, lastName, role) => {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'CUMA: Manual Verification Unsuccessful',
+      html: `
+        <p>Dear ${firstName} ${lastName},</p>
+        <p>Thank you for signing up to CUMA. After manually verifying your information, we regret to inform you that we are unable to approve your application to join as a ${role} at this time.</p>
+        <p>If you believe this decision was made in error or if you have any questions, please don't hesitate to contact our support team for more information or clarification.</p>
+        <p>We appreciate your interest in CUMA and thank you for your understanding.</p>
+        <p>Best regards,<br>The CUMA Team</p>
+      `
+    };
+
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Rejection email sent to ${email}`);
+    } catch (error) {
+      console.error(`Error sending rejection email to ${email}:`, error);
+    }
+  };
