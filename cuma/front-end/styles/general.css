@@ -301,3 +301,23 @@ button:last-of-type:hover,
     background-color: #3b90d5;
 }
 
+/* User information within the header, move it required */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.burger-bar-icon {
+    
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.user-info {
+    margin-left: auto; 
+    text-align: right;
+}
+

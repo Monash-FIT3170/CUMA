@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
+import * as AuthUtils from '../utils/auth-utils.js';
 
 const serverPath = "http://localhost:" + (process.env.PORT || 3000);
-const isProduction = process.env.NODE_ENV === 'production';
-const ACCESS_TOKEN_AGE = 15 * 60 * 1000; // 15mins
 const authBackendPath = "/api/authentication";
 
 /**
@@ -52,7 +51,7 @@ async function authenticateToken(req, res, next) {
 
             // Verify the new access token and store in cookie
             const decodedAccessToken = jwt.verify(result.accessToken, process.env.ACCESS_TOKEN_SECRET);
-            createAccessTokenCookie(res, result.accessToken);
+            AuthUtils.createAccessTokenCookie(res, result.accessToken);
 
             // Add user info to api request
             req.user = decodedAccessToken;
@@ -65,18 +64,7 @@ async function authenticateToken(req, res, next) {
         };
 
     } else {
-        return res.redirect("/login?error=expired-tokens");
+        return res.redirect("/login");
     };
 }
-
-// Create and add cookies
-function createAccessTokenCookie(res, cookieToken) {
-    res.cookie('accessToken', cookieToken, {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'strict' : 'lax',
-        maxAge: ACCESS_TOKEN_AGE,
-    });
-}
-
 export default authenticateToken;
