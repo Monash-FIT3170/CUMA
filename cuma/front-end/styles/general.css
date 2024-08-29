@@ -58,6 +58,22 @@ main {
     border-radius: 5px;
 }
 
+.profile-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.profile-details {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
 .course-info h2 {
     margin-bottom: 15px;
 }
@@ -283,5 +299,25 @@ button:last-of-type:hover,
 
 #modify-unit-button:hover, #delete-unit-button:hover {
     background-color: #3b90d5;
+}
+
+/* User information within the header, move it required */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.burger-bar-icon {
+    
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+.user-info {
+    margin-left: auto; 
+    text-align: right;
 }
 

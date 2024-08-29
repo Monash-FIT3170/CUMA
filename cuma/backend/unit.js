@@ -1,29 +1,22 @@
-// pathname for consistency
-const pathname = "/api/unit"
-console.log(Backend.Unit)
+const unitBackendPath = "/api/unit"
 
 // define namespace
 Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
     /**
      * @param {string} universityName
-     * 
+     *
      * @return {json} API response.
      */
-
-    const unitInfo = {}
     const params = {"universityName": universityName}
-    
+
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllFromUni");
+        const url = new URL(serverPath + unitBackendPath + "/getAllFromUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
-
-        console.log({"universityName": universityName, unitInfo})
-    
         const result = await response.json()
         return result
-    } 
+    }
     catch (error) {
         console.error("Error:", error);
     }
@@ -33,21 +26,17 @@ Backend.Unit.getAllUnitsFromUniversity = async function (universityName) {
 Backend.Unit.getAllUnitsNotInUniversity = async function (universityName) {
     /**
      * @param {string} universityName
-     * 
+     *
      * @return {json} API response.
      */
 
-    const unitInfo = {}
     const params = { "universityName": universityName }
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/getAllNotInUni");
+        const url = new URL(serverPath + unitBackendPath + "/getAllNotInUni");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url)
-
-        console.log({ "universityName": universityName, unitInfo })
-
         const result = await response.json();
         return result;
     }
@@ -66,7 +55,7 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
     const params = { universityName, unitCode };
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/retrieveUnit");
+        const url = new URL(serverPath + unitBackendPath + "/retrieveUnit");
         url.search = new URLSearchParams(params).toString();
 
         const response = await fetch(url);
@@ -74,7 +63,6 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const unit = await response.json();
-        console.log("Retrived Unit:", unit);
         return unit;
     }
     catch (error) {
@@ -87,9 +75,9 @@ Backend.Unit.retrieveUnit = async function (universityName, unitCode) {
 Backend.Unit.add = async function (universityName, unitInfo) {
     /**
      * @param {string} universityName
-       @param {json} unitInfo = {
+     @param {json} unitInfo = {
             name: str;
-            desc: 
+            desc:
             type: int;
             creditPt: int;
             level: int;
@@ -98,7 +86,7 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
         }
 
-        @return {json} API reponse
+     @return {json} API reponse
      *  */
 
     // var name=  unitInfo.name;
@@ -111,8 +99,9 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
     fieldMissing = []
 
+
     try {
-        const response = await fetch("http://127.0.0.1:3000" + pathname, {
+        const response = await fetch(serverPath + unitBackendPath, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -134,11 +123,11 @@ Backend.Unit.add = async function (universityName, unitInfo) {
 
 Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
     /**
-     * @param {string} universityName 
-       @param {json} unitInfoChange  - the modification
-       {
+     * @param {string} universityName
+     @param {json} unitInfoChange  - the modification
+     {
             name: str;
-            desc: 
+            desc:
             type: int;
             creditPt: int;
             level: int;
@@ -146,14 +135,14 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
             link: str
 
         }
-        
-        @param {string} unitCode : The code of the unit to update
 
-        @return {json} API reponse
+     @param {string} unitCode : The code of the unit to update
+
+     @return {json} API reponse
      *  */
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL(serverPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "PUT",
@@ -176,13 +165,13 @@ Backend.Unit.modify = async function (universityName, unitCode, newUnitInfo) {
 }
 
 Backend.Unit.delete = async function (universityName, unitCode) {
-    /** 
+    /**
      * @param {string} universityName
      * @param {int} unitCode
-    */
+     */
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/" + encodeURIComponent(unitCode));
+        const url = new URL(serverPath + unitBackendPath + "/" + encodeURIComponent(unitCode));
 
         const response = await fetch(url, {
             method: "Delete",
