@@ -54,21 +54,22 @@
         <!-- Profile Section -->
         <section class="profile-info">
             <h2>Profile</h2>
-            <img src="images/profile-example.jpg" alt="Profile Image" class="profile-image">
             <div class="profile-container">
-                <div class="profile-item">
-                    <label for="profile-name">Name</label>
-                    <input type="text" id="profile-name" value="John Doe" readonly>
+                <img src="images/profile-example.jpg" alt="Profile Image" class="profile-image">
+                <div class="profile-details">
+                    <div class="profile-item">
+                        <label for="profile-name">Name:</label>
+                        <input type="text" id="profile-name" value="John Doe" readonly>
+                    </div>
+                    <div class="profile-item">
+                        <label for="profile-email">Email:</label>
+                        <input type="email" id="profile-email" value="john.doe@example.com" readonly>
+                    </div>
+                    <div class="profile-item">
+                        <label for="profile-role">Role:</label>
+                        <input type="text" id="profile-role" value="Student" readonly>
+                    </div>
                 </div>
-                <div class="profile-item">
-                    <label for="profile-email">Email</label>
-                    <input type="email" id="profile-email" value="john.doe@example.com" readonly>
-                </div>
-                <div class="profile-item">
-                    <label for="profile-role">Role</label>
-                    <input type="text" id="profile-role" value="Student" readonly>
-                </div>
-                <!-- Additional profile fields can be added here -->
             </div>
         </section>
 
