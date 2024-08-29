@@ -3,6 +3,7 @@ import { MongoClient } from 'mongodb';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
+import ai from './routes/ai.js'
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
+app.use('/api/ai/', ai);
 
 // Page Link
 app.get('/index', authenticateToken, (req, res) => {
