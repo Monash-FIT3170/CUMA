@@ -858,3 +858,33 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchAndDisplayUserInfo();
     repopulateResults();
 });
+
+
+function editProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
+    
+    // Enable editing by removing the 'readonly' attribute
+    inputs.forEach(input => input.removeAttribute('readonly'));
+
+    // Show Save button and hide Edit button
+    document.getElementById('edit-button').style.display = 'none';
+    document.getElementById('save-button').style.display = 'inline-block';
+}
+
+function saveProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
+    
+    // For simplicity, let's just print out the new values (you can later replace this with an API call)
+    inputs.forEach(input => {
+        console.log(`${input.id}: ${input.value}`);
+    });
+    
+    // Disable editing by adding the 'readonly' attribute back
+    inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
+
+    // Hide Save button and show Edit button
+    document.getElementById('edit-button').style.display = 'inline-block';
+    document.getElementById('save-button').style.display = 'none';
+}
