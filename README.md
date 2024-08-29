@@ -1,98 +1,121 @@
 # CUMA (Course Unit Mapping Automation)
 
-## Project 6 - FIT3170
+CUMA is a tool that helps course directors facilitate students' transition between universities and allows students to explore options for studying abroad by providing information on mapped/similar units between universities.
 
-## Team
 
-| Member                      | Email                       |
-| --------------------------- | --------------------------- |
-| Zilei Chen                  | zche0160@student.monash.edu |
-| David Batonda               | dbat0014@student.monash.edu |
-| Michael Sigal               | msig0003@student.monash.edu |
-| Jasmine See                 | jsee0012@student.monash.edu |
-| Mark Song                   | mson0024@student.monash.edu |
-| Maddy Prazeus               | tpra0008@student.monash.edu |
-| Mishal FAOA Alhaidar        | malh0009@student.monash.edu |
-| Jamie Gary Harrison         | jhar0038@student.monash.edu |
-| Changheng Li                | clii0078@student.monash.edu |
-| Sean Heng Keh               | skeh0003@student.monash.edu |
-| Melvin Pramode              | mpra0021@student.monash.edu |
-| Tharith Yeak                | tyea0002@student.monash.edu |
-| Cheuk Lam Winnie Chui       | cchu0061@student.monash.edu |
-| Sok Huot Ear                | sear0002@student.monash.edu |
-| Niroshan Sivaneeswaran      | nsiv0005@student.monash.edu |
-| Ropafadzo Martha Chigumadzi | rchi0023@student.monash.edu |
 
-# Getting started and setting up
+## Table of Contents
 
-## 1. Install Node.js and npm
+1. [CUMA Usage](#cuma-usage)
+    - [Features](#features)
+    - [How to access the CUMA website](#how-to-access-the-cuma-website)
+2. [Development Team](#development-team)
+3. [Development Guide](#development-guide)
+    - [Setting up](#setting-up)
+    - [How to run the server](#how-to-run-the-server)
+    - [How to run the web](#how-to-run-the-web)
+4. [Project Structure](#project-structure)
+    - [Root Directory](#root-directory)
+    - [cuma Directory](#cuma-directory)
 
-Please have a read at the guide:
+
+
+## CUMA Usage
+
+### Features
+- Search for units within your course
+- View a unit's information, including its mapped units from other universities
+- Create your own (pending) unit mapping between a domestic unit and a foreign unit
+- Send your pending unit mapping to a course director through email for approval
+- Add, modify and delete a unit and its mapped units, if you are an authenticated course director
+
+
+### How to access the CUMA website
+
+Deployment is done using AWS. To access it, visit: https://3.25.70.20/
+
+
+
+## Development Team
+
+**FIT3170 - Project 6**
+
+| Member                 | Email                       |
+| ---------------------- | --------------------------- |
+| Zilei Chen             | zche0160@student.monash.edu |
+| David Batonda          | dbat0014@student.monash.edu |
+| Michael Sigal          | msig0003@student.monash.edu |
+| Jasmine See            | jsee0012@student.monash.edu |
+| Mark Song              | mson0024@student.monash.edu |
+| Maddy Prazeus          | tpra0008@student.monash.edu |
+| Mishal FAOA Alhaidar   | malh0009@student.monash.edu |
+| Jamie Gary Harrison    | jhar0038@student.monash.edu |
+| Changheng Li           | clii0078@student.monash.edu |
+| Sean Heng Keh          | skeh0003@student.monash.edu |
+| Melvin Pramode         | mpra0021@student.monash.edu |
+| Tharith Yeak           | tyea0002@student.monash.edu |
+| Cheuk Lam Winnie Chui  | cchu0061@student.monash.edu |
+| Sok Huot Ear           | sear0002@student.monash.edu |
+| Niroshan Sivaneeswaran | nsiv0005@student.monash.edu |
+
+
+
+## Development Guide
+
+### Setting up
+
+#### 1. Install Node.js and npm
+
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-## 2. Setup Local Repository
+#### 2. Setup Local Repository
 
-Open command prompt or terminal in root dir.
-Run "npm install" in root directory (CUMA).
+Open command prompt or terminal in the root directory (CUMA), and run the following command: `npm install`.
 
-## 3. Allow Database Access
+#### 3. Allow Database Access
 
-Download the .env file and remove the "\_", then place into the root dir.
+Download the .env file and remove the `_`, then place into the root directory (CUMA).
 
-https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
+https://drive.google.com/file/d/1e6VIRL7H7DyVEynzhhJdyUZeMOqH9g1s/view?usp=drive_link
 
-# How to run the server and web application
 
-For any of the command, access the terminal in the root directory "..\CUMA".
+### How to run the server
 
-## Development Mode
+In the root directory (CUMA), run the following command: `npm run server`
 
-`npm run dev`
 
-The command tracks changed and automatically reloads any changes made, mostly on backend and api calls.
+### How to run the web
 
-## Production Mode
+#### 1. Install Live Server
 
-`npm run server`
+Install "Live Server" extension on VS Code
 
-To run the server in production mode.
+#### 2. Run the web
 
-# Project structrue
+Navigate to `index.html`.
+This file is located in `/cuma/front-end/index.html`
 
-## Root Directory
+Open this html using Live Server.
 
-The root directory is defined to be in the same hierarchy as "app.js" and "package.json".
+The server runs the API and connects to mongoDB. Therefore, this command must be run first
+before npm install can be queried.
 
-## Cuma Directory
+
+
+## Project structure
+
+
+### Root Directory
+
+The root directory is defined to be in the same hierarchy as app.js and package.json.
+
+
+### cuma Directory
 
 `cuma` directory is separated as:
 
 - `front-end`: contains the View and Controller. For example, `index.html` (view) will have a matching `index.js` file (for the controller logic).
-
 - `back-end`: Contains the interaction with the API tier
-
 - `api`: Contains the API logics, route handlers and the connection to the database.
 
-This web is designed to be a three-tier application, where `front-end` makes a call to `backend`. `backend` will then make a fetch request to the API.
-
-# Important Notes
-
-- The server runs the API and connects to MongoDB. Ensure the server is running before making any API queries.
-
-- In development mode, the server will automatically restart when changes are detected in the `cuma/api` and `cuma/backend` directory.
-
-- Make sure all required dependencies are installed by running `npm install` before starting the development or production servers.
-
-The API is handled by `api` where it will query the database.
-
-# Updating the Repository
-
-**IMPORTANT:** After pulling updates from the repository, always run `npm install` in the root directory. This is to ensures that any new or updated node modules are properly installed. Failure to do so may result in missing dependencies and application errors.
-
-# Handover Documentation
-
-## Software/Hardware required to run the project
-
-## How to set up the project and run it - previous sections
-
-## Additional notes
+This web is designed to be a three-tier application, where `front-end` makes a call to `backend`. `backend` will then make a fetch request to the API. The API is handled by `api` where it will query the database.
