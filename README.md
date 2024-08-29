@@ -3,6 +3,7 @@
 CUMA is a tool that helps course directors facilitate students' transition between universities and allows students to explore options for studying abroad by providing information on mapped/similar units between universities.
 
 
+
 ## Table of Contents
 
 1. [CUMA Usage](#cuma-usage)
@@ -18,6 +19,7 @@ CUMA is a tool that helps course directors facilitate students' transition betwe
     - [cuma Directory](#cuma-directory)
 
 
+
 ## CUMA Usage
 
 ### Features
@@ -27,9 +29,11 @@ CUMA is a tool that helps course directors facilitate students' transition betwe
 - Send your pending unit mapping to a course director through email for approval
 - Add, modify and delete a unit and its mapped units, if you are an authenticated course director
 
+
 ### How to access the CUMA website
 
 Deployment is done using AWS. To access it, visit: https://3.25.70.20/
+
 
 
 ## Development Team
@@ -55,6 +59,7 @@ Deployment is done using AWS. To access it, visit: https://3.25.70.20/
 | Niroshan Sivaneeswaran | nsiv0005@student.monash.edu |
 
 
+
 ## Development Guide
 
 ### Setting up
@@ -65,29 +70,27 @@ https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 #### 2. Setup Local Repository
 
-Open command prompt or terminal in root dir.
-
-Run `npm install` in root directory (CUMA).
+Open command prompt or terminal in the root directory (CUMA), and run the following command: `npm install`.
 
 #### 3. Allow Database Access
 
-Download the .env file and remove the `_`, then place into the root dir.
+Download the .env file and remove the `_`, then place into the root directory (CUMA).
 
-https://drive.google.com/file/d/1bq9kjm1LlIXsRHThCpEGvAytYSRSaz4t/view?usp=sharing
+https://drive.google.com/file/d/1e6VIRL7H7DyVEynzhhJdyUZeMOqH9g1s/view?usp=drive_link
 
 
 ### How to run the server
 
-In root do: `npm run server`
+In the root directory (CUMA), run the following command: `npm run server`
 
 
 ### How to run the web
 
-#### Live Server
+#### 1. Install Live Server
 
 Install "Live Server" extension on VS Code
 
-#### Run the web
+#### 2. Run the web
 
 Navigate to `index.html`.
 This file is located in `/cuma/front-end/index.html`
@@ -98,11 +101,14 @@ The server runs the API and connects to mongoDB. Therefore, this command must be
 before npm install can be queried.
 
 
+
 ## Project structure
+
 
 ### Root Directory
 
 The root directory is defined to be in the same hierarchy as app.js and package.json.
+
 
 ### cuma Directory
 
