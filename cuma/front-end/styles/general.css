@@ -153,6 +153,7 @@ button:hover, .add-unit:hover {
 textarea {
     resize: vertical;
     height: 60px;
+    font-family: Arial, sans-serif;
 }
 
 .input-container label {
