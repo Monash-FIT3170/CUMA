@@ -59,6 +59,11 @@ Deployment is done using AWS. To access it, visit: https://3.25.70.20/
 | Niroshan Sivaneeswaran | nsiv0005@student.monash.edu |
 
 
+## Technical Requirements
+
+- Node.js 12.x or higher
+- NPM 6.x or higher
+- Modern web browser with JavaScript enabled
 
 ## Development Guide
 
@@ -68,8 +73,9 @@ Deployment is done using AWS. To access it, visit: https://3.25.70.20/
 
 https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
-#### 2. Setup Local Repository
+#### 2. Setup Local Repository and install dependencies.
 
+Clone the repository: `git clone https://github.com/Monash-FIT3170/CUMA.git`
 Open command prompt or terminal in the root directory (CUMA), and run the following command: `npm install`.
 
 #### 3. Allow Database Access
