@@ -622,6 +622,12 @@ async function fetchAndDisplayUserInfo() {
     try {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
+            // Populate the profile fields with the fetched data
+            document.getElementById('profile-name').value = response.data.name;
+            document.getElementById('profile-email').value = response.data.email;
+            document.getElementById('profile-role').value = response.data.role;
+
+            // Also update any other parts of the UI that depend on user info
             updateUserDisplay(response.data);
             updateUIBasedOnRole(response.data.role);
         } else {
@@ -876,7 +882,6 @@ function saveProfile() {
     // Get all the profile input fields
     const inputs = document.querySelectorAll('.profile-details input');
     
-    // For simplicity, let's just print out the new values (you can later replace this with an API call)
     inputs.forEach(input => {
         console.log(`${input.id}: ${input.value}`);
     });
