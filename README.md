@@ -76,6 +76,7 @@ https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 #### 2. Setup Local Repository and install dependencies.
 
 Clone the repository: `git clone https://github.com/Monash-FIT3170/CUMA.git`
+
 Open command prompt or terminal in the root directory (CUMA), and run the following command: `npm install`.
 
 #### 3. Allow Database Access
