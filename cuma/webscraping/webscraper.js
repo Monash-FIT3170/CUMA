@@ -79,7 +79,7 @@ async function getUnitInfo(page, url){
 
         //right column on page containing unit info
         let rightCol = Array.from(document.querySelectorAll("div[class='css-1sscrr8-Box--Box-Box-Attribute--AttrContainer ene3w3n2']"));
-
+        
         let faculty = rightCol[0].querySelector("div").innerText.trim()
         let creditPoints = rightCol[5].querySelector("div").innerText.trim()
 
@@ -92,7 +92,8 @@ async function getUnitInfo(page, url){
             offeringsArr = Array.from(offeringElement.querySelectorAll("strong")).map(x => x.innerText.trim());
         } 
 
-        //offeringsArr = offeringsArr.map(x => (x[0],x[2],x.slice(3,x.length)));
+        // get learning ourcomes
+        let outcomes = Array.from(document.querySelectorAll("div[class='css-fzyh5b-AccordionList--ListContentContainer eytijak0'] > div[class='clamp'] > p")).map(x => x.innerText.trim());
         
         //get unit level
         let unitLevel = unitCode[3];
@@ -104,9 +105,11 @@ async function getUnitInfo(page, url){
             "unitLevel": unitLevel,
             "unitType": null,
             "faculty": faculty,
+            "courses": [],
             "creditPoints": creditPoints,
             "offerings": offeringsArr,
             "unitDescription": unitDescription,
+            "learningOutcomes": outcomes,
             "handbookURL": document.URL
         }
 
@@ -165,6 +168,7 @@ async function run(course){
 
         //check if page 404d, if not add to our json obj
         if (unitData !== null){
+            unitData.courses.push(courseTitle)
             data.units.push(unitData);
             //update user
             console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
@@ -181,7 +185,7 @@ async function run(course){
     browser.close();
 
     //write to file
-    fs.writeFile('webscraping/unitData.json', JSON.stringify(data), (err) => {
+    fs.writeFile('./unitData.json', JSON.stringify(data), (err) => {
         if (err) {
             throw err;
         }
