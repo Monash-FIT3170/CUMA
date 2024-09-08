@@ -1,0 +1,1241 @@
+{
+  "University": "Monash",
+  "courseCode": "SFTWRENG01",
+  "CourseTitle": "Software engineering",
+  "units": [
+    {
+      "unitCode": "MAT1830",
+      "unitName": "Discrete mathematics for computer science",
+      "unitLevel": "1",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "OCT-MY-01-MALAYSIA-ON-CAMPUS",
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces fundamental discrete mathematics topics including combinatorics, sets, relations and functions; methods of logic and proof, especially proof by induction; probability theory, Bayes' theorem; recursion; recurrence relations; trees and other graphs. It establishes the mathematical basis required for studies in Computer Science and Software Engineering.",
+      "learningOutcomes": [
+        "Identify basic methods of proof, particularly induction, and apply them to solve problems in mathematics and computer science;",
+        "Manipulate sets, relations, functions and their associated concepts, and apply these to solve problems in mathematics and computer science;",
+        "Use and analyse simple first and second order recurrence relations;",
+        "Use trees and graphs to solve problems in computer science;",
+        "Apply counting principles in combinatorics;",
+        "Describe the principles of elementary probability theory, evaluate conditional probabilities and use Bayes' Theorem."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/MAT1830"
+    },
+    {
+      "unitCode": "FIT2004",
+      "unitName": "Algorithms and data structures",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces students to problem solving concepts and techniques fundamental to the science of programming. In doing this it covers problem specification, algorithmic design, analysis and implementation. Detailed topics include analysis of best, average and worst-case time and space complexity; introduction to numerical algorithms; recursion; advanced data structures such as heaps and B-trees; hashing; sorting algorithms; searching algorithms; graph algorithms; and numerical computing.",
+      "learningOutcomes": [
+        "Analyse general problem solving strategies and algorithmic paradigms, and apply them to solving new problems;",
+        "Prove correctness of programs, analyse their space and time complexities;",
+        "Compare and contrast various abstract data types and use them appropriately;",
+        "Develop and implement algorithms to solve computational problems."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2004"
+    },
+    {
+      "unitCode": "FIT2085",
+      "unitName": "Fundamentals of algorithms for engineers",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces you to core problem-solving, analytical skills, and methodologies useful for developing flexible, robust, and maintainable software. In doing this, it covers a range of conceptual levels, from fundamental algorithms and data structures, down to their efficient implementation as well as complexity. Topics include data types, data structures, algorithms, algorithmic complexity, recursion, and their practical applications.",
+      "learningOutcomes": [
+        "Translate problem statements into algorithms and implement them in a high level programming language;",
+        "Determine appropriate basic abstract data types, including; stacks, queues, lists, binary trees, priority queues, heaps and hash tables; for specific contexts;",
+        "Theoretically and experimentally evaluate different implementations of basic abstract data types;",
+        "Analyse the efficiency of algorithms by determining their best-case and worst-case big-O time complexity;",
+        "Work in teams to analyse algorithms and write programs."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2085"
+    },
+    {
+      "unitCode": "FIT2099",
+      "unitName": "Object oriented design and implementation",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces you to object-oriented design principles and their application to the construction of quality software. You will learn the fundamental concepts that underlie modern object-oriented languages, and will learn how to implement your designs using at least one. You will also learn how to use standard notation to illustrate your designs.",
+      "learningOutcomes": [
+        "Iteratively apply object-oriented design principles to design small to medium-size software systems, using standard software engineering notations, namely UML class diagrams and UML interaction diagrams.",
+        "Describe the quality of object-oriented software designs, both in terms of meeting user requirements and the effective application of object-oriented design concepts and principles.",
+        "Apply object-oriented programming constructs, such as abstraction, information hiding, inheritance, and polymorphism, to implement object-oriented designs using a programming language (namely, Java).",
+        "Apply effective programming strategies to refactor and debug object-oriented implementations systematically and efficiently by using available programming language tools.",
+        "Apply principles of software engineering practice to create object-oriented systems with peers using tools including integrated development environments (IDEs), UML drawing tools, and version control systems."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2099"
+    },
+    {
+      "unitCode": "FIT2100",
+      "unitName": "Operating systems",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "This unit will provide students with the knowledge of how a multi-programming, multi-user operating systems operates and it manages and allocate resources to different applications. Students will be able to compare and contrast various resource management allocation strategies. Students will develop and implement code to understand and make use of operating system services.",
+      "learningOutcomes": [
+        "Analyse and evaluate various strategies used by an operating system in managing the system resources and running applications efficiently;",
+        "Analyse and identify parameters that can improve the performance of multi-programming operating systems;",
+        "Apply synchronisation techniques in the development of applications, using operating system services; and",
+        "Apply system calls in the design of applications, to improve application performance, robustness or functionality."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2100"
+    },
+    {
+      "unitCode": "FIT2101",
+      "unitName": "Software engineering process and management",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "A disciplined process is vital to the success of any major software development project. In this unit, you will learn essential skills for managing software development efforts and for working within coordinated teams. You will learn how to decide upon and document your team's structure and process model. Your team will be expected to follow the process model they have documented, and to evaluate its effectiveness.",
+      "learningOutcomes": [
+        "Describe the nature and purpose of a software engineering process, including the historical evolution of the concept, and describe the major features of the most common process models;",
+        "Document a software process in a project management plan, including process model, team organisation, risk management, and time management;",
+        "Identify and apply relevant ethical considerations for software engineering projects and analyse them in light of ethical codes and standards;",
+        "Identify relevant risks for a small-to-medium size software project, analyse their impact and likelihood, identify appropriate mitigations, and document these in a risk matrix.;",
+        "Elicit functional and non-functional requirements, including human aspects, for a small-to-medium size software project from stakeholders through interview and/or document analysis techniques, capture these using appropriate methods for the given process model (including user stories and use cases), and analyse these requirements for completeness including test-ability;",
+        "Apply a lightweight process to the development of a small software project in small groups, including the use of software engineering tools such as revision control and issue tracking systems, analyse their strengths and weaknesses and make recommendations for improving the process based on experience and observation."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2101"
+    },
+    {
+      "unitCode": "FIT2107",
+      "unitName": "Software quality and testing",
+      "unitLevel": "2",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "This unit focuses on modern software quality assurance and testing tools and techniques to assure the quality of software systems. Students will learn different quality aspects of quality attributes, e.g., reliability, human, and security. Students will design test cases and apply systematic testing techniques in the context of individual modules and entire systems, using appropriate tools and techniques to automate the testing process where possible. Finally, students will analyze and report code quality issues using modern code review practices with tools and measures.",
+      "learningOutcomes": [
+        "Analyze and identify software quality attributes for a small to medium-sized software system;",
+        "Develop a software testing plan by selecting appropriate quality assurance and testing strategies;",
+        "Design test cases using black-box and white-box testing techniques based on user requirements;",
+        "Conduct automated unit testing using continuous integration frameworks and system testing;",
+        "Analyze and report code quality issues using modern code review practices with tools and measures."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT2107"
+    },
+    {
+      "unitCode": "FIT3077",
+      "unitName": "Software engineering: Architecture and design",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "S1-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "This unit builds on introductory units to analysis and design. It provides the professional software engineer with advanced knowledge and skills in high-level architectural design, its theoretical foundations, industrial best practice, and relevant application context. In the software life-cycle, software architecture sits between analysis/specification and design/implementation. The field of software architecture has come of age with a thriving research community and numerous high-level models, methods, tools and practices widely used in industry.",
+      "learningOutcomes": [
+        "Model and design flexible software at the architectural level using various tools and techniques from the requirements;",
+        "Analyse, design, and refactor software systems taking into consideration various quality attributes and requirements",
+        "Take requirements for systems and develop software designs and architectures following object-oriented principles;",
+        "Select and use appropriate tools for iteratively incrementing the design and architecture of the system;",
+        "Evaluate and apply appropriate design patterns, frameworks and architectures in designing software;",
+        "Justify design decisions in the context of a project and effectively communicate these decisions to project stakeholders"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3077"
+    },
+    {
+      "unitCode": "FIT3159",
+      "unitName": "Computer architecture",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "S1-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "This unit covers the internal mechanism of computers and how they are organised and programmed. Topics include combinatorial and sequential logic, Boolean Algebra, counters, ripple adders, tree adders, memory/addressing, busses, speed, DMA, data representation, machine arithmetic, microprogramming, caches and cache architectures, virtual memory and translation look-aside buffers, vectored interrupts, polled interrupts, pipelined architecture, superscalar architecture, data dependency, hazards, CISC, RISC, VLIW machine architectures.",
+      "learningOutcomes": [
+        "Analyse simple logic circuits;",
+        "Explain and analyse key processor components;",
+        "Explain and analyse computer organisation;",
+        "Write and debug simple assembly language programs;",
+        "Use simulator programs to model computer system components."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3159"
+    },
+    {
+      "unitCode": "FIT3170",
+      "unitName": "Software engineering practice",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "12",
+      "offerings": [
+        "FY-01-CLAYTON-ON-CAMPUS",
+        "FY-01-MALAYSIA-ON-CAMPUS",
+        "S2-SS-02-CLAYTON-FLEXIBLE",
+        "S2-SS-02-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "In this unit, students will undertake a full-year software development project in a self-managing team. Students will apply the skills they learned in prerequisite and co-requisite units to a larger project than any they have encountered to date. Through attempting larger-scale software development they will learn how the techniques they have encountered in isolation work together as an integrated methodology to make such complex projects feasible.",
+      "learningOutcomes": [
+        "Describe industry-standard team-based project management methodologies and apply them across a multi-functional team to achieve optimal project progress",
+        "Apply soft skills when engaging stakeholders in a consistent and professional manner to determine functional and non-functional requirements",
+        "Plan and manage the full range of activities in a software engineering project in accordance with the development methodology",
+        "Compare and analyse appropriate industry-standard technologies to determine the optimal combination of software required to support project development",
+        "Assess aspects of quality assurance that are relevant to the context of the project, and evaluate strategies for ensuring quality standards are met for end users",
+        "Deliberate professional issues occurring within the development and deployment of software applications, and identify appropriate actions based on human factors, relevant law and industry codes of ethical behaviour."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3170"
+    },
+    {
+      "unitCode": "FIT3171",
+      "unitName": "Databases",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS",
+        "SSB-01-CLAYTON-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit will provide an introduction to the concepts of database design and usage and the related issues of data management. You will develop skills in planning, designing, and implementing a data model using an enterprise-scale relational database system (Oracle). Methods and techniques will also be presented to populate, retrieve, update and implement integrity features on data in the implemented database system.",
+      "learningOutcomes": [
+        "Apply the theories of the relational database model;",
+        "Develop a sound relational database design;",
+        "Implement a relational database based on a sound database design;",
+        "Manage data that meets user requirements, including queries and transactions;",
+        "Differentiate non-relational database model and the relational database model;",
+        "Develop programming structures within a database backend."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3171"
+    },
+    {
+      "unitCode": "FIT4165",
+      "unitName": "Computer networks",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "S1-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "The unit introduces computer networks with an explicit software and system-centric focus. It provides skills in data communications, networks, and associated software interfaces, and introduces principles in network design, configuration, management and security.",
+      "learningOutcomes": [
+        "Analyse critically the network architecture standards for open systems;",
+        "Analyse critically and apply the ISO reference and Internet models;",
+        "Implement programs using internetworking concepts, IP addressing, IPC and socket-level interface;",
+        "Analyse critically the fundamentals and technologies of cabled and wireless physical layer;",
+        "Analyse critically the fundamentals and technologies of cabled and wireless data-link layer;",
+        "Analyse critically and implement the fundamentals and technologies of the network layer, including packet-switching and queueing concepts;",
+        "Analyse critically and implement designs based on the functions and architectures of cabled and wireless LAN and WAN, including ALOHA and CSMA/CD/CA models;",
+        "Implement and evaluate system level designs based on LAN architecture for organisational requirements."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4165"
+    },
+    {
+      "unitCode": "FIT4002",
+      "unitName": "Software engineering industry experience studio project",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "12",
+      "offerings": ["FY-01-CLAYTON-FLEXIBLE", "FY-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Students will undertake a large project and work in groups on a software project for a client. The client may be internal to Monash or from the industry or research organisation. In general, projects involve all aspects of the system development lifecycle. Groups are responsible for their own project management, with guidance from a supervisor. Some projects will warrant students working in pairs or individually.",
+      "learningOutcomes": [
+        "Design and implement a software system of a quality acceptable to an external client;",
+        "Select and use appropriate tools, techniques and strategies to manage project resources, including time and personnel;",
+        "Identify potential sources of risk, including ethical risk, and devise and adopt appropriate strategies to monitor and mitigate these risks;",
+        "Choose and follow a software development methodology that is appropriate to the team, project and client, and justify this methodology;",
+        "Elicit functional and non-functional requirements, including human aspects requirements, from client representatives and ensure that these are communicated to team members and other stakeholders in an appropriate form",
+        "Produce internal documentation of a sufficient quality to support project development activities (including specification, analysis, design, testing) and address relevant security and other risks",
+        "Communicate effectively with a diverse range of project stakeholders, including clients, end users, and supervisors",
+        "Verify systematically that internal and external project deliverables meet agreed quality standards, such as functionality, security and usability",
+        "Produce external documentation of a sufficient quality to meet the needs of clients, end users, and client-site technical staff."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4002"
+    },
+    {
+      "unitCode": "FIT4701",
+      "unitName": "Final year software engineering project A",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "The aim of this capstone unit is to provide an opportunity for you to undertake a substantial individual or small group project. Projects undertaken will integrate and build on content from earlier stages of the course. This unit is the first part of a two-unit project.",
+      "learningOutcomes": [
+        "Research relevant and reliable literature to evaluate the state of the field.",
+        "Analyse a problem and evaluate the potential of a solution or experiment.",
+        "Appraise a complex engineering problem and investigate it using appropriate research methods and techniques.",
+        "Integrate foundational and discipline-specific knowledge to solve complex open-ended problems.",
+        "Plan the scope and requirements of a research project or experiment, responding to changing requirements and potential interdisciplinary inputs.",
+        "Generate research and technical outputs by applying appropriate techniques, resources and modern engineering tools to a complex open-ended engineering problem.",
+        "Demonstrate consideration of the ethics and norms which guide engineering practice, including professionalism, innovation and creativity.",
+        "Assess the social, health, safety, legal, cultural, commercial and political impacts of the identified project, as appropriate.",
+        "Assess the sustainability of your project within the appropriate discipline context, with consideration of the relevant sustainable development goals and indicators.",
+        "Synthesise the progress and outputs of your project through professional engineering reports and presentations to a range of audiences including the community and industry.",
+        "Engage with project collaborators to achieve research outcomes using effective self and/or team management, review and improvement practices. (Applicable to the Clayton-based course)"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4701"
+    },
+    {
+      "unitCode": "FIT4702",
+      "unitName": "Final year software engineering project B",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit is a continuation of FIT4701 Final year software engineering project A. The aim of this capstone unit is to provide an opportunity for you to undertake a substantial individual or small group project. Projects undertaken will integrate and build on content from earlier stages of the course.",
+      "learningOutcomes": [
+        "Research relevant and reliable literature to evaluate the state of the field.",
+        "Analyse a problem and evaluate the potential of a solution or experiment.",
+        "Appraise a complex engineering problem and investigate it using appropriate research methods and techniques.",
+        "Integrate foundational and discipline-specific knowledge to solve complex open-ended problems.",
+        "Plan the scope and requirements of a research project or experiment, responding to changing requirements and potential interdisciplinary inputs.",
+        "Generate research and technical outputs by applying appropriate techniques, resources and modern engineering tools to a complex open-ended engineering problem.",
+        "Demonstrate consideration of the ethics and norms which guide engineering practice, including professionalism, innovation and creativity.",
+        "Assess the social, health, safety, legal, cultural, commercial and political impacts of the identified project, as appropriate.",
+        "Assess the sustainability of your project within the appropriate discipline context, with consideration of the relevant sustainable development goals and indicators.",
+        "Synthesise the progress and outputs of your project through professional engineering reports and presentations to a range of audiences including the community and industry.",
+        "Engage with project collaborators to achieve research outcomes using effective self and/or team management, review and improvement practices. (Applicable to the Clayton-based course)"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4702"
+    },
+    {
+      "unitCode": "FIT4042",
+      "unitName": "Industry",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "18",
+      "offerings": [
+        "S1-01-CLAYTON-ON-CAMPUS",
+        "S2-01-CLAYTON-ON-CAMPUS",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "Students are on placement full time in a defined, graduate level role during a 22-week placement period at established partners of the Faculty of IT industry based learning program including major global companies, leading Australian companies and worldwide consultancies. The students on placement apply the knowledge, skills and practices of professional attitudes and behaviour developed in their academic units. They develop communication, time management, self-reflection and customer service skills in business situations, experience and participate professionally in the corporate environment and obtain feedback from experienced supervisors on their performance.",
+      "learningOutcomes": [
+        "Set achievable and measurable goals;",
+        "Identify useful theoretical knowledge that has been covered in prior coursework and knowledge that has not yet been covered;",
+        "Develop and practice professional skills and attitudes including: initiative, communication, time-management and teamwork skills in a business environment;",
+        "Develop solutions to business problems using information technology and other techniques;",
+        "Prepare documentation and written reports of a professional standard;",
+        "Address performance improvement opportunities identified by industry supervisors and self-assess opportunities for personal development;",
+        "Develop information technology skills (such as business process modelling, performance enhancement of installed software, updating current software and developing new software) in a complex, corporate business environment;",
+        "Apply engineering synthesis and design processes in a business and information technology environment;",
+        "Evaluate and critique the engineering approaches undertaken during the conduct and management of the projects."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4042"
+    },
+    {
+      "unitCode": "ENG0001",
+      "unitName": "Engineering continuous professional development",
+      "unitLevel": "0",
+      "unitType": null,
+      "faculty": "Faculty of Engineering",
+      "courses": ["Software engineering"],
+      "creditPoints": "0",
+      "offerings": ["S1-01-CLAYTON-IMMERSIVE", "S2-01-CLAYTON-IMMERSIVE"],
+      "unitDescription": "Continuous professional development (CPD) is a compulsory requirement for all engineering students. It is part of meeting the Engineers Australia Stage 1 Competency Standard to be a Professional Engineer.",
+      "learningOutcomes": [
+        "Apply theoretical engineering knowledge outside of the classroom.",
+        "Demonstrate understanding of engineering practice expectations and observe health and safety rules during professional practice experiences.",
+        "Value engineering ethical principles and responsibilities and satisfy professional standards for assigned engineering tasks.",
+        "Demonstrate the ability to communicate engineering tasks to relevant parties and write professional quality technical reports.",
+        "Demonstrate an ability to work independently and to collaborate with colleagues on common tasks effectively.",
+        "Demonstrate the willingness and ability to engage in life-long learning."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/ENG0001"
+    },
+    {
+      "unitCode": "ENG0002",
+      "unitName": "Industrial training",
+      "unitLevel": "0",
+      "unitType": null,
+      "faculty": "Faculty of Engineering",
+      "courses": ["Software engineering"],
+      "creditPoints": "0",
+      "offerings": ["SSB-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "In the internship, you acquire experience by working in a professional environment in engineering industries over 12 weeks. The internship includes considerations of engineering health and safety, teamwork, communication and life-long learning in the workplace and the development of a workplace written report.",
+      "learningOutcomes": [
+        "Relate theoretical knowledge to engineering practice in workplace.",
+        "Follow professional engineering practices, and health and safety rules of the workplace.",
+        "Uphold engineering ethical principles and responsibilities, and have the ability to carry out engineering tasks given to acceptable standards.",
+        "Demonstrate the ability to communicate engineering tasks to relevant parties and the ability to write technical reports.",
+        "Show the ability to work independently and to collaborate with colleagues on common tasks effectively.",
+        "Exhibit the willingness and ability to engage in life-long learning."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/ENG0002"
+    },
+    {
+      "unitCode": "FIT3003",
+      "unitName": "Business intelligence and data warehousing",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Automation and the use of technological tools have resulted in the accumulation of vast volumes of data by modern business organisations. Data warehouses have been set up as repositories to store this data and improved techniques now result in the speedy collection and integration of such data. OLAP technology has resulted in the faster generation of reports and more flexible analysis based on the data repositories. This unit will explore the concepts of data warehousing and OLAP, covering the data processing technological requirements for data warehousing and OLAP and will provide hands on experience on designing data warehousing and OLAP systems.",
+      "learningOutcomes": [
+        "Design multi-dimensional databases and data warehouses;",
+        "Use fact and dimensional modelling;",
+        "Implement online analytical processing (OLAP) queries;",
+        "Explain the roles of data warehousing architecture and the concepts of granularity in data warehousing;",
+        "Create business intelligence reports using data warehouses and OLAP."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3003"
+    },
+    {
+      "unitCode": "FIT3031",
+      "unitName": "Network security",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit will provide students with an understanding of: OSI security architecture; common information risks and requirements; operation of encryption techniques; digital signatures; public key infrastructure; authentication and non-repudiation; intrusion detection and response; firewall defence; privacy and ethics issues; security configurations to PC-based applications; and design of information systems with security compliance and security standards and protocols.",
+      "learningOutcomes": [
+        "Describe OSI security architecture and apply common security standards and protocols for network security applications e.g. electronic mail, IP, web and network management;",
+        "Critically assess threats, vulnerabilities and risks to an organisations information assets and propose control technologies and techniques which can be applied to reduce the security risk;",
+        "Apply cryptographic techniques to develop methods to disguise information to ensure its integrity, confidentiality and authenticity;",
+        "Describe the ethical, legal and criminal issues relating to the security of information and computer networks both Wired and Wireless;",
+        "Implement cryptographic algorithms and security protocols to provide security over networks and the Internet using Vitual Private Networks;",
+        "Design system security against intruders and malicious software;",
+        "Apply security configurations to computer and network based applications.",
+        "Describe and apply firewall configurations to protect networks.",
+        "Implement network management protocols and security requirements."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3031"
+    },
+    {
+      "unitCode": "FIT3080",
+      "unitName": "Artificial intelligence",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "This unit covers the history of artificial intelligence and the foundational concepts of intelligent agents. It delves into problem-solving and search techniques, including problem representation, heuristic search, and adversarial search. You will learn about knowledge representation and reasoning, focusing on propositional and first-order logic for AI applications, as well as planning. The unit also explores reasoning under uncertainty through Bayesian Networks and Markov Decision Processes. In the realm of machine learning, the unit includes reinforcement learning techniques, supervised learning such as decision trees, Naive Bayes, neural networks, and self-supervised learning approaches. Additionally, the unit addresses various AI applications and examines ethical considerations in AI.",
+      "learningOutcomes": [
+        "Describe the historical and conceptual development of AI",
+        "Explain, apply and evaluate the goals of AI and the main paradigms for achieving them including logical inference, search, machine learning and Bayesian inference;",
+        "Explain the and understand the practical and ethical implications of Artificial Intelligence in real world contexts.",
+        "Describe, analyse, apply and evaluate heuristic AI for problem solving;",
+        "Describe, analyse and apply basic knowledge representation and reasoning mechanisms;",
+        "Describe, analyse and apply probabilistic inference mechanisms for reasoning under uncertainty;",
+        "Describe, analyse, apply and evaluate machine learning techniques;"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3080"
+    },
+    {
+      "unitCode": "FIT3094",
+      "unitName": "Artificial life, artificial intelligence and virtual environments",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit introduces topics in Artificial Intelligence (AI) and Artificial Life (ALife) suited to real-time simulation and computer games development. Using a practice-based and programming-led approach, the unit explores elements of the history of these fields, and their application to games, the fields’ fundamental concepts and theory, as well as practical techniques and algorithms that can be used to build real-time, interactive games, virtual environments and simulations. Starting with basic concepts in 2D discrete simulation, the unit progresses to continuous 3D models, agent-based models, bio-inspired intelligence and search algorithms. Programs are developed primarily using C++.",
+      "learningOutcomes": [
+        "Explain the concepts and theories underlying AI and Artificial Life;",
+        "Evaluate and apply AI and/or ALife software techniques to model simple intelligent behaviour in discrete and continuous simulations and games",
+        "Apply evolutionary algorithms to devise novel agents and understand their application, and that of other search algorithms, to problems requiring the search of a solution space;",
+        "Apply - through practice-based learning - design, development, execution and validation of real-time interactive software using AI techniques"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3094"
+    },
+    {
+      "unitCode": "FIT3134",
+      "unitName": "Entrepreneurship",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["SSA-02-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Over the past few years, the world has seen disruptive ideas spearheaded by entrepreneurs and the startups that they lead. Often, these startups are backed by strong technological advancements that power rapid growth, giving birth to the term technopreneurship. This unit aims to empower students with the essential knowledge, skills, and tools to bring a technology idea to a venture-backable startup. This includes topics such as (1) team, (2) vision; (3) problem; (4) market; (5) solution; (6) business model; (7) go-to-market; (8) competitors; (9) traction/ metrics; and (10) investment ask.",
+      "learningOutcomes": [
+        "Describe what startups are, using the concepts of innovation, entrepreneurship and technopreneurship.",
+        "Evaluate and differentiate between ideas, ideas that can be businesses and business ideas that can be startups.",
+        "Understand the roles and responsibilities of a startup founding team.",
+        "Demonstrate research process for market research, idea validation, value proposition and scale to large with appropriate metrics.",
+        "Actualize ideas to an industry-grade business pitch deck."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3134"
+    },
+    {
+      "unitCode": "FIT3138",
+      "unitName": "Real time enterprise systems",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit provides both a theoretical and practical overview of real time enterprise systems. Real time enterprise systems are configurable information systems packages, implemented on-line that integrate people, technology and information processing. The three integrated processes within and across functional areas are seamlessly interconnected and almost time-lag free in an organisation. Topics include systems and technology background, ES evolution, ES lifecycle, implementation and configuration, ES and electronic commerce and ES success and failure factors. The theoretical component will be augmented by detailed case studies which focus on problems faced by real-life companies. For the practical component, laboratory exercises using a well-known enterprise system will be used to deepen student understanding.",
+      "learningOutcomes": [
+        "Critically analyse the characteristics, features and functionality of real time enterprise systems and their role in the modern and fast-paced business environment;",
+        "Demonstrate a capacity to describe and perform navigation functions and create master data objects in a real-time enterprise system;",
+        "Describe system-wide concepts such as workflow, reporting, and the exchange of information between business partners and employees;",
+        "Critically evaluate the benefits of enterprise systems in terms of integration, world-wide flexibility, interactive processing, client-server platform, cloud computing, SOA, open systems, and the capacity to be configured for all business types;",
+        "Critically discuss the major factors that impact on stakeholders during an enterprise system implementation that can influence the project triple constraints and business success identified from both theoretical knowledge and actual business cases;",
+        "Demonstrate the capability to project manage a real-time enterprise endeavour by developing clear communication, and team management skills supported by examples from actual business cases."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3138"
+    },
+    {
+      "unitCode": "FIT3139",
+      "unitName": "Computational modelling and simulation",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit provides an overview of computational science and an introduction to its central methods. It covers the role of computational tools and methods in 21st century science, emphasising modelling and simulation. It introduces a variety of models, providing contrasting studies on: continuous versus discrete models; analytical versus numerical models; deterministic versus stochastic models; and static versus dynamic models. Other topics include: Monte-Carlo methods; epistemology of simulations; visualisation; high-dimensional data analysis; optimisation; limitations of numerical methods; high-performance computing and data-intensive research.",
+      "learningOutcomes": [
+        "Explain and apply the process of computational scientific model building, verification and interpretation;",
+        "Analyse the differences between core classes of modelling approaches (Numerical versus Analytical; Linear versus Non-linear; Continuous versus Discrete; Deterministic versus Stochastic);",
+        "Evaluate the implications of choosing different modelling approaches;",
+        "Rationalise the role of simulation and data visualisation in science;",
+        "Apply all of the above to solving idealisations of real-world problems across various scientific disciplines."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3139"
+    },
+    {
+      "unitCode": "FIT3143",
+      "unitName": "Parallel computing",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Modern computer systems contain parallelism in both hardware and software. This unit covers parallelism in both general purpose and application specific computer architectures and the programming paradigms that allow parallelism to be exploited in software. The unit examines shared memory and message passing paradigms in hardware and software; concurrency, multithreading and synchronicity; parallel, clustered and distributed supercomputing algorithms, languages and software tools and development environments. You will learn to design and develop parallel algorithms in these paradigms, and apply technical writing and presentation to communicate parallel computing.",
+      "learningOutcomes": [
+        "Examine the design principles of parallel computing architectures;",
+        "Evaluate and contrast different types of parallel architectures using Flynn's taxonomy;",
+        "Analyse the design principles of distributed parallel computing systems;",
+        "Criticise and assess common performance models used for parallel applications;",
+        "Research and solve synchronisation problems typical in the design of parallel applications;",
+        "Compare the fundamental principles of parallel hardware using vector processing, Graphics Processing Units (GPU) and Neural Processing Units (NPU);",
+        "Judge modern parallel computing applications and the impact of exponential growth in hardware"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3143"
+    },
+    {
+      "unitCode": "FIT3146",
+      "unitName": "Maker lab",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS"],
+      "unitDescription": "This unit will enable students to create new artefacts which utilise developments in information technology. The unit will combine the theoretical and technical skills gained in other units into a problem solving context and allow the students to gain the skills needed to create solutions of problems using technology. Students will learn valuable research and communication skills as they explore and create using a variety of technologies that support the making process. Student will have the opportunity to explore new technologies and undertake the prototyping and refinement process in an environment that supports independent learning. Students will have the opportunity to use technology to solve a problem which is of interest.",
+      "learningOutcomes": [
+        "Methodically locate and use new technologies to solve a specific problem in a variety of contexts",
+        "Use a variety of techniques to learn new technologies at different levels of depth of understanding and be able to communicate this to others",
+        "Undertake an iterative prototyping process to create a viable solution for a user and be able to demonstrate and communicate the reasons for decisions in the creation of a working prototype",
+        "Reflect effectively on the making process and the value of trial and error",
+        "Be able to articulate how emerging technologies are used in different contexts including social good, HCI, creativity, and ethics"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3146"
+    },
+    {
+      "unitCode": "FIT3152",
+      "unitName": "Data analytics",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-ON-CAMPUS", "S1-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "There has been an explosion in the quantity and variety of data collected and routinely analysed by government, business and society at large over recent years. This has been described by some social commentators as the rise of \"big data\" and and the analysts and practitioners who investigate this data as \"data scientists.\" This unit will introduce students to the analysis of big data and the role of the data scientist. Techniques covered include data management and transformation, visual analysis, social network analysis, statistical learning, clustering and natural language processing. Students will be introduced to these methods using open source industry standard software. Data and case studies will be drawn from diverse sources. The general principles of analysis, investigation and reporting will be covered. Students will be encouraged to critically reflect on the data analysis process within their own domain of interest.",
+      "learningOutcomes": [
+        "Demonstrate the ability to transform real world problems into ones that can then be solved using data analytics techniques;",
+        "Cleanse and prepare data for analysis;",
+        "Analyse large data sets using a range of statistical, graphical and machine-learning techniques;",
+        "Validate and critically assess the results of analysis;",
+        "Interpret the results of analysis and communicate these to a broad audience."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3152"
+    },
+    {
+      "unitCode": "FIT3154",
+      "unitName": "Advanced data analysis",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit introduces the problem of machine learning and the major kinds of statistical learning used in data analysis. Learning and the different kinds of learning will be covered and their usage discussed. Evaluation techniques and typical application contexts will presented. A series of different models and algorithms will be presented in an exploratory way: looking at typical data, the basic models and algorithms and their use: linear and logistic regression, support vector machines, Bayesian networks, decision trees, random forests, k-means and clustering, neural-networks, deep learning, and others. Finally, two specialist topics will be covered briefly, statistical learning theory and working with big data.",
+      "learningOutcomes": [
+        "Describe what machine learning is;",
+        "Differentiate kinds of statistical learning models and algorithms;",
+        "Evaluate a machine learning algorithm in typical contexts;",
+        "Describe and apply the major models and algorithms for statistical learning;",
+        "Identify the most competitive algorithms for typical contexts;",
+        "Compare and contrast the differences between big data applications and regular applications of algorithms;",
+        "Describe the theoretical limits of learning."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3154"
+    },
+    {
+      "unitCode": "FIT3155",
+      "unitName": "Advanced data structures and algorithms",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit builds on the concepts learnt in introductory algorithms and data structures study. It covers advanced algorithmic paradigms and problem-solving techniques required to address real-world programming challenges. It explores, in depth, the design and analysis of space-efficient data structures and time-efficient problem solving strategies to be used with them. Topics include amortized analysis, advanced sorting and searching algorithms, new tree/string/graph data structures and algorithms, and number-theoretic algorithms amongst others.",
+      "learningOutcomes": [
+        "Analyse efficient data structures and effective algorithmic paradigms;",
+        "Design and implement efficient algorithms and data structures for use on large data sets;",
+        "Apply advanced algorithms and data structures to tackle complex computational problems;",
+        "Prove the correctness of programs and reason about their space and time complexities."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3155"
+    },
+    {
+      "unitCode": "FIT3168",
+      "unitName": "IT forensics",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS"],
+      "unitDescription": "This unit provides a broad coverage of digital ICT forensics. You will examine definitions of evidence as they apply to investigations involving the seizure and examination of information technology devices. The unit will introduce you to various tools, techniques and algorithms that may be employed by investigators for acquisition, preservation and analysis of evidence. Disk-based (local) and network (remote) forensic environments will be explored. You will also learn of the impediments and complicating factors that can threaten forensic investigations.",
+      "learningOutcomes": [
+        "Explain the motivations and landscape of forensic investigations in an IT context;",
+        "Explain the relevant legal definitions and frameworks that apply to digital forensic investigations;",
+        "Select appropriate tools and algorithms to perform forensic investigations and acquire relevant evidence;",
+        "Apply and evaluate forensic techniques in local media-based an network-based environments;",
+        "Report on forensic findings in a clear and concise manner.",
+        "Demonstrate how digital forensics can be employed by Police and Tax officials in a court of law."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3168"
+    },
+    {
+      "unitCode": "FIT3169",
+      "unitName": "Immersive environments",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS"],
+      "unitDescription": "FIT3169 introduces students to immersive environment design and production principles using game engine prototyping software. Building upon the 3D creation and editing skills in the prerequisite unit FIT1033 Foundations of 3D, students will learn how to create game levels, import assets (models, sounds, animations), and extend supplied code to visualise interactive virtual environments for a range of applications and devices.",
+      "learningOutcomes": [
+        "Analyse and evaluate game asset production techniques;",
+        "Implement game design principles in working interactive environments;",
+        "Construct and create virtual environments;",
+        "Design and develop immersive 3D or 2D game prototypes."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3169"
+    },
+    {
+      "unitCode": "FIT3173",
+      "unitName": "Software security",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "SSB-01-CLAYTON-FLX-BLK"],
+      "unitDescription": "This unit aims to introduce secure software development issues from the design stage, through to implementation, testing and deployment. Topics studied include the secure software development life cycle, secure software design principles, threat evaluation models, secure coding and development practices, software security testing, deployment and maintenance. Students are provided with a range of practical exercises and tasks to reinforce their skills including: identification of security bugs in programs written in different programming languages, design, implementation, and testing of secure concurrent and networked applications and identification of vulnerabilities in networked and mobile/wireless applications.",
+      "learningOutcomes": [
+        "Understand the fundamentals of software security.",
+        "Model the possible software vulnerabilities and threats for a given application system",
+        "Apply a wide range of tools and technologies to evaluate software vulnerabilities.",
+        "Apply appropriate methods for the design and realisation of secure software for memory exploits and web applications security.",
+        "Analyse and evaluate security properties of concurrent and networked applications.",
+        "Discuss and evaluate the significance of various software security weaknesses.",
+        "Describe and select mitigation strategies for common vulnerabilities and attacks.",
+        "Investigate, implement and exploit security vulnerabilities in a lab environment."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3173"
+    },
+    {
+      "unitCode": "FIT3175",
+      "unitName": "Usability",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "SSB-01-CLAYTON-FLX-BLK"],
+      "unitDescription": "This unit explores the underpinning theories, principles and practices of interface design to achieve usable computer-based systems. It examines issues in the design of system interfaces from a number of perspectives: user, programmer, designer. It explores the application of the relevant theories in practice. The unit will cover topics such as methods and tools for developing effective user interfaces, evaluation methods such as the conduct of usability and heuristic evaluations, design of appropriate interface elements including the design of menus and other interaction styles. The unit will also focus on designing for a diverse range of users and environments.",
+      "learningOutcomes": [
+        "Explain the theories and principles of usability as applied to interface and interaction design;",
+        "Apply usability principles to the design of interfaces for Web, small screen and mobile devices;",
+        "Design an interface for user diversity and accessibility;",
+        "Employ user-centred design;",
+        "Evaluate an interface and interaction design."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3175"
+    },
+    {
+      "unitCode": "FIT3176",
+      "unitName": "Advanced database design",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit will introduce advanced concepts in the areas of database design, including document-store, column-store, and graph database design; implementations in non-relational database systems.",
+      "learningOutcomes": [
+        "Describe various non-relational database systems, including NoSQL;",
+        "Compare and contrast between relational and non-relational database design and model;",
+        "Design database systems using document-store and column-store design techniques;",
+        "Explain transactions systems in non-relational systems;",
+        "Implement and manipulate document-store and column-store database systems;",
+        "Investigate graph model in database systems;",
+        "Demonstrate graph query processing."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3176"
+    },
+    {
+      "unitCode": "FIT3178",
+      "unitName": "iOS app development",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit focuses on the design, development and deployment of mobile apps for iOS using the Swift programming language. Students will learn best practices for iOS development using native frameworks and common design patterns. The unit will explore areas such as mobile UI design, data storage, web services and networking, mobile sensors, use of media, and mobile interface testing. The unit will emphasise hands-on, practical experience with the Xcode development environment and iOS simulator. Students will design and build their own app.",
+      "learningOutcomes": [
+        "Describe the feasibility and technical challenges of creating iOS apps using UIKit and associated technologies;",
+        "Analyse mobile interface guidelines and technical constraints to design effective navigation and user interfaces for mobile apps;",
+        "Apply common object-oriented design patterns such as Model-View-Controller and Delegation; and",
+        "Follow iOS best practices to design, construct and test non-trivial iOS apps with a web service component."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3178"
+    },
+    {
+      "unitCode": "FIT3179",
+      "unitName": "Data visualisation",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS", "S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Data visualisation is a powerful technique that allows us to use our visual system to understand data. Interactive data visualisation is now common in business, engineering and design and the social and physical sciences. This unit introduces the main kinds of information graphics and interactive visualisation systems and their areas of application. It investigates the reasons why visualisation can be effective and based on this students will gain experience in critically assessing data visualisations and in designing their own visualisations. You will learn how to create visualisations with representative computer tools and gain experience in creating a data visualisation for an application domain of their choice.",
+      "learningOutcomes": [
+        "Critically analyse data visualisations;",
+        "Create effective data visualisations;",
+        "Describe the main applications of data visualisation in business, engineering and design, and the social and physical sciences;",
+        "Describe the advantages, drawbacks and pitfalls of the visual presentation of data as compared to its presentation using other media."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3179"
+    },
+    {
+      "unitCode": "FIT3182",
+      "unitName": "Big data management and processing",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "Data engineering is about developing the software (and hardware) infrastructure to support data science. This unit introduces software tools and techniques for data engineering, but not hardware. It will cover an introduction to big data processing, covering volume, variety, and velocity; large volume data processing using parallel technologies; variety data formats, including unstructured and semi-structured data, using NoSQL databases; and velocity data processing, covering data streaming.",
+      "learningOutcomes": [
+        "identify big data concepts and technologies;",
+        "design and develop parallel database processing algorithms and methods;",
+        "explain a variety of data formats in big data;",
+        "apply modern big data processing tools for various data structures;",
+        "solve complex big data streaming problems."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3182"
+    },
+    {
+      "unitCode": "FIT3183",
+      "unitName": "Malicious AI and dark side security",
+      "unitLevel": "3",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-MALAYSIA-ON-CAMPUS"],
+      "unitDescription": "In this unit you will learn first-hand some of the required skills of a Chief Security Officer. You will be exposed to the latest technologies deployed by attackers against AI and security, and mechanisms to counter these malicious activities. This unit gives you the opportunity to engage in role-playing case studies wherein you will be required to participate against other students in a security warfare: security vs anti-security technologies, such as, deepfakes vs anti-deepfakes, forensics vs counter forensics.",
+      "learningOutcomes": [
+        "identify and evaluate malicious technologies deployed by attackers against AI and security such as adversarial machine learning, deepfakes, ransomware, kleptography, cryptovirology, covert exfiltration, anti-forensics, subversion.",
+        "implement counter-anti-security technologies to combat the anti-security techniques deployed by attackers.",
+        "design and deploy security or anti-security techniques in real-world situations.",
+        "critically assess the level of security offered by existing AI and security systems.",
+        "explain the ethical principles between the dark side and cybersecurity for social good."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT3183"
+    },
+    {
+      "unitCode": "FIT4005",
+      "unitName": "IT research methods",
+      "unitLevel": "4",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "The aim of this unit is to prepare students to conduct research in an industry IT context. It provides broad coverage of the issues, concepts, methods, and techniques associated with the diverse responsibilities expected from the contemporary IT professional as they evaluate products, conduct R&D and plan product feature development. It introduces students to major research paradigms, the principles of research design, research ethics, and research methods and techniques of data collection and analysis appropriate to research in the IT industry. It covers how to effectively communicate the results of a piece of research through the established method of short-form video. Skills developed and knowledge acquired from this unit will prepare students to plan, conduct and communicate research within an IT organisation, as well as to be knowledgeable and critical interpreters of research more generally.",
+      "learningOutcomes": [
+        "Demonstrate the ability to frame and design an effective research plan, with respect to all aspects of the research pipeline;",
+        "Review and critique the current state of art from a wide range of sources to inform a research question and appropriate methods;",
+        "Explain the ethical and professional issues that may arise in IT research and demonstrate practical ways to approach them when operationalizing research;",
+        "Evaluate, select and justify research methods and techniques of data collection and analysis appropriate to particular research designs and projects in sub-disciplines of IT, with a focus on both qualitative and quantitative data;",
+        "Identify and describe the potential intellectual property involved in a piece of IT research, including prior art and new knowledge;",
+        "Communicate research findings, demonstrating an understanding of diverse audiences and stakeholders in the research pipeline."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT4005"
+    },
+    {
+      "unitCode": "FIT5003",
+      "unitName": "Software security",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit aims to introduce the secure software development issues including secure software development life cycle, secure software design principles, secure coding practices, threat evaluation models, secure software testing, deployment and maintenance, software development and security policy integration. You are provided with a range of practical exercises and tasks to reinforce their skills including: identification of security bugs in programs written in different programming languages, design, implementation, and testing of secure concurrent and networked applications, identification of vulnerabilities in networked and mobile/wireless applications. In addition, you will learn input validation techniques to minimise security risks, man-in-the-middle attack techniques to be able to build more secure networked applications, practical secure software testing techniques to be able to test applications for security bugs.",
+      "learningOutcomes": [
+        "Investigate methods that are appropriate for the realisation software security;",
+        "Investigate and model the possible vulnerabilities and threats for a given application system;",
+        "Design, implement and produce test procedures and perform evaluation of software security features of concurrent and networked applications.",
+        "Analyse and evaluate software security related scenarios with reference to the code of ethics and professional practice."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5003"
+    },
+    {
+      "unitCode": "FIT5032",
+      "unitName": "Internet applications development",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "T3-57-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "This unit provides you with the knowledge, understanding and skills required to develop an application system which uses a web interface to a back-end database. The unit assumes a sound basic knowledge of programming and database concepts and skills as developed in the introductory units in these areas. The emphasis in the unit is on mastery of the key concepts and the basic knowledge and skills required to build this kind of application. The unit will provide you with an awareness of the wide range of technologies which are used to support this kind of application, but will examine only a limited number of these technologies to demonstrate the key concepts and their application.",
+      "learningOutcomes": [
+        "Demonstrate the impact of the history of web applications development on current web-technology;",
+        "Design, construct and publish web-database applications;",
+        "Analyse and critique the key technological issues confronting developers building web-database applications;",
+        "Test the key features of programming languages which are commonly used for developing web-database application;",
+        "Assess the MVC design pattern and construct a web-database application using the MVC design pattern;",
+        "Apply, analyse and critique a professional approach towards the development of web-database applications, considering data privacy and cybersecurity aspects.."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5032"
+    },
+    {
+      "unitCode": "FIT5037",
+      "unitName": "Network security",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE", "T3-57-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "Network security is an important part of any computer network and essential knowledge for IT professionals. This unit provides fundamental network security for IT students and professionals. It covers wired and wireless communication and network security, security at different layers, computer system security, network services and applications security, basic defence systems, cryptography for network security, techniques for identifying system vulnerabilities and penetration testing.",
+      "learningOutcomes": [
+        "Critically assess networked environments for security threats, vulnerabilities, and risks, and recommend improvements",
+        "Describe and critique common security standards and protocols for networked applications",
+        "Compare, select and apply cryptographic techniques for network security",
+        "",
+        "Identify security issues and network attacks relating to wired and wireless networks and take action to mitigate or neutralise potential issues and attacks",
+        "Design secure networked systems against intruders and malicious networked applications whilst adhering to ethical principles."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5037"
+    },
+    {
+      "unitCode": "FIT5046",
+      "unitName": "Mobile and distributed computing systems",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "S1-01-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "This unit provides a high level coverage of mobile and distributed computing. It will focus on the underlying concepts and standards of mobile computing. Students will learn techniques to design and develop mobile applications. The unit will also provide students with an understanding of current mobile and distributed technologies such as web services, Internet of Things, context-aware computing, location-awareness, wireless sensor networks and current research trends.",
+      "learningOutcomes": [
+        "Identify and describe different approaches and methods for building distributed and mobile computing systems;",
+        "Evaluate several models and approaches and select suitable mobile computing solution to a particular case;",
+        "Propose and develop a mobile or distributed system that is appropriate to a problem domain;",
+        "Identify the current research directions in the field and their impacts."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5046"
+    },
+    {
+      "unitCode": "FIT5124",
+      "unitName": "Emerging topics for cybersecurity in practice",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit aims to provide students with advanced knowledge of cybersecurity. Advancements in cloud services, mobile computing, and machine learning bring much convenience to our lives, improve our productivity in daily work, and provide us with personalised services. Despite many benefits, these new paradigms incur aggravated security and privacy concerns. End-users, enterprises, and governments face growing threats from sophisticated cyber attacks. This unit will study advanced cybersecurity technologies to address those threats in the current practice. Topics include design and implementation of advanced cryptosystems for high-performance applications such as encrypted databases, cryptographic protocols and hardware-assisted approaches for secure computing applications such as privacy-preserving machine learning, and practical post-quantum cryptography that can address the emerging threats of quantum computers. Learning activities will focus on understanding security and privacy issues in cloud and networked systems, encrypted search techniques, cloud storage security, secure multi-party computation techniques, trusted computing, and lattice-based cryptography.",
+      "learningOutcomes": [
+        "Identify security and privacy issues in cloud, networked, and machine learning systems;",
+        "Describe the operations of several advanced cryptosystems and protocols and their underlying assumptions and applications;",
+        "Apply hardware-assisted techniques to design secure and trustworthy systems;",
+        "Explain advanced attacks against cryptosystems and machine learning systems;",
+        "Analyse the strengths and limitations of emerging cybersecurity technologies"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5124"
+    },
+    {
+      "unitCode": "FIT5129",
+      "unitName": "Cyber operations",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-ON-CAMPUS"],
+      "unitDescription": "An effective cybersecurity practitioner requires knowledge from multiple disciplines, including computer science, mathematics, psychology, sociology, criminology, law, economics, and engineering. This unit considers the intersection of the technical, psychological, and sociological aspects involved in maintaining security within organisations. The unit will provide students with practical foundations in planning secure networks, policy-based operations, and the implementation of security. Students will also be introduced to best practices in dealing with security breaches. Critical reflective and practical skills will be acquired through reflective reading and considering real-world applications.",
+      "learningOutcomes": [
+        "Understand the intersection of the technical, psychological, sociological and ethical aspects involved in maintaining security within organisations.",
+        "Critically evaluate approaches to risk assessment and response to security breaches.",
+        "Perform a risk analysis and assessment",
+        "Confidently articulate your scholarly informed views on dealing with security breaches"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5129"
+    },
+    {
+      "unitCode": "FIT5137",
+      "unitName": "Advanced database technology",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-FLEXIBLE"],
+      "unitDescription": "This unit examines advanced database technology. This unit particularly covers three main types of advanced database technologies, including (i) document store, (ii) wide column store, and (iii) graph database. These three systems represent the broad spectrum of NoSQL databases. The underlying theoretical foundations, such as database modelling, transactions, and graph query processing will also be explored.",
+      "learningOutcomes": [
+        "Explain the concepts of data engineering;",
+        "Understand data preparation and transformation for data engineering;",
+        "Compare and contrast various map database technologies;",
+        "Demonstrate map database processing;",
+        "Implement map-based database systems;",
+        "Describe various types of emerging database technologies;",
+        "Construct advanced and secure database applications"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5137"
+    },
+    {
+      "unitCode": "FIT5145",
+      "unitName": "Foundations of data science",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit looks at processes, case studies and simple tools to understand the many facets of working with data, and the significant effort in Data Science over and above the core task of Data Analysis. Working with data as part of a business model and the lifecycle in an organisation is considered, as well as business processes and case studies. Data and its handling is also introduced: characteristic kinds of data and its collection, data storage and basic kinds of data preparation, data cleaning and data stream processing. Styles of data analysis and outcomes of successful data exploration and analysis are reviewed. Standards, tools and resources are also reviewed. Basic curation and management are reviewed: archival and architectural practice, policy, legal and ethical issues.",
+      "learningOutcomes": [
+        "Analyse the role of data in organisations, including curation and management issues;",
+        "Apply basic tools for performing exploratory data analysis and visualisation",
+        "Apply basic predictive modeling methods and integrate data analysis results to guide real-world decision making ;",
+        "Apply basic tools for managing and processing big data;",
+        "Identify data resources, data storage, processing requirements, and recognised standards for a data science project",
+        "Recognise and analyse ethical and security challenges inherent to data science."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5145"
+    },
+    {
+      "unitCode": "FIT5163",
+      "unitName": "Information and computer security",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "T3-57-OS-CHI-SEU-ON-CAMPUS"
+      ],
+      "unitDescription": "The unit aims to provide the students with in depth knowledge of techniques required to deal with security problems in information systems. The main areas of study include symmetric and asymmetric encryption techniques, cryptographic hash functions with related topics of message authentication codes and digital signatures. Study of techniques and algorithms for providing mutual trust include key management and distribution and user authentication to establish trust in the identity of communicating partner are also included. It looks at various management issues, including use and abuse of encryption, distributed systems authentication and integrity management. A range of security applications are used as examples. Students will learn how to apply cryptographic techniques in practice.",
+      "learningOutcomes": [
+        "Critically assess threats, vulnerabilities and risks to an organisation's information assets, and propose control technologies and techniques which can be applied to reduce the security risk;",
+        "Apply a variety of cryptographic algorithms to develop methods to disguise information to ensure its integrity, confidentiality and authenticity;",
+        "Apply a variety of methods for key management and distribution and analyse the risks associated with the various approaches;",
+        "Implement user authentication and access control mechanisms to create a security architecture to protect the assets of the information system;",
+        "Implement cryptographic techniques to preserve the security of information and evaluate its effectiveness;",
+        "Apply a variety of security control technologies to IT systems in an organisation."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5163"
+    },
+    {
+      "unitCode": "FIT5201",
+      "unitName": "Machine learning",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S1-01-OS-CHI-SEU-ON-CAMPUS",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces machine learning and the major kinds of statistical learning models and algorithms used in data analysis. Learning and the different kinds of learning will be covered and their usage will be discussed. The unit presents foundational concepts in machine learning and statistical learning theory, e.g. bias-variance, model selection, and how model complexity interplays with model's performance on unobserved data. A series of different models and algorithms will be presented and interpreted based on the foundational concepts: linear models for regression and classification (e.g. linear basis function models, logistic regression, Bayesian classifiers, generalised linear models), discriminative, probabilistic, and generative models, non-parametric models (e.g., k-nearest neighbour, Gaussian process regression), k-means and latent variable models (e.g. Gaussian mixture model), expectation-maximisation, and neural networks and deep learning. Moreover, implementation techniques will be introduced and practiced that allow to practically implement the introduced algorithms in a scalable manner with robust and standardised interfaces.",
+      "learningOutcomes": [
+        "Describe the components and theoretical concepts of statistical machine learning;",
+        "Assess and explain theoretically the performance of machine learning approaches and derive recommendations for algorithm and model selection;",
+        "Derive and implement the most widely used machine learning models and algorithms and apply them to real-world and synthetic datasets;",
+        "Develop scalable and standardised implementations of typical machine learning algorithms using suitable programming techniques and libraries.",
+        "Describe and discuss ethical challenges when deploying machine learning systems in practice."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5201"
+    },
+    {
+      "unitCode": "FIT5202",
+      "unitName": "Data processing for big data",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-MALAYSIA-EVENING",
+        "S2-01-CLAYTON-FLEXIBLE",
+        "SSB-01-CLAYTON-FLX-BLK"
+      ],
+      "unitDescription": "This unit focuses on big data processing, including volume, complexity, and velocity using the latest big data technologies. In big data volume, it covers large volume data processing using parallel technologies. In large dimensionality (or complexity), it covers various data analytics methods for parallel processing. For the velocity, it covers data streaming processing.",
+      "learningOutcomes": [
+        "identify and explain big data concepts and technologies;",
+        "write and interpret parallel database processing algorithms and methods;",
+        "apply common data analytics and machine learning algorithms in a big data environment in a secure and ethical manner;",
+        "use and evaluate streaming methods in big data processing;",
+        "use big data streaming technologies."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5202"
+    },
+    {
+      "unitCode": "FIT5215",
+      "unitName": "Deep learning",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S2-01-CLAYTON-FLEXIBLE",
+        "S2-01-MALAYSIA-ON-CAMPUS",
+        "T3-57-OS-CHI-SEU-ON-CAMPUS"
+      ],
+      "unitDescription": "Modern machine learning provides core underlying theory and techniques to data science and artificial intelligence. This unit is for students to develop practical knowledge of modern machine learning and deep learning and how they can be used in real-world settings such as image recognition or text clustering via neural embeddings. Learning activities will focus on designing machine learning systems, a broad landscape of supervised and unsupervised learning methods with a focus on modern deep learning knowledge for data analytics including deep neural networks, representation learning and embedding methods, and deep models used for time-series data which are rapidly used in science and industry.",
+      "learningOutcomes": [
+        "Describe the life cycle of a machine leaning system, what is involved in designing such systems and strategy to maintain them;",
+        "Describe what deep learning (DL) is, access what makes DL work or fail and where they should be applied;",
+        "Develop and apply deep neural networks, convolutional neural networks, recurrent neural networks and different optimisation strategies for training them;",
+        "Develop unsupervised feature learning models and representation learning models."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5215"
+    },
+    {
+      "unitCode": "FIT5216",
+      "unitName": "Modelling discrete optimisation problems",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "S1-01-OS-CHI-SEU-ON-CAMPUS"
+      ],
+      "unitDescription": "This unit introduces the fundamentals of modelling for discrete optimisation, focusing on how to rigorously express a discrete optimisation problem in a manner that is can be solved. Topics covered will include decision variables, basic constraints, modelling with sets, modelling with functions, multiple modelling viewpoints, modelling time, common modelling patterns, model translation, and debugging discrete optimisation models. We will examine complex real world problems and see how they can be translated so that they can be solved by modern discrete optimisation technology.",
+      "learningOutcomes": [
+        "model a discrete optimisation problem using a mix of basic and more advanced modelling techniques in a high level modelling language;",
+        "interpret and explain models written by others;",
+        "explain how models are mapped to solver-level input;",
+        "identify and fix errors in models;",
+        "evaluate the limitations, appropriateness and benefits of different modelling patterns for common problem classes;",
+        "evaluate and improve the efficiency of models by applying different model transformations."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5216"
+    },
+    {
+      "unitCode": "FIT5217",
+      "unitName": "Natural language processing",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": [
+        "S1-01-CLAYTON-FLEXIBLE",
+        "S1-01-MALAYSIA-ON-CAMPUS",
+        "T3-57-OS-CHI-SEU-ON-CAMPUS"
+      ],
+      "unitDescription": "Natural language processing (NLP) stands as a cornerstone in the information age, made even more riveting with the rise of Generative AI and the introduction of models like LLM. NLP not only supports artificial intelligence in grasping intricate language nuances but also heralds a range of innovative applications. This unit delves into the fundamental principles of NLP, covering essential techniques for analyzing language syntax and meaning. We will also explore the neural network underpinnings of contemporary language models in the context of important real-world problems such as Machine Translation. Furthermore, we'll delve into the theoretical and practical foundations of recent LLMs.",
+      "learningOutcomes": [
+        "organise core problems and applications in NLP;",
+        "design systems to tackle NLP problems;",
+        "Evaluation of NLP models from utility & ethics, and safety perspectives.",
+        "assess various recent approaches to NLP."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5217"
+    },
+    {
+      "unitCode": "FIT5221",
+      "unitName": "Intelligent image and video analysis",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "T3-57-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "This unit will discuss the fundamental and modern concepts in image and video analysis. The students will be introduced to the basics of image processing and low-level vision. The topics related to image formation, operations, features and segmentation will enable students with the understanding for developing vision enabled systems. Concepts related to convolutional neural networks (CNN) will be introduced and recent examples will be thoroughly analysed. Recent computer vision concepts will be discussed from a deep learning perspective. The unit will be balance between the theoretical and the practical implementation aspects of computer vision.",
+      "learningOutcomes": [
+        "describe image analysis and low-level vision",
+        "describe semantic image and video understanding techniques",
+        "describe convolutional neural networks and their applications",
+        "implement and extend existing computer vision algorithms",
+        "evaluate and compare techniques suitable for adding vision capability to unimodal and multimodal intelligent systems"
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5221"
+    },
+    {
+      "unitCode": "FIT5222",
+      "unitName": "Planning and automated reasoning",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS", "T3-57-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "This unit focuses on the foundations of automated planning and reasoning and their real-world applications. Autonomous agents are active agents that independently execute actions to achieve a certain goal or goals. These agents perceive their environment and reason and plan in order to effect their environment and achieve their goals. This is a very popular and highly researched AI approach and has many significant implications beyond the traditional area of AI (optimisation, robotics, scheduling, etc?). This course will give students the foundations to develop and design their own autonomous agents.",
+      "learningOutcomes": [
+        "explain the theoretical concepts of automated planning and reasoning techniques",
+        "apply agent modelling techniques to analyse, design and implement a small agent-based system",
+        "evaluate, design, and implement automated planning and reasoning technique",
+        "describe strengths and weaknesses of different automated planning and reasoning approaches for software agents",
+        "apply automated planning and concurrent programming techniques to non-trivial distributed problems.",
+        "Describe and discuss planning security challenges and solutions through goal recognition algorithms."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5222"
+    },
+    {
+      "unitCode": "FIT5223",
+      "unitName": "IT forensics",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S2-01-CLAYTON-ON-CAMPUS"],
+      "unitDescription": "This unit provides a broad coverage of (digital) IT forensics. You will examine definitions of evidence as they apply to investigations involving the seizure and examination of information technology devices. The unit will introduce you to various tools, techniques and algorithms that may be employed by investigators for acquisition, preservation, and analysis of evidence. Disk-based (local) and network (remote) forensic environments will be explored. You will also learn of the impediments and complicating factors that can threaten forensic investigations.",
+      "learningOutcomes": [
+        "explain the motivations and landscape of forensic investigations in an IT context;",
+        "explain the relevant legal definitions and frameworks that apply to digital forensic investigations;",
+        "select appropriate tools and algorithms to perform forensic investigations and acquire relevant evidence;",
+        "apply and evaluate forensic techniques in local media-based and network-based environments;",
+        "report on forensic findings in a clear and concise manner;",
+        "demonstrate how digital forensics can be employed by Police and Tax officials in a court of law."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5223"
+    },
+    {
+      "unitCode": "FIT5225",
+      "unitName": "Cloud computing and security",
+      "unitLevel": "5",
+      "unitType": null,
+      "faculty": "Faculty of Information Technology",
+      "courses": ["Software engineering"],
+      "creditPoints": "6",
+      "offerings": ["S1-01-CLAYTON-FLEXIBLE", "S1-01-OS-CHI-SEU-ON-CAMPUS"],
+      "unitDescription": "Cloud computing has emerged as a backend solution for many modern IT applications. It offers on-demand resources and subscription-based services in a pay-as-you-go model to individual and corporate end-users. Cloud computing facilitates setup, implementation, maintenance, and management of the integrated computation and storage services. This unit will enable students to develop a basic knowledge of cloud computing technology and design and implement cloud applications using cloud services. It also introduces the security and privacy issues of the off-the-shelf cloud services. Learning activities will focus on understanding cloud delivery and service models, identifying various cloud platforms, and fundamental cloud technologies such as virtualisation, containers, serverless, web services and their security challenges.",
+      "learningOutcomes": [
+        "describe fundamental principles and paradigms of cloud computing;",
+        "identify appropriate design choices when developing real-world cloud computing applications;",
+        "apply different cloud programming methods and tools;",
+        "demonstrate a comprehensive understanding of virtualisation and container technologies;",
+        "design and implement a highly scalable cloud-based application;",
+        "analyse and evaluate the security of the current cloud services and in-cloud applications."
+      ],
+      "handbookURL": "https://handbook.monash.edu/2024/units/FIT5225"
+    }
+  ]
+}
