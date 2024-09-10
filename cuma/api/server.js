@@ -74,6 +74,10 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-signup.html'));
 });
 
+app.get('/additional-info', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-additional-info.html'));
+});
+
 app.get('/signup/mfa-init', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'mfa-init.html'));
 });

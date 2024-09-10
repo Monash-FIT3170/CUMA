@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Information</title>
+    <link rel="stylesheet" href="styles/auth.css">
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/authentication.js" defer></script>
+    <script src="auth.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="content">
+                <h1>Welcome to</h1>
+                <img src="images/logo.png" alt="CUMA Logo">
+                <p>CUMA is a tool to help course directors facilitate the transition of students between universities and allow students to explore options for studying abroad by providing information on mapped/similar units between universities.</p>
+            </div>
+        </div>
+        <div class="right-section">
+            <div class="form">
+                <h2>Additional Information</h2>
+                <div id="user-type-selection">
+                    <p>Please select your role:</p>
+                    <button class="primary-btn" onclick="showForm('student')">Student</button>
+                    <button class="primary-btn" onclick="showForm('course-director')">Course Director</button>
+
+                </div>
+
+                <form id="student-form" style="display: none;">
+                    <h3>Student Information</h3>
+                    <div class="input-container">
+                        <input type="date" id="student-dob" required>
+                        <label for="student-dob">Date of Birth</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="student-university" required>
+                        <label for="student-university">University</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="student-major" required>
+                        <label for="student-major">Major</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="student-id" required>
+                        <label for="student-id">Student ID</label>
+                    </div>
+                    <button type="submit" class="primary-btn">Submit</button>
+                    <button type="button" class="secondary-btn" onclick="showRoleSelection()">Back</button>
+                </form>
+
+                <form id="course-director-form" style="display: none;">
+                    <h3>Course Director Information</h3>
+                    <div class="input-container">
+                        <input type="date" id="director-dob" required>
+                        <label for="director-dob">Date of Birth</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="director-university" required>
+                        <label for="director-university">University</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="director-title" required>
+                        <label for="director-title">Professional Title</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="director-department" required>
+                        <label for="director-department">Department</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="director-faculty" required>
+                        <label for="director-faculty">Faculty</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="director-staff-id" required>
+                        <label for="director-staff-id">Staff ID</label>
+                    </div>
+                    <button type="submit" class="primary-btn">Submit</button>
+                    <button type="button" class="secondary-btn" onclick="showRoleSelection()">Back</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

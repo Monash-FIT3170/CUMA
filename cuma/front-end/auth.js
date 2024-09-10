@@ -121,3 +121,68 @@ document.addEventListener('DOMContentLoaded', () => {
         verifyLoginTOTP.addEventListener('click', verifyLoginTOTPToken)
     }
 });
+
+// function form to show the role selection
+function showForm(userType) {
+    document.getElementById('user-type-selection').style.display = 'none';
+    if (userType === 'student') {
+        document.getElementById('student-form').style.display = 'block';
+        document.getElementById('course-director-form').style.display = 'none';
+    } else {
+        document.getElementById('student-form').style.display = 'none';
+        document.getElementById('course-director-form').style.display = 'block';
+    }
+}
+
+// function to handle the student additional info form submission
+function handleStudentFormSubmission(e) {
+    e.preventDefault();
+    const dateOfBirth = document.getElementById('student-dob').value;
+    const university = document.getElementById('student-university').value.trim();
+    const major = document.getElementById('student-major').value.trim();
+    const studentID = document.getElementById('student-id').value.trim();
+
+    // TODO: Add validation for these fields and send to backend
+    console.log('Student data:', { dateOfBirth, university, major, studentID });
+
+    // TODO: Handle the response from the backend
+    // If successful, redirect to the next step (e.g., MFA setup)
+    // /signup/mfa-init'
+}
+
+// function to handle the course director additional info form submission
+function handleDirectorFormSubmission(e) {
+    e.preventDefault();
+    const dateOfBirth = document.getElementById('director-dob').value;
+    const university = document.getElementById('director-university').value.trim();
+    const professionalTitle = document.getElementById('director-title').value.trim();
+    const department = document.getElementById('director-department').value.trim();
+    const faculty = document.getElementById('director-faculty').value.trim();
+    const staffID = document.getElementById('director-staff-id').value.trim();
+
+    // TODO: Add validation for these fields and send to backend
+    console.log('Course Director data:', { dateOfBirth, university, professionalTitle, department, faculty, staffID });
+
+    // TODO: Handle the response from the backend
+    // If successful, redirect to the next step (e.g., MFA setup)
+    // /signup/mfa-init'
+}
+
+// function to show the role selection and hide the forms
+function showRoleSelection() {
+    document.getElementById('user-type-selection').style.display = 'block';
+    document.getElementById('student-form').style.display = 'none';
+    document.getElementById('course-director-form').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const studentForm = document.getElementById('student-form');
+    if (studentForm) {
+        studentForm.addEventListener('submit', handleStudentFormSubmission);
+    }
+
+    const directorForm = document.getElementById('course-director-form');
+    if (directorForm) {
+        directorForm.addEventListener('submit', handleDirectorFormSubmission);
+    }
+});
