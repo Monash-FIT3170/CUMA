@@ -1,141 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bachelor of Software Engineering - Monash University</title>
-  <link rel="stylesheet" href="styles/general.css">
-  <script src="../backend/namespace.js" defer></script>
-  <script src="../backend/unitConnection.js" defer></script>
-  <script src="../backend/unit.js" defer></script>
-  <script src="../backend/authentication.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bachelor of Software Engineering - Monash University</title>
 
-  <link rel="stylesheet" href="styles/header.css">
-  <link rel="stylesheet" href="styles/nav.css">
-  <script src="./index.js" defer></script>
-  <script src="filter.js"></script>
+    <!-- External Styles -->
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/nav.css">
 
-  <!-- MDL CSS -->
-  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-  <!-- MDL JavaScript -->
-  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- External Scripts -->
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/unitConnection.js" defer></script>
+    <script src="../backend/unit.js" defer></script>
+    <script src="../backend/authentication.js" defer></script>
+    <script src="./index.js" defer></script>
+    <script src="filter.js"></script>
+
+
 </head>
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-  <!-- Header -->
-  <header class="mdl-layout__header">
-    <div class="mdl-layout__header-row">
-      <!-- Burger Icon -->
-      <button class="mdl-layout__drawer-button mdl-button mdl-js-button mdl-button--icon" onclick="toggleNav()">
-        <i class="material-icons">menu</i>
-      </button>
-      <!-- Title -->
-      <span class="mdl-layout-title">CUMA</span>
-      <div class="mdl-layout-spacer"></div>
-      <!-- User Info -->
-      <div class="user-info mdl-navigation">
-        <!-- Temporary info, please fix if required -->
-      </div>
-    </div>
-  </header>
+<header>
+    <button onclick="toggleNav()" class="openbtn">
+        <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
+    </button>
+    <h1>CUMA</h1>
+    <div class="user-info"></div>
+</header>
 
-  <!-- Sidebar (Drawer) -->
-  <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">Menu</span>
-    <nav class="mdl-navigation">
-      <a href="index.html" class="mdl-navigation__link">
-        <i class="material-icons">map</i>Mapping
-      </a>
-      <a href="nav-add-unit.html" class="mdl-navigation__link">
-        <i class="material-icons">add</i>Add Unit
-      </a>
-      <a href="nav-unit-info.html" class="mdl-navigation__link">
-        <i class="material-icons">info</i>Unit Info
-      </a>
-      <a href="nav-profile.html" class="mdl-navigation__link">
-        <i class="material-icons">person</i>Profile
-      </a>
-      <a href="nav-setting.html" class="mdl-navigation__link">
-        <i class="material-icons">settings</i>Settings
-      </a>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="send-connections-button" onclick="userSendConnections()">
-        Send Connections
-      </button>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="logout-button" onclick="userLogout()">
-        Logout
-      </button>
-    </nav>
-  </div>
-
-  <!-- Main Content -->
-  <main class="mdl-layout__content">
-    <div class="page-content">
-      <!-- Course Units Section -->
-      <section class="course-info mdl-shadow--2dp">
-        <h2>Bachelor of Software Engineering - Monash University</h2>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="unit-search">
-          <label class="mdl-textfield__label" for="unit-search">Search Unit</label>
-        </div>
-
-        <div class="course-units">
-          <h3>Course Units</h3>
-          <div class="unit-list-wrapper">
-            <div class="unit-list" id="unit-list">
-              <!-- Dynamic units will be appended here -->
-            </div>
-          </div>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect add-unit" onclick="toggleAddUnitForm()" style="display: none;">
+<nav class="sidebar" id="sidebar">
+    <div id="sidebar-content">
+        <a href="index.html" class="sidebar-link">
+            <img src="images/mapping.png" class="sidebar-img">
+            Mapping
+        </a>
+        <a href="nav-add-unit.html" class="sidebar-link">
+            <img src="images/icons8-navigation-96.png" class="sidebar-img">
             Add Unit
-          </button>
+        </a>
+        <a href="nav-unit-info.html" class="sidebar-link">
+            <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img">
+            Unit Info
+        </a>
+        <a href="nav-profile.html" class="sidebar-link">
+            <img src="images/icons8-person-96.png" class="sidebar-img">
+            Profile
+        </a>
+        <a href="nav-setting.html" class="sidebar-link">
+            <img src="images/icons8-cog-96.png" class="sidebar-img">
+            Settings
+        </a>
+        <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
+        <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
+    </div>
+</nav>
+
+<main id="main">
+    <section class="course-info">
+        <h2>Bachelor of Software Engineering - Monash University</h2>
+        <input type="text" placeholder="Search Unit" id="unit-search">
+        <div class="course-units">
+            <h3>Course Units</h3>
+            <div class="unit-list-wrapper">
+                <div class="unit-list" id="unit-list">
+                    <!-- Dynamic units will be appended here -->
+                </div>
+            </div>
+            <button class="add-unit" onclick="toggleModal()">Add Unit</button>
         </div>
-      </section>
+    </section>
 
-      <!-- Add Unit Section -->
-      <section class="add-unit-form mdl-shadow--2dp" id="add-unit-form" style="display: none;">
-        <h3>Add Unit to Bachelor of Software Engineering</h3>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="form-unit-name" required>
-          <label class="mdl-textfield__label" for="form-unit-name">Unit Name</label>
+    <!-- Modal for Add Unit -->
+    <div id="add-unit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleModal()">&times;</span>
+            <h3>Add Unit to Bachelor of Software Engineering</h3>
+            <div class="input-container">
+                <input type="text" id="form-unit-name" required>
+                <label for="form-unit-name">Unit Name</label>
+            </div>
+            <div class="input-container">
+                <input type="text" id="form-unit-code" required>
+                <label for="form-unit-code">Unit Code</label>
+            </div>
+            <div class="input-container">
+                <select id="form-unit-type" required>
+                    <option value="" disabled selected>Select Unit Type</option>
+                    <option value="Core">Core</option>
+                    <option value="Elective">Elective</option>
+                </select>
+                <label for="form-unit-type">Unit Type</label>
+            </div>
+            <div class="input-container">
+                <input type="number" id="form-unit-credit" required>
+                <label for="form-unit-credit">Unit Credit Points</label>
+            </div>
+            <div class="input-container">
+                <input type="number" id="form-unit-level" required>
+                <label for="form-unit-level">Unit Level</label>
+            </div>
+            <div class="input-container">
+                <textarea id="form-unit-overview" required></textarea>
+                <label for="form-unit-overview">Unit Overview</label>
+            </div>
+            <button onclick="addUnit()">Add Unit to Course</button>
+            <button onclick="toggleModal()">Cancel</button>
         </div>
+    </div>
 
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="form-unit-code" required>
-          <label class="mdl-textfield__label" for="form-unit-code">Unit Code</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <select class="mdl-textfield__input" id="form-unit-type" required>
-            <option value="" disabled selected>Select Unit Type</option>
-            <option value="Core">Core</option>
-            <option value="Elective">Elective</option>
-          </select>
-          <label class="mdl-textfield__label" for="form-unit-type">Unit Type</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="number" id="form-unit-credit" required>
-          <label class="mdl-textfield__label" for="form-unit-credit">Unit Credit Points</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="number" id="form-unit-level" required>
-          <label class="mdl-textfield__label" for="form-unit-level">Unit Level</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <textarea class="mdl-textfield__input" id="form-unit-overview" required></textarea>
-          <label class="mdl-textfield__label" for="form-unit-overview">Unit Overview</label>
-        </div>
-
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="addUnit()">Add Unit to Course</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="toggleAddUnitForm()">Cancel</button>
-      </section>
-
-      <!-- Unit Details Section -->
-      <section class="unit-details mdl-shadow--2dp" id="unit-details">
+    <!-- Unit Details Section -->
+    <section class="unit-details" id="unit-details">
         <h3>Selected Unit Information</h3>
         <h3 id="display-unit-title"></h3>
         <p><strong>Type:</strong> <span id="display-unit-type">N/A</span></p>
@@ -143,68 +118,85 @@
         <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
         <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
         <p id="display-unit-description">Select a unit to see the details</p>
+        <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
+        <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
+        <button onclick="toggleConnectionModal()">Add Unit Connection</button>
+    </section>
 
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="toggleAddConnection()">Add Unit Connection</button>
-      </section>
-
-      <!-- Mapped Units Section -->
-      <section class="mapped-units mdl-shadow--2dp">
+    <!-- Mapped Units Section -->
+    <section class="mapped-units">
         <h4>Mapped Units</h4>
         <div id="unit-connection-list">
-          <!-- Mapped units will be appended here -->
+            <!-- Mapped units will be appended here -->
         </div>
-      </section>
+    </section>
 
-      <!-- Add Unit Connection Section -->
-      <section class="add-connection-form mdl-shadow--2dp" id="add-connection-form" style="display: none;">
-        <h3>Add Unit Connection</h3>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="form-connection-name" required>
-          <label class="mdl-textfield__label" for="form-connection-name">Unit Name</label>
+    <!-- Modal for Add Unit Connection -->
+    <div id="add-connection-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleConnectionModal()">&times;</span>
+            <h3>Add Unit Connection</h3>
+            <div class="input-container">
+                <input type="text" id="form-connection-name" required>
+                <label for="form-connection-name">Unit Name</label>
+            </div>
+            <div class="input-container">
+                <input type="text" id="form-connection-code" required>
+                <label for="form-connection-code">Unit Code</label>
+            </div>
+            <div class="input-container">
+                <input type="text" id="form-connection-institution" required>
+                <label for="form-connection-institution">Institution</label>
+            </div>
+            <div class="input-container">
+                <select id="form-connection-type" required>
+                    <option value="" disabled selected>Select Unit Type</option>
+                    <option value="Core">Core</option>
+                    <option value="Elective">Elective</option>
+                </select>
+                <label for="form-connection-type">Unit Type</label>
+            </div>
+            <div class="input-container">
+                <input type="number" id="form-connection-credit" required>
+                <label for="form-connection-credit">Unit Credit Points</label>
+            </div>
+            <div class="input-container">
+                <input type="number" id="form-connection-level" required>
+                <label for="form-connection-level">Unit Level</label>
+            </div>
+            <div class="input-container">
+                <textarea id="form-connection-overview" required></textarea>
+                <label for="form-connection-overview">Unit Overview</label>
+            </div>
+            <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
+            <button onclick="toggleConnectionModal()">Cancel</button>
         </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="form-connection-code" required>
-          <label class="mdl-textfield__label" for="form-connection-code">Unit Code</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="form-connection-institution" required>
-          <label class="mdl-textfield__label" for="form-connection-institution">Institution</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <select class="mdl-textfield__input" id="form-connection-type" required>
-            <option value="" disabled selected>Select Unit Type</option>
-            <option value="Core">Core</option>
-            <option value="Elective">Elective</option>
-          </select>
-          <label class="mdl-textfield__label" for="form-connection-type">Unit Type</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="number" id="form-connection-credit" required>
-          <label class="mdl-textfield__label" for="form-connection-credit">Unit Credit Points</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="number" id="form-connection-level" required>
-          <label class="mdl-textfield__label" for="form-connection-level">Unit Level</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <textarea class="mdl-textfield__input" id="form-connection-overview" required></textarea>
-          <label class="mdl-textfield__label" for="form-connection-overview">Unit Overview</label>
-        </div>
-
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
-      </section>
     </div>
-  </main>
-</div>
+
+</main>
+
+<script>
+    function toggleModal() {
+        const modal = document.getElementById("add-unit-modal");
+        modal.style.display = modal.style.display === "block" ? "none" : "block";
+    }
+
+    function toggleConnectionModal() {
+        const modal = document.getElementById("add-connection-modal");
+        modal.style.display = modal.style.display === "block" ? "none" : "block";
+    }
+
+    window.onclick = function(event) {
+        const unitModal = document.getElementById("add-unit-modal");
+        const connectionModal = document.getElementById("add-connection-modal");
+
+        if (event.target === unitModal) {
+            unitModal.style.display = "none";
+        }
+        if (event.target === connectionModal) {
+            connectionModal.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>
