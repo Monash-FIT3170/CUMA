@@ -1,10 +1,21 @@
 /* Global styles */
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6f9;
+    font-family: Arial;
+    font-size: 16px;
+    color: #333;
 }
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+}
+
+p, input, button {
+    font-weight: 400;
+}
+/* Import Inter font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 
 /* header {
     background-color: #4da5f5;
@@ -126,18 +137,35 @@ main {
 }
 
 
+/* Button Styles */
 button, .add-unit {
-    background-color: #4da5f5;
+    background-color: #008CBA;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 200px; /* Set max width */
+    width: auto;      /* Auto width to fit the content */
 }
 
+/* On hover, buttons will be slightly brighter */
 button:hover, .add-unit:hover {
-    background-color: #3b90d5;
+    background-color: #005F7A;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02); /* Slight scaling on hover */
 }
+
+/* Adjust for smaller devices */
+@media (max-width: 768px) {
+    button, .add-unit {
+        max-width: 100%; /* On smaller screens, buttons can take up full width */
+        padding: 12px;
+    }
+}
+
 
 .input-container {
     position: relative;
@@ -313,14 +341,14 @@ header {
 }
 
 .burger-bar-icon {
-    
+
     width: 40px;
     height: 40px;
     margin-right: 20px;
 }
 
 .user-info {
-    margin-left: auto; 
+    margin-left: auto;
     text-align: right;
 }
 

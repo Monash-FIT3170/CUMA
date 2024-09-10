@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bachelor of Software Engineering - Monash University</title>
-
-    <!-- External Styles -->
     <link rel="stylesheet" href="styles/general.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/nav.css">
-
-    <!-- External Scripts -->
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/unitConnection.js" defer></script>
     <script src="../backend/unit.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
-    <script src="./index.js" defer></script>
-    <script src="filter.js"></script>
 
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/nav.css">
+    <script src="./index.js" defer></script>>
+    <script src="filter.js"></script>
 
 </head>
 <body>
@@ -26,11 +22,13 @@
         <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
     </button>
     <h1>CUMA</h1>
+    <!--Temporary info, please fix if required-->
     <div class="user-info"></div>
 </header>
 
 <nav class="sidebar" id="sidebar">
     <div id="sidebar-content">
+
         <a href="index.html" class="sidebar-link">
             <img src="images/mapping.png" class="sidebar-img">
             Mapping
@@ -51,12 +49,14 @@
             <img src="images/icons8-cog-96.png" class="sidebar-img">
             Settings
         </a>
+        <!--Temporary buttons, please fix if required-->
         <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
-        <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
+        <button class="sidebar-button" id="logout-button", onclick="userLogout()">Logout</button>
     </div>
 </nav>
 
 <main id="main">
+    <!-- Course Units Section -->
     <section class="course-info">
         <h2>Bachelor of Software Engineering - Monash University</h2>
         <input type="text" placeholder="Search Unit" id="unit-search">
@@ -67,49 +67,55 @@
                     <!-- Dynamic units will be appended here -->
                 </div>
             </div>
-            <button class="add-unit" onclick="toggleModal()">Add Unit</button>
+            <button class="add-unit" onclick="toggleAddUnitForm()" >Add Unit</button>
         </div>
     </section>
 
-    <!-- Modal for Add Unit -->
-    <div id="add-unit-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="toggleModal()">&times;</span>
-            <h3>Add Unit to Bachelor of Software Engineering</h3>
-            <div class="input-container">
-                <input type="text" id="form-unit-name" required>
-                <label for="form-unit-name">Unit Name</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="form-unit-code" required>
-                <label for="form-unit-code">Unit Code</label>
-            </div>
-            <div class="input-container">
-                <select id="form-unit-type" required>
-                    <option value="" disabled selected>Select Unit Type</option>
-                    <option value="Core">Core</option>
-                    <option value="Elective">Elective</option>
-                </select>
-                <label for="form-unit-type">Unit Type</label>
-            </div>
-            <div class="input-container">
-                <input type="number" id="form-unit-credit" required>
-                <label for="form-unit-credit">Unit Credit Points</label>
-            </div>
-            <div class="input-container">
-                <input type="number" id="form-unit-level" required>
-                <label for="form-unit-level">Unit Level</label>
-            </div>
-            <div class="input-container">
-                <textarea id="form-unit-overview" required></textarea>
-                <label for="form-unit-overview">Unit Overview</label>
-            </div>
-            <button onclick="addUnit()">Add Unit to Course</button>
-            <button onclick="toggleModal()">Cancel</button>
-        </div>
-    </div>
+    <!-- Add Unit Section -->
+    <section class="add-unit-form" id="add-unit-form" >
+        <h3>Add Unit to Bachelor of Software Engineering</h3>
 
-    <!-- Unit Details Section -->
+        <!-- Form: Unit Name -->
+        <div class="input-container">
+            <input type="text" id="form-unit-name" required>
+            <label for="form-unit-name">Unit Name</label>
+        </div>
+
+        <!-- Form: Unit Code -->
+        <div class="input-container">
+            <input type="text" id="form-unit-code" required>
+            <label for="form-unit-code">Unit Code</label>
+        </div>
+
+        <!-- Form: Unit Type Dropdown -->
+        <div class="input-container">
+            <select id="form-unit-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-unit-type">Unit Type</label>
+        </div>
+
+        <!-- Form: Other Fields -->
+        <div class="input-container">
+            <input type="number" id="form-unit-credit" required>
+            <label for="form-unit-credit">Unit Credit Points</label>
+        </div>
+        <div class="input-container">
+            <input type="number" id="form-unit-level" required>
+            <label for="form-unit-level">Unit Level</label>
+        </div>
+        <div class="input-container">
+            <textarea id="form-unit-overview" required></textarea>
+            <label for="form-unit-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addUnit()">Add Unit to Course</button>
+        <button onclick="toggleAddUnitForm()">Cancel</button>
+    </section>
+
+    <!-- Unit Details Display Section -->
     <section class="unit-details" id="unit-details">
         <h3>Selected Unit Information</h3>
         <h3 id="display-unit-title"></h3>
@@ -118,10 +124,12 @@
         <p><strong>Level:</strong> <span id="display-unit-level">N/A</span></p>
         <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
         <p id="display-unit-description">Select a unit to see the details</p>
-        <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;">Modify Unit</button>
-        <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
-        <button onclick="toggleConnectionModal()">Add Unit Connection</button>
+
+        <button id="modify-unit-button" onclick="modifyUnit()" >Modify Unit</button>
+        <button id="delete-unit-button" onclick="deleteUnit()" >Delete Unit</button>
+        <button onclick="toggleAddConnection()">Add Unit Connection</button>
     </section>
+
 
     <!-- Mapped Units Section -->
     <section class="mapped-units">
@@ -131,72 +139,77 @@
         </div>
     </section>
 
-    <!-- Modal for Add Unit Connection -->
-    <div id="add-connection-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="toggleConnectionModal()">&times;</span>
-            <h3>Add Unit Connection</h3>
-            <div class="input-container">
-                <input type="text" id="form-connection-name" required>
-                <label for="form-connection-name">Unit Name</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="form-connection-code" required>
-                <label for="form-connection-code">Unit Code</label>
-            </div>
-            <div class="input-container">
-                <input type="text" id="form-connection-institution" required>
-                <label for="form-connection-institution">Institution</label>
-            </div>
-            <div class="input-container">
-                <select id="form-connection-type" required>
-                    <option value="" disabled selected>Select Unit Type</option>
-                    <option value="Core">Core</option>
-                    <option value="Elective">Elective</option>
-                </select>
-                <label for="form-connection-type">Unit Type</label>
-            </div>
-            <div class="input-container">
-                <input type="number" id="form-connection-credit" required>
-                <label for="form-connection-credit">Unit Credit Points</label>
-            </div>
-            <div class="input-container">
-                <input type="number" id="form-connection-level" required>
-                <label for="form-connection-level">Unit Level</label>
-            </div>
-            <div class="input-container">
-                <textarea id="form-connection-overview" required></textarea>
-                <label for="form-connection-overview">Unit Overview</label>
-            </div>
-            <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
-            <button onclick="toggleConnectionModal()">Cancel</button>
+
+    <!-- Add Unit Connection Section -->
+    <section class="add-connection-form" id="add-connection-form" >
+        <h3>Add Unit Connection</h3>
+
+        <!-- Form Fields -->
+        <div class="input-container">
+            <input type="text" id="form-connection-name" required>
+            <label for="form-connection-name">Unit Name</label>
         </div>
-    </div>
+
+        <div class="input-container">
+            <input type="text" id="form-connection-code" required>
+            <label for="form-connection-code">Unit Code</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="form-connection-institution" required>
+            <label for="form-connection-institution">Institution</label>
+        </div>
+
+        <div class="input-container">
+            <select id="form-connection-type" required>
+                <option value="" disabled selected>Select Unit Type</option>
+                <option value="Core">Core</option>
+                <option value="Elective">Elective</option>
+            </select>
+            <label for="form-connection-type">Unit Type</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-credit" required>
+            <label for="form-connection-credit">Unit Credit Points</label>
+        </div>
+
+        <div class="input-container">
+            <input type="number" id="form-connection-level" required>
+            <label for="form-connection-level">Unit Level</label>
+        </div>
+
+        <div class="input-container">
+            <textarea id="form-connection-overview" required></textarea>
+            <label for="form-connection-overview">Unit Overview</label>
+        </div>
+
+        <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
+        <button onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
+    </section>
+
+    <section class="add-connection-form" id="add-connection" >
+        <button onclick="toggleAddConnectionExisitingUnit()">Add to exisiting unit</button>
+        <button onclick="toggleAddConnectionNewUnit()">Add to a new unit</button>
+    </section>
+
+    <section class="add-connection-form" id="add-connection-existing-unit-form" >
+        <h3>Search Existing Unit</h3>
+        <input type="text" placeholder="Search Unit" id="unit-search-bar-connection">
+        <button onclick="toggleAddConnectionExistingUnitForm()">Cancel</button>
+        <div class="foeign-units-units">
+            <h3>Foreign Units</h3>
+            <div class="unit-list-wrapper">
+                <div class="unit-list" id="foreign-unit-list">
+                    <!-- Dynamic units will be appended here -->
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
 
 </main>
-
-<script>
-    function toggleModal() {
-        const modal = document.getElementById("add-unit-modal");
-        modal.style.display = modal.style.display === "block" ? "none" : "block";
-    }
-
-    function toggleConnectionModal() {
-        const modal = document.getElementById("add-connection-modal");
-        modal.style.display = modal.style.display === "block" ? "none" : "block";
-    }
-
-    window.onclick = function(event) {
-        const unitModal = document.getElementById("add-unit-modal");
-        const connectionModal = document.getElementById("add-connection-modal");
-
-        if (event.target === unitModal) {
-            unitModal.style.display = "none";
-        }
-        if (event.target === connectionModal) {
-            connectionModal.style.display = "none";
-        }
-    }
-</script>
 </body>
 </html>
