@@ -64,7 +64,7 @@ async function authenticateToken(req, res, next) {
         };
 
     } else {
-        return res.redirect("/login?error=expired-tokens");
+        return res.redirect("/login");
     };
 }
 export default authenticateToken;

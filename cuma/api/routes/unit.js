@@ -11,6 +11,7 @@ import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
 import authenticateToken from '../middleware/authenticateToken.js';
 import authorize from '../middleware/roleAuth.js';
+import gemini from '../../ai/geminiTest.js';
 
 const router = express.Router();
 
@@ -85,6 +86,8 @@ router.get('/getAllFromUni', authenticateToken, async (req, res) => {
 
         // get connections
         return res.json(result);
+
+
     }
     catch (error) {
         console.error(error);
@@ -137,13 +140,20 @@ router.post('/', authenticateToken, authorize(['course_director']), async (req, 
             return res.status(400).json("unit already exists")
         }
 
+        // call gemini to create keywords for the unit
+        const aiGenUnitKeyword = await gemini(unitInfoReq.unitDescription)
+
         // add the unit
         const result = await units.insertOne(
             {
                 "universityName": universityNameReq,
+                "aiGenKeyWord": aiGenUnitKeyword,
                 ...unitInfoReq
             }
         )
+
+
+
         return res.status(200).json(result);
     } catch (error) {
         // Handle errors
@@ -231,7 +241,7 @@ router.put('/:unitCode', authenticateToken, authorize(['course_director']), asyn
 
         // get requestBody
         const universityName = req.body.universityName;
-        const newUnitInfo = req.body.newUnitInfo
+        var newUnitInfo = req.body.newUnitInfo
 
         // Extract the unitcode from request parameters
         const unitCode = req.params.unitCode;
@@ -240,18 +250,29 @@ router.put('/:unitCode', authenticateToken, authorize(['course_director']), asyn
         const database = client.db('CUMA');
         const units = database.collection(collectionName);
 
+        // gemini
+        var aiGenKeyWord = null;
+        if (newUnitInfo.unitDescription) {
+            aiGenKeyWord = await gemini(newUnitInfo.unitDescription);
+            newUnitInfo = {
+                ...newUnitInfo,
+                aiGenKeyWord: aiGenKeyWord
+            };
+        }
+
         // update the unit
         const result = await units.updateOne({
             unitCode: unitCode,
-            universityName: universityName
+            universityName: universityName,
         },
-            { $set: newUnitInfo }
+            { $set: newUnitInfo}
         );
 
         // if the unitCode does not exist
         if (result.matchedCount === 0) {
             return res.status(400).json("This unit does not exist")
         }
+
 
         return res.status(200).json(result);
     }
@@ -336,3 +357,4 @@ router.get('/getAllNotInUni', authenticateToken, async (req, res) => {
 
 
 export default router;
+

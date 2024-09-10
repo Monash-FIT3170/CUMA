@@ -236,6 +236,7 @@ async function repopulateResults() {
     {
       // Display the updated mapped units for the selected unit
       displayMappedUnits(selectedUnitCode);
+
     }
 
 
@@ -621,9 +622,14 @@ async function fetchAndDisplayUserInfo() {
     try {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
+            // Populate the profile fields with the fetched data
+            document.getElementById('profile-name').value = response.data.name;
+            document.getElementById('profile-email').value = response.data.email;
+            document.getElementById('profile-role').value = response.data.role;
+
+            // Also update any other parts of the UI that depend on user info
             updateUserDisplay(response.data);
-            userRole = response.data.role;
-            updateUIBasedOnRole();
+            updateUIBasedOnRole(response.data.role);
         } else {
             console.error('Failed to fetch user info:', response);
         }
@@ -632,32 +638,225 @@ async function fetchAndDisplayUserInfo() {
     }
 }
 
+function getRoleName(role) {
+    const roleMap = {
+        course_director: "Course Director",
+        general_user: "General User",
+        student: "Student"
+    };
+    return roleMap[role] || "Unknown Role";
+}
+
+
 function updateUserDisplay(userData) {
     const userInfoDiv = document.querySelector('.user-info');
     if (userInfoDiv) {
+        const roleName = getRoleName(userData.role);
         userInfoDiv.innerHTML = `
-            <p>User: <strong>${userData.name}</strong></p>
-            <p>Role: <strong>${userData.role}</strong></p>
+            <p><strong>User</strong>: ${userData.name}</p>
+            <p><strong>Role</strong>: ${roleName}</p>
         `;
     } else {
         console.error('User info display container not found.');
     }
 }
 
-function updateUIBasedOnRole() {
+function updateUIBasedOnRole(userRole) {
     const addUnitButton = document.querySelector('.add-unit');
     const modifyUnitButton = document.getElementById('modify-unit-button');
     const deleteUnitButton = document.getElementById('delete-unit-button');
+    const sendConnectionsButton = document.getElementById('send-connections-button');
 
-    if (userRole === 'student' || userRole !== 'course_director') {
-        if (addUnitButton) addUnitButton.style.display = 'none';
-        if (modifyUnitButton) modifyUnitButton.style.display = 'none';
-        if (deleteUnitButton) deleteUnitButton.style.display = 'none';
-    } else {
-        if (addUnitButton) addUnitButton.style.display = 'block';
+    // hide all buttons
+    if (addUnitButton) addUnitButton.style.display = 'none';
+    if (modifyUnitButton) modifyUnitButton.style.display = 'none';
+    if (deleteUnitButton) deleteUnitButton.style.display = 'none';
+    if (sendConnectionsButton) sendConnectionsButton.style.display = 'none';
+
+    // Configure UI based on user role
+    switch (userRole) {
+        case 'course_director':
+            // Course directors can do everything
+            if (addUnitButton) addUnitButton.style.display = 'block';
+            if (modifyUnitButton) modifyUnitButton.style.display = 'block';
+            if (deleteUnitButton) deleteUnitButton.style.display = 'block';
+            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
+            break;
+        case 'student':
+            // Students cannot add, modify, or delete units
+            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
+            break;
+        case 'general_user':
+            // General users cannot add, modify, delete units or send connections
+            break;
+
+        default:
+            break;
     }
 }
 
+
+
+async function getTopThreeSimilarUnits() {
+    const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
+
+    // Check if the description is too short
+    if (foreignUnitDescription.length < 100) { // Adjust the length threshold as needed
+        alert("Please enter a longer unit description (at least 100 characters).");
+        return;
+    }
+
+    if (!foreignUnitDescription) {
+        alert("Please enter a unit description.");
+        return;
+    }
+
+    // Fetch all units from Monash
+    const monashUnits = await Backend.Unit.getAllUnitsFromUniversity(default_university);
+
+    const similarityScores = [];
+
+    function getSimilarity(s1, s2) {
+        // Get similarity using cosine similarity
+        const tokenize = text => {
+            return text.toLowerCase().match(/\b(\w+)\b/g);
+        };
+        const termFreqMap = tokens => {
+            const freqMap = {};
+            tokens.forEach(token => {
+                freqMap[token] = (freqMap[token] || 0) + 1;
+            });
+            return freqMap;
+        };
+        const addKeysToDict = (map, dict) => {
+            for (let key in map) {
+                dict[key] = true;
+            }
+        };
+        const dotProduct = (mapA, mapB) => {
+            let sum = 0;
+            for (let key in mapA) {
+                if (mapB.hasOwnProperty(key)) {
+                    sum += mapA[key] * mapB[key];
+                }
+            }
+            return sum;
+        };
+        const magnitude = map => {
+            let sum = 0;
+            for (let key in map) {
+                sum += map[key] * map[key];
+            }
+            return Math.sqrt(sum);
+        };
+        const tokensA = tokenize(s1);
+        const tokensB = tokenize(s2);
+
+        const freqMapA = termFreqMap(tokensA);
+        const freqMapB = termFreqMap(tokensB);
+
+        const dict = {};
+        addKeysToDict(freqMapA, dict);
+        addKeysToDict(freqMapB, dict);
+
+        const dotProd = dotProduct(freqMapA, freqMapB);
+        const magnitudeA = magnitude(freqMapA);
+        const magnitudeB = magnitude(freqMapB);
+
+        if (magnitudeA === 0 || magnitudeB === 0) {
+            return 0;
+        }
+        return dotProd / (magnitudeA * magnitudeB);
+    }
+
+    // Iterate through Monash units and calculate similarity scores
+    for (const key in monashUnits) {
+        const unit = monashUnits[key];
+        const similarity = getSimilarity(foreignUnitDescription, unit.unitDescription);
+        similarityScores.push({ unit, similarity });
+    }
+
+    // Sort by similarity in descending order
+    similarityScores.sort((a, b) => b.similarity - a.similarity);
+
+    const recommendedUnitDiv = document.getElementById('recommended-unit');
+    recommendedUnitDiv.innerHTML = ''; // Clear previous results
+
+    // Display the top 3 most similar units
+    const topThree = similarityScores.slice(0, 3);
+    topThree.forEach(({ unit, similarity }, index) => {
+        recommendedUnitDiv.innerHTML += `
+            <div class="recommended-unit">
+                <h4>${index + 1}. ${unit.unitCode} - ${unit.unitName}</h4>
+                <p>Similarity Score: ${(similarity * 100).toFixed(2)}%</p>
+                <p>Type: ${unit.unitType}, Credits: ${unit.creditPoints}, Level: ${unit.unitLevel}</p>
+                <p>${unit.unitDescription}</p>
+            </div>
+        `;
+    });
+
+    if (topThree.length === 0) {
+        recommendedUnitDiv.innerHTML = '<p>No similar units found.</p>';
+    } else {
+        recommendedUnitDiv.style.backgroundColor = '#e0f7fa';
+    }
+}
+
+// Attach the function to the form submission
+if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
+    document.getElementById('foreign-unit-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        getTopThreeSimilarUnits();
+    });
+}
+
+// Call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}
+
+
+// call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}
+
+// Navigation bar tracker
+let navOpen = false;
+
+//handle nav stuff
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+
+    document.getElementById("sidebar-content").style.display = "none";
+
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+
+    document.getElementById("sidebar-content").style.display = "block";
+
+    document.getElementById("main").style.marginLeft= "200px";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+})
 
 
 // call every render
@@ -665,3 +864,32 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchAndDisplayUserInfo();
     repopulateResults();
 });
+
+
+function editProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
+    
+    // Enable editing by removing the 'readonly' attribute
+    inputs.forEach(input => input.removeAttribute('readonly'));
+
+    // Show Save button and hide Edit button
+    document.getElementById('edit-button').style.display = 'none';
+    document.getElementById('save-button').style.display = 'inline-block';
+}
+
+function saveProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
+    
+    inputs.forEach(input => {
+        console.log(`${input.id}: ${input.value}`);
+    });
+    
+    // Disable editing by adding the 'readonly' attribute back
+    inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
+
+    // Hide Save button and show Edit button
+    document.getElementById('edit-button').style.display = 'inline-block';
+    document.getElementById('save-button').style.display = 'none';
+}

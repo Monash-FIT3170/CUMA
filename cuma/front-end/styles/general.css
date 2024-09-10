@@ -58,6 +58,22 @@ main {
     border-radius: 5px;
 }
 
+.profile-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.profile-details {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
 .course-info h2 {
     margin-bottom: 15px;
 }
@@ -137,6 +153,7 @@ button:hover, .add-unit:hover {
 textarea {
     resize: vertical;
     height: 60px;
+    font-family: Arial, sans-serif;
 }
 
 .input-container label {
@@ -305,3 +322,43 @@ header {
     text-align: right;
 }
 
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+}
+
+.profile-item label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.profile-item input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 300px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
