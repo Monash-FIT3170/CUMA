@@ -93,3 +93,213 @@ main {
 .transfer-plan-form button.submit-button:hover {
     background-color: #0056b3;
 }
+
+
+
+
+/* transfer-planner Header Section */
+.plan-header {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.plan-header h1 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.plan-header h2 {
+  font-size: 20px;
+  color: #666;
+}
+
+.plan-header h2 span {
+  font-weight: bold;
+  color: #333;
+}
+
+.plan-header p {
+  font-size: 18px;
+  color: #888;
+}
+
+/* University Name Section */
+.university-name-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 10px;
+}
+
+.univeristy-name-slot {
+  width: 100%;
+  min-width: 220px;
+  min-height: 245px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.university-name-column h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+}
+
+
+/* Grid Layout for Unit Slots */
+.plan-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Units Connection column */
+.unit-connection-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 10px;
+}
+
+/* Unit Slot */
+.unit-slot {
+  width: 100%;
+  min-width: 220px;
+  min-height: 245px;
+  height: 120px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.unit-slot:hover {
+  border-color: rgb(104, 196, 244);
+}
+
+.unit-slot .unit-card {
+  width: 100%;
+  height:100%;
+}
+
+/* Search Icon */
+
+.unit-slot .search-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: width 0.3s ease, border-radius 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.unit-slot .search-icon-container:hover {
+    width: 200px;
+    border-radius: 25px;
+    justify-content: flex-start;
+    padding-left: 15px;
+}
+
+.unit-slot .search-icon-container .search-icon {
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.3s ease;
+}
+
+.unit-slot .search-icon-container:hover .search-icon {
+    left: 20px;
+}
+
+.unit-slot .search-icon-container .add-text {
+    opacity: 0;
+    white-space: nowrap;
+    color: black;
+    font-size: 14px;
+    margin-left: 50px;
+    transition: opacity 0.3s ease;
+}
+
+.unit-slot .search-icon-container:hover .add-text {
+    opacity: 1;
+}
+
+span.arrow-icon {
+  font-size: 24px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.action-buttons .btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  margin: 0 10px;
+}
+
+.action-buttons .save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.action-buttons .send-approval {
+  background-color: #2196f3;
+  color: white;
+}
+
+.action-buttons .btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive Styling */
+@media (max-width: 1200px) {
+  .plan-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .unit-connection-column {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .university-name-column {
+    flex-direction: row;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  span.arrow-icon {
+    transform: rotate(-90deg);
+    margin: 0 20px;
+  }
+
+  .unit-slot {
+    width: 100%;
+  }
+}
