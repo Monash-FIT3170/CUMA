@@ -10,7 +10,7 @@ const createNewPlanContainer = document.getElementById("create-new-plan");
 
 // Get Planner Element
 const plannerContainer = document.getElementById("transfer-planner");
-const plannerName = document.getElementById("planner-name ");
+const plannerName = document.getElementById("planner-name");
 const plannerCourse = document.getElementById("course-name");
 const plannerStudyYearPeriod = document.getElementById("study-year-period");
 const plannerHomeUniName = document.getElementById("home-university-name");
