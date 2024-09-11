@@ -250,6 +250,85 @@
             </div>
         </div>
 
+        <!-- Full-screen modal container -->
+        <div id="unitModal" class="modal">
+            <div class="modal-content">
+
+                <!-- Header with Search Bar -->
+                <div class="modal-header">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search Units from Monash University" />
+                        <button class="close-button" id="closeModal">×</button>
+                    </div>
+                </div>
+
+                <!-- Modal Content Container -->
+                <div class="unit-search-container">
+
+                    <!-- Filters -->
+                    <div class="filters">
+                        <div class="filter-selection">
+                            <label for="course-level">Course Level</label>
+                            <select id="course-level" name="course-level">
+                                <option value="1">Level 1</option>
+                                <option value="2">Level 2</option>
+                                <option value="3">Level 3</option>
+                                <option value="4">Level 4</option>
+                                <option value="5">Level 5</option>
+                                <option value="6">Level 6</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-selection">
+                            <label for="study-period">Study Period</label>
+                            <select id="study-period" name="study-period">
+                                <option value="semester-1">Semester 1</option>
+                                <option value="semester-2">Semester 2</option>
+                                <option value="summer-term">Summer Term</option>
+                                <option value="winter-term">Winter Term</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Result Feedbacks -->
+                    <div class="results-heading">
+                        Showing Results
+                    </div>
+
+                    <!-- Units Result Grid -->
+                    <div class="unit-cards-grid" id="home-university-card-grid">
+
+                        <!-- Cards will be dynamically added here -->
+                         <!-- Sample Card -->
+                        <div class="unit-card">
+                            <div class="unit-top">
+                                <span class="courseCode"></span>
+                                <div class="unit-icons">
+                                    <button class="unit-icons-btn" id="info-icon">i</button>
+                                    <button class="unit-icons-btn" id="btn-add-unit">+</button>
+                                </div>
+                            </div>
+
+                            <h3 class="unit-name-text">Discrete Mathematics for Computer Science</h3>
+
+                            <p class="unit-details-text">MAT1830 | Level 1 | 12 Credits</p>
+
+                            <div class="unit-semesters-row">
+                                <div class="semester-badge">Semester 1</div>
+                                <div class="semester-badge">Semester 2</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Add Custom Unit button -->
+                    <button class="add-custom">+ Add Custom Unit</button>
+
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
 </body>
