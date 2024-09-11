@@ -1,0 +1,95 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  margin-left: 200px;
+  margin-top: 75px;
+  padding: 0;
+  width: calc(100% - 260px);
+}
+
+.container {
+  width: 100%;
+  padding: 30px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+/* Transfer Planner Styling */
+.transfer-plan-form {
+  max-width: 800px;
+  min-width: 515px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.transfer-plan-form h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: xxx-large;
+    color: #094183;
+}
+
+.transfer-plan-form p {
+    margin-bottom: 40px;
+    text-align: center;
+    color: rgb(9, 65, 131);
+    margin-top: 1.5rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.transfer-plan-form .form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.transfer-plan-form label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.transfer-plan-form select, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+}
+
+.transfer-plan-form select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.transfer-plan-form button.submit-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.transfer-plan-form button.submit-button:hover {
+    background-color: #0056b3;
+}
