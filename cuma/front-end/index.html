@@ -86,8 +86,8 @@
                     <label for="course">Select Course *</label>
                     <select id="course" required>
                     <option value="">Select</option>
-                    <option value="Engineering - Software">Bachelor of Engineering - Software</option>
-                    <option value="Engineering - Civil">Bachelor of Engineering - Civil</option>
+                    <option value="Bachelor of Engineering - Software">Bachelor of Engineering - Software</option>
+                    <option value="Bachelor of Engineering - Civil">Bachelor of Engineering - Civil</option>
                     <!-- Add more courses as needed -->
                     </select>
                 </div> 
@@ -140,8 +140,8 @@
 
             <!-- Text Heading -->
             <div class="plan-header">
-                <h1 id="planner-name">Melbourne Uni Transfer 2025</h1>
-                <h2 id="course-name">Bachelor of Engineering <span>Software Engineering</span></h2>
+                <h2 id="planner-name">Melbourne Uni Transfer 2025</h1>
+                <h1 id="course-name">Bachelor of Engineering <span>Software Engineering</span></h2>
                 <p id="study-year-period">2025 : Semester 1</p>
             </div>
 
@@ -268,8 +268,8 @@
                     <!-- Filters -->
                     <div class="filters">
                         <div class="filter-selection">
-                            <label for="course-level">Course Level</label>
-                            <select id="course-level" name="course-level">
+                            <label for="unit-course-level">Course Level</label>
+                            <select id="unit-course-level">
                                 <option value="1">Level 1</option>
                                 <option value="2">Level 2</option>
                                 <option value="3">Level 3</option>
@@ -280,8 +280,8 @@
                         </div>
 
                         <div class="filter-selection">
-                            <label for="study-period">Study Period</label>
-                            <select id="study-period" name="study-period">
+                            <label for="unit-study-period">Study Period</label>
+                            <select id="unit-study-period">
                                 <option value="semester-1">Semester 1</option>
                                 <option value="semester-2">Semester 2</option>
                                 <option value="summer-term">Summer Term</option>
@@ -291,39 +291,13 @@
                     </div>
 
                     <!-- Result Feedbacks -->
-                    <div class="results-heading">
-                        Showing Results
-                    </div>
+                    <div class="results-heading"></div>
 
                     <!-- Units Result Grid -->
-                    <div class="unit-cards-grid" id="home-university-card-grid">
-
-                        <!-- Cards will be dynamically added here -->
-                         <!-- Sample Card -->
-                        <div class="unit-card">
-                            <div class="unit-top">
-                                <span class="courseCode"></span>
-                                <div class="unit-icons">
-                                    <button class="unit-icons-btn" id="info-icon">i</button>
-                                    <button class="unit-icons-btn" id="btn-add-unit">+</button>
-                                </div>
-                            </div>
-
-                            <h3 class="unit-name-text">Discrete Mathematics for Computer Science</h3>
-
-                            <p class="unit-details-text">MAT1830 | Level 1 | 12 Credits</p>
-
-                            <div class="unit-semesters-row">
-                                <div class="semester-badge">Semester 1</div>
-                                <div class="semester-badge">Semester 2</div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <div class="unit-cards-grid" id="home-university-card-grid"></div>
 
                     <!-- Add Custom Unit button -->
                     <button class="add-custom">+ Add Custom Unit</button>
-
                 </div>
 
             </div>
