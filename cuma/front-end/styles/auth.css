@@ -254,3 +254,8 @@ body, html {
     max-width: 200px;
     padding: 10px;
 }
+
+#user-type-selection p {
+  font-size: small;
+  margin: 5px 0;
+}

@@ -8,7 +8,10 @@ import QRCode from 'qrcode';
 // Constants
 const ACCESS_TOKEN_AGE = 15 * 60 * 1000;    // 15mins
 const REFRESH_TOKEN_AGE = 60 * 60 * 1000;   // 1hr
-const DB_NAME = 'CUMA';
+// For testing purposes
+// const DB_NAME = 'CUMA';
+// const DB_COLLECTION_NAME = 'users';
+const DB_NAME = 'CUMA_TEST';
 const DB_COLLECTION_NAME = 'users';
 
 // Token access generation

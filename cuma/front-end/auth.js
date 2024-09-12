@@ -145,6 +145,23 @@ function handleStudentFormSubmission(e) {
     // TODO: Add validation for these fields and send to backend
     console.log('Student data:', { dateOfBirth, university, major, studentID });
 
+    const additionalInfo = {
+        role: 'student',
+        dateOfBirth,
+        university,
+        major,
+        studentID
+    };
+
+    Backend.Auth.additionalInfo(additionalInfo).then(response => {
+        if (response.status === 200) {
+            alert("Success: " + response.message);
+            window.location.href = '/signup/mfa-init';
+        } else {
+            alert("Error " + response.status + ": " + response.error);
+        }
+    });
+
     // TODO: Handle the response from the backend
     // If successful, redirect to the next step (e.g., MFA setup)
     // /signup/mfa-init'

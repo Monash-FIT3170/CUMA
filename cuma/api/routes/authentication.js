@@ -433,6 +433,20 @@ router.get('/user-info', authenticateToken, async (req, res) => {
     }
 });
 
+// Update addition information endpoint
+router.get('/additional-info', async (req, res) => {
+    try {
+        // Fetch user from database
+        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, req.user.email);
+        if (!existingUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+    } catch (error) {
+        
+    }
+
+});
+
 export default router;
 
 

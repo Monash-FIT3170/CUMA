@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Additional Information</title>
+    <title>Role Verification Needed</title>
     <link rel="stylesheet" href="styles/auth.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
@@ -20,16 +20,19 @@
         </div>
         <div class="right-section">
             <div class="form">
-                <h2>Additional Information</h2>
                 <div id="user-type-selection">
+                    <h2>Role Verification Needed</h2>
+                    <p>Your role selection will help us tailor the information and services.<br>You may be asked to verify this role through additional information.</br></p>
+
+                    <!-- <p></p> -->
                     <p>Please select your role:</p>
                     <button class="primary-btn" onclick="showForm('student')">Student</button>
                     <button class="primary-btn" onclick="showForm('course-director')">Course Director</button>
-
+                    <button class="secondary-btn" onclick="goBack()">Back</button>
                 </div>
 
                 <form id="student-form" style="display: none;">
-                    <h3>Student Information</h3>
+                    <h2>Student Information</h2>
                     <div class="input-container">
                         <input type="date" id="student-dob" required>
                         <label for="student-dob">Date of Birth</label>
@@ -51,7 +54,7 @@
                 </form>
 
                 <form id="course-director-form" style="display: none;">
-                    <h3>Course Director Information</h3>
+                    <h2>Course Director Information</h2>
                     <div class="input-container">
                         <input type="date" id="director-dob" required>
                         <label for="director-dob">Date of Birth</label>
@@ -79,6 +82,20 @@
                     <button type="submit" class="primary-btn">Submit</button>
                     <button type="button" class="secondary-btn" onclick="showRoleSelection()">Back</button>
                 </form>
+
+                <div id="submission-complete" style="display: none;">
+                    <h2>Submission Complete</h2>
+                    <div class="checkmark">
+                        <svg width="100" height="100" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#4CAF50" stroke-width="5"/>
+                            <path d="M25,50 L40,65 L75,30" fill="none" stroke="#4CAF50" stroke-width="5"/>
+                        </svg>
+                    </div>
+                    <p>Thank you for submitting your form! You are currently assigned as a General User. We will verify and confirm your information within the next 24 hours and provide you with the appropriate role/access tailored to your status. For updates, we will notify you at your account email address (e.g., student****@gmail.com).</p>
+                    <p>In the meantime, feel free to use our tool and discover the many features available to you.</p>
+                    <p>By clicking Continue, you will be directed to set up Multi-Factor Authentication (MFA). You will have the option to skip this step and set it up later if you choose.</p>
+                    <button class="primary-btn" onclick="continueMFA()">Continue</button>
+                </div>
             </div>
         </div>
     </div>

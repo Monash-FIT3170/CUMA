@@ -292,3 +292,27 @@ Backend.Auth.updateUserInfo = async function (userInfo) {
   }
 };
 
+Backend.Auth.additionalInfo = async function (additionalInfo) {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/additional-info");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(additionalInfo),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+      console.log("Error updating user info:", error);
+      throw error;
+  }
+}
+
