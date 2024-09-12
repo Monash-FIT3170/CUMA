@@ -10,6 +10,7 @@
     <script src="../backend/unit.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
     <script src="./component/sidenav.js" defer></script>
+    <script src="./component/header/header.js"></script>
     
 
     <link rel="stylesheet" href="styles/header.css">
@@ -18,15 +19,8 @@
     <script src="dark-light-mode.js"></script>
 </head>
 <body>
-    <header>
-        <button onclick="toggleNav()" class="openbtn">
-            <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
-        </button>
-        <h1>CUMA</h1>
-        <!--Temporary info, please fix if required-->
-        <div class="user-info"></div>
-    </header>
-    
+    <header-component></header-component>
+
     <sidenav-component isopen="true"></sidenav-component>
     
     <main id="main">
