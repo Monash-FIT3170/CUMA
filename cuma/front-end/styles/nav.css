@@ -1,3 +1,4 @@
+/* Sidebar Styling */
 .sidebar {
     position: fixed;
     left: 0;
@@ -11,6 +12,11 @@
     border-top: 0;
     border-left: 0;
     border-bottom: 0;
+    transition: background-color 0.3s;
+}
+
+.sidebar.dark-mode {
+    background-color: #333; /* Dark Mode Background for Sidebar */
 }
 
 .sidebar-link {
@@ -27,9 +33,17 @@
     text-decoration: none;
 }
 
+.sidebar-link.dark-mode {
+    color: rgb(180, 180, 180); /* Dark Mode Text Color */
+}
+
 .sidebar-link:hover {
     background-color: #e0e0e0;
     color: rgb(50, 50, 50);
+}
+
+.sidebar-link.dark-mode:hover {
+    background-color: rgba(50, 50, 50, 0.8); /* Dark Mode Hover Effect */
 }
 
 .sidebar-img {
@@ -37,34 +51,38 @@
     margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
-
 }
 
+.sidebar-img.dark-mode {
+    filter: invert(1); /* Invert Image Colors for Dark Mode */
+}
+
+/* Button Styling */
 body button.openbtn {
     background-color: transparent;
     margin: 0;
 }
 
-body button.closebtn{
+body button.closebtn {
     margin-bottom: 0;
-    align-self:flex-end;
+    align-self: flex-end;
     padding: 0;
     font-size: x-large;
     color: black;
     background-color: transparent;
 }
 
-body button.closebtn:hover{
+body button.closebtn:hover {
     color: #3b90d5;
     background-color: transparent;
 }
 
-nav .closebtn-block{
+nav .closebtn-block {
     display: flex;
     justify-content: flex-end;
 }
 
-nav #sidebar-content{
+nav #sidebar-content {
     display: block;
     padding: 10px;
     width: 150px;
@@ -77,16 +95,16 @@ nav button.sidebar-button {
     margin-left: 5px;
 }
 
-nav button.sidebar-button:hover{
+nav button.sidebar-button:hover {
     background-color: #3b90d5;
 }
 
+/* Apply Hover Effect and Transitions */
 .sidebar a {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: rgb(80, 80, 80);
-
 }
 
 .sidebar-link {
@@ -98,9 +116,8 @@ nav button.sidebar-button:hover{
 }
 
 .sidebar-link:hover {
-    background-color: rgba(154,179,251,0.5);
+    background-color: rgba(154, 179, 251, 0.5);
     border-radius: 10px;
-    
 }
 
 .sidebar-img {
@@ -109,23 +126,57 @@ nav button.sidebar-button:hover{
     height: 30px;
 }
 
+/* Dark Mode for Buttons */
+.sidebar-button.dark-mode {
+    background-color: #444;
+    color: white;
+}
 
-/* User information within the header, move it required */
+.sidebar-button.dark-mode:hover {
+    background-color: #3b90d5;
+}
+
+/* Header Styling */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    transition: background-color 0.3s;
+}
+
+header.dark-mode {
+    background-color: #1f1f1f; /* Dark Mode Background for Header */
 }
 
 .burger-bar-icon {
-    
     width: 40px;
     height: 40px;
     margin-right: 20px;
 }
 
+.burger-bar-icon.dark-mode {
+    filter: invert(1); /* Invert Image Colors for Dark Mode */
+}
+
 .user-info {
-    margin-left: auto; 
+    margin-left: auto;
     text-align: right;
+    color: rgb(80, 80, 80);
+}
+
+.user-info.dark-mode {
+    color: rgb(200, 200, 200); /* Dark Mode Text Color */
+}
+
+/* Dark Mode Body Background and Text */
+body {
+    background-color: white;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
 }

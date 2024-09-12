@@ -17,13 +17,11 @@
         <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
     </button>
     <h1>CUMA</h1>
-    <!--Temporary info, please fix if required-->
     <div class="user-info"></div>
 </header>
 
 <nav class="sidebar" id="sidebar">
     <div id="sidebar-content">
-            
         <a href="index.html" class="sidebar-link">
             <img src="images/mapping.png" class="sidebar-img">
             Mapping
@@ -44,8 +42,7 @@
             <img src="images/icons8-cog-96.png" class="sidebar-img">
             Settings
         </a>
-        <!--Temporary buttons, please fix if required-->
-        <button class="sidebar-button" id="logout-button", onclick="userLogout()">Logout</button>
+        <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
     </div>
 </nav>
 
@@ -54,18 +51,48 @@
     <section class="settings-info">
         <h2>Settings</h2>
         <div class="settings-container">
-            <!-- Example setting -->
+            <!-- Dark Mode Setting -->
             <div class="setting-item">
                 <label for="dark-mode-toggle">Dark Mode</label>
                 <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
             </div>
+            <!-- Email Notifications Setting -->
             <div class="setting-item">
                 <label for="email-notifications-toggle">Email Notifications</label>
                 <input type="checkbox" id="email-notifications-toggle" onchange="toggleEmailNotifications()">
             </div>
-            <!-- Add more settings here -->
         </div>
     </section>
 </main>
+
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const sidebar = document.getElementById('sidebar');
+        const header = document.querySelector('header');
+
+        body.classList.toggle('dark-mode');
+        sidebar.classList.toggle('dark-mode');
+        header.classList.toggle('dark-mode');
+
+        // Save the current mode to localStorage
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    window.onload = function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('sidebar').classList.add('dark-mode');
+            document.querySelector('header').classList.add('dark-mode');
+            document.getElementById('dark-mode-toggle').checked = true;
+        }
+    };
+</script>
+
 </body>
 </html>
