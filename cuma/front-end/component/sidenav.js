@@ -243,6 +243,19 @@ style = `
     body.dark-mode .profile-detail-element h3 {
         color: #ffffff; /* White heading color in dark mode */
     }
+
+    button {
+        background-color: #4da5f5; 
+        color: white; /* Text color */
+        border: none; /* Remove default border */
+        border-radius: 4px; /* Rounded corners */
+        padding: 10px 20px; /* Spacing inside the button */
+        font-size: 16px; /* Font size */
+        font-weight: bold; /* Font weight */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background color and scaling */
+        outline: none; /* Remove outline */
+    }
 `
 
 sidenav.innerHTML = `
