@@ -23,8 +23,8 @@ const unitModal = document.getElementById("unitModal");
 const closeModal = document.getElementById('closeModal');
 const modalCardGrid = document.getElementById('home-university-card-grid');
 const searchInput = document.querySelector('.search-bar input');
-const levelSelect = document.getElementById('course-level');
-const studyPeriodSelect = document.getElementById('study-period');
+const levelSelect = document.getElementById('unit-course-level');
+const studyPeriodSelect = document.getElementById('unit-study-period');
 
 // Attach event listeners for search input and filter dropdowns
 searchInput.addEventListener('input', filterUnits);
@@ -76,7 +76,6 @@ function configureTransferPlanner(formData) {
 }
 
 // Gather all the home unit slots element and add click event listener to open the modal
-
 for (const homeUnitSlotName of homeUnitSlotNameArray) {
     const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
 
@@ -101,7 +100,6 @@ for (const targetUnitSlotName of targetUnitSlotNameArray) {
 
     // Set the dataset.slotPair using the getHomeUnitSlotNamePair function
     const homeUnitSlotNamePair = getHomeUnitSlotNamePair(targetUnitSlotName);
-    
     targetUnitSlotElement.dataset.slotPair = homeUnitSlotNamePair;
     
     // Find the search icon within the target unit slot element
@@ -113,7 +111,7 @@ for (const targetUnitSlotName of targetUnitSlotNameArray) {
             const homeSlotElement = document.getElementById(targetUnitSlotElement.dataset.slotPair);
 
             // Check if the home slot that it is paired to does not have a unit (by checking uniCode stored in dataset)
-            if (!homeSlotElement.dataset.unitCode || homeSlotElement.dataset.unitcode === "") {
+            if (!homeSlotElement.dataset.unitCode) {
                 alert("Please select a unit from Home University first!");
                 return;
             }
@@ -126,8 +124,6 @@ for (const targetUnitSlotName of targetUnitSlotNameArray) {
         console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
     }
 }
-
-
 
 // Get the Home Slot's name that belong with the Target Slot
 function getHomeUnitSlotNamePair(targetUnitSlotName) {
@@ -278,9 +274,8 @@ function openUnitInfoModal(unit) {
 
 // Add the unit to the unitSlot
 function addUnitToSlot(unitSlotID, unit) {
-    if (isAlreadySelected(unit)) {
+    if (homeUnitIsAlreadySelected(unit)) {
         alert(unit.unitName + ' already is selected!');
-        unitModal.style.display = 'block';
         return;
     }
     // Get the slot and set the unit data
@@ -298,10 +293,10 @@ function addUnitToSlot(unitSlotID, unit) {
 }
 
 // Check all the home slot if it has been selected
-function isAlreadySelected(unit) {
+function homeUnitIsAlreadySelected(unit) {
     for (const homeUnitSlotName of homeUnitSlotNameArray) {
         const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
-        if (homeUnitSlotElement && homeUnitSlotElement.dataset.unitcode && homeUnitSlotElement.dataset.unitcode === unit.unitCode) {
+        if (homeUnitSlotElement && homeUnitSlotElement.dataset.unitCode && homeUnitSlotElement.dataset.unitCode === unit.unitCode) {
             return true;
         }
     }
@@ -312,12 +307,12 @@ function isAlreadySelected(unit) {
 function removeUnitFromSlot(unitSlotID) {
     // Get unitSlot and remove unit data
     const unitSlot = document.getElementById(unitSlotID);
-    unitSlot.dataset.unit = "";
+    delete unitSlot.dataset.unitCode;
 
     // Remove all child element - aka unitCard
     while (unitSlot.firstChild) {
         unitSlot.removeChild(unitSlot.firstChild);
-    }
+    };
 
     // Create and add the search container back
     const searchContainer = creatSearchContainer('Monash', unitSlotID);
