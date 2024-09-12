@@ -104,24 +104,22 @@ main {
 }
 
 .plan-header h1 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 10px;
+  font-size: 35px;
+  color:#094183;
+  margin-bottom: 30px;
+  font-weight: bold;
 }
 
 .plan-header h2 {
   font-size: 20px;
-  color: #666;
-}
-
-.plan-header h2 span {
-  font-weight: bold;
-  color: #333;
+  color:#0c58b0;
+  margin-bottom: 15px;
 }
 
 .plan-header p {
-  font-size: 18px;
+  font-size: 20px;
   color: #888;
+  color:#0e6ad3;
 }
 
 /* University Name Section */
