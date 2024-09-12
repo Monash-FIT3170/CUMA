@@ -19,6 +19,28 @@
     background-color: #333; /* Dark Mode Background for Sidebar */
 }
 
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: 75px;
+    background-color: #f4f6f9;
+    width: 200px;
+    z-index: 100;
+    padding-top: 10px;
+    border-right: 1px solid lightgray;
+    border-top: 0;
+    border-left: 0;
+    border-bottom: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar.dark-mode {
+    background-color: #333; /* Dark Mode Background for Sidebar */
+    color: #e0e0e0; /* Sidebar text color in dark mode */
+}
+
 .sidebar-link {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -29,12 +51,12 @@
     align-items: center;
     color: rgb(80, 80, 80);
     font-size: 20px;
-    transition: 0.3s;
+    transition: background-color 0.3s, color 0.3s;
     text-decoration: none;
 }
 
 .sidebar-link.dark-mode {
-    color: rgb(180, 180, 180); /* Dark Mode Text Color */
+    color: #e0e0e0; /* Light text color for dark mode */
 }
 
 .sidebar-link:hover {
@@ -43,7 +65,8 @@
 }
 
 .sidebar-link.dark-mode:hover {
-    background-color: rgba(50, 50, 50, 0.8); /* Dark Mode Hover Effect */
+    background-color: rgba(255, 255, 255, 0.1); /* Lighten hover effect in dark mode */
+    color: #ffffff; /* Ensure hover text is visible */
 }
 
 .sidebar-img {
@@ -51,10 +74,11 @@
     margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
+    transition: filter 0.3s;
 }
 
 .sidebar-img.dark-mode {
-    filter: invert(1); /* Invert Image Colors for Dark Mode */
+    filter: invert(1); /* Invert image colors for dark mode */
 }
 
 /* Button Styling */
@@ -142,17 +166,19 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header.dark-mode {
     background-color: #1f1f1f; /* Dark Mode Background for Header */
+    color: #e0e0e0; /* Dark mode text color for header */
 }
 
 .burger-bar-icon {
     width: 40px;
     height: 40px;
     margin-right: 20px;
+    transition: filter 0.3s;
 }
 
 .burger-bar-icon.dark-mode {
@@ -179,4 +205,36 @@ body {
 body.dark-mode {
     background-color: #121212;
     color: #ffffff;
+}
+
+/* Light Mode (default) */
+.profile-info, .profile-details {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode */
+body.dark-mode .profile-info,
+body.dark-mode .profile-details {
+    background-color: #1f1f1f; /* Dark background for profile sections */
+    color: #ffffff; /* White text color */
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Softer shadow for dark mode */
+}
+
+body.dark-mode input {
+    background-color: #333; /* Dark background for inputs */
+    color: white; /* White text color */
+}
+
+body.dark-mode button {
+    background-color: #444;
+    color: white;
+}
+
+body.dark-mode .profile-detail-element h3 {
+    color: #ffffff; /* White heading color in dark mode */
 }
