@@ -14,18 +14,20 @@
     <link rel="stylesheet" href="styles/nav.css">
     <script src="./index.js" defer></script>>
     <script src="filter.js"></script>
+    <script src="dark-light-mode.js"></script>
+    <script src="./component/sidenav.js"></script>
+    <script src="./component/header/header.js"></script>
+
 </head>
+
+
+
+
+
 <body>
-    <header>
-        <button onclick="toggleNav()" class="openbtn">
-            <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
-        </button>
-        <h1>CUMA</h1>
-        <!--Temporary info, please fix if required-->
-        <div class="user-info"></div>
-    </header>
+        <header-component></header-component>
     
-    <nav class="sidebar" id="sidebar">
+    <!-- <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
             
             <a href="index.html" class="sidebar-link">
@@ -47,12 +49,14 @@
             <a href="nav-setting.html" class="sidebar-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img">
                 Settings
-            </a>
+            </a> -->
             <!--Temporary buttons, please fix if required-->
-            <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
+            <!-- <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
             <button class="sidebar-button" id="logout-button", onclick="userLogout()">Logout</button>
         </div>
-    </nav>
+    </nav> -->
+
+<sidenav-component isopen="true"></sidenav-component>
     
 <main id="main">
     <!-- Course Units Section -->
