@@ -23,7 +23,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const serverPath = "http://localhost:" + port
-const client = new MongoClient(process.env.MONGODB_URI);
+// Change the URI to MONGODB_URI for production
+const client = new MongoClient(process.env.TEST_MONGODB_URI);
 
 // Middleware setup
 app.use(express.json());
@@ -114,6 +115,7 @@ async function run() {
     console.log("Connected to MongoDB");
 
     // Connect to MongoDB using Mongoose
+    // Change the URI to MONGODB_URI for production
     await mongoose.connect(process.env.TEST_MONGODB_URI);
     console.log("Connected to MongoDB using Mongoose");
 
