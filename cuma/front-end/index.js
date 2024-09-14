@@ -439,8 +439,8 @@ function addConnectionNewUnit() {
                     // Hide the form again
                     toggleAddConnectionNewUnitForm();
 
-                                // Display the updated mapped units for the selected unit
-                      repopulateResults()
+                    // Display the updated mapped units for the selected unit
+                    repopulateResults()
                 
                 }
 

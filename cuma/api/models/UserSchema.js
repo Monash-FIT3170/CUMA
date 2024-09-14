@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
 // Define the schema for the additional information required for role verification
 const AdditionalInfoSchema = new Schema({

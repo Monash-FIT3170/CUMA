@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import * as AuthUtils from '../utils/auth-utils.js';
 import authenticateToken from '../middleware/authenticateToken.js';
+import User from '../models/UserSchema.js';
 
 dotenv.config();
 
@@ -30,45 +31,44 @@ const scopes = [
   'openid'
 ];
 
-// Signup proccess routers
+// Signup process routers
 router.post('/signup', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
 
         // Role checking via email domain
-        let userRole = 'general_user';
+        let roles = ['general_user'];
         if (email.endsWith('@student.monash.edu')) {
-            userRole = 'student';
+            roles.push('student');
         } else if (email.endsWith('@monash.edu')) {
-            userRole = 'course_director';
+            roles.push('course_director');
         }
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
-        const newUser = {
+        const newUser = new User({
             hashedPassword,
             email,
             emailVerified: false,
             emailHD: email.split('@')[1],
             firstName,
             lastName,
-            role: userRole,
+            roles,
+            status: 'pending_role_info',
             mfaEnabled: false,
             mfaSecret: null,
-            createAt: new Date(),
-            updatedAt: new Date(),
-            lastLogin: new Date()
-        };
-        await users.insertOne(newUser);
+        });
+
+        await newUser.save();
 
         req.session.pendingSignupUser = { email, expiresIn: Date.now() + 5 * 60 * 1000};
 
-        return res.status(201).json({ message: 'Signup successfully' });
+        return res.status(201).json({ message: 'Signup successful' });
 
     } catch (error) {
         console.error('Error signing up: ', error);
@@ -85,13 +85,13 @@ router.get('/setup-mfa', async (req, res) => {
         }
         const email = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User not found, please log in again' });
         }
 
         try {
-            const { secret, imageUrl } = await AuthUtils.setupMFA(users, email);
+            const { secret, imageUrl } = await AuthUtils.setupMFA(existingUser);
 
             req.session.pendingSignupUser.expiresIn = Date.now() + 5 * 60 * 1000; // 5mins
 
@@ -122,7 +122,7 @@ router.post('/enable-mfa', async (req, res) => {
         }
         const email = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User not found, please try again' });
         }
@@ -130,7 +130,8 @@ router.post('/enable-mfa', async (req, res) => {
         const isValidMFAToken = AuthUtils.verifyMFA(token, existingUser.mfaSecret);
         if (!isValidMFAToken) return res.status(400).json({ error: 'Invalid MFA token' });
 
-        await users.updateOne({ email }, { $set: { mfaEnabled: true } });
+        existingUser.mfaEnabled = true;
+        await existingUser.save();
 
         delete req.session.pendingSignupUser;
 
@@ -141,12 +142,13 @@ router.post('/enable-mfa', async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 // Default login process routers
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
         }
@@ -161,7 +163,7 @@ router.post('/login', async (req, res) => {
             return res.status(206).json({ message: 'MFA required' });
         }
 
-        await AuthUtils.processLoginAccessToken(res, users, existingUser, isProduction);
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
         return res.status(201).json({ message: 'Login successful' });
 
@@ -182,7 +184,7 @@ router.post('/verify-mfa', async (req, res) => {
         }
         const userEmail = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, userEmail);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(userEmail);
 
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
@@ -193,7 +195,7 @@ router.post('/verify-mfa', async (req, res) => {
             return res.status(400).json({ error: 'Invalid MFA token' });
         }
 
-        await AuthUtils.processLoginAccessToken(res, users, existingUser, isProduction);
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
         return res.status(201).json({ message: 'Login successful' });
 
@@ -203,10 +205,10 @@ router.post('/verify-mfa', async (req, res) => {
     }
 });
 
+
 // Google authentication routers
 router.get('/google', (req, res) => {
     try {
-
         const state = AuthUtils.generateRandomToken();
         req.session.googleState = { state, expiresIn: Date.now() + 5 * 60 * 1000  };
 
@@ -220,7 +222,7 @@ router.get('/google', (req, res) => {
         res.redirect(authorizationUrl);
 
     } catch (error) {
-        console.error('Error Verifying MFA: ', error);
+        console.error('Error initiating Google auth: ', error);
         res.status(500).json({ error: error.message});
     }
 });
@@ -249,21 +251,30 @@ router.get('/oauth2callback', async (req, res) => {
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data;
-        const userGoogleID = userData.id;
 
         // Verification of user role
-        const userEmail = userData.email;
-        let userRole = 'general_user';
-        if (userEmail.endsWith('@student.monash.edu')) {
-            userRole = 'student';
-        } else if (userEmail.endsWith('@monash.edu')) {
-            userRole = 'course_director';
+        let roles = ['general_user'];
+        if (userData.email.endsWith('@student.monash.edu')) {
+            roles.push('student');
+        } else if (userData.email.endsWith('@monash.edu')) {
+            roles.push('course_director');
         }
 
-        userData.role = userRole;
+        let existingUser = await AuthUtils.fetchExistingGoogleUserFromDB(userData.id);
+        if (!existingUser) {
+            existingUser = new User({
+                userGoogleId: userData.id,
+                email: userData.email,
+                emailVerified: userData.verified_email,
+                emailHD: userData.hd,
+                firstName: userData.given_name,
+                lastName: userData.family_name,
+                roles: roles,
+                status: 'active'
+            });
+        }
 
-        const { users, existingUser } = await AuthUtils.fetchExistingGoogleUserFromDB(req.client, userGoogleID);
-        await AuthUtils.processGoogleLogin(res, users, existingUser, userData, isProduction);
+        await AuthUtils.processGoogleLogin(res, existingUser, userData, isProduction);
 
         delete req.session.googleState;
         return res.redirect('/index');
@@ -283,15 +294,13 @@ router.get('/logout', async (req, res) => {
             const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
             const email = decoded.email;
 
-            const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+            const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
             if (!existingUser) {
                 return res.status(400).json({ error: 'User does not exist' });
             }
 
-            await users.updateOne(
-                { email },
-                { $unset: { refreshToken: "" } }
-            );
+            existingUser.refreshToken = undefined;
+            await existingUser.save();
         }
 
         // Clear JWT cookies
@@ -319,12 +328,12 @@ router.post('/request-password-reset', async (req, res) => {
     const { email } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
         }
 
-        if (!await AuthUtils.processResetPasswordLink(users, existingUser, serverPath)) {
+        if (!await AuthUtils.processResetPasswordLink(existingUser, serverPath)) {
             return res.status(500).json({ error: 'Error sending email' });
         }
 
@@ -340,7 +349,7 @@ router.post('/validate-password-reset-link', async (req, res) => {
     const { token, email } = req.body;
 
     try {
-        const { existingUser } = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(req.client, email, token);
+        const existingUser = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(email, token);
         if (!existingUser || existingUser.passwordReset.resetTokenExpiry < Date.now()) {
             return res.status(400).json({ error: 'Invalid or expired password reset token. Please request another password reset.' });
         }
@@ -357,20 +366,16 @@ router.post('/update-new-password', async (req, res) => {
     const { email, password, token } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(req.client, email, token);
+        const existingUser = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(email, token);
         if (!existingUser || existingUser.passwordReset.resetTokenExpiry < Date.now()) {
             return res.status(400).json({ error: 'Invalid or expired password reset token. Please request another password reset.' });
         }
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
-        await users.updateOne(
-            { email },
-            { 
-                $set: { hashedPassword },
-                $unset: { 'passwordReset.resetToken': "", 'passwordReset.resetTokenExpiry': "" }
-            }
-        );
+        existingUser.hashedPassword = hashedPassword;
+        existingUser.passwordReset = undefined;
+        await existingUser.save();
 
         return res.status(200).json({ message: 'Successfully updated new password.' });
 
@@ -389,13 +394,13 @@ router.post('/refresh-token', async (req, res) => {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
             if (err) return res.status(403).json({ message: 'Invalid refresh token' });
 
-            const { existingUser } = await AuthUtils.fetchExistingUserWithRefreshTokenFromDB(req.client, user.email, refreshToken);
+            const existingUser = await AuthUtils.fetchExistingUserWithRefreshTokenFromDB(user.email, refreshToken);
 
-            if (!existingUser || existingUser.refreshToken.expiresIn < Date.now()) {
+            if (!existingUser || existingUser.refreshToken.expiry < Date.now()) {
                 return res.status(400).json({ error: 'Invalid or expired refresh token. Please log in again.' });
             }
 
-            const newAccessToken = AuthUtils.generateAccessToken(existingUser.email, existingUser.role);
+            const newAccessToken = AuthUtils.generateAccessToken(existingUser.email, existingUser.roles);
 
             return res.status(200).json({ accessToken: newAccessToken, message: 'Access token refreshed successfully' });
         });
@@ -408,13 +413,13 @@ router.post('/refresh-token', async (req, res) => {
         }
     }
 });
+        
 
 // Get user information endpoint
 router.get('/user-info', authenticateToken, async (req, res) => {
     try {
-
         // Fetch user from database
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, req.user.email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(req.user.email);
         if (!existingUser) {
             return res.status(404).json({ message: "User not found." });
         }
@@ -422,7 +427,8 @@ router.get('/user-info', authenticateToken, async (req, res) => {
         // Construct user information
         const userInfo = {
             name: existingUser.firstName,
-            role: existingUser.role
+            roles: existingUser.roles,
+            status: existingUser.status
         };
 
         res.json(userInfo);
@@ -433,18 +439,52 @@ router.get('/user-info', authenticateToken, async (req, res) => {
     }
 });
 
-// Update addition information endpoint
-router.get('/additional-info', async (req, res) => {
+// Update additional information endpoint
+router.post('/additional-info', authenticateToken, async (req, res) => {
     try {
-        // Fetch user from database
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, req.user.email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(req.user.email);
         if (!existingUser) {
             return res.status(404).json({ message: "User not found." });
         }
-    } catch (error) {
-        
-    }
 
+        const { 
+            dateOfBirth, university, major, studentId, 
+            department, professionalTitle, staffId 
+        } = req.body;
+
+        let additionalInfo = {
+            dateOfBirth,
+            university,
+            submissionDate: new Date()
+        };
+
+        if (existingUser.roles.includes('student')) {
+            additionalInfo = {
+                ...additionalInfo,
+                major,
+                studentId
+            };
+        } else if (existingUser.roles.includes('course_director')) {
+            additionalInfo = {
+                ...additionalInfo,
+                department,
+                professionalTitle,
+                staffId
+            };
+        }
+
+        existingUser.additional_info = additionalInfo;
+        existingUser.status = 'pending_verification';
+        existingUser.verificationRequestedAt = new Date();
+
+        await existingUser.save();
+
+        res.status(200).json({ message: "Additional information submitted successfully." });
+
+    } catch (error) {
+        console.error("Failed to update additional information:", error);
+        res.status(500).json({ message: "Failed to update additional information." });
+    }
 });
 
 export default router;
