@@ -74,7 +74,11 @@ function handleSignupFormSubmission(e) {
             if (response.status === 201) {
                 // Redirect to the homepage
                 alert("Success: " + response.result.message)
-                window.location.href = '/signup/mfa-init';
+
+                // Check for next step in the signup process
+                if (response.result.nextStep){
+                    window.location.href = response.result.nextStep;
+                }
             } else {
                 alert("Error " + response.status + ": " + response.result.error)
             }
@@ -105,22 +109,6 @@ function verifyLoginTOTPToken() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const loginButton = document.getElementById('login-btn');
-    if (loginButton) {
-        loginButton.addEventListener('click', handleLoginFormSubmission);
-    }
-
-    const signupForm = document.getElementById('signup-btn');
-    if (signupForm) {
-        signupForm.addEventListener('click', handleSignupFormSubmission);
-    }
-
-    const verifyLoginTOTP = document.getElementById('login-verify-totp');
-    if (verifyLoginTOTP) {
-        verifyLoginTOTP.addEventListener('click', verifyLoginTOTPToken)
-    }
-});
 
 // function form to show the role selection
 function showForm(userType) {
@@ -140,23 +128,25 @@ function handleStudentFormSubmission(e) {
     const dateOfBirth = document.getElementById('student-dob').value;
     const university = document.getElementById('student-university').value.trim();
     const major = document.getElementById('student-major').value.trim();
-    const studentID = document.getElementById('student-id').value.trim();
+    const studentId = document.getElementById('student-id').value.trim();
 
     // TODO: Add validation for these fields and send to backend
-    console.log('Student data:', { dateOfBirth, university, major, studentID });
+    console.log('Student data:', { dateOfBirth, university, major, studentId });
 
     const additionalInfo = {
-        role: 'student',
+        askingRole: 'student',
         dateOfBirth,
         university,
         major,
-        studentID
+        studentId
     };
 
-    Backend.Auth.additionalInfo(additionalInfo).then(response => {
+    Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            window.location.href = '/signup/mfa-init';
+            if (response.nextStep){
+                window.location.href = response.nextStep;
+            }
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
@@ -175,14 +165,32 @@ function handleDirectorFormSubmission(e) {
     const professionalTitle = document.getElementById('director-title').value.trim();
     const department = document.getElementById('director-department').value.trim();
     const faculty = document.getElementById('director-faculty').value.trim();
-    const staffID = document.getElementById('director-staff-id').value.trim();
+    const staffId = document.getElementById('director-staff-id').value.trim();
 
     // TODO: Add validation for these fields and send to backend
-    console.log('Course Director data:', { dateOfBirth, university, professionalTitle, department, faculty, staffID });
+    const additionalInfo = {
+        askingRole: 'course_director',
+        dateOfBirth,
+        university,
+        professionalTitle,
+        department,
+        faculty,
+        staffId
+    };
 
-    // TODO: Handle the response from the backend
-    // If successful, redirect to the next step (e.g., MFA setup)
-    // /signup/mfa-init'
+    Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
+        if (response.status === 200) {
+            alert("Success: " + response.message);
+            if (response.nextStep){
+                window.location.href = response.nextStep;
+            }
+        } else {
+            alert("Error " + response.status + ": " + response.error);
+        }
+    });
+}
+function goBack() {
+
 }
 
 // function to show the role selection and hide the forms
@@ -193,11 +201,22 @@ function showRoleSelection() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const loginButton = document.getElementById('login-btn');
+    if (loginButton) {
+        loginButton.addEventListener('click', handleLoginFormSubmission);
+    }
+    const signupForm = document.getElementById('signup-btn');
+    if (signupForm) {
+        signupForm.addEventListener('click', handleSignupFormSubmission);
+    }
+    const verifyLoginTOTP = document.getElementById('login-verify-totp');
+    if (verifyLoginTOTP) {
+        verifyLoginTOTP.addEventListener('click', verifyLoginTOTPToken)
+    }
     const studentForm = document.getElementById('student-form');
     if (studentForm) {
         studentForm.addEventListener('submit', handleStudentFormSubmission);
     }
-
     const directorForm = document.getElementById('course-director-form');
     if (directorForm) {
         directorForm.addEventListener('submit', handleDirectorFormSubmission);

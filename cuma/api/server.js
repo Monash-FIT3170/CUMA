@@ -33,6 +33,7 @@ app.use(session({
   secret: process.env.SESSION_TOKEN_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 app.use(cookieParser());
 
@@ -59,6 +60,12 @@ app.get('/index', authenticateToken, (req, res) => {
 //   res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
 // });
 
+// Example route to log session data
+app.get('/view-session', (req, res) => {
+  console.log(req.session);  // Logs the entire session object to the console
+  res.send('Check the console to see session data.');
+});
+
 app.get('/', authenticateToken, (req, res) => {
   res.redirect('/index');
 });
@@ -75,8 +82,8 @@ app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-signup.html'));
 });
 
-app.get('/additional-info', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-additional-info.html'));
+app.get('/signup/role-verification', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'auth-role-verification.html'));
 });
 
 app.get('/signup/mfa-init', (req, res) => {

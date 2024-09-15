@@ -99,6 +99,10 @@ const UserSchema = new Schema({
         type: String, 
         enum: ['student', 'course_director', 'general_user'] 
     }],
+    askingRole:{
+        type: String,
+        enum: ['student', 'course_director', 'general_user']
+    },
     status: {
         type: String,
         enum: ['pending_role_info', 'pending_verification', 'active', 'rejected'],

@@ -51,7 +51,7 @@ router.post('/signup', async (req, res) => {
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
-        const newUser = new User({
+        const pendingUser = {
             hashedPassword,
             email,
             emailVerified: false,
@@ -61,18 +61,88 @@ router.post('/signup', async (req, res) => {
             roles,
             status: 'pending_role_info',
             mfaEnabled: false,
-            mfaSecret: null,
+            mfaSecret: null
+        }
+
+        req.session.pendingSignupUser = {
+            userData: pendingUser,
+            expiresIn: Date.now() + 5 * 60 * 1000
+        }
+
+        return res.status(201).json({ 
+            message: 'Initial signup successful. Please proceed with additional information.',
+            nextStep: '/signup/role-verification'
         });
-
-        await newUser.save();
-
-        req.session.pendingSignupUser = { email, expiresIn: Date.now() + 5 * 60 * 1000};
-
-        return res.status(201).json({ message: 'Signup successful' });
 
     } catch (error) {
         console.error('Error signing up: ', error);
         return res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Update additional information endpoint
+router.post('/role-verification', async (req, res) => {
+    try {
+        const sessionUser = req.session.pendingSignupUser;
+        if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+            delete req.session.pendingSignupUser;
+            return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+        }
+
+        const pendingUserData = sessionUser.userData;
+
+        const { 
+            askingRole, dateOfBirth, university, major, studentID, 
+            department, professionalTitle, staffId 
+        } = req.body;
+
+        if (!['student', 'course_director'].includes(askingRole)) {
+            return res.status(400).json({ message: 'Invalid role selected.' });
+        }
+
+        let additionalInfo = {
+            dateOfBirth,
+            university,
+        };
+
+        if (askingRole === 'student') {
+            additionalInfo = {
+                ...additionalInfo,
+                major,
+                studentID
+            };
+
+        } else if (askingRole == 'course_director') {
+            additionalInfo = {
+                ...additionalInfo,
+                department,
+                professionalTitle,
+                staffId
+            };
+        }
+
+        const newUser = new User({
+            ...pendingUserData,
+            askingRole,
+            additional_info: additionalInfo,
+            status: 'pending_verification',
+            verificationRequestedAt: new Date()
+        });
+
+        // Save the user to the database
+        await newUser.save();
+
+        // Clear the session data as it's no longer needed
+        delete req.session.pendingSignupUser;
+
+        res.status(200).json({ 
+            message: 'Role information added successfully.', 
+            nextStep: '/signup/mfa-init' 
+        });
+
+    } catch (error) {
+        console.error("Failed to update additional information:", error);
+        res.status(500).json({ message: "Failed to update additional information." });
     }
 });
 
@@ -438,55 +508,6 @@ router.get('/user-info', authenticateToken, async (req, res) => {
         res.status(500).json({ message: "Failed to retrieve user information." });
     }
 });
-
-// Update additional information endpoint
-router.post('/additional-info', authenticateToken, async (req, res) => {
-    try {
-        const existingUser = await AuthUtils.fetchExistingUserFromDB(req.user.email);
-        if (!existingUser) {
-            return res.status(404).json({ message: "User not found." });
-        }
-
-        const { 
-            dateOfBirth, university, major, studentId, 
-            department, professionalTitle, staffId 
-        } = req.body;
-
-        let additionalInfo = {
-            dateOfBirth,
-            university,
-            submissionDate: new Date()
-        };
-
-        if (existingUser.roles.includes('student')) {
-            additionalInfo = {
-                ...additionalInfo,
-                major,
-                studentId
-            };
-        } else if (existingUser.roles.includes('course_director')) {
-            additionalInfo = {
-                ...additionalInfo,
-                department,
-                professionalTitle,
-                staffId
-            };
-        }
-
-        existingUser.additional_info = additionalInfo;
-        existingUser.status = 'pending_verification';
-        existingUser.verificationRequestedAt = new Date();
-
-        await existingUser.save();
-
-        res.status(200).json({ message: "Additional information submitted successfully." });
-
-    } catch (error) {
-        console.error("Failed to update additional information:", error);
-        res.status(500).json({ message: "Failed to update additional information." });
-    }
-});
-
 export default router;
 
 

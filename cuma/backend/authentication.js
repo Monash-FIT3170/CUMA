@@ -292,9 +292,9 @@ Backend.Auth.updateUserInfo = async function (userInfo) {
   }
 };
 
-Backend.Auth.additionalInfo = async function (additionalInfo) {
+Backend.Auth.roleVerificationInfo = async function (additionalInfo) {
   try {
-    const url = new URL(serverPath + authBackendPath + "/additional-info");
+    const url = new URL(serverPath + authBackendPath + "/role-verification");
 
     const response = await fetch(url, {
       method: "POST",
