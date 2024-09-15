@@ -128,7 +128,6 @@ router.post('/role-verification', async (req, res) => {
             ...pendingUserData,
             askingRole,
             additional_info: additionalInfo,
-            status: 'pending_verification',
             verificationRequestedAt: new Date()
         });
 
