@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 // Define the schema for the additional information required for role verification
 const AdditionalInfoSchema = new Schema({
+    dateOfBirth: {
+        type: Date,
+    },
     university: { 
         type: String, 
         trim: true 
@@ -14,6 +17,10 @@ const AdditionalInfoSchema = new Schema({
     department: { 
         type: String, 
         trim: true 
+    },
+    faculty: {
+        type: String,
+        trim: true
     },
     professionalTitle: { 
         type: String, 

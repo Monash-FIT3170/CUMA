@@ -92,9 +92,11 @@ router.post('/role-verification', async (req, res) => {
         const pendingUserData = sessionUser.userData;
 
         const { 
-            askingRole, dateOfBirth, university, major, studentID, 
-            department, professionalTitle, staffId 
+            askingRole, dateOfBirth, university, major, studentId, professionalTitle,
+            faculty, department, staffId 
         } = req.body;
+
+        console.log(req.body);
 
         if (!['student', 'course_director'].includes(askingRole)) {
             return res.status(400).json({ message: 'Invalid role selected.' });
@@ -109,13 +111,14 @@ router.post('/role-verification', async (req, res) => {
             additionalInfo = {
                 ...additionalInfo,
                 major,
-                studentID
+                studentId
             };
 
         } else if (askingRole == 'course_director') {
             additionalInfo = {
                 ...additionalInfo,
                 department,
+                faculty,
                 professionalTitle,
                 staffId
             };
@@ -132,9 +135,6 @@ router.post('/role-verification', async (req, res) => {
         // Save the user to the database
         await newUser.save();
 
-        // Clear the session data as it's no longer needed
-        delete req.session.pendingSignupUser;
-
         res.status(200).json({ 
             message: 'Role information added successfully.', 
             nextStep: '/signup/mfa-init' 
@@ -148,7 +148,7 @@ router.post('/role-verification', async (req, res) => {
 
 router.get('/setup-mfa', async (req, res) => {
     try {
-        const sessionUser = req.session.pendingSignupUser;
+        const sessionUser = req.session.pendingSignupUser.userData;
         if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
             delete req.session.pendingSignupUser;
             return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
@@ -163,7 +163,7 @@ router.get('/setup-mfa', async (req, res) => {
         try {
             const { secret, imageUrl } = await AuthUtils.setupMFA(existingUser);
 
-            req.session.pendingSignupUser.expiresIn = Date.now() + 5 * 60 * 1000; // 5mins
+            req.session.pendingSignupUser.userData.expiresIn = Date.now() + 5 * 60 * 1000; // 5mins
 
             return res.status(201).json({ 
                 email,
@@ -185,7 +185,7 @@ router.post('/enable-mfa', async (req, res) => {
     const { token } = req.body;
 
     try {
-        const sessionUser = req.session.pendingSignupUser;
+        const sessionUser = req.session.pendingSignupUser.userData;
         if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
             delete req.session.pendingSignupUser;  // Delete the session if it has expired
             return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });

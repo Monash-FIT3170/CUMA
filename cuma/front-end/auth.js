@@ -1,3 +1,27 @@
+// Utility functions for form data persistence
+function saveSignupData() {
+    localStorage.setItem('firstName', document.getElementById('signup-firstname').value);
+    localStorage.setItem('lastName', document.getElementById('signup-lastname').value);
+    localStorage.setItem('email', document.getElementById('signup-email').value);
+}
+
+function loadSignupData() {
+    document.getElementById('signup-firstname').value = localStorage.getItem('firstName') || '';
+    document.getElementById('signup-lastname').value = localStorage.getItem('lastName') || '';
+    document.getElementById('signup-email').value = localStorage.getItem('email') || '';
+}
+
+function clearSignupData() {
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('email');
+}
+
+function returnToLogin() {
+    clearSignupData();
+    window.location.href = '/login';
+}
+
 function validateEmailAndPassword(email, password) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -135,26 +159,20 @@ function handleStudentFormSubmission(e) {
 
     const additionalInfo = {
         askingRole: 'student',
-        dateOfBirth,
-        university,
-        major,
-        studentId
+        dateOfBirth: dateOfBirth,
+        university: university,
+        major: major,
+        studentId: studentId
     };
 
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            if (response.nextStep){
-                window.location.href = response.nextStep;
-            }
+            showSubmissionComplete(response.nextStep);
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
     });
-
-    // TODO: Handle the response from the backend
-    // If successful, redirect to the next step (e.g., MFA setup)
-    // /signup/mfa-init'
 }
 
 // function to handle the course director additional info form submission
@@ -170,27 +188,48 @@ function handleDirectorFormSubmission(e) {
     // TODO: Add validation for these fields and send to backend
     const additionalInfo = {
         askingRole: 'course_director',
-        dateOfBirth,
-        university,
-        professionalTitle,
-        department,
-        faculty,
-        staffId
+        dateOfBirth: dateOfBirth,
+        university: university,
+        professionalTitle: professionalTitle,
+        faculty: faculty,
+        department: department,
+        staffId: staffId
     };
 
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            if (response.nextStep){
-                window.location.href = response.nextStep;
-            }
+            showSubmissionComplete(response.nextStep);
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
     });
 }
 function goBack() {
+    window.location.href = '/signup';
+}
 
+// Function to show the submission complete section
+function showSubmissionComplete(nextStep) {
+    document.getElementById('user-type-selection').style.display = 'none';
+    document.getElementById('student-form').style.display = 'none';
+    document.getElementById('course-director-form').style.display = 'none';
+    document.getElementById('submission-complete').style.display = 'block';
+
+    // Store the nextStep URL for later use
+    document.getElementById('submission-complete').dataset.nextStep = nextStep;
+
+    clearSignupData();
+}
+
+// Function to continue to the next step (MFA or otherwise)
+function continueMFA() {
+    const nextStep = document.getElementById('submission-complete').dataset.nextStep;
+    if (nextStep) {
+        window.location.href = nextStep;
+    } else {
+        console.error('Next step URL not found');
+    }
 }
 
 // function to show the role selection and hide the forms
@@ -221,4 +260,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (directorForm) {
         directorForm.addEventListener('submit', handleDirectorFormSubmission);
     }
+    const returnToLoginButton = document.getElementById('return-login-btn');
+    if (returnToLoginButton) {
+        returnToLoginButton.addEventListener('click', returnToLogin);
+    }
+
+
+    // Load saved signup data when the signup page loads
+    if (window.location.pathname === '/signup') {
+        loadSignupData();
+    }
+
+    // Add event listeners to save data when input fields change
+    const signupInputs = document.querySelectorAll('#signup-firstname, #signup-lastname, #signup-email');
+    signupInputs.forEach(input => {
+        input.addEventListener('input', saveSignupData);
+    });
 });
