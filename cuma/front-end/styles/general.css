@@ -288,3 +288,103 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
+
+.profile-info {
+    background-color: white;
+    padding: 15px; /* Reduced padding */
+    border-radius: 10px; /* Smaller radius */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    gap: 15px; /* Reduced gap */
+    margin-bottom: 30px; /* Reduced margin */
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Reduced gap */
+}
+
+.profile-image {
+    width: 100px; /* Reduced image size */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Reduced gap */
+}
+
+.profile-item label {
+    font-size: 1em; /* Reduced font size */
+    color: #333;
+}
+
+.profile-item input {
+    width: 100%;
+    padding: 10px; /* Reduced padding */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-item input:focus {
+    border-color: #3498db;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2); /* Smaller shadow */
+}
+
+/* Edit and Save Buttons */
+#edit-button, #save-button {
+    padding: 8px 15px; /* Smaller padding */
+    border-radius: 20px; /* Reduced radius */
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); /* Smaller shadow */
+    margin-right: 10px;
+}
+
+#edit-button:hover, #save-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px); /* Reduced hover effect */
+}
+
+/* Profile Details Section */
+.profile-details {
+    background-color: white;
+    padding: 15px; /* Reduced padding */
+    border-radius: 10px; /* Smaller radius */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Reduced min-width */
+    gap: 15px; /* Reduced gap */
+}
+
+.profile-detail-element {
+    padding: 15px; /* Reduced padding */
+    background-color: #f9f9f9;
+    border-radius: 10px; /* Smaller radius */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Smaller shadow */
+}
+
+.profile-detail-element h3 {
+    margin-bottom: 10px; /* Reduced margin */
+    font-size: 1.2em; /* Reduced font size */
+    color: #333;
+}
+
+.profile-detail-element p {
+    font-size: 1em; /* Reduced font size */
+    color: #666;
+}

@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
-    <script src="./index.js" defer></script>
+    <script src="./profile.js" defer></script>
     <script src="dark-light-mode.js"></script>
     <script src="./component/sidenav.js" defer></script>
     <script src="./component/header/header.js"></script>
@@ -31,52 +31,23 @@
                 <img src="images/profile-example.jpg" alt="Profile Image" class="profile-image">
                 <div class="profile-details">
                     <div class="profile-item">
-                        <label for="profile-name">Name:</label>
-                        <input type="text" id="profile-name" readonly>
+                        <strong>Name: </strong><span id="profile-name-text">John Doe</span>
+                        <input type="text" id="profile-name-input" style="display: none;" value="John Doe">
                     </div>
                     <div class="profile-item">
-                        <label for="profile-email">Email:</label>
-                        <input type="email" id="profile-email" readonly>
+                        <strong>Email: </strong><span id="profile-email-text">john.doe@example.com</span>
+                        <input type="email" id="profile-email-input" style="display: none;" value="john.doe@example.com">
                     </div>
                     <div class="profile-item">
-                        <label for="profile-role">Role:</label>
-                        <input type="text" id="profile-role" readonly>
+                        <strong>Role: </strong><span id="profile-role-text">Student</span>
+                        <input type="text" id="profile-role-input" style="display: none;" value="Student">
                     </div>                    
                     <button id="edit-button" onclick="editProfile()">Edit</button>
                     <button id="save-button" onclick="saveProfile()" style="display: none;">Save</button>
                 </div>
             </div>
         </section>
-        
-        <!-- Profile Detail Section -->
-        <section class="profile-details">
-            <h2>Profile Details</h2>
-            <div class="profile-detail-grid">
-                <div class="profile-detail-element">
-                    <h3>Contact Information</h3>
-                    <p><strong>Email:</strong> john.doe@example.com</p>
-                    <p><strong>Phone:</strong> (555) 123-4567</p>
-                </div>
-                <div class="profile-detail-element">
-                    <h3>Preferences</h3>
-                    <p><strong>Language:</strong> English</p>
-                    <p><strong>Timezone:</strong> GMT+10</p>
-                </div>
-            </div>
-        </section>
     </main>
-    
-<!--    <main id="main">-->
-<!--        <section class="profile-section">-->
-<!--            <div class="bubble">-->
-<!--                <h2>User Profile</h2>-->
-<!--                <p><strong>Name:</strong></p>-->
-<!--                <p><strong>Email:</strong></p>-->
-<!--                <p><strong>Institution:</strong></p>-->
-<!--                <button class="secondary-btn" onclick="editProfile()">Edit Profile</button>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--    </main>-->
     
     
 </body>
