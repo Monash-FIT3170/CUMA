@@ -1,3 +1,20 @@
+// Function to handle profile image preview
+function previewProfileImage() {
+    const fileInput = document.getElementById('profile-image-input');
+    const imagePreview = document.getElementById('profile-image-preview');
+
+    // Check if a file was selected
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result; // Update the profile image preview
+        }
+        
+        reader.readAsDataURL(fileInput.files[0]); // Read the selected image file
+    }
+}
+
 function editProfile() {
     // Hide text
     document.getElementById("profile-name-text").style.display = "none";

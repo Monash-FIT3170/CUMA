@@ -291,23 +291,23 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
 
 .profile-info {
     background-color: white;
-    padding: 15px; /* Reduced padding */
-    border-radius: 10px; /* Smaller radius */
+    padding: 15px; 
+    border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: row;
-    gap: 15px; /* Reduced gap */
-    margin-bottom: 30px; /* Reduced margin */
+    gap: 15px; 
+    margin-bottom: 30px; 
 }
 
 .profile-container {
     display: flex;
     align-items: center;
-    gap: 15px; /* Reduced gap */
+    gap: 15px; 
 }
 
 .profile-image {
-    width: 100px; /* Reduced image size */
+    width: 100px; 
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
@@ -317,17 +317,17 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
 .profile-details {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Reduced gap */
+    gap: 10px; 
 }
 
 .profile-item label {
-    font-size: 1em; /* Reduced font size */
+    font-size: 1em; 
     color: #333;
 }
 
 .profile-item input {
     width: 100%;
-    padding: 10px; /* Reduced padding */
+    padding: 10px; 
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -336,24 +336,191 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
 
 .profile-item input:focus {
     border-color: #3498db;
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2); /* Smaller shadow */
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2); 
 }
 
 /* Edit and Save Buttons */
 #edit-button, #save-button {
-    padding: 8px 15px; /* Smaller padding */
-    border-radius: 20px; /* Reduced radius */
+    padding: 8px 15px; 
+    border-radius: 20px; 
     background-color: #3498db;
     color: white;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4); /* Smaller shadow */
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.4);
     margin-right: 10px;
 }
 
 #edit-button:hover, #save-button:hover {
     background-color: #2980b9;
-    transform: translateY(-2px); /* Reduced hover effect */
+    transform: translateY(-2px); 
 }
 
+/* Form Containers */
+.add-unit-section .bubble {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: 40px auto;
+}
+
+/* Input Fields */
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-container input, 
+.input-container select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+    border-color: #3498db;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+}
+
+.input-container label {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 0.9em;
+    background-color: white;
+    padding: 0 5px;
+    color: #666;
+    pointer-events: none;
+    transition: 0.2s;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label,
+.input-container select:focus + label,
+.input-container select:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 10px;
+    font-size: 0.8em;
+    color: #3498db;
+}
+
+/* Button */
+.primary-btn {
+    padding: 12px 25px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    margin-top: 10px;
+}
+
+.primary-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
+}
+
+/* Success Message */
+#success-message {
+    background-color: #e8f4fc;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    text-align: center;
+}
+
+#success-message h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+#success-message p {
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* Unit Info Container */
+.unit-info-section .bubble {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: 40px auto;
+}
+
+/* Input Fields */
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-container input, 
+.input-container select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+    border-color: #3498db;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+}
+
+.input-container label {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 0.9em;
+    background-color: white;
+    padding: 0 5px;
+    color: #666;
+    pointer-events: none;
+    transition: 0.2s;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label,
+.input-container select:focus + label,
+.input-container select:not(:placeholder-shown) + label {
+    top: -12px;
+    left: 10px;
+    font-size: 0.8em;
+    color: #3498db;
+}
+
+/* Button */
+.primary-btn {
+    padding: 12px 25px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    margin-top: 10px;
+}
+
+.primary-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
+}
