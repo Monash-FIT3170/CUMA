@@ -59,6 +59,22 @@ nav a i {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
+.profile-info {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.profile-details {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
 .course-info h2 {
     margin-bottom: 15px;
     font-size: 1.8em;
@@ -159,7 +175,7 @@ textarea:focus {
 
 textarea {
     resize: vertical;
-    height: 80px;
+    height: 60px;
 }
 
 .input-container label {
@@ -288,3 +304,4 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
+

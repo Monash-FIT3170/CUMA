@@ -9,13 +9,16 @@
 
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
+import authenticateToken from '../middleware/authenticateToken.js';
+import authorize from '../middleware/roleAuth.js';
+import gemini from '../../ai/geminiTest.js';
 
 const router = express.Router();
 
 const collectionName = "testUnits";
 
 
-router.get('/getAllFromUni', async (req, res) => {
+router.get('/getAllFromUni', authenticateToken, async (req, res) => {
     /**
      * This endpoint retrieves all the units available in a university
      * 
@@ -83,6 +86,8 @@ router.get('/getAllFromUni', async (req, res) => {
 
         // get connections
         return res.json(result);
+
+
     }
     catch (error) {
         console.error(error);
@@ -91,7 +96,7 @@ router.get('/getAllFromUni', async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, authorize(['course_director']), async (req, res) => {
     /**
      * This endpoint inserts a unit into the database.
      * 
@@ -135,13 +140,20 @@ router.post('/', async (req, res) => {
             return res.status(400).json("unit already exists")
         }
 
+        // call gemini to create keywords for the unit
+        const aiGenUnitKeyword = await gemini(unitInfoReq.unitDescription)
+
         // add the unit
         const result = await units.insertOne(
             {
                 "universityName": universityNameReq,
+                "aiGenKeyWord": aiGenUnitKeyword,
                 ...unitInfoReq
             }
         )
+
+
+
         return res.status(200).json(result);
     } catch (error) {
         // Handle errors
@@ -151,7 +163,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.get('/retrieveUnit', async (req, res) => {
+router.get('/retrieveUnit', authenticateToken, async (req, res) => {
     /**
       This endpoint retrieves a unit from a specific university
       
@@ -201,7 +213,7 @@ router.get('/retrieveUnit', async (req, res) => {
 // });
 
 
-router.put('/:unitCode', async (req, res) => {
+router.put('/:unitCode', authenticateToken, authorize(['course_director']), async (req, res) => {
     /**
      * This endpoint modify a unit base on "unitcode"
      * 
@@ -229,7 +241,7 @@ router.put('/:unitCode', async (req, res) => {
 
         // get requestBody
         const universityName = req.body.universityName;
-        const newUnitInfo = req.body.newUnitInfo
+        var newUnitInfo = req.body.newUnitInfo
 
         // Extract the unitcode from request parameters
         const unitCode = req.params.unitCode;
@@ -238,18 +250,29 @@ router.put('/:unitCode', async (req, res) => {
         const database = client.db('CUMA');
         const units = database.collection(collectionName);
 
+        // gemini
+        var aiGenKeyWord = null;
+        if (newUnitInfo.unitDescription) {
+            aiGenKeyWord = await gemini(newUnitInfo.unitDescription);
+            newUnitInfo = {
+                ...newUnitInfo,
+                aiGenKeyWord: aiGenKeyWord
+            };
+        }
+
         // update the unit
         const result = await units.updateOne({
             unitCode: unitCode,
-            universityName: universityName
+            universityName: universityName,
         },
-            { $set: newUnitInfo }
+            { $set: newUnitInfo}
         );
 
         // if the unitCode does not exist
         if (result.matchedCount === 0) {
             return res.status(400).json("This unit does not exist")
         }
+
 
         return res.status(200).json(result);
     }
@@ -264,7 +287,7 @@ router.put('/:unitCode', async (req, res) => {
 });
 
 
-router.delete('/:unitCode', async (req, res) => {
+router.delete('/:unitCode', authenticateToken, authorize(['course_director']), async (req, res) => {
     // Handle DELETE request to delete unit by unitCode
     try {
         // get client
@@ -296,7 +319,7 @@ router.delete('/:unitCode', async (req, res) => {
 });
 
 
-router.get('/getAllNotInUni', async (req, res) => {
+router.get('/getAllNotInUni', authenticateToken, async (req, res) => {
     /**
      * This endpoint retrieves all the units available in a university
      * 
@@ -334,3 +357,4 @@ router.get('/getAllNotInUni', async (req, res) => {
 
 
 export default router;
+

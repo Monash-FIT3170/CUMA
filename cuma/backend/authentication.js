@@ -237,3 +237,58 @@ Backend.Auth.updateNewPassword = async function (token, email, password) {
     throw error;
   }
 };
+
+Backend.Auth.getUserInfo = async function () {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/user-info");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, data: result }; 
+
+  } catch (error) {
+    console.log("Error fetching user info:", error);
+    throw error;
+  }
+};
+
+
+Backend.Auth.updateUserInfo = async function (userInfo) {
+  try {
+      const url = new URL(serverPath + authBackendPath + "/update-user-info");
+
+      const response = await fetch(url, {
+          method: "POST", // or "PUT" depending on your API design
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userInfo),
+      });
+
+      const result = await response.json();
+
+      console.log({ result: result, status: response.status });
+
+      if (response.status === 200) {
+          console.log("User info updated successfully.");
+      } else {
+          console.error("Failed to update user info:", result);
+      }
+
+      return { result: result, status: response.status };
+
+  } catch (error) {
+      console.log("Error updating user info:", error);
+      throw error;
+  }
+};
+
