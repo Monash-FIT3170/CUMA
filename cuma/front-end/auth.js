@@ -168,7 +168,7 @@ function handleStudentFormSubmission(e) {
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            showSubmissionComplete(response.nextStep);
+            showSubmissionComplete(response.nextStep,response.userEmail);
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
@@ -199,7 +199,7 @@ function handleDirectorFormSubmission(e) {
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            showSubmissionComplete(response.nextStep);
+            showSubmissionComplete(response.nextStep,response.userEmail);
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
@@ -210,14 +210,14 @@ function goBack() {
 }
 
 // Function to show the submission complete section
-function showSubmissionComplete(nextStep) {
+function showSubmissionComplete(nextStep, userEmail) {
     document.getElementById('user-type-selection').style.display = 'none';
     document.getElementById('student-form').style.display = 'none';
     document.getElementById('course-director-form').style.display = 'none';
     document.getElementById('submission-complete').style.display = 'block';
-
-    // Store the nextStep URL for later use
     document.getElementById('submission-complete').dataset.nextStep = nextStep;
+    document.getElementById('user-email').textContent = userEmail;
+
 
     clearSignupData();
 }

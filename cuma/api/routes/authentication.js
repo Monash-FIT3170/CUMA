@@ -137,7 +137,8 @@ router.post('/role-verification', async (req, res) => {
 
         res.status(200).json({ 
             message: 'Role information added successfully.', 
-            nextStep: '/signup/mfa-init' 
+            nextStep: '/signup/mfa-init',
+            userEmail: newUser.email
         });
 
     } catch (error) {
