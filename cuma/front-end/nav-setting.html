@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - CUMA</title>
     <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/settings.css">
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
     <link rel="stylesheet" href="styles/header.css">
@@ -19,23 +20,27 @@
     <header-component></header-component>
     <sidenav-component isopen="true"></sidenav-component>
 
-<main id="main">
-    <!-- Settings Section -->
-    <section class="settings-info">
-        <h2>Settings</h2>
-        <div class="settings-container">
-            <!-- Dark Mode Setting -->
-            <div class="setting-item">
-                <label for="dark-mode-toggle">Dark Mode</label>
-                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+
+    <main id="main">
+        <!-- Settings Section -->
+        <section class="settings-info">
+            <h2>App Settings</h2>
+            <div class="settings-container">
+                <!-- Dark Mode Setting -->
+                <div class="settings-item">
+                    <label for="dark-mode-toggle">Dark Mode</label>
+                    <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+                </div>
+
+                <!-- Notifications Setting -->
+                <div class="settings-item">
+                    <label for="notifications-toggle">Enable Notifications</label>
+                    <input type="checkbox" id="notifications-toggle" onchange="toggleNotifications()">
+                </div>
+
             </div>
-            <!-- Email Notifications Setting -->
-            <div class="setting-item">
-                <label for="email-notifications-toggle">Email Notifications</label>
-                <input type="checkbox" id="email-notifications-toggle" onchange="toggleEmailNotifications()">
-            </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
+    
 </body>
 </html>
