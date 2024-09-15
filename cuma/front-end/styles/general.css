@@ -1,45 +1,12 @@
 /* Global styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f6f9;
 }
 
-/* header {
-    background-color: #4da5f5;
-    color: white;
-    padding: 15px 30px;
-    display: flex;
-    flex-direction: column;
-    width: 100px;
-    height: 100%;
-    position: absolute;
-}
-
-header h1 {
-    margin: 0;
-    width: 100px;
-}
-
-nav {
-    flex: 1;
-    vertical-align: top;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: block;
-    gap: 15px;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-} */
-
+/* Main layout */
 main {
     display: flex;
     padding: 20px;
@@ -50,18 +17,55 @@ main {
     margin-top: 75px;
 }
 
+/* Navigation Icons */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+nav a i {
+    font-size: 16px;
+    margin-right: 8px; 
+}
+
+.nav-sandwich-bar {
+    background-color: transparent; 
+    border: none;
+}
+
+/* Course Info Section */
 .course-info {
     flex: 1;
     background: white;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .course-info h2 {
     margin-bottom: 15px;
+    font-size: 1.8em;
+    color: #2c3e50;
 }
 
+/* Unit List */
 .unit-list {
     display: flex;
     flex-direction: column;
@@ -69,74 +73,93 @@ main {
 }
 
 .unit, .foreign-unit {
-    padding: 10px;
-    border-radius: 5px;
+    padding: 15px;
+    border-radius: 10px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.unit.selected{
+.unit.selected {
     background-color: #d3e9ff;
     border-color: #4da5f5;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
-
-
 
 .unit, .foreign-unit h4 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1em; 
+    color: #3498db;
 }
 
 .unit, .foreign-unit p {
-    margin: 0;
+    margin: 5px 0 0 0;
     color: #666;
 }
 
-.foreign-unit:hover{
-    background-color: #d8e8f8;
-    border-color: #88a4bd;
+.foreign-unit:hover {
+    background-color: #e3f2fd;
+    border-color: #3498db;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
-
-
-
+/* Scrollable Unit List */
 .unit-list-wrapper {
-    max-height: 500px; /* Adjust the height as needed */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px; 
+    overflow-y: auto;
 }
 
-
+/* Buttons */
 button, .add-unit {
-    background-color: #4da5f5;
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 30px;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 7px 20px rgba(52, 152, 219, 0.5);
 }
 
 button:hover, .add-unit:hover {
-    background-color: #3b90d5;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
 
+/* Input Containers */
 .input-container {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.input-container input[type="text"], input[type="number"], select, textarea {
+.input-container input[type="text"], 
+input[type="number"], 
+select, 
+textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input:focus, 
+select:focus, 
+textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
 }
 
 textarea {
     resize: vertical;
-    height: 60px;
+    height: 80px;
 }
 
 .input-container label {
@@ -159,129 +182,109 @@ textarea {
     background-color: white;
     padding: 0 5px;
     font-size: 0.8em;
-    color: #4da5f5;
+    color: #3498db;
 }
 
 /* Add Unit Form */
-.add-unit-form,
-.add-connection-form {
+.add-unit-form, .add-connection-form {
     flex: 1;
     background: white;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
     display: none;
 }
 
 .add-unit-form h3, .add-connection-form h3 {
     margin-top: 0;
     margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #2c3e50;
 }
 
-.add-unit-form .input-container,
-.add-connection-form .input-container {
-    margin-bottom: 15px;
-}
-
-.add-unit-form .input-container input,
-.add-unit-form .input-container select,
-.add-unit-form .input-container textarea,
-.add-connection-form .input-container input,
-.add-connection-form .input-container select,
-.add-connection-form .input-container textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-button,
-.add-unit-form button,
-.add-connection-form button {
-    background-color: #4da5f5;
+/* Buttons for Forms */
+button, .add-unit-form button, .add-connection-form button {
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 30px;
     cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     margin-right: 10px;
     margin-bottom: 15px;
+    box-shadow: 0 7px 20px rgba(52, 152, 219, 0.5);
 }
 
-button:hover,
-.add-unit-form button:hover,
-.add-connection-form button:hover {
-    background-color: #3b90d5;
-}
-
-button:last-of-type,
-.add-unit-form button:last-of-type,
-.add-connection-form button:last-of-type {
-    background: #4da5f5;
-}
-
-button:last-of-type:hover,
-.add-unit-form button:last-of-type:hover,
-.add-connection-form button:last-of-type:hover {
-    background: #4da5f5;
+button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
 
 /* Unit Details Section */
-.unit-details {
+.unit-details, .mapped-units {
     flex: 1;
     background: white;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Mapped Units Section */
-.mapped-units {
-    flex: 1;
-    background: white;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+.unit-details:hover, .mapped-units:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .mapped-units h4 {
     margin-top: 0;
     margin-bottom: 15px;
+    font-size: 1.3em;
+    color: #2c3e50;
 }
 
+/* Connections */
 .connection {
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     margin-bottom: 10px;
     background-color: #f9f9f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .connection h5 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.2em;
+    color: #3498db;
 }
 
 .connection p {
-    margin: 0;
+    margin: 5px 0 0 0;
     color: #666;
+}
+
+.connection:hover {
+    background-color: #e3f2fd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
 /* Modify and Delete Buttons */
 #modify-unit-button, #delete-unit-button {
-    background-color: #4da5f5;
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 30px;
     cursor: pointer;
-    margin-right: 10px;
-    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 7px 20px rgba(52, 152, 219, 0.5);
 }
 
 #modify-unit-button:hover, #delete-unit-button:hover {
-    background-color: #3b90d5;
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
-
