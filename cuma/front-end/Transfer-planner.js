@@ -164,7 +164,7 @@ function configureTargetUnitSlot(targetUniversityName) {
                 }
 
                 // Open the modal with home university units (using 'Monash' as an example)
-                setupHomeUnitsModal('Monash', targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
+                setupTargetUnitsModal('Monash', targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
             });
         } else {
             console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
@@ -242,7 +242,7 @@ function filterUnits() {
     renderUnitsInModal(unitModal.dataset.id, filteredUnits);
 }
 
-// Function to setup modal and fetch units based on the university name
+// Function to setup Home unit modal and fetch units based on the university name
 async function setupHomeUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
     unitModal.dataset.id = unitSlotID;
@@ -252,6 +252,29 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
 
     // Fetch the units from the backend
     Backend.Unit.getAllUnitsFromUniversity(universityName)
+    .then(UnitArray => {
+        allUnits = UnitArray; // Store the units for filtering
+        renderUnitsInModal(unitSlotID, allUnits);
+    })
+    .catch(error => {
+        console.error('Error fetching units from university:', error);
+        modalCardGrid.innerHTML = `<p>Error loading units. Please try again.</p>`;
+    });
+
+    // open the modal
+    unitModal.style.display = 'block';
+}
+
+// Function to setup Target unit modal and fetch units based on the university name 
+async function setupTargetUnitsModal(universityName, unitSlotID) {
+    // Set the unitSlotID to the modal grid dataset
+    unitModal.dataset.id = unitSlotID;
+
+    // Clear the modal grid and show a loading message
+    modalCardGrid.innerHTML = `<p>Loading units...</p>`;
+
+    // Fetch the units from the backend
+    Backend.Unit.getAllUnitsFromUniversity(universityName) // TODO: Change this to get Target units
     .then(UnitArray => {
         allUnits = UnitArray; // Store the units for filtering
         renderUnitsInModal(unitSlotID, allUnits);
@@ -361,7 +384,7 @@ function replaceSearchContainer(unitSlot) {
                 alert("Please select a unit from Home University first!");
                 return;
             }
-            setupHomeUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
+            setupTargetUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
         } else {
             console.error(`Unit slot with ID ${unitSlot.id} not found in home or target arrays.`);
         }
