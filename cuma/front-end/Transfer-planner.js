@@ -332,27 +332,40 @@ function replaceSearchContainer(unitSlot) {
     // Remove the unit data
     delete unitSlot.dataset.unitCode;
 
-    // Remove all child element - aka unitCard
+    // Remove all child elements - aka unitCard
     while (unitSlot.firstChild) {
         unitSlot.removeChild(unitSlot.firstChild);
-    };
+    }
 
-    // Create a new unit card element
+    // Create a new search icon container
     const searchIconContainer = document.createElement('div');
     searchIconContainer.className = 'search-icon-container';
-    searchIconContainer.innerHTML =`
+    searchIconContainer.innerHTML = `
         <span class="search-icon">🔍</span>
         <span class="add-text">ADD A UNIT</span>
     `;
 
-    // Add click eventlister to the search container
+    // Add click event listener to the search container
     searchIconContainer.addEventListener('click', (event) => {
-        const unitSlotPair = document.getElementById(unitSlot.dataset.slotPair);
-        if (targetUnitSlotNameArray.includes(unitSlotPair) && !unitSlotPair.dataset.unitCode) {
-            alert("Please select a Home Unit first!");
-            return;
+        // Determine if it's a home or target unit slot
+        const isHomeSlot = homeUnitSlotNameArray.includes(unitSlot.id);
+        const isTargetSlot = targetUnitSlotNameArray.includes(unitSlot.id);
+
+        if (isHomeSlot) {
+            // Handle home unit slot click event
+            setupHomeUnitsModal(unitSlot.dataset.university, unitSlot.id);
+        } else if (isTargetSlot) {
+            // Handle target unit slot click event
+            const homeSlotElement = document.getElementById(unitSlot.dataset.slotPair);
+            if (!homeSlotElement.dataset.unitCode) {
+                alert("Please select a unit from Home University first!");
+                return;
+            }
+            setupHomeUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
+        } else {
+            console.error(`Unit slot with ID ${unitSlot.id} not found in home or target arrays.`);
         }
-        setupHomeUnitsModal('monash', unitSlot.id); // TODO: need to change to 'unitSlot.dataset.university' to use correct data
+
         unitModal.style.display = 'block';
     });
 
