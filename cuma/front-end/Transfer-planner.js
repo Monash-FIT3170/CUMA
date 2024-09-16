@@ -2,6 +2,34 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleNav();
 });
 
+//handle nav stuff
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.getElementById("sidebar-content").style.display = "none";
+    document.getElementById("mapping-main").style.marginLeft= "0";
+    document.getElementById("mapping-main").style.width= "calc(100% - 60px)";
+}
+
+//handle nav stuff
+function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+    document.getElementById("sidebar-content").style.display = "block";
+    document.getElementById("mapping-main").style.marginLeft= "200px";
+    document.getElementById("mapping-main").style.width= "calc(100% - 260px)";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
 let allUnits = [];  // Store all units for search/filter functionality
 let navOpen = false;    // Navigation bar tracker
 
@@ -31,6 +59,11 @@ searchInput.addEventListener('input', filterUnits);
 levelSelect.addEventListener('change', filterUnits);
 studyPeriodSelect.addEventListener('change', filterUnits);
 
+// Close modal event
+closeModal.addEventListener('click', () => {
+    unitModal.style.display = 'none';
+});
+
 // On Create new Transfer plan form submit update database and configure then show the planner
 document.querySelector('.transfer-plan-form').addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent the form from submitting
@@ -59,6 +92,7 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
     configureTransferPlanner(formData);
 });
 
+// Configure the Transfer Planner with the data collected from the Transfer Plan Form
 function configureTransferPlanner(formData) {
     // Set the plan header
     plannerName.textContent = formData.planName;
@@ -69,63 +103,76 @@ function configureTransferPlanner(formData) {
     plannerHomeUniName.textContent = 'University of Monash';
     plannerTargetUniName.textContent = formData.transferUniversity;
 
+    // Change container visibility
     createNewPlanContainer.style.display = "none";
     plannerContainer.style.display = "block";
 
-
+    // Congfigure Unit Slots
+    configureHomeUnitSlot('Monash');
+    configureTargetUnitSlot(formData.transferUniversity);
 }
 
-// Gather all the home unit slots element and add click event listener to open the modal
-for (const homeUnitSlotName of homeUnitSlotNameArray) {
-    const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
+// Configure all the home unit slot with required data and click event
+function configureHomeUnitSlot(homeUniversityName) {
+    // Gather all the home unit slots element and add click event listener to open the modal
+    for (const homeUnitSlotName of homeUnitSlotNameArray) {
 
-    homeUnitSlotElement.dataset.slotPair = getTargetUnitSlotNamePair(homeUnitSlotName);
-    homeUnitSlotElement.dataset.university = 'Monash';
+        // Get unit slot
+        const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
 
-    const searchIcon = homeUnitSlotElement.querySelector('.search-icon-container')
-    if (searchIcon) {
-        searchIcon.addEventListener('click', (event) => {
-            setupHomeUnitsModal('Monash', homeUnitSlotElement.id); // Fetch data for 'Monash' when home slot is clicked
-            unitModal.style.display = 'block'; // Show the modal
-        });
-    } else {
-        console.error(`Element with ID ${homeUnitSlotName} not found`);
+        // store data
+        homeUnitSlotElement.dataset.slotPair = getTargetUnitSlotNamePair(homeUnitSlotName);
+        homeUnitSlotElement.dataset.university = homeUniversityName;
+
+        // Add click event listener to setup and open modal
+        const searchIcon = homeUnitSlotElement.querySelector('.search-icon-container');
+        if (searchIcon) {
+            searchIcon.addEventListener('click', (event) => {
+                setupHomeUnitsModal(homeUniversityName, homeUnitSlotElement.id);
+            });
+        } else {
+            console.error(`Element with ID ${homeUnitSlotName} not found`);
+        }
     }
 }
 
-// Gather all the target unit slots elements and add click event listener to open the modal
-for (const targetUnitSlotName of targetUnitSlotNameArray) { 
+// Configure all the target unit slot with required data and click event
+function configureTargetUnitSlot(targetUniversityName) {
 
-    const targetUnitSlotElement = document.getElementById(targetUnitSlotName);
+    // Gather all the target unit slots elements and add click event listener to open the modal
+    for (const targetUnitSlotName of targetUnitSlotNameArray) { 
 
-    // Set the dataset.slotPair using the getHomeUnitSlotNamePair function
-    const homeUnitSlotNamePair = getHomeUnitSlotNamePair(targetUnitSlotName);
-    targetUnitSlotElement.dataset.slotPair = homeUnitSlotNamePair;
-    
-    // Find the search icon within the target unit slot element
-    const searchIcon = targetUnitSlotElement.querySelector('.search-icon-container');
-    if (searchIcon) {
-        searchIcon.addEventListener('click', (event) => {
+        // get target slot
+        const targetUnitSlotElement = document.getElementById(targetUnitSlotName);
 
-            // Get the corresponding home slot element inside the event listener
-            const homeSlotElement = document.getElementById(targetUnitSlotElement.dataset.slotPair);
+        // store data
+        targetUnitSlotElement.dataset.slotPair = getHomeUnitSlotNamePair(targetUnitSlotName);
+        targetUnitSlotElement.dataset.university = targetUniversityName;
+        
+        // Add click event listener to setup and open modal
+        const searchIcon = targetUnitSlotElement.querySelector('.search-icon-container');
+        if (searchIcon) {
+            searchIcon.addEventListener('click', (event) => {
 
-            // Check if the home slot that it is paired to does not have a unit (by checking uniCode stored in dataset)
-            if (!homeSlotElement.dataset.unitCode) {
-                alert("Please select a unit from Home University first!");
-                return;
-            }
+                // Get the corresponding home slot element inside the event listener
+                const homeSlotElement = document.getElementById(targetUnitSlotElement.dataset.slotPair);
 
-            // Open the modal with home university units (using 'Monash' as an example)
-            setupHomeUnitsModal('Monash', targetUnitSlotElement.id);
-            unitModal.style.display = 'block'; // Show the modal
-        });
-    } else {
-        console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
+                // Check if the home slot that it is paired to does not have a unit (by checking uniCode stored in dataset)
+                if (!homeSlotElement.dataset.unitCode) {
+                    alert("Please select a unit from Home University first!");
+                    return;
+                }
+
+                // Open the modal with home university units (using 'Monash' as an example)
+                setupHomeUnitsModal('Monash', targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
+            });
+        } else {
+            console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
+        }
     }
 }
 
-// Get the Home Slot's name that belong with the Target Slot
+// Utils - Get the Home Slot's name that belong with the Target Slot
 function getHomeUnitSlotNamePair(targetUnitSlotName) {
     let homeUnitSlotNamePair = NaN;
     switch (targetUnitSlotName) {
@@ -148,7 +195,7 @@ function getHomeUnitSlotNamePair(targetUnitSlotName) {
     return homeUnitSlotNamePair;
 }
 
-// Get the Target Slot's name that belong with the Home Slot
+// Utils - Get the Target Slot's name that belong with the Home Slot
 function getTargetUnitSlotNamePair(homeUnitSlotName) {
     let targetUnitSlotNamePair = NaN;
     switch (homeUnitSlotName) {
@@ -171,57 +218,24 @@ function getTargetUnitSlotNamePair(homeUnitSlotName) {
     return targetUnitSlotNamePair;
 }
 
-//handle nav stuff
-function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
-    document.getElementById("sidebar-content").style.display = "none";
-    document.getElementById("mapping-main").style.marginLeft= "0";
-    document.getElementById("mapping-main").style.width= "calc(100% - 60px)";
-}
-
-//handle nav stuff
-function openNav() {
-    document.getElementById("sidebar").style.width = "200px";
-    document.getElementById("sidebar-content").style.display = "block";
-    document.getElementById("mapping-main").style.marginLeft= "200px";
-    document.getElementById("mapping-main").style.width= "calc(100% - 260px)";
-}
-
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
-
-// Close modal event
-closeModal.addEventListener('click', () => {
-    unitModal.style.display = 'none';
-});
-
 // Function to filter units based on search text, level, and study period
 function filterUnits() {
     const searchText = searchInput.value.toLowerCase();
-    // const selectedLevel = levelSelect.value;
-    // const selectedStudyPeriod = studyPeriodSelect.value;
+    const selectedLevel = levelSelect.value;
+    const selectedStudyPeriod = studyPeriodSelect.value;
 
     const filteredUnits = allUnits.filter(unit => {
         // Check if the unit name matches the search text
         const matchesSearch = unit.unitName.toLowerCase().includes(searchText);
 
         // TODO: Check if the unit level matches the selected level
-        // const matchesLevel = selectedLevel === '' || unit.unitLevel === selectedLevel;
+        const matchesLevel = selectedLevel === '' || unit.unitLevel === selectedLevel;
 
         // TODO: Check if the study period matches the selected one
-        // const matchesStudyPeriod = selectedStudyPeriod === '' || selectedStudyPeriod === 'semester-1' || selectedStudyPeriod === 'semester-2';
+        const matchesStudyPeriod = selectedStudyPeriod === '' || selectedStudyPeriod === 'semester-1' || selectedStudyPeriod === 'semester-2';
 
         // Return true if the unit matches all filters
-        return matchesSearch;
+        return matchesSearch && matchesLevel && matchesStudyPeriod;
     });
 
     // Re-render units based on the filtered results
@@ -246,6 +260,9 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
         console.error('Error fetching units from university:', error);
         modalCardGrid.innerHTML = `<p>Error loading units. Please try again.</p>`;
     });
+
+    // open the modal
+    unitModal.style.display = 'block';
 }
 
 // Function to render units to the grid
@@ -274,14 +291,18 @@ function openUnitInfoModal(unit) {
 
 // Add the unit to the unitSlot
 function addUnitToSlot(unitSlotID, unit) {
+
+    // Check if homeUnitSlot already contain the unit
     if (homeUnitIsAlreadySelected(unit)) {
         alert(unit.unitName + ' already is selected!');
         return;
     }
+
     // Get the slot and set the unit data
     const unitSlot = document.getElementById(unitSlotID);
     unitSlot.dataset.unitCode = unit.unitCode;
 
+    // Remove all child element - aka search container
     while (unitSlot.firstChild) {
         unitSlot.removeChild(unitSlot.firstChild);
     }
@@ -292,21 +313,23 @@ function addUnitToSlot(unitSlotID, unit) {
     unitSlot.appendChild(unitCardDiv);
 }
 
-// Check all the home slot if it has been selected
-function homeUnitIsAlreadySelected(unit) {
-    for (const homeUnitSlotName of homeUnitSlotNameArray) {
-        const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
-        if (homeUnitSlotElement && homeUnitSlotElement.dataset.unitCode && homeUnitSlotElement.dataset.unitCode === unit.unitCode) {
-            return true;
-        }
-    }
-    return false;
-}
-
 // Remove unit from the unitSlot
 function removeUnitFromSlot(unitSlotID) {
     // Get unitSlot and remove unit data
     const unitSlot = document.getElementById(unitSlotID);
+    replaceSearchContainer(unitSlot);
+
+    // If the unit is a homeUnitSlot then need to remove target slot too.
+    if (homeUnitSlotNameArray.includes(unitSlotID)) {
+        const unitSlotPair = document.getElementById(unitSlot.dataset.slotPair);
+        replaceSearchContainer(unitSlotPair);
+    }
+}
+
+// Remove all children element in unitSlot and replace with search container
+function replaceSearchContainer(unitSlot) {
+    
+    // Remove the unit data
     delete unitSlot.dataset.unitCode;
 
     // Remove all child element - aka unitCard
@@ -314,10 +337,27 @@ function removeUnitFromSlot(unitSlotID) {
         unitSlot.removeChild(unitSlot.firstChild);
     };
 
-    // Create and add the search container back
-    const searchContainer = creatSearchContainer('Monash', unitSlotID);
-    unitSlot.appendChild(searchContainer);
+    // Create a new unit card element
+    const searchIconContainer = document.createElement('div');
+    searchIconContainer.className = 'search-icon-container';
+    searchIconContainer.innerHTML =`
+        <span class="search-icon">🔍</span>
+        <span class="add-text">ADD A UNIT</span>
+    `;
 
+    // Add click eventlister to the search container
+    searchIconContainer.addEventListener('click', (event) => {
+        const unitSlotPair = document.getElementById(unitSlot.dataset.slotPair);
+        if (targetUnitSlotNameArray.includes(unitSlotPair) && !unitSlotPair.dataset.unitCode) {
+            alert("Please select a Home Unit first!");
+            return;
+        }
+        setupHomeUnitsModal('monash', unitSlot.id); // TODO: need to change to 'unitSlot.dataset.university' to use correct data
+        unitModal.style.display = 'block';
+    });
+
+    // Add the container to the slot
+    unitSlot.appendChild(searchIconContainer);
 }
 
 // Create a Unit Card to store in planner
@@ -375,21 +415,20 @@ function createUnitCard(unitSlotID, unit, type) {
     return unitCardDiv
 }
 
-// Create a search container to store in the UnitSlot when unitCard is removed
-function creatSearchContainer(university, unitSlotID) {
-    // Create a new unit card element
-    const searchIconContainer = document.createElement('div');
-    searchIconContainer.className = 'search-icon-container';
-    searchIconContainer.innerHTML =`
-        <span class="search-icon">🔍</span>
-        <span class="add-text">ADD A UNIT</span>
-    `;
+// Utils - Check all the home slot if it has been selected
+function homeUnitIsAlreadySelected(unit) {
+    for (const homeUnitSlotName of homeUnitSlotNameArray) {
+        const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
+        if (homeUnitSlotElement && homeUnitSlotElement.dataset.unitCode && homeUnitSlotElement.dataset.unitCode === unit.unitCode) {
+            return true;
+        }
+    }
+    return false;
+}
 
-    searchIconContainer.addEventListener('click', (event) => {
-        setupHomeUnitsModal(university, unitSlotID); // Fetch data for university when home slot is clicked
-        unitModal.style.display = 'block'; // Show the modal
-    });
-
-    return searchIconContainer;
-
+// Utils - Check if the Home Unit Slot is empty
+function isHomeUnitSlotEmpty(unitSlot) {
+    const unitSlotPair = document.getElementById(unitSlot.dataset.slotPair);
+    if (unitSlotPair.dataset.unitCode) return false;
+    return true;
 }
