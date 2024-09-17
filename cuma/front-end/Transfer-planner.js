@@ -46,9 +46,9 @@ const plannerTargetUniName = document.getElementById("target-university-name");
 const homeUnitSlotNameArray = ["home-unit-slot-1", "home-unit-slot-2", "home-unit-slot-3", "home-unit-slot-4"];
 const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "target-unit-slot-3", "target-unit-slot-4"];
 
-// Get Modal Elements
-const unitModal = document.getElementById("unitModal");
-const closeModal = document.getElementById('closeModal');
+// Get Add Unit Modal Elements
+const addUnitModal = document.getElementById("add-unit-modal");
+const closeModal = document.getElementById('close-add-unit-modal');
 const modalCardGrid = document.getElementById('home-university-card-grid');
 const searchInput = document.querySelector('.search-bar input');
 const levelSelect = document.getElementById('unit-course-level');
@@ -61,7 +61,7 @@ studyPeriodSelect.addEventListener('change', filterUnits);
 
 // Close modal event
 closeModal.addEventListener('click', () => {
-    unitModal.style.display = 'none';
+    addUnitModal.style.display = 'none';
 });
 
 // On Create new Transfer plan form submit update database and configure then show the planner
@@ -239,13 +239,13 @@ function filterUnits() {
     });
 
     // Re-render units based on the filtered results
-    renderUnitsInModal(unitModal.dataset.id, filteredUnits);
+    renderUnitsInModal(addUnitModal.dataset.id, filteredUnits);
 }
 
 // Function to setup Home unit modal and fetch units based on the university name
 async function setupHomeUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
-    unitModal.dataset.id = unitSlotID;
+    addUnitModal.dataset.id = unitSlotID;
 
     // Clear the modal grid and show a loading message
     modalCardGrid.innerHTML = `<p>Loading units...</p>`;
@@ -262,13 +262,13 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
     });
 
     // open the modal
-    unitModal.style.display = 'block';
+    addUnitModal.style.display = 'block';
 }
 
 // Function to setup Target unit modal and fetch units based on the university name 
 async function setupTargetUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
-    unitModal.dataset.id = unitSlotID;
+    addUnitModal.dataset.id = unitSlotID;
 
     // Clear the modal grid and show a loading message
     modalCardGrid.innerHTML = `<p>Loading units...</p>`;
@@ -285,7 +285,7 @@ async function setupTargetUnitsModal(universityName, unitSlotID) {
     });
 
     // open the modal
-    unitModal.style.display = 'block';
+    addUnitModal.style.display = 'block';
 }
 
 // Function to render units to the grid
@@ -304,12 +304,6 @@ function renderUnitsInModal(unitSlotID, units) {
         const unitCardDiv = createUnitCard(unitSlotID, unit, 'add');
         modalCardGrid.appendChild(unitCardDiv);
     });
-}
-
-// Open unit information modal
-function openUnitInfoModal(unit) {
-    // TODO: Create the page and render it
-    alert(`More information about ${unit.unitName}`);
 }
 
 // Add the unit to the unitSlot
@@ -389,7 +383,7 @@ function replaceSearchContainer(unitSlot) {
             console.error(`Unit slot with ID ${unitSlot.id} not found in home or target arrays.`);
         }
 
-        unitModal.style.display = 'block';
+        addUnitModal.style.display = 'block';
     });
 
     // Add the container to the slot
@@ -439,8 +433,8 @@ function createUnitCard(unitSlotID, unit, type) {
     const actionButton = unitCardDiv.querySelector('#' + actionBtnId);
     if (type === 'add'){
         actionButton.addEventListener('click', () => {
-            addUnitToSlot(unitModal.dataset.id, unit);
-            unitModal.style.display = 'none';
+            addUnitToSlot(addUnitModal.dataset.id, unit);
+            addUnitModal.style.display = 'none';
         });
     } else {
         actionButton.addEventListener('click', () => {
@@ -468,3 +462,54 @@ function isHomeUnitSlotEmpty(unitSlot) {
     if (unitSlotPair.dataset.unitCode) return false;
     return true;
 }
+
+// Get Unit Info Modal Elements
+const unitInfoModal = document.getElementById('unit-info-modal');
+const closeUnitInfoModal = document.getElementById('close-unit-info-modal');
+const unitInfoDetails = document.getElementById('units-details');
+const unitInfoUnitName = document.getElementById('units-name');
+const unitInfoSemesterTagContainer = document.getElementById('.semester-tags-container');
+const unitInfoSelectedTag = document.getElementById('selected-tag');
+const unitInfoDescription = document.getElementById('unit-descriptions');
+const unitInfoHandbookLink = document.getElementById('handbook-link');
+const unitInfoUnitCourseNames = document.getElementById('unit-course-name');
+
+// Open unit information modal
+function openUnitInfoModal(unit) {
+    unitInfoModal.style.display = "block";
+    unitInfoUnitName.textContent = unit.unitName;
+    unitInfoDetails.textContent = `${unit.unitCode} | Level ${unit.unitLevel} | ${unit.creditPoints} Credits`;
+    unitInfoDescription.textContent = unit.unitDescription;
+    unitInfoHandbookLink.href = unit.handBookURL;
+
+    const unitCourseContainer = document.querySelector('.unit-course-container');
+
+    // Clear any existing content (optional)
+    unitCourseContainer.innerHTML = '';
+
+    // Loop through the list and create elements
+    if (unit.course) {
+        unit.course.forEach(course => {
+            const courseItemDiv = document.createElement('div');
+            courseItemDiv.classList.add('course-item');
+            courseItemDiv.textContent = `${course.courseCode} - ${course.courseName}`;
+            unitCourseContainer.appendChild(courseItemDiv);
+        });
+    } else {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('course-item');
+        itemDiv.textContent = 'Unspecified. Please refer to the unit handbook.';
+        unitCourseContainer.appendChild(itemDiv);
+    }
+
+    if (homeUnitIsAlreadySelected(unit)) {
+        unitInfoSelectedTag.style.display = "block";
+    } else {
+        unitInfoSelectedTag.style.display = "none";
+    }
+    
+}
+
+closeUnitInfoModal.addEventListener('click', () => {
+    unitInfoModal.style.display = "none";
+});

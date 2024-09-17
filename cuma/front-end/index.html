@@ -62,7 +62,7 @@
     <main id="mapping-main">
 
         <!-- Create New Plan Container -->
-        <div class="container" id="create-new-plan">
+        <div class="container" id="create-new-plan" style="display: block;">
 
             <!-- New Plan Form -->
             <form class="transfer-plan-form">
@@ -133,7 +133,6 @@
                 <button type="submit" class="submit-button">Create Transfer Plan</button>
             </form>
         </div>
-
                 
         <!-- Add Unit Connection Container -->
         <div class="container" id="transfer-planner" style="display: none;">
@@ -250,15 +249,15 @@
             </div>
         </div>
 
-        <!-- Full-screen modal container -->
-        <div id="unitModal" class="modal">
+        <!-- Full-screen modal container displaying units for adding to mapping slot -->
+        <div class="modal" id="add-unit-modal" style="display: none;">
             <div class="modal-content">
 
                 <!-- Header with Search Bar -->
                 <div class="modal-header">
                     <div class="search-bar">
                         <input type="text" placeholder="Search Units from Monash University" />
-                        <button class="close-button" id="closeModal">×</button>
+                        <button class="close-button" id="close-add-unit-modal">×</button>
                     </div>
                 </div>
 
@@ -298,6 +297,44 @@
 
                     <!-- Add Custom Unit button -->
                     <button class="add-custom">+ Add Custom Unit</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Floating modal container displaying selected units information-->
+        <div class="modal" id="unit-info-modal" style="display: none;">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <div class="modal-title-header">
+                        <h1>Subject Details</h1>
+                        <button class="close-button" id="close-unit-info-modal">×</button>
+                    </div>
+                </div>
+
+                <!-- Unit Content -->
+                <div class="unit-info-container">
+                    <p class="unit-details-text" id="units-details">Placeholder</p>
+                    <h1 class="unit-name-text" id="units-name">Placeholder</h1>
+                    <div class="tags-container">
+                        <div class="semester-tags-container">
+                            <div class="semester-tag">Semester 1</div>
+                            <div class="semester-tag">Semester 2</div>
+                        </div>
+                        <div class="selected-tag" id="selected-tag"><img src="images/check.png" class="check-icon">In Plan</div>
+                    </div>
+                    <div class="section-container">
+                        <h2 id="section-heading">Description</h3>
+                        <p id="unit-descriptions">Placeholder</p>
+                        <a id="handbook-link" target="_blank">View more details in Handbook<img src="images/share.png" class="share-icon"></a>
+                    </div>
+                    <div class="section-container">
+                        <h2 id="section-heading">Course</h3>
+                        <div class="unit-course-container">
+                        </div>
+                    </div>
                 </div>
 
             </div>
