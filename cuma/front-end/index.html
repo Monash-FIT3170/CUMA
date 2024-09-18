@@ -269,6 +269,7 @@
                         <div class="filter-selection">
                             <label for="unit-course-level">Course Level</label>
                             <select id="unit-course-level">
+                                <option value="">select</option>
                                 <option value="1">Level 1</option>
                                 <option value="2">Level 2</option>
                                 <option value="3">Level 3</option>
@@ -281,6 +282,7 @@
                         <div class="filter-selection">
                             <label for="unit-study-period">Study Period</label>
                             <select id="unit-study-period">
+                                <option value="">select</option>
                                 <option value="semester-1">Semester 1</option>
                                 <option value="semester-2">Semester 2</option>
                                 <option value="summer-term">Summer Term</option>
@@ -302,6 +304,9 @@
             </div>
         </div>
 
+        <!-- Overlay for background blur -->
+        <div class="modal-overlay" id="modal-overlay" style="display: none;"></div>
+
         <!-- Floating modal container displaying selected units information-->
         <div class="modal" id="unit-info-modal" style="display: none;">
             <div class="modal-content">
@@ -320,8 +325,6 @@
                     <h1 class="unit-name-text" id="units-name">Placeholder</h1>
                     <div class="tags-container">
                         <div class="semester-tags-container">
-                            <div class="semester-tag">Semester 1</div>
-                            <div class="semester-tag">Semester 2</div>
                         </div>
                         <div class="selected-tag" id="selected-tag"><img src="images/check.png" class="check-icon">In Plan</div>
                     </div>

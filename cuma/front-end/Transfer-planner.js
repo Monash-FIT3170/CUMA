@@ -1,3 +1,5 @@
+let navOpen = false;    // Navigation bar tracker
+
 document.addEventListener('DOMContentLoaded', () => {
     toggleNav();
 });
@@ -30,39 +32,12 @@ function toggleNav() {
     
 }
 
-let allUnits = [];  // Store all units for search/filter functionality
-let navOpen = false;    // Navigation bar tracker
+
+// ---------- Create New Planner Logic ---------- //
+
 
 // Get create new plan element
 const createNewPlanContainer = document.getElementById("create-new-plan");
-
-// Get Planner Element
-const plannerContainer = document.getElementById("transfer-planner");
-const plannerName = document.getElementById("planner-name");
-const plannerCourse = document.getElementById("course-name");
-const plannerStudyYearPeriod = document.getElementById("study-year-period");
-const plannerHomeUniName = document.getElementById("home-university-name");
-const plannerTargetUniName = document.getElementById("target-university-name");
-const homeUnitSlotNameArray = ["home-unit-slot-1", "home-unit-slot-2", "home-unit-slot-3", "home-unit-slot-4"];
-const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "target-unit-slot-3", "target-unit-slot-4"];
-
-// Get Add Unit Modal Elements
-const addUnitModal = document.getElementById("add-unit-modal");
-const closeModal = document.getElementById('close-add-unit-modal');
-const modalCardGrid = document.getElementById('home-university-card-grid');
-const searchInput = document.querySelector('.search-bar input');
-const levelSelect = document.getElementById('unit-course-level');
-const studyPeriodSelect = document.getElementById('unit-study-period');
-
-// Attach event listeners for search input and filter dropdowns
-searchInput.addEventListener('input', filterUnits);
-levelSelect.addEventListener('change', filterUnits);
-studyPeriodSelect.addEventListener('change', filterUnits);
-
-// Close modal event
-closeModal.addEventListener('click', () => {
-    addUnitModal.style.display = 'none';
-});
 
 // On Create new Transfer plan form submit update database and configure then show the planner
 document.querySelector('.transfer-plan-form').addEventListener('submit', function (event) {
@@ -91,6 +66,19 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
     // Setup the planner container
     configureTransferPlanner(formData);
 });
+
+
+// ---------- Transfer Planner Logic ---------- //
+
+// Get Planner Element
+const plannerContainer = document.getElementById("transfer-planner");
+const plannerName = document.getElementById("planner-name");
+const plannerCourse = document.getElementById("course-name");
+const plannerStudyYearPeriod = document.getElementById("study-year-period");
+const plannerHomeUniName = document.getElementById("home-university-name");
+const plannerTargetUniName = document.getElementById("target-university-name");
+const homeUnitSlotNameArray = ["home-unit-slot-1", "home-unit-slot-2", "home-unit-slot-3", "home-unit-slot-4"];
+const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "target-unit-slot-3", "target-unit-slot-4"];
 
 // Configure the Transfer Planner with the data collected from the Transfer Plan Form
 function configureTransferPlanner(formData) {
@@ -217,6 +205,29 @@ function getTargetUnitSlotNamePair(homeUnitSlotName) {
     }
     return targetUnitSlotNamePair;
 }
+
+
+// ---------- Add Unit Modal Logic ---------- //
+
+// Get Add Unit Modal Elements
+const addUnitModal = document.getElementById("add-unit-modal");
+const closeAddUnitModal = document.getElementById('close-add-unit-modal');
+const modalCardGrid = document.getElementById('home-university-card-grid');
+const searchInput = document.querySelector('.search-bar input');
+const levelSelect = document.getElementById('unit-course-level');
+const studyPeriodSelect = document.getElementById('unit-study-period');
+
+let allUnits = [];  // Store all units for search/filter functionality
+
+// Close modal event
+closeAddUnitModal.addEventListener('click', () => {
+    addUnitModal.style.display = 'none';
+});
+
+// Attach event listeners for search input and filter dropdowns
+searchInput.addEventListener('input', filterUnits);
+levelSelect.addEventListener('change', filterUnits);
+studyPeriodSelect.addEventListener('change', filterUnits);
 
 // Function to filter units based on search text, level, and study period
 function filterUnits() {
@@ -456,6 +467,17 @@ function homeUnitIsAlreadySelected(unit) {
     return false;
 }
 
+// Utils - Check all the target slot if it has been selected
+function targetUnitIsAlreadySelected(unit) {
+    for (const targetUnitSlotName of targetUnitSlotNameArray) {
+        const targetUnitSlotElement = document.getElementById(targetUnitSlotName);
+        if (targetUnitSlotElement && targetUnitSlotElement.dataset.unitCode && targetUnitSlotElement.dataset.unitCode === unit.unitCode) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Utils - Check if the Home Unit Slot is empty
 function isHomeUnitSlotEmpty(unitSlot) {
     const unitSlotPair = document.getElementById(unitSlot.dataset.slotPair);
@@ -463,31 +485,49 @@ function isHomeUnitSlotEmpty(unitSlot) {
     return true;
 }
 
+
+// ---------- Unit Info Floating Modal Logic ---------- //
+
 // Get Unit Info Modal Elements
 const unitInfoModal = document.getElementById('unit-info-modal');
 const closeUnitInfoModal = document.getElementById('close-unit-info-modal');
 const unitInfoDetails = document.getElementById('units-details');
 const unitInfoUnitName = document.getElementById('units-name');
-const unitInfoSemesterTagContainer = document.getElementById('.semester-tags-container');
+const unitInfoSemesterTagContainer = document.querySelector('.semester-tags-container');
+const unitCourseContainer = document.querySelector('.unit-course-container');
 const unitInfoSelectedTag = document.getElementById('selected-tag');
 const unitInfoDescription = document.getElementById('unit-descriptions');
 const unitInfoHandbookLink = document.getElementById('handbook-link');
 const unitInfoUnitCourseNames = document.getElementById('unit-course-name');
 
+const overlay = document.getElementById('modal-overlay');
+
 // Open unit information modal
 function openUnitInfoModal(unit) {
+
     unitInfoModal.style.display = "block";
+    console.log(overlay);
+    overlay.style.display = "block";
+    console.log(overlay);
+
+    // Add Unit general single unit data
     unitInfoUnitName.textContent = unit.unitName;
     unitInfoDetails.textContent = `${unit.unitCode} | Level ${unit.unitLevel} | ${unit.creditPoints} Credits`;
     unitInfoDescription.textContent = unit.unitDescription;
     unitInfoHandbookLink.href = unit.handBookURL;
 
-    const unitCourseContainer = document.querySelector('.unit-course-container');
+    // Add Unit Semester - TODO: Dynamically add these later
+    unitInfoSemesterTagContainer.innerHTML = '';
+    const sampleSemester = ['Semester 1', 'Semester 2'];
+    sampleSemester.forEach (semester => {
+        const semesterTagDiv = document.createElement('div');
+        semesterTagDiv.classList.add('semester-tag');
+        semesterTagDiv.textContent = semester;
+        unitInfoSemesterTagContainer.appendChild(semesterTagDiv);
+    });
 
-    // Clear any existing content (optional)
-    unitCourseContainer.innerHTML = '';
-
-    // Loop through the list and create elements
+    // Loop through the course list and create and add element
+    unitCourseContainer.innerHTML = "";
     if (unit.course) {
         unit.course.forEach(course => {
             const courseItemDiv = document.createElement('div');
@@ -502,14 +542,21 @@ function openUnitInfoModal(unit) {
         unitCourseContainer.appendChild(itemDiv);
     }
 
-    if (homeUnitIsAlreadySelected(unit)) {
+    // Check if the unit is selected
+    if (homeUnitIsAlreadySelected(unit) || targetUnitIsAlreadySelected(unit)) {
         unitInfoSelectedTag.style.display = "block";
     } else {
         unitInfoSelectedTag.style.display = "none";
     }
-    
 }
 
+// Close the unit info modal
 closeUnitInfoModal.addEventListener('click', () => {
     unitInfoModal.style.display = "none";
+    overlay.style.display = "none";
 });
+
+overlay.addEventListener('click', () => {
+    unitInfoModal.style.display = "none";
+    overlay.style.display = "none";
+})
