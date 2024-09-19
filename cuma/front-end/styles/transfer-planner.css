@@ -1,23 +1,46 @@
 /* General Reset */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
 
-main {
-  margin-left: 200px;
-  margin-top: 75px;
+html, body {
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
   padding: 0;
-  width: calc(100% - 260px);
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Prevents scrollbars from appearing due to overflow */
+}
+
+main {
+  flex: 1; /* Allows main to grow and fill available space */
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  gap: 20px;
+  padding-top: 75px; /* Creates space below the fixed header */
+  overflow-y: auto;
+}
+
+
 .container {
-  width: 100%;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
   padding: 30px;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -25,21 +48,24 @@ main {
 
 /* Transfer Planner Styling */
 .transfer-plan-form {
-  max-width: 800px;
-  min-width: 515px;
-  margin: 0 auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  max-width: 800px;
+  min-width: 300px;
+  margin: 0 auto;
+  padding: 10px;
   height: 100%;
-  overflow-y: auto;
-  align-items: center;
+  align-items: stretch;
+  justify-content: space-between;
+
 }
 
 .transfer-plan-form h1 {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: xxx-large;
-    color: #094183;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 3rem;
+  color: #094183;
 }
 
 .transfer-plan-form p {
@@ -95,12 +121,17 @@ main {
 }
 
 
-
-
 /* transfer-planner Header Section */
+#transfer-planner {
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
 .plan-header {
   text-align: left;
-  margin-bottom: 30px;
+  margin-bottom: 1.2rem;
 }
 
 .plan-header h1 {
@@ -122,20 +153,28 @@ main {
   color:#0e6ad3;
 }
 
+/* Grid Layout for Unit Slots */
+.plan-grid {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  height: 100%;
+}
+
 /* University Name Section */
 .university-name-column {
+  height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
   padding: 10px;
 }
 
 .univeristy-name-slot {
+  height: 100%;
   width: 100%;
-  min-width: 220px;
+  min-width: 150px;
   min-height: 245px;
-  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -149,16 +188,9 @@ main {
   color: #444;
 }
 
-
-/* Grid Layout for Unit Slots */
-.plan-grid {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
 /* Units Connection column */
 .unit-connection-column {
+  height: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -171,7 +203,6 @@ main {
   width: 100%;
   min-width: 220px;
   min-height: 245px;
-  height: 120px;
   border: 2px dashed #ccc;
   border-radius: 8px;
   display: flex;

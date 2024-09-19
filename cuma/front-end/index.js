@@ -826,18 +826,15 @@ let navOpen = false;
 
 //handle nav stuff
 function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
-
-    document.getElementById("sidebar-content").style.display = "none";
-
+    sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "false")
     document.getElementById("main").style.marginLeft= "0";
 }
 
 //handle nav stuff
 function openNav() {
-    document.getElementById("sidebar").style.width = "200px";
-
-    document.getElementById("sidebar-content").style.display = "block";
+    const sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "true");
 
     document.getElementById("main").style.marginLeft= "200px";
 }
@@ -893,3 +890,4 @@ function saveProfile() {
     document.getElementById('edit-button').style.display = 'inline-block';
     document.getElementById('save-button').style.display = 'none';
 }
+

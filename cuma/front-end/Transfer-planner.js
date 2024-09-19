@@ -1,23 +1,19 @@
-let navOpen = false;    // Navigation bar tracker
-
-document.addEventListener('DOMContentLoaded', () => {
-    toggleNav();
-});
+// Navigation bar tracker
+let navOpen = false;
 
 //handle nav stuff
 function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
-    document.getElementById("sidebar-content").style.display = "none";
-    document.getElementById("mapping-main").style.marginLeft= "0";
-    document.getElementById("mapping-main").style.width= "calc(100% - 60px)";
+    sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "false")
+    document.getElementById("main").style.marginLeft= "0";
 }
 
 //handle nav stuff
 function openNav() {
-    document.getElementById("sidebar").style.width = "200px";
-    document.getElementById("sidebar-content").style.display = "block";
-    document.getElementById("mapping-main").style.marginLeft= "200px";
-    document.getElementById("mapping-main").style.width= "calc(100% - 260px)";
+    const sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "true");
+
+    document.getElementById("main").style.marginLeft= "200px";
 }
 
 // open and close navigation bar
@@ -31,6 +27,10 @@ function toggleNav() {
     }
     
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+})
 
 
 // ---------- Create New Planner Logic ---------- //
@@ -93,7 +93,7 @@ function configureTransferPlanner(formData) {
 
     // Change container visibility
     createNewPlanContainer.style.display = "none";
-    plannerContainer.style.display = "block";
+    plannerContainer.style.display = "flex";
 
     // Congfigure Unit Slots
     configureHomeUnitSlot('Monash');
