@@ -19,10 +19,6 @@
 
 </head>
 
-
-
-
-
 <body>
     <header-component></header-component>
 
@@ -30,82 +26,38 @@
     
     <!-- Main Page -->
     <main id="main">
+        <!-- Transfer Plan Home  -->
+        <div class="container" id="transfer-planner-home">
+            <div class="container-content" id="transfer-planner-home-content">
 
-        <!-- Create New Plan Container -->
-        <div class="container" id="create-new-plan" style="display: flex;">
-
-            <!-- New Plan Form -->
-            <form class="transfer-plan-form">
-
-                <!-- Titles -->
-                <h1>Create a new Transfer Plan</h1>
-                <p>To start your plan select your course.</p>
-
-                <!-- Course Level input -->
-                <div class="form-group">
-                    <label for="course-level">Course Level *</label>
-                    <select id="course-level" required>
-                    <option value="">Select</option>
-                    <option value="Undergraduate">Undergraduate</option>
-                    <option value="Postgraduate">Postgraduate</option>
-                    </select>
+                <!-- Gettings headings -->
+                <div class="heading">
+                    <h1 id="greeting">Hello, Student!</h1>
+                    <p id="date">Wednesday, 19 September 2024</p>
                 </div>
 
-                <!-- Course Name Input -->
-                <div class="form-group">
-                    <label for="course">Select Course *</label>
-                    <select id="course" required>
-                    <option value="">Select</option>
-                    <option value="Bachelor of Engineering - Software">Bachelor of Engineering - Software</option>
-                    <option value="Bachelor of Engineering - Civil">Bachelor of Engineering - Civil</option>
-                    <!-- Add more courses as needed -->
-                    </select>
-                </div> 
+                <!-- Saved Planner Grid -->
+                <div class="saved-planner-grid">
+                    <!-- Planner List Items -->
+                    <div id="planner-list" class="planner-list hidden">
+                        <!-- Planner items will be dynamically added here -->
+                    </div>
 
-                <!-- Study Year Input -->
-                <div class="form-group">
-                    <label for="study-year">Study Year *</label>
-                    <select id="study-year" required>
-                    <option value="">Select</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    </select>
+                    <!-- Empty Message -->
+                    <div id="empty-message" class="empty-message-container hidden">
+                        <img src="./images/empty-folder-illustration.png" alt="No Planners - image by Freepik" class="empty-image">
+                        <h3>You have no transfer plan</h3>
+                        <p>Use the 'Create New Planner' button to get started</p>
+                    </div>
                 </div>
 
-                <!-- Study Period Input -->
-                <div class="form-group">
-                    <label for="study-period">Study Period *</label>
-                    <select id="study-period" required>
-                    <option value="">Select</option>
-                    <option value="Semester 1">Semester 1</option>
-                    <option value="Semester 2">Semester 2</option>
-                    </select>
-                </div>
-
-                <!-- Transfer University -->
-                <div class="form-group">
-                    <label for="transfer-university">Transfer University *</label>
-                    <select id="transfer-university" required>
-                    <option value="">Select</option>
-                    <option value="melbourne">University of Melbourne</option>
-                    <option value="rmit">RMIT University</option>
-                    </select>
-                </div>
-
-                <!-- Plan Name Input -->
-                <div class="form-group">
-                    <label for="plan-name">Name your plan *</label>
-                    <input type="text" id="plan-name" placeholder="New Transfer Plan 2025" required>
-                </div>
-
-                <!-- Submission Button -->
-                <button type="submit" class="submit-button">Create Transfer Plan</button>
-            </form>
+                <!-- Create New button -->
+                <button id="create-planner" class="create-button">+ Create New Planner</button>
+            </div>
         </div>
                 
         <!-- Add Unit Connection Container -->
-        <div class="container" id="transfer-planner" style="display: none;">
+        <div class="container hidden" id="transfer-planner">
 
             <!-- Text Heading -->
             <div class="plan-header">
@@ -218,67 +170,12 @@
                 <button class="btn send-approval">Send for Approval</button>
             </div>
         </div>
-
-        <!-- Full-screen modal container displaying units for adding to mapping slot -->
-        <div class="modal" id="add-unit-modal" style="display: none;">
-            <div class="modal-content">
-
-                <!-- Header with Search Bar -->
-                <div class="modal-header">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Search Units from Monash University" />
-                        <button class="close-button" id="close-add-unit-modal">×</button>
-                    </div>
-                </div>
-
-                <!-- Modal Content Container -->
-                <div class="unit-search-container">
-
-                    <!-- Filters -->
-                    <div class="filters">
-                        <div class="filter-selection">
-                            <label for="unit-course-level">Course Level</label>
-                            <select id="unit-course-level">
-                                <option value="">select</option>
-                                <option value="1">Level 1</option>
-                                <option value="2">Level 2</option>
-                                <option value="3">Level 3</option>
-                                <option value="4">Level 4</option>
-                                <option value="5">Level 5</option>
-                                <option value="6">Level 6</option>
-                            </select>
-                        </div>
-
-                        <div class="filter-selection">
-                            <label for="unit-study-period">Study Period</label>
-                            <select id="unit-study-period">
-                                <option value="">select</option>
-                                <option value="semester-1">Semester 1</option>
-                                <option value="semester-2">Semester 2</option>
-                                <option value="summer-term">Summer Term</option>
-                                <option value="winter-term">Winter Term</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Result Feedbacks -->
-                    <div class="results-heading"></div>
-
-                    <!-- Units Result Grid -->
-                    <div class="unit-cards-grid" id="home-university-card-grid"></div>
-
-                    <!-- Add Custom Unit button -->
-                    <button class="add-custom">+ Add Custom Unit</button>
-                </div>
-
-            </div>
-        </div>
-
+        
         <!-- Overlay for background blur -->
-        <div class="modal-overlay" id="modal-overlay" style="display: none;"></div>
+        <div class="modal-overlay hidden" id="modal-overlay"></div>
 
         <!-- Floating modal container displaying selected units information-->
-        <div class="modal" id="unit-info-modal" style="display: none;">
+        <div class="modal hidden" id="unit-info-modal">
             <div class="modal-content">
 
                 <!-- Modal Header -->
@@ -314,6 +211,142 @@
         </div>
 
     </main>
+
+    <!-- Create New Plan Container -->
+    <div class="modal hidden" id="create-new-plan">
+        <div class="modal-content">
+            <!-- Header with Search Bar -->
+            <div class="modal-header">
+                <div class="title">
+                    <h1>Create a new Transfer Plan</h1>
+                    <button class="close-button" id="close-create-new-plan-modal">×</button>
+                </div>
+            </div>
+
+            <!-- New Plan Form -->
+            <form class="transfer-plan-form">
+                <!-- Titles -->
+                <p>To start your plan select your course details.</p>
+
+                <!-- Course Level input -->
+                <div class="form-group">
+                    <label for="course-level">Course Level *</label>
+                    <select id="course-level" required>
+                    <option value="">Select</option>
+                    <option value="Undergraduate">Undergraduate</option>
+                    <option value="Postgraduate">Postgraduate</option>
+                    </select>
+                </div>
+
+                <!-- Course Name Input -->
+                <div class="form-group">
+                    <label for="course">Select Course *</label>
+                    <select id="course" required>
+                    <option value="">Select</option>
+                    <option value="Bachelor of Engineering - Software">Bachelor of Engineering - Software</option>
+                    <option value="Bachelor of Engineering - Civil">Bachelor of Engineering - Civil</option>
+                    <!-- Add more courses as needed -->
+                    </select>
+                </div> 
+
+                <!-- Study Year Input -->
+                <div class="form-group">
+                    <label for="study-year">Study Year *</label>
+                    <select id="study-year" required>
+                    <option value="">Select</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    </select>
+                </div>
+
+                <!-- Study Period Input -->
+                <div class="form-group">
+                    <label for="study-period">Study Period *</label>
+                    <select id="study-period" required>
+                    <option value="">Select</option>
+                    <option value="Semester 1">Semester 1</option>
+                    <option value="Semester 2">Semester 2</option>
+                    </select>
+                </div>
+
+                <!-- Transfer University -->
+                <div class="form-group">
+                    <label for="transfer-university">Transfer University *</label>
+                    <select id="transfer-university" required>
+                    <option value="">Select</option>
+                    <option value="melbourne">University of Melbourne</option>
+                    <option value="rmit">RMIT University</option>
+                    </select>
+                </div>
+
+                <!-- Plan Name Input -->
+                <div class="form-group">
+                    <label for="plan-name">Name your plan *</label>
+                    <input type="text" id="plan-name" placeholder="New Transfer Plan 2025" required>
+                </div>
+
+                <!-- Submission Button -->
+                <button type="submit" class="submit-button">Create Transfer Plan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Full-screen modal container displaying units for adding to mapping slot -->
+    <div class="modal hidden" id="add-unit-modal">
+        <div class="modal-content">
+
+            <!-- Header with Search Bar -->
+            <div class="modal-header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search Units from Monash University" />
+                    <button class="close-button" id="close-add-unit-modal">×</button>
+                </div>
+            </div>
+
+            <!-- Modal Content Container -->
+            <div class="unit-search-container">
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-selection">
+                        <label for="unit-course-level">Course Level</label>
+                        <select id="unit-course-level">
+                            <option value="">select</option>
+                            <option value="1">Level 1</option>
+                            <option value="2">Level 2</option>
+                            <option value="3">Level 3</option>
+                            <option value="4">Level 4</option>
+                            <option value="5">Level 5</option>
+                            <option value="6">Level 6</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-selection">
+                        <label for="unit-study-period">Study Period</label>
+                        <select id="unit-study-period">
+                            <option value="">select</option>
+                            <option value="semester-1">Semester 1</option>
+                            <option value="semester-2">Semester 2</option>
+                            <option value="summer-term">Summer Term</option>
+                            <option value="winter-term">Winter Term</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Result Feedbacks -->
+                <div class="results-heading"></div>
+
+                <!-- Units Result Grid -->
+                <div class="unit-cards-grid" id="home-university-card-grid"></div>
+
+                <!-- Add Custom Unit button -->
+                <button class="add-custom">+ Add Custom Unit</button>
+            </div>
+
+        </div>
+    </div>
+    
 
 </body>
 </html>

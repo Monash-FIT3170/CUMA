@@ -34,7 +34,6 @@ main {
   overflow-y: auto;
 }
 
-
 .container {
   flex: 1;
   justify-content: center;
@@ -43,82 +42,267 @@ main {
   background-color: #f9f9f9;
 }
 
+.container.hidden {
+  display: none;
+}
 
 
+/* General Modal Styling*/
+.modal {
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal.hidden {
+  display: none;
+}
+
+/* Modal Header */
+.modal-header {
+  background-color: rgb(104, 196, 244);
+  align-items: center;
+}
+
+/* Modal content styling (full screen) */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+
+
+
+
+/* Transfer Planner Home */
+
+#transfer-planner-home {
+  align-items: center;
+}
+
+#transfer-planner-home .container-content {
+  width: 100%;
+  height: 100%;
+  min-width: 280px;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+#transfer-planner-home h1 {
+  font-size: 2.6rem;
+}
+
+#transfer-planner-home #date {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+#transfer-planner-home .saved-planner-grid {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#transfer-planner-home .planner-list {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-self: stretch;
+  margin-top: 50px;
+}
+
+#transfer-planner-home .planner-list.hidden {
+  display: none;
+}
+
+#transfer-planner-home .planner-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#transfer-planner-home .empty-message-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+#transfer-planner-home .empty-message-container.hidden {
+  display: none;
+}
+
+#transfer-planner-home .empty-message-container .empty-image {
+  flex: 1;
+  max-height: 200px;
+  max-width: 250px;
+  margin-bottom: 20px;
+}
+
+#transfer-planner-home .empty-message-container h3 {
+  text-align: center;
+  max-width: 300px;
+  margin-bottom: 10px;
+  font-size: medium;
+}
+
+#transfer-planner-home .empty-message-container p {
+  text-align: center;
+  max-width: 300px;
+  margin-bottom: 50px;
+  font-size: small;
+}
+
+#transfer-planner-home .create-button {
+  font-size: x-large;
+  align-self: center;
+  margin-bottom: 20px;
+  padding: 20px 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24);
+}
+
+#transfer-planner-home .create-button:hover {
+  background-color: #0151a6;
+}
+
+#transfer-planner-home .create-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+
+
+
+
+
+/* Modal Header */
+.modal-header .title {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 800px;
+  min-width: 300px;
+  padding: 30px;
+  margin: 0 auto;
+  gap: 20px;
+  font-size: 1.5rem;
+  background-color: rgb(104, 196, 244);
+  color: #094183;
+  
+}
+
+/* Close button */
+.modal-header .title .close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
 
 /* Transfer Planner Styling */
 .transfer-plan-form {
   display: flex;
+  flex: 1;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
   width: 100%;
   max-width: 800px;
   min-width: 300px;
   margin: 0 auto;
-  padding: 10px;
-  height: 100%;
-  align-items: stretch;
-  justify-content: space-between;
-
-}
-
-.transfer-plan-form h1 {
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 3rem;
-  color: #094183;
+  padding: 30px;
 }
 
 .transfer-plan-form p {
-    margin-bottom: 40px;
-    text-align: center;
-    color: rgb(9, 65, 131);
-    margin-top: 1.5rem;
-    font-size: 1.3rem;
-    font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: rgb(9, 65, 131);
 }
 
 .transfer-plan-form .form-group {
-    margin-bottom: 25px;
-    text-align: left;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .transfer-plan-form label {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #333;
-    display: block;
-    margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .transfer-plan-form select, input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  box-sizing: border-box;
 }
 
 .transfer-plan-form select:focus, input[type="text"]:focus {
-    outline: none;
-    border-color: #007bff;
+  outline: none;
+  border-color: #007bff;
 }
 
 .transfer-plan-form button.submit-button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 50px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  
 }
 
 .transfer-plan-form button.submit-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
+
+
+
+
+
+
+
+
+
 
 
 /* transfer-planner Header Section */
@@ -336,37 +520,6 @@ span.arrow-icon {
 
 
 
-
-
-/* Style for modal background */
-.modal {
-  display: none;  /* Hidden by default */
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  justify-content: center;
-  align-items: center;
-  z-index: 998;
-}
-
-/* Modal content styling (full screen) */
-.modal-content {
-  background-color: #f9f9f9;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-}
-
-/* Modal Header */
-.modal-header {
-  background-color: rgb(104, 196, 244);
-  align-items: center;
-}
-
 /* Search Bar */
 .modal-header .search-bar {
   display: flex;
@@ -574,6 +727,10 @@ span.arrow-icon {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 999;
+}
+
+.modal-overlay.hidden {
+  display: none;
 }
 
 /* Basic modal styling */
