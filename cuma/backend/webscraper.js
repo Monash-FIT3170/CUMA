@@ -4,6 +4,8 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 //const { NONAME } = require('dns');
 const backendPath = "api/webscraperEndpoint"
+const serverPath = "localhost:3000"
+const unitBackendPath = "/api/unit"
 
 
 /*
@@ -106,7 +108,7 @@ async function getUnitInfo(page, url){
             "unitLevel": unitLevel,
             "unitType": null,
             "faculty": faculty,
-            "courses": [],
+            "course": [],
             "creditPoints": creditPoints,
             "offerings": offeringsArr,
             "unitDescription": unitDescription,
@@ -157,6 +159,13 @@ export async function run(course){
         units:[]
     }
 
+    const courseData = {  
+        "courseCode": courseCode,
+        "courseName": courseTitle
+    }
+
+
+
     // loop over each unit and fetch its info
     for(let i = 0; i < courseUnits.length; i++){
 
@@ -169,7 +178,8 @@ export async function run(course){
 
         //check if page 404d, if not add to our json obj
         if (unitData !== null){
-            unitData.courses.push(courseTitle)
+            unitData["universityName"] = "Monash"
+            unitData["course"].push(courseData)
             data.units.push(unitData);
             //update user
             console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
@@ -180,7 +190,7 @@ export async function run(course){
 
         
         //pause so as not to overwhelm monash servers
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise(r => setTimeout(r, 0));
     }
 
     browser.close();
@@ -191,13 +201,57 @@ export async function run(course){
             throw err;
         }
         console.log("JSON data is saved.");
+        // write to database
+        addToDatabase()
     });
+
+
 
     return 0
 
 }
 
+// async function addToDatabase(){
+//     // read from unitdata.json
+//     const data = fs.readFileSync('./unitData.json', 'utf8');
+
+//     const jsonObject = JSON.parse(data);
+//     // Prepare data
+//     const units = jsonObject["units"];
+
+//     // Iterate over the units array and log each unit object
+//     // units.forEach((unit, index) => {
+//     //     console.log(`Unit ${index + 1}:`, JSON.stringify(unit, null, 2));
+//     // });
+
+//     // post
+//     try {
+//         // Add the 'http://' protocol to the URL
+//         const response = await fetch("http://localhost:3000/api/units/addManyUnits", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({ units }),
+//         });
+    
+//         // Extract the response code
+//         const statusCode = response.status;
+    
+//         // Parse and log the result
+//         const result = await response.json();
+//         console.log({ result: result, status: statusCode });
+//         return { result: result, status: statusCode };
+//     } catch (error) {
+//         console.log("Error:", error);
+//     }
+    
+
+// }
+
+
 // run("https://handbook.monash.edu/2024/aos/SFTWRENG01?year=2024");
+// addToDatabase()
 
 // Backend.Unit.scrapeDomestic = async function (courseURL) {
 //     /**
