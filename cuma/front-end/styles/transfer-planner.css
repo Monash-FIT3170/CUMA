@@ -78,6 +78,23 @@ main {
   overflow-y: auto;
 }
 
+.close-button {
+  display: flex;
+  align-items: center;     /* Vertically center the image */
+  justify-content: center; /* Horizontally center the image */
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+.close-button .close-button-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
 
 
@@ -205,8 +222,8 @@ main {
 /* Modal Header */
 .modal-header .title {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
+  justify-content: space-evenly;
+  align-items: center;
   width: 100%;
   max-width: 800px;
   min-width: 300px;
@@ -217,14 +234,6 @@ main {
   background-color: rgb(104, 196, 244);
   color: #094183;
   
-}
-
-/* Close button */
-.modal-header .title .close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
 }
 
 /* Transfer Planner Styling */
@@ -527,7 +536,7 @@ span.arrow-icon {
   align-items: center;
   background-color: rgb(104, 196, 244);
   max-width: 1200px;
-  padding: 10px;
+  padding: 20px;
   margin: 0 auto;
 }
 
@@ -536,14 +545,6 @@ span.arrow-icon {
   border: none;
   padding: 10px;
   font-size: 16px;
-}
-
-/* Close button */
-.modal-header .search-bar .close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
 }
 
 /* Styling specific to the unit search area */
@@ -770,14 +771,7 @@ span.arrow-icon {
   margin: 0;
 }
 
-#unit-info-modal .close-button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  margin-right: 15px;
-  cursor: pointer;
-}
+
 
 /* Unit Info Styling */
 #unit-info-modal .unit-info-container {
