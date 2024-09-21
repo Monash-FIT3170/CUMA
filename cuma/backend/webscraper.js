@@ -33,7 +33,7 @@ async function getUnits(page,url){
         //js doesnt like it when we just return just the html obj, so do some processing here    
         let unitsProcessed = Array.from(units).map(unit => unit.href)
 
-        let title = document.querySelectorAll("h2")[0].innerText.split("-");
+        let title = document.querySelectorAll("h2")[0].innerText?.split("-");
 
         let courseCode = title[0].trim();
         let courseTitle = title[1].trim();
@@ -61,7 +61,7 @@ async function getUnitInfo(page, url){
 
     //check page is not 404
     let state = await page.evaluate(() => {
-        pageType = document.querySelector("div[class='css-ksrl4z-Text--Text-Text-Breadcrumbs--BreadcrumbLabel eh2gia11']").innerText
+        pageType = document.querySelector("div[class='css-ksrl4z-Text--Text-Text-Breadcrumbs--BreadcrumbLabel eh2gia11']")?.innerText
         return pageType === "404 Page" ? true : false
     })
 
@@ -73,18 +73,18 @@ async function getUnitInfo(page, url){
     let result = await page.evaluate(() => {
 
         //page main title
-        let header = document.querySelectorAll("h2")[0].innerText.split("-")
+        let header = document.querySelectorAll("h2")[0]?.innerText.split("-")
 
         let unitCode = header[0].trim()
         let unitName = header[1].trim()
 
         //get unit info
-        let unitDescription = document.querySelector("div[class*='e1ydu1r41'] > div > p").innerText.trim();
+        let unitDescription = document.querySelector("div[class*='e1ydu1r41'] > div > p")?.innerText.trim();
 
         //right column on page containing unit info
         let rightCol = Array.from(document.querySelectorAll("div[class='css-1sscrr8-Box--Box-Box-Attribute--AttrContainer ene3w3n2']"));
-        let faculty = rightCol[0].querySelector("div").innerText.trim()
-        let creditPoints = rightCol[5].querySelector("div").innerText.trim()
+        let faculty = rightCol[0]?.querySelector("div")?.innerText.trim()
+        let creditPoints = rightCol[5]?.querySelector("div")?.innerText.trim()
 
         //get offerings
         let offeringElement = document.querySelector("div[data-menu-id='Offerings']");
@@ -92,11 +92,11 @@ async function getUnitInfo(page, url){
         let offeringsArr = [];
         //handling in case offerings section is not availble:
         if (offeringElement !== null){
-            offeringsArr = Array.from(offeringElement.querySelectorAll("strong")).map(x => x.innerText.trim());
+            offeringsArr = Array.from(offeringElement?.querySelectorAll("strong")).map(x => x.innerText.trim());
         } 
 
         // get learning ourcomes
-        let outcomes = Array.from(document.querySelectorAll("div[class='css-fzyh5b-AccordionList--ListContentContainer eytijak0'] > div[class='clamp'] > p")).map(x => x.innerText.trim());
+        let outcomes = Array.from(document?.querySelectorAll("div[class='css-fzyh5b-AccordionList--ListContentContainer eytijak0'] > div[class='clamp'] > p")).map(x => x.innerText.trim());
         
         //get unit level
         let unitLevel = unitCode[3];
