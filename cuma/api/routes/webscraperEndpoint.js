@@ -6,6 +6,7 @@ import gemini from '../../ai/geminiTest.js';
 
 import { run } from '../../backend/webscraper.js';
 import { threadId } from "worker_threads";
+import { ObjectId } from "mongodb";
 
 const collectionName = "testUnits";
 
@@ -15,9 +16,9 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
       const url = req.body.url;
 
       // const output = await run(url);
-      const output = 1
 
       const result = await addToDatabase(req, res);
+
 
       return res.status(200).json(result);
     } catch (error) {
@@ -33,17 +34,21 @@ async function addToDatabase(req){
   const jsonObject = JSON.parse(data);
   // Prepare data
   const unitData = jsonObject["units"];
+  const courseCode = jsonObject["courseCode"];
+  const universtiyName = jsonObject["University"];
 
+      // Access the MongoDB client from the request object
+      const client = req.client;
+      const database = client.db('CUMA');
+    
+    
+      // get the collection
+      const units = database.collection(collectionName);
+
+      console.log(await units.updateOne({"unitCode": "MAT1830"}, {"$pop": {"course" : -1}}));
 
   try {
-    // Access the MongoDB client from the request object
-    const client = req.client;
-    const database = client.db('CUMA');
-  
-    console.log("here")
-  
-    // get the collection
-    const units = database.collection(collectionName);
+
   
 
     // call gemini to create keywords for the unit
@@ -54,16 +59,51 @@ async function addToDatabase(req){
     //     thisUnit["keywords"] = aiGenUnitKeyword
     // }
 
-    console.log(unitData)
 
     // add the unit
     const result = await units.insertMany(unitData, { ordered: false });
+    console.log(result)
     
-    return result;
+    
+    return result.writeErrors;
+
+    
   
   }
   catch (error){
-    console.log(error);
+    if (error && error.writeErrors) {
+      console.log(error)
+
+      // if there is error in adding any error due to unique key error,
+      // do a modify operation instead: append the course to unit.course instead of adding the unit itself.
+      const failedUnits = error.writeErrors.map(writeError => writeError.getOperation().unitCode.toString());
+      console.log(failedUnits)
+      
+      const unitsToModify = await units.find({
+        "unitCode": { $in: failedUnits }, // Check if _id is in the array
+        "universityName" : universtiyName, // check if univerisity Name is valid
+        course: {
+          $not: {
+            $elemMatch: {
+              courseCode: 'SFTWRENG01'
+            }
+          }
+        }
+      })
+
+      console.log(universtiyName)
+      
+
+
+      // Loop through the unitsToModify array
+    console.log("units to modify")
+    unitsToModify.forEach(unit => {
+
+      console.log(unit)
+
+    });
+
+  }
   }
   
   
@@ -81,7 +121,6 @@ async function addToDatabase(req){
   
 
 }
-
 
 
 
