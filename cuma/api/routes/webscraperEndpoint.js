@@ -13,7 +13,9 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
 
       const output = await run(url);
 
-      const result = await addToDatabase(req);
+      
+
+      const result = await addToDatabase(req, output);
       console.log(result)
 
       return res.status(200).json(result);
@@ -24,7 +26,7 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
 
 });
 
-async function addToDatabase(req) {
+async function addToDatabase(req, data) {
   const returnResults = {
     "unitsAdded": null,
     "unitsModified": null,
@@ -32,7 +34,8 @@ async function addToDatabase(req) {
   };
 
   // Read from unitdata.json
-  const data = fs.readFileSync('./unitData.json', 'utf8');
+  // const data = fs.readFileSync('./unitData.json', 'utf8');
+  // console.log(data)
   const jsonObject = JSON.parse(data);
   
   // Prepare data
