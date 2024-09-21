@@ -201,13 +201,11 @@ export async function run(course){
             throw err;
         }
         console.log("JSON data is saved.");
-        // write to database
-        addToDatabase()
     });
 
 
 
-    return 0
+    return 0;
 
 }
 
