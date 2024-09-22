@@ -127,3 +127,35 @@ window.deletePlanner = function(index) {
     localStorage.setItem('planners', JSON.stringify(planners));
     renderPlanners();
 }
+
+
+// ---------- Create New Planner Logic ---------- //
+const createNewPlanContainer = document.getElementById("create-new-plan");
+const courseLevel = document.getElementById('course-level').value;
+const course = document.getElementById('course').value;
+const studyYear = document.getElementById('study-year').value;
+const studyPeriod = document.getElementById('study-period').value;
+const transferUniversity = document.getElementById('transfer-university').value;
+const planName = document.getElementById('plan-name').value;
+
+// On Create new Transfer plan form submit update database and configure then show the planner
+document.querySelector('.transfer-plan-form').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the form from submitting
+
+    // Create an object to store the data
+    const formData = {
+        courseLevel: courseLevel,
+        course: course,
+        studyYear: studyYear,
+        studyPeriod: studyPeriod,
+        transferUniversity: transferUniversity,
+        planName: planName
+    };
+
+    // TODO: Create new entry in database
+    
+    // Setup the planner container
+    console.log(formData);
+});
+
+
