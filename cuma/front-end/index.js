@@ -89,7 +89,7 @@ function addUnit() {
             Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
                 if (!handleResponse(response)) {
                     // if no error
-                    repopulateResults()
+                    // repopulateResults()
                 }
             });
 
@@ -127,7 +127,7 @@ function addUnit() {
             // handles any error
             if (handleResponse(response) == 0) {
                 // if no error, then repopulate the result
-                repopulateResults()
+                // repopulateResults()
             }
         });
     }
@@ -290,6 +290,7 @@ function deleteUnit() {
     Backend.Unit.delete(default_university, selectedUnitCode).then(response => {
         if (!handleResponse(response)) {
             // if no error, repopulate the data
+
             repopulateResults()
         }
     })
@@ -583,7 +584,7 @@ function addConnectionExistingUnit(foeignUnitDiv) {
 
     Backend.UnitConnection.add(unitInfo).then(response => {
         handleResponse(response);
-        repopulateResults();
+        // repopulateResults();
     });
 }
 
@@ -810,57 +811,23 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     });
 }
 
-// Call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
+// // Call every render if on index
+// if (window.location.pathname.includes('index.html')) {
+//     repopulateResults();
+// }
 
 
-// call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
-
-// Navigation bar tracker
-let navOpen = false;
-
-//handle nav stuff
-function closeNav() {
-    sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "false")
-    document.getElementById("main").style.marginLeft= "0";
-}
-
-//handle nav stuff
-function openNav() {
-    const sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "true");
-
-    document.getElementById("main").style.marginLeft= "200px";
-}
-
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    toggleNav();
-})
+// // call every render if on index
+// if (window.location.pathname.includes('index.html')) {
+//     repopulateResults();
+// }
 
 
-// call every render
-document.addEventListener('DOMContentLoaded', () => {
-    fetchAndDisplayUserInfo();
-    repopulateResults();
-});
+// // call every render
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchAndDisplayUserInfo();
+//     repopulateResults();
+// });
 
 
 function editProfile() {
