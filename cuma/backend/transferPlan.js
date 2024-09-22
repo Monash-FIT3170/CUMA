@@ -1,7 +1,7 @@
 const authBackendPath = "/api/transferPlan";
 
 // Create new planner using the form data
-Backend.TransferPlanner.create = async function (createPlannerForm) {
+Backend.TransferPlan.create = async function (createPlannerForm) {
   try {
     const url = new URL(serverPath + authBackendPath + "/create");
 
@@ -25,7 +25,7 @@ Backend.TransferPlanner.create = async function (createPlannerForm) {
 };
 
 // Get all the existing planners from the database
-Backend.TransferPlanner.getAll = async function () {
+Backend.TransferPlan.getAll = async function () {
   try {
     const url = new URL(serverPath + authBackendPath + "/all");
 
@@ -48,7 +48,7 @@ Backend.TransferPlanner.getAll = async function () {
 };
 
 // Get one specific planner
-Backend.TransferPlanner.getSpecific = async function (plannerName) {
+Backend.TransferPlan.getSpecific = async function (plannerName) {
   try {
     const url = new URL(serverPath + authBackendPath + `/plan/${plannerName}`);
 
@@ -71,7 +71,7 @@ Backend.TransferPlanner.getSpecific = async function (plannerName) {
 };
 
 // Update an existing transfer plan using form data
-Backend.TransferPlanner.update = async function (planName, updatePlannerForm) {
+Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
   try {
     const url = new URL(serverPath + authBackendPath + `/plan/${planName}`);
 
@@ -95,7 +95,7 @@ Backend.TransferPlanner.update = async function (planName, updatePlannerForm) {
 };
 
 // Delete a transfer plan
-Backend.TransferPlanner.delete = async function (planName) {
+Backend.TransferPlan.delete = async function (planName) {
   try {
     const url = new URL(serverPath + authBackendPath + `/plan/${planName}`);
 

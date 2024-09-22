@@ -1,3 +1,6 @@
+// Set home university
+DEFAULT_HOME_UNIVERSITY = "Monash"
+
 // Navigation bar tracker
 let navOpen = false;
 
@@ -185,7 +188,7 @@ function configureTransferPlanner(formData) {
     plannerStudyYearPeriod.textContent = formData.studyYear + " : " + formData.studyPeriod;
 
     // Set the university name
-    plannerHomeUniName.textContent = 'University of Monash';
+    plannerHomeUniName.textContent = DEFAULT_HOME_UNIVERSITY;
     plannerTargetUniName.textContent = formData.transferUniversity;
 
     // Change container visibility
@@ -194,7 +197,7 @@ function configureTransferPlanner(formData) {
     plannerContainer.classList.remove("hidden");
 
     // Congfigure Unit Slots
-    configureHomeUnitSlot('Monash');
+    configureHomeUnitSlot(DEFAULT_HOME_UNIVERSITY);
     configureTargetUnitSlot(formData.transferUniversity);
 }
 
@@ -250,7 +253,7 @@ function configureTargetUnitSlot(targetUniversityName) {
                 }
 
                 // Open the modal with home university units (using 'Monash' as an example)
-                setupTargetUnitsModal('Monash', targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
+                setupTargetUnitsModal(targetUniversityName, targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
             });
         } else {
             console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
@@ -487,7 +490,7 @@ function replaceSearchContainer(unitSlot) {
                 alert("Please select a unit from Home University first!");
                 return;
             }
-            setupTargetUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
+            setupTargetUnitsModal(unitSlot.dataset.university, unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
         } else {
             console.error(`Unit slot with ID ${unitSlot.id} not found in home or target arrays.`);
         }
@@ -594,10 +597,8 @@ function sendTransferForApproval() {
 // Open user default main app in preparation for sending Transfer for approval
 async function saveUnitConnections() {
     connections = getConnections();
-
     await connections.forEach(async (connection, idx) => {
-        await Backend.UnitConnection.add(connection).then(response => {
-            console.log(connection)
+        Backend.UnitConnection.add(connection).then(response => {
             handleResponse(response);
             // repopulateResults();
         });

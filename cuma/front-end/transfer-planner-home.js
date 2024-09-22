@@ -1,3 +1,6 @@
+// Set home university
+DEFAULT_HOME_UNIVERSITY = "Monash"
+
 // Navigation bar tracker
 let navOpen = false;
 
@@ -87,6 +90,8 @@ function createNewTransferPlan() {
 }
 
 createButton.addEventListener('click', () => {
+    // Populate university transfer options
+    setUpTransferUniOptions();
     createNewPlanModal.classList.remove('hidden');
 });
 
@@ -128,6 +133,28 @@ window.deletePlanner = function(index) {
     renderPlanners();
 }
 
+// Set up Universities to choose from
+async function setUpTransferUniOptions() {
+    const selectElement = document.getElementById("transfer-university");
+
+    Backend.Unit.getAllOtherUni(DEFAULT_HOME_UNIVERSITY)
+        .then(otherUniversities => {
+
+            otherUniversities.forEach(universityObj => {
+                const { universityName } = universityObj;
+                const option = document.createElement("option");
+                option.value = universityName; // Set the value attribute
+                option.textContent = universityName; // Set the displayed text
+
+                selectElement.appendChild(option);
+            });
+        })
+        .catch(error => {
+            // Log and handle the error (e.g., showing an error message to the user)
+            console.error("Error fetching other universities:", error);
+            alert("Failed to load universities. Please try again later.");
+        });
+}
 
 // ---------- Create New Planner Logic ---------- //
 const createNewPlanContainer = document.getElementById("create-new-plan");
