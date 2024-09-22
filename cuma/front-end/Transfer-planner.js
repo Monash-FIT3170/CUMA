@@ -554,6 +554,44 @@ function createUnitCard(unitSlotID, unit, type) {
     return unitCardDiv
 }
 
+// Get units 
+function getConnections() {
+    // Gather all the target unit slots elements and add click event listener to open the modal
+    connections = [];
+
+    // Gather all the target unit slots elements and add click event listener to open the modal
+    for (let i = 0; i < targetUnitSlotNameArray.length; i++) { 
+
+        homeUnitSlotName = homeUnitSlotNameArray[i];
+        targetUnitSlotName = targetUnitSlotNameArray[i];
+
+        // get slots
+        const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
+        const targetUnitSlotElement = document.getElementById(targetUnitSlotName);
+
+        // get data
+        homeUniversityName = homeUnitSlotElement.dataset.university;
+        homeUnitCode = homeUnitSlotElement.dataset.unitCode;
+        targetUniversityName = targetUnitSlotElement.dataset.university;
+        targetUnitCode = targetUnitSlotElement.dataset.unitCode;
+        if (homeUniversityName && homeUnitCode && targetUniversityName && targetUnitCode) {
+            connections.push({ 
+                "universityNameA": homeUniversityName, 
+                "unitCodeA": homeUnitCode, 
+                "universityNameB": targetUniversityName, 
+                "unitCodeB": targetUnitCode });
+        }
+    }
+
+    return connections;
+}
+
+
+// Open user default main app in preparation for sending Transfer for approval
+function sendTransferForApproval() {
+    userSendConnections(getConnections());
+}
+
 // Utils - Check all the home slot if it has been selected
 function homeUnitIsAlreadySelected(unit) {
     for (const homeUnitSlotName of homeUnitSlotNameArray) {
