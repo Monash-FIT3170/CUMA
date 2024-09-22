@@ -727,7 +727,7 @@ span.arrow-icon {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  z-index: 999;
+  z-index: 1001;
 }
 
 .modal-overlay.hidden {
@@ -737,7 +737,7 @@ span.arrow-icon {
 /* Basic modal styling */
 #unit-info-modal {
   position: fixed;
-  z-index: 1000;
+  z-index: 1002;
   left: calc(50% + 100px);
   top: 50%;
   transform: translate(-50%, -50%);
