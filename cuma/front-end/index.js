@@ -162,6 +162,10 @@ function handleResponse(response) {
     if (response.status == 400) {
         alert("Error: " + response.result)
         return 1
+    } else if (!response.ok) {
+        // If response is not OK, handle the error status
+        alert(response.error);
+        return 1
     }
     return 0
 }

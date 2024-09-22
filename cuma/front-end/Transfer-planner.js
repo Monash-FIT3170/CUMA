@@ -586,10 +586,22 @@ function getConnections() {
     return connections;
 }
 
-
 // Open user default main app in preparation for sending Transfer for approval
 function sendTransferForApproval() {
     userSendConnections(getConnections());
+}
+
+// Open user default main app in preparation for sending Transfer for approval
+async function saveUnitConnections() {
+    connections = getConnections();
+
+    await connections.forEach(async (connection, idx) => {
+        await Backend.UnitConnection.add(connection).then(response => {
+            console.log(connection)
+            handleResponse(response);
+            // repopulateResults();
+        });
+    });
 }
 
 // Utils - Check all the home slot if it has been selected
