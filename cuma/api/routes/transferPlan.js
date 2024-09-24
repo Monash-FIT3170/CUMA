@@ -64,7 +64,7 @@ router.post('/create', authenticateToken, async (req, res) => {
         const newPlan = {
             createdAt: new Date(),
             updatedAt: new Date(),
-            homeUniversity: "monash",
+            homeUniversity: "Monash",
             courseLevel: createPlannerForm.courseLevel,
             course: createPlannerForm.course,
             studyYear: createPlannerForm.studyYear,

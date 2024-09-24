@@ -28,6 +28,8 @@ function toggleNav() {
     
 }
 
+let transferPlanData = {};
+
 document.addEventListener('DOMContentLoaded', (req, res) => {
     toggleNav();
 
@@ -37,32 +39,15 @@ document.addEventListener('DOMContentLoaded', (req, res) => {
 
     (async () => {
         try {
-            const tranferPlan = await getSpecificTransferPlan(name);
+            tranferPlan = await getSpecificTransferPlan(name);
             configureTransferPlanner(tranferPlan);
         } catch (error) {
-            console.error("An error occurred while deleting the transfer plan:", error);
-            deleteButton.disabled = false; // Re-enable the button if the deletion fails
+            console.error("An error occurred while retreiving plan data and configuring the planner:", error);
+            alert('Error:' + error);
         }
     })();
 
 });
-
-async function getSpecificTransferPlan(plannerName) {
-    // Request to fetch a specific transfer plan by name
-    return Backend.TransferPlan.getSpecific(plannerName).then(response => {
-        if (response.status === 200) {
-            return response.result.transferPlan; // Return the specific transfer plan
-        } else {
-            alert("Error " + response.status + ": " + response.result.error);
-            return null; // Return null if there is an error
-        }
-    }).catch(error => {
-        console.error("An error occurred:", error);
-        alert("An error occurred: " + error.message);
-        return null; // Return null in case of error
-    });
-}
-
 
 // ---------- Transfer Planner Logic ---------- //
 
@@ -85,11 +70,11 @@ function configureTransferPlanner(plannerData) {
     plannerStudyYearPeriod.textContent = plannerData.studyYear + " : " + plannerData.studyPeriod;
 
     // Set the university name
-    plannerHomeUniName.textContent = planner.homeUniversity;
+    plannerHomeUniName.textContent = plannerData.homeUniversity;
     plannerTargetUniName.textContent = plannerData.transferUniversity;
 
     // Congfigure Unit Slots
-    configureHomeUnitSlot(planner.homeUniversity);
+    configureHomeUnitSlot(plannerData.homeUniversity);
     configureTargetUnitSlot(plannerData.transferUniversity);
 }
 
