@@ -63,7 +63,6 @@ const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "ta
 
 // Configure the Transfer Planner with the data collected from the Transfer Plan Form
 function configureTransferPlanner(plannerData) {
-    console.log(plannerData);
     // Set the plan header
     plannerName.textContent = plannerData.name;
     plannerCourse.textContent = plannerData.course;
@@ -75,7 +74,18 @@ function configureTransferPlanner(plannerData) {
 
     // Congfigure Unit Slots
     configureHomeUnitSlot(plannerData.homeUniversity);
-    configureTargetUnitSlot(plannerData.transferUniversity);
+    // configureTargetUnitSlot(plannerData.transferUniversity); // TODO: Revert back to this when connection are populated
+    configureTargetUnitSlot(plannerData.homeUniversity);
+
+    // Populate the unit mappings
+    (async () => {
+        try {
+            await populateUnitMappings(plannerData.unitMappings);
+        } catch (error) {
+            console.error("An error occurred while retrieving plan data and configuring the planner:", error);
+            alert('Error:' + error);
+        }
+    })();
 }
 
 // Configure all the home unit slot with required data and click event
@@ -138,6 +148,67 @@ function configureTargetUnitSlot(targetUniversityName) {
     }
 }
 
+// Function to populate units into the slots from the database
+async function populateUnitMappings(unitMappings) {
+    for (const mapping of unitMappings) {
+        // Populate home unit
+        if (mapping.homeUnit && mapping.homeUnit.unitCode) {
+            const homeUnitSlotID = mapping.homeUnit.slotId;
+            const homeUniversityName = mapping.homeUnit.universityName;
+            const homeUnitCode = mapping.homeUnit.unitCode;
+
+            try {
+                const homeUnit = await Backend.Unit.retrieveUnit(homeUniversityName, homeUnitCode);
+                if (homeUnit) {
+                    addUnitToSlotFromDB(homeUnitSlotID, homeUnit);
+                } else {
+                    console.error(`Home unit ${homeUnitCode} not found`);
+                }
+            } catch (error) {
+                console.error(`Error retrieving home unit ${homeUnitCode}:`, error);
+            }
+        }
+
+        // Populate target unit, if it exists
+        if (mapping.targetUnit && mapping.targetUnit.unitCode) {
+            const targetUnitSlotID = mapping.targetUnit.slotId;
+            const targetUniversityName = mapping.targetUnit.universityName;
+            const targetUnitCode = mapping.targetUnit.unitCode;
+
+            try {
+                const targetUnit = await Backend.Unit.retrieveUnit(targetUniversityName, targetUnitCode);
+                if (targetUnit) {
+                    addUnitToSlotFromDB(targetUnitSlotID, targetUnit);
+                } else {
+                    console.error(`Target unit ${targetUnitCode} not found`);
+                }
+            } catch (error) {
+                console.error(`Error retrieving target unit ${targetUnitCode}:`, error);
+            }
+        }
+    }
+}
+
+
+// use to add unit to the slot
+function addUnitToSlotFromDB(unitSlotID, unit) {
+
+    // Get the slot and set the unit data
+    const unitSlot = document.getElementById(unitSlotID);
+    unitSlot.dataset.unitCode = unit.unitCode;
+    unitSlot.dataset.unitName = unit.unitName;
+
+    // Remove all child element - aka search container
+    while (unitSlot.firstChild) {
+        unitSlot.removeChild(unitSlot.firstChild);
+    }
+
+    // Create a new unit card element
+    const unitCardDiv = createUnitCard(unitSlotID, unit, 'remove');
+
+    unitSlot.appendChild(unitCardDiv);
+}
+
 // Utils - Get the Home Slot's name that belong with the Target Slot
 function getHomeUnitSlotNamePair(targetUnitSlotName) {
     let homeUnitSlotNamePair = NaN;
@@ -184,6 +255,62 @@ function getTargetUnitSlotNamePair(homeUnitSlotName) {
     return targetUnitSlotNamePair;
 }
 
+// Get units 
+function getUnitMappings() {
+    const unitMappings = [];
+
+    for (let i = 0; i < homeUnitSlotNameArray.length; i++) {
+        const homeSlotId = homeUnitSlotNameArray[i];
+        const targetSlotId = targetUnitSlotNameArray[i];
+
+        const homeSlotElement = document.getElementById(homeSlotId);
+        const targetSlotElement = document.getElementById(targetSlotId);
+
+        if (!homeSlotElement || !targetSlotElement) {
+            console.error(`Slot elements not found for indices ${i}`);
+            continue;
+        }
+
+        const homeUnitCode = homeSlotElement.dataset.unitCode;
+        const homeUniversityName = homeSlotElement.dataset.university;
+        const homeUnitName = homeSlotElement.dataset.unitName;
+
+        const targetUnitCode = targetSlotElement.dataset.unitCode;
+        const targetUniversityName = targetSlotElement.dataset.university;
+        const targetUnitName = targetSlotElement.dataset.unitName;
+
+        if (homeUnitCode) {
+            unitMappings.push({
+                homeUnit: {
+                    slotId: homeSlotId,
+                    unitCode: homeUnitCode,
+                    universityName: homeUniversityName,
+                    unitName: homeUnitName
+                },
+                targetUnit: targetUnitCode ? {
+                    slotId: targetSlotId,
+                    unitCode: targetUnitCode,
+                    universityName: targetUniversityName,
+                    unitName: targetUnitName
+                } : null
+            });
+        }
+    }
+    return unitMappings;
+}
+
+// Open user default main app in preparation for sending Transfer for approval
+function sendTransferForApproval() {
+    const unitMappings = getUnitMappings();
+    // TODO: Setup Email again
+    // userSendConnections(getConnections());
+}
+
+// Open user default main app in preparation for sending Transfer for approval
+async function saveUnitConnections() {
+    const unitMappings = getUnitMappings();
+    updateTransferPlan(plannerName.textContent, unitMappings);
+}
 
 // ---------- Add Unit Modal Logic ---------- //
 
@@ -307,6 +434,7 @@ function addUnitToSlot(unitSlotID, unit) {
     // Get the slot and set the unit data
     const unitSlot = document.getElementById(unitSlotID);
     unitSlot.dataset.unitCode = unit.unitCode;
+    unitSlot.dataset.unitName = unit.unitName;
 
     // Remove all child element - aka search container
     while (unitSlot.firstChild) {
@@ -337,6 +465,7 @@ function replaceSearchContainer(unitSlot) {
     
     // Remove the unit data
     delete unitSlot.dataset.unitCode;
+    delete unitSlot.dataset.unitName;
 
     // Remove all child elements - aka unitCard
     while (unitSlot.firstChild) {
@@ -434,56 +563,6 @@ function createUnitCard(unitSlotID, unit, type) {
     return unitCardDiv
 }
 
-// Get units 
-function getConnections() {
-    // Gather all the target unit slots elements and add click event listener to open the modal
-    connections = [];
-
-    // Gather all the target unit slots elements and add click event listener to open the modal
-    for (let i = 0; i < targetUnitSlotNameArray.length; i++) { 
-
-        homeUnitSlotName = homeUnitSlotNameArray[i];
-        targetUnitSlotName = targetUnitSlotNameArray[i];
-
-        // get slots
-        const homeUnitSlotElement = document.getElementById(homeUnitSlotName);
-        const targetUnitSlotElement = document.getElementById(targetUnitSlotName);
-
-        // get data
-        homeUniversityName = homeUnitSlotElement.dataset.university;
-        homeUnitCode = homeUnitSlotElement.dataset.unitCode;
-        targetUniversityName = targetUnitSlotElement.dataset.university;
-        targetUnitCode = targetUnitSlotElement.dataset.unitCode;
-        if (homeUniversityName && homeUnitCode && targetUniversityName && targetUnitCode) {
-            connections.push({ 
-                "universityNameA": homeUniversityName, 
-                "unitCodeA": homeUnitCode, 
-                "universityNameB": targetUniversityName, 
-                "unitCodeB": targetUnitCode });
-        }
-    }
-
-    return connections;
-}
-
-// Open user default main app in preparation for sending Transfer for approval
-function sendTransferForApproval() {
-    userSendConnections(getConnections());
-}
-
-// Open user default main app in preparation for sending Transfer for approval
-async function saveUnitConnections() {
-    connections = getConnections();
-
-    await connections.forEach(async (connection, idx) => {
-        await Backend.UnitConnection.add(connection).then(response => {
-            console.log(connection)
-            handleResponse(response);
-            // repopulateResults();
-        });
-    });
-}
-
 // Utils - Check all the home slot if it has been selected
 function homeUnitIsAlreadySelected(unit) {
     for (const homeUnitSlotName of homeUnitSlotNameArray) {
@@ -534,9 +613,7 @@ const overlay = document.getElementById('modal-overlay');
 function openUnitInfoModal(unit) {
 
     unitInfoModal.style.display = "block";
-    console.log(overlay);
     overlay.style.display = "block";
-    console.log(overlay);
 
     // Add Unit general single unit data
     unitInfoUnitName.textContent = unit.unitName;

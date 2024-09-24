@@ -57,8 +57,8 @@ async function getSpecificTransferPlan(plannerName) {
 }
 
 // update specific student transfer plan
-async function updateTransferPlan(planName, updatePlannerForm) {
-    return Backend.TransferPlan.update(planName, updatePlannerForm)
+async function updateTransferPlan(planName, unitMappings) {
+    return Backend.TransferPlan.update(planName, unitMappings)
         .then(response => {
             if (response.status === 200) {
                 alert("Successfully updated the transfer plan.");

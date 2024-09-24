@@ -68,7 +68,7 @@ Backend.TransferPlan.getSpecific = async function (plannerName) {
 };
 
 // Update an existing transfer plan using form data
-Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
+Backend.TransferPlan.update = async function (planName, unitMappings) {
   try {
     const url = new URL(serverPath + transferPlanBackendPath + `/plan/${encodeURIComponent(planName)}`);
 
@@ -77,7 +77,7 @@ Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ updatePlannerForm }),
+      body: JSON.stringify({ unitMappings }),
     });
 
     const result = await response.json();

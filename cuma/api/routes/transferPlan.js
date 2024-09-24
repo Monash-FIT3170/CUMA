@@ -188,22 +188,22 @@ router.get('/plan/:name', authenticateToken, async (req, res) => {
     }
 });
 
-// Update a specific transfer plan
-router.put('/plan/:planName', authenticateToken, async (req, res) => {
+// Update the unitMappings of a specific transfer plan
+router.put('/plan/:name', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
         if (!user) return res.status(403).json({ error: "User not found" });
 
-        const { planName } = req.params;
-        const { updatePlannerForm } = req.body;
+        const { name } = req.params; // Corrected the parameter name
+        const { unitMappings } = req.body;
 
-        if (!updatePlannerForm) {
-            return res.status(400).json({ error: "Update data is required." });
+        if (!unitMappings) {
+            return res.status(400).json({ error: "unitMappings data is required." });
         }
 
         const transferPlansCollection = await getTransferPlanDBCollection(req);
 
-        // Find the specific transfer plan for the user
+        // Find the specific transfer plan document for the user
         const userTransferPlans = await transferPlansCollection.findOne({ user: user.email });
 
         if (!userTransferPlans || !userTransferPlans.transferPlans) {
@@ -211,26 +211,15 @@ router.put('/plan/:planName', authenticateToken, async (req, res) => {
         }
 
         // Find the specific plan by name
-        const planIndex = userTransferPlans.transferPlans.findIndex(plan => plan.name === planName);
+        const planIndex = userTransferPlans.transferPlans.findIndex(plan => plan.name === name);
 
         if (planIndex === -1) {
             return res.status(404).json({ error: 'Transfer Plan not found.' });
         }
 
-        // Prepare the updated transfer plan object
-        const updatedTransferPlan = {
-            ...userTransferPlans.transferPlans[planIndex],
-            updatedAt: new Date(),
-            courseLevel: updatePlannerForm.courseLevel || userTransferPlans.transferPlans[planIndex].courseLevel,
-            course: updatePlannerForm.course || userTransferPlans.transferPlans[planIndex].course,
-            studyYear: updatePlannerForm.studyYear || userTransferPlans.transferPlans[planIndex].studyYear,
-            studyPeriod: updatePlannerForm.studyPeriod || userTransferPlans.transferPlans[planIndex].studyPeriod,
-            transferUniversity: updatePlannerForm.transferUniversity || userTransferPlans.transferPlans[planIndex].transferUniversity,
-            name: updatePlannerForm.planName || planName // Update plan name if provided, otherwise keep the original
-        };
-
-        // Update the specific transfer plan in the array
-        userTransferPlans.transferPlans[planIndex] = updatedTransferPlan;
+        // Update only the unitMappings of the transfer plan
+        userTransferPlans.transferPlans[planIndex].unitMappings = unitMappings;
+        userTransferPlans.transferPlans[planIndex].updatedAt = new Date();
 
         // Update the document in the database
         await transferPlansCollection.updateOne(
@@ -239,8 +228,8 @@ router.put('/plan/:planName', authenticateToken, async (req, res) => {
         );
 
         return res.status(200).json({
-            message: 'Transfer Plan updated successfully',
-            transferPlan: updatedTransferPlan,
+            message: 'Transfer Plan unitMappings updated successfully',
+            transferPlan: userTransferPlans.transferPlans[planIndex],
         });
 
     } catch (error) {
