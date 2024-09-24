@@ -1,9 +1,9 @@
-const authBackendPath = "/api/transferPlan";
+const transferPlanBackendPath = "/api/transferPlan";
 
 // Create new planner using the form data
 Backend.TransferPlan.create = async function (createPlannerForm) {
   try {
-    const url = new URL(serverPath + authBackendPath + "/create");
+    const url = new URL(serverPath + transferPlanBackendPath + "/create");
 
     const response = await fetch(url, {
       method: "POST",
@@ -15,8 +15,6 @@ Backend.TransferPlan.create = async function (createPlannerForm) {
 
     const result = await response.json();
 
-    console.log({ result: result, status: response.status });
-
     return { result: result, status: response.status };
 
   } catch (error) {
@@ -27,7 +25,7 @@ Backend.TransferPlan.create = async function (createPlannerForm) {
 // Get all the existing planners from the database
 Backend.TransferPlan.getAll = async function () {
   try {
-    const url = new URL(serverPath + authBackendPath + "/all");
+    const url = new URL(serverPath + transferPlanBackendPath + "/all");
 
     const response = await fetch(url, {
       method: "GET",
@@ -37,20 +35,20 @@ Backend.TransferPlan.getAll = async function () {
     });
 
     const result = await response.json();
-
-    console.log({ result: result, status: response.status });
 
     return { result: result, status: response.status };
 
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error fetching transfer plans:", error);
+    return { result: null, status: 500, error: error.message };
   }
 };
+
 
 // Get one specific planner
 Backend.TransferPlan.getSpecific = async function (plannerName) {
   try {
-    const url = new URL(serverPath + authBackendPath + `/plan/${plannerName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${plannerName}`);
 
     const response = await fetch(url, {
       method: "GET",
@@ -60,8 +58,6 @@ Backend.TransferPlan.getSpecific = async function (plannerName) {
     });
 
     const result = await response.json();
-
-    console.log({ result: result, status: response.status });
 
     return { result: result, status: response.status };
 
@@ -73,7 +69,7 @@ Backend.TransferPlan.getSpecific = async function (plannerName) {
 // Update an existing transfer plan using form data
 Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
   try {
-    const url = new URL(serverPath + authBackendPath + `/plan/${planName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${planName}`);
 
     const response = await fetch(url, {
       method: "PUT",
@@ -85,8 +81,6 @@ Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
 
     const result = await response.json();
 
-    console.log({ result: result, status: response.status });
-
     return { result: result, status: response.status };
 
   } catch (error) {
@@ -97,7 +91,7 @@ Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
 // Delete a transfer plan
 Backend.TransferPlan.delete = async function (planName) {
   try {
-    const url = new URL(serverPath + authBackendPath + `/plan/${planName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${planName}`);
 
     const response = await fetch(url, {
       method: "DELETE",
@@ -107,8 +101,6 @@ Backend.TransferPlan.delete = async function (planName) {
     });
 
     const result = await response.json();
-
-    console.log({ result: result, status: response.status });
 
     return { result: result, status: response.status };
 

@@ -52,42 +52,106 @@ const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric
 dateElement.textContent = today.toLocaleDateString(undefined, options);
 
 // // Load existing planners from local storage or create sample data
-let planners = getSavedTransferPlans();
-renderPlanners();
+let planners = null;
+(async () => {
+    try {
+        planners = await getAllTransferPlans();
+        renderPlanners();
+    } catch (error) {
+        console.error("An error occurred while fetching planners:", error);
+    }
+})();
 
-function getSavedTransferPlans() {
-    // Backend.TransferPlan.getSavedTransferPlans.then(response => { 
-    //     if (response.status == 200) {
-    //         return response.transferPlans;
-    //     } else {
-    //         alert("Error " + response.status + ": " + response.error);
-    //     }
-    // }).catch(error => {
-    //     console.error("An error occurred:", error);
-    // });
 
-    // Mock Data
-    const savedTransferPlan = [
-        {name: 'Oxford Transfer 2025', courseLevel: 'Undergraduate', course: 'Bachelor of Engineering - Software', studyYear: '2026', studyPeriod: 'Semester 1', transferUniversity: 'oxford', connection: {unit1:{home:"MAT1830", target: ""}, unit2:{home:"", target: ""}, unit3:{home:"", target: ""}, unit4:{home:"", target: ""}}},
-        {name: 'Yale Transfer 2025', courseLevel: 'Undergraduate', course: 'Bachelor of Engineering - Software', studyYear: '2024', studyPeriod: 'Semester 2', transferUniversity: 'yale', connection: {unit1:{home:"MAT1830", target: ""}, unit2:{home:"", target: ""}, unit3:{home:"", target: ""}, unit4:{home:"", target: ""}}},
-        {name: 'MIT Winter Transfer 2025', courseLevel: 'Undergraduate', course: 'Bachelor of Engineering - Software', studyYear: '2022', studyPeriod: 'Semester 1', transferUniversity: 'mit', connection: {unit1:{home:"MAT1830", target: ""}, unit2:{home:"", target: ""}, unit3:{home:"", target: ""}, unit4:{home:"", target: ""}}},
-        {name: 'Harvard Semester 2 2025', courseLevel: 'Undergraduate', course: 'Bachelor of Engineering - Software', studyYear: '2023', studyPeriod: 'Semester 2', transferUniversity: 'harvard', connection: {unit1:{home:"MAT1830", target: ""}, unit2:{home:"", target: ""}, unit3:{home:"", target: ""}, unit4:{home:"", target: ""}}}
-    ];
-
-    return savedTransferPlan;
+async function createTransferPlan(createPlannerForm) {
+    // Request to create a new transfer plan
+    return Backend.TransferPlan.create(createPlannerForm).then(response => {
+        if (response.status === 201) {
+            return response.result.transferPlan;
+        } else {
+            console.error("An error occurred:", response.result.error);
+            alert("An error occurred: " + response.result.error);
+            return null;
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+        return null;
+    });
 }
 
-function openTransferPlan() {
-
+async function getAllTransferPlans() {
+    return Backend.TransferPlan.getAll()
+        .then(response => {
+            if (response.status === 200) {
+                if (response.result.transferPlan === null) {
+                    return [];
+                }
+                return response.result.transferPlan;
+            } else {
+                alert("Error " + response.status + ": " + response.result.error);
+                return []; // Return an empty array if there is an error
+            }
+        })
+        .catch(error => {
+            console.error("An error occurred:", error);
+            alert("An error occurred: " + error.message);
+            return []; // Return an empty array in case of error
+        });
 }
 
-function deleteTransferPlan() {
-
+async function getSpecificTransferPlan(plannerName) {
+    // Request to fetch a specific transfer plan by name
+    return Backend.TransferPlan.getSpecific(plannerName).then(response => {
+        if (response.status === 200) {  // Success
+            alert("Successfully retrieved the transfer plan.");
+            console.log(response.result.transferPlan);
+            return response.result.transferPlan; // Return the specific transfer plan
+        } else {
+            alert("Error " + response.status + ": " + response.result.error);
+            return null; // Return null if there is an error
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+        return null; // Return null in case of error
+    });
 }
 
-function createNewTransferPlan() {
-
+async function updateTransferPlan(planName, updatePlannerForm) {
+    // Request to update an existing transfer plan
+    return Backend.TransferPlan.update(planName, updatePlannerForm).then(response => {
+        if (response.status === 200) {  // Success
+            alert("Successfully updated the transfer plan.");
+            return response.result.transferPlan; // Return the updated transfer plan
+        } else {
+            alert("Error " + response.status + ": " + response.result.error);
+            return null; // Return null if there is an error
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+        return null; // Return null in case of error
+    });
 }
+
+async function deleteTransferPlan(planName) {
+    // Request to delete a specific transfer plan by name
+    return Backend.TransferPlan.delete(planName).then(response => {
+        if (response.status === 200) {  // Success
+            alert(`Successfully deleted the transfer plan "${planName}".`);
+            return true; // Return true if the plan is successfully deleted
+        } else {
+            alert("Error " + response.status + ": " + response.result.error);
+            return false; // Return false if there is an error
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+        return false; // Return false in case of error
+    });
+}
+
 
 createButton.addEventListener('click', () => {
     // Populate university transfer options
@@ -95,13 +159,8 @@ createButton.addEventListener('click', () => {
     createNewPlanModal.classList.remove('hidden');
 });
 
-closeCreateNewPlanModal.addEventListener('click', () => {
-    createNewPlanModal.classList.add('hidden');
-})
-
 // Render the list of Planners
 function renderPlanners() {
-
     plannerList.innerHTML = '';
 
     if (planners.length === 0) {
@@ -118,19 +177,30 @@ function renderPlanners() {
                 <span>${planner.name}</span>
                 <button onclick="deletePlanner(${index})">🗑️</button>
             `;
-            plannerItem.addEventListener("click", () => {
-                // TODO: Add Click event to 
-                console.log(`${planner.name} is clicked`)
-            })
             plannerList.appendChild(plannerItem);
         });
     }
 }
 
-window.deletePlanner = function(index) {
-    planners.splice(index, 1);
-    localStorage.setItem('planners', JSON.stringify(planners));
-    renderPlanners();
+function deletePlanner(index) {
+    const plannerName = planners[index].name;
+
+    const deleteButton = document.querySelectorAll('.planner-item button')[index];
+    deleteButton.disabled = true; // Disable button to prevent multiple clicks
+
+    // deletes from db
+    (async () => {
+        try {
+            await deleteTransferPlan(plannerName);
+            
+            // delete from list and re-render
+            planners.splice(index, 1);
+            renderPlanners();
+        } catch (error) {
+            console.error("An error occurred while deleting the transfer plan:", error);
+            deleteButton.disabled = false; // Re-enable the button if the deletion fails
+        }
+    })();
 }
 
 // Set up Universities to choose from
@@ -158,16 +228,21 @@ async function setUpTransferUniOptions() {
 
 // ---------- Create New Planner Logic ---------- //
 const createNewPlanContainer = document.getElementById("create-new-plan");
-const courseLevel = document.getElementById('course-level').value;
-const course = document.getElementById('course').value;
-const studyYear = document.getElementById('study-year').value;
-const studyPeriod = document.getElementById('study-period').value;
-const transferUniversity = document.getElementById('transfer-university').value;
-const planName = document.getElementById('plan-name').value;
+
+closeCreateNewPlanModal.addEventListener('click', () => {
+    createNewPlanModal.classList.add('hidden');
+});
 
 // On Create new Transfer plan form submit update database and configure then show the planner
 document.querySelector('.transfer-plan-form').addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent the form from submitting
+
+    const courseLevel = document.getElementById('course-level').value;
+    const course = document.getElementById('course').value;
+    const studyYear = document.getElementById('study-year').value;
+    const studyPeriod = document.getElementById('study-period').value;
+    const transferUniversity = document.getElementById('transfer-university').value;
+    const planName = document.getElementById('plan-name').value;
 
     // Create an object to store the data
     const formData = {
@@ -179,10 +254,17 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
         planName: planName
     };
 
-    // TODO: Create new entry in database
-    
-    // Setup the planner container
-    console.log(formData);
+    // Create new entry in database
+    let newTransferPlan = null;
+    (async () => {
+        try {
+            newTransferPlan = await createTransferPlan(formData);
+            console.log(newTransferPlan);
+            window.location.href = `/transfer-plan/plan?name=${newTransferPlan.name}`;
+        } catch (error) {
+            console.error("An error occurred while creating the transfer plan:", error);
+        }
+    })();
 });
 
 

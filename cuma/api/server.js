@@ -54,6 +54,10 @@ app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
 });
 
+app.get('/transfer-plan/plan', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
+});
+
 // app.get('/', authenticateToken, (req, res) => {
 //   res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
 // });
