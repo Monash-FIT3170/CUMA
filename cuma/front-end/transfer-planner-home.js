@@ -33,6 +33,7 @@ function toggleNav() {
 
 document.addEventListener('DOMContentLoaded', () => {
     toggleNav();
+
 })
 
 
@@ -45,27 +46,52 @@ const createButton = document.getElementById('create-planner');
 const createNewPlanModal = document.getElementById('create-new-plan');
 const closeCreateNewPlanModal = document.getElementById('close-create-new-plan-modal');
 
-// Display today's date
-const dateElement = document.getElementById('date');
-const today = new Date();
-const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-dateElement.textContent = today.toLocaleDateString(undefined, options);
+
 
 // // Load existing planners from local storage or create sample data
 let planners = null;
+setupGreeting();
+setupDate();
 fetchAndPopulateTransferPlan();
 
+// Retrieve user name and setup greetings
+function setupGreeting() {
+    const greeting = document.getElementById("greeting");
+    Backend.Auth.getUserInfo()
+    .then( response => {
+        if (response.status === 200) {
+            greeting.textContent = `Hello, ${response.data.name}!`;
+        } else {
+            greeting.textContent = `Hello, Student!`;
+        }
+    })
+    .catch(error => {
+        console.log(error);
+        greeting.textContent = `Hello, Student!`;
+    });
+}
+
+// Setup with today's date
+function setupDate() {
+    // Display today's date
+    const dateElement = document.getElementById('date');
+    const today = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateElement.textContent = today.toLocaleDateString(undefined, options);
+}
+
+// Fetch the data and populate the transfer list
 function fetchAndPopulateTransferPlan() {
     (async () => {
         try {
             planners = await getAllTransferPlans();
-            console.log(planners);
             renderPlanners();
         } catch (error) {
             console.error("An error occurred while fetching planners:", error);
         }
     })();
 }
+
 // Render the list of Planners
 function renderPlanners() {
     plannerList.innerHTML = '';
@@ -82,11 +108,44 @@ function renderPlanners() {
             plannerItem.className = 'planner-item';
             plannerItem.innerHTML = `
                 <span>${planner.name}</span>
-                <button onclick="deletePlanner(${index})">🗑️</button>
+                <div class="dates-and-delete">
+                    <span id="last-update">Last Update: ${formatDateTime(planner.updatedAt)}</span>
+                    <button>🗑️</button>
+                </div>
             `;
+
+            // Redirect when the planner item (excluding the delete button) is clicked
+            plannerItem.addEventListener("click", () => {
+                window.location.href = `/transfer-plan/plan?name=${planner.name}`;
+            });
+
+            // Add event listener to the delete button
+            const deleteButton = plannerItem.querySelector('button');
+            deleteButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent the click event from bubbling up
+                deletePlanner(index);    // Call your delete function
+            });
+
             plannerList.appendChild(plannerItem);
         });
     }
+}
+
+// Util - Covert and formate date time from iso
+function formatDateTime(dateTime) {
+    const date = new Date(dateTime);
+
+    // Extract date components
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+
+    // Extract time components
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    // Format and return the date and time
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
 // delete planner ui and from db
