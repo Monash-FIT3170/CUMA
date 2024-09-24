@@ -11,6 +11,21 @@ async function getTransferPlanDBCollection(req) {
   return database.collection(TRANSFER_PLAN_COLLECTION);
 }
 
+/**
+ * Utility function to retrieve the email of the user.
+ * @param {Object} req request
+ * @returns 
+ */
+function getEmail(req) {
+    // No user detected
+    if (!req.user.email) {
+        return null;
+    }
+
+    // Local login
+    return req.user.email;
+}
+
 async function getUser(req) {
     const userEmail = getEmail(req);
     if (!userEmail) return null;
