@@ -47,7 +47,7 @@ async function getUser(req) {
 router.post('/create', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(403).json({ error: "User not found" });
 
         const transferPlansCollection = await getTransferPlanDBCollection(req);
         const { createPlannerForm } = req.body;
@@ -130,7 +130,7 @@ router.post('/create', authenticateToken, async (req, res) => {
 router.get('/all', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(403).json({ error: "User not found" });
 
         const transferPlansCollection = await getTransferPlanDBCollection(req);
         const userTransferPlans = await transferPlansCollection.findOne({ user: user.email });
@@ -155,7 +155,7 @@ router.get('/all', authenticateToken, async (req, res) => {
 router.get('/plan/:name', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(403).json({ error: "User not found" });
 
         const transferPlansCollection = await getTransferPlanDBCollection(req);
         const { name } = req.params;
@@ -192,7 +192,7 @@ router.get('/plan/:name', authenticateToken, async (req, res) => {
 router.put('/plan/:planName', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(403).json({ error: "User not found" });
 
         const { planName } = req.params;
         const { updatePlannerForm } = req.body;
@@ -254,7 +254,7 @@ router.put('/plan/:planName', authenticateToken, async (req, res) => {
 router.delete('/plan/:planName', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
-        if (!user) return res.status(404).json({ error: "User not found" });
+        if (!user) return res.status(403).json({ error: "User not found" });
 
         const { planName } = req.params;
 
