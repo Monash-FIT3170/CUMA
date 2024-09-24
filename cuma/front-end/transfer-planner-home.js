@@ -53,112 +53,19 @@ dateElement.textContent = today.toLocaleDateString(undefined, options);
 
 // // Load existing planners from local storage or create sample data
 let planners = null;
-(async () => {
-    try {
-        planners = await getAllTransferPlans();
-        renderPlanners();
-    } catch (error) {
-        console.error("An error occurred while fetching planners:", error);
-    }
-})();
+fetchAndPopulateTransferPlan();
 
-
-async function createTransferPlan(createPlannerForm) {
-    // Request to create a new transfer plan
-    return Backend.TransferPlan.create(createPlannerForm).then(response => {
-        if (response.status === 201) {
-            return response.result.transferPlan;
-        } else {
-            console.error("An error occurred:", response.result.error);
-            alert("An error occurred: " + response.result.error);
-            return null;
+function fetchAndPopulateTransferPlan() {
+    (async () => {
+        try {
+            planners = await getAllTransferPlans();
+            console.log(planners);
+            renderPlanners();
+        } catch (error) {
+            console.error("An error occurred while fetching planners:", error);
         }
-    }).catch(error => {
-        console.error("An error occurred:", error);
-        alert("An error occurred: " + error.message);
-        return null;
-    });
+    })();
 }
-
-async function getAllTransferPlans() {
-    return Backend.TransferPlan.getAll()
-        .then(response => {
-            if (response.status === 200) {
-                if (response.result.transferPlan === null) {
-                    return [];
-                }
-                return response.result.transferPlan;
-            } else {
-                alert("Error " + response.status + ": " + response.result.error);
-                return []; // Return an empty array if there is an error
-            }
-        })
-        .catch(error => {
-            console.error("An error occurred:", error);
-            alert("An error occurred: " + error.message);
-            return []; // Return an empty array in case of error
-        });
-}
-
-async function getSpecificTransferPlan(plannerName) {
-    // Request to fetch a specific transfer plan by name
-    return Backend.TransferPlan.getSpecific(plannerName).then(response => {
-        if (response.status === 200) {  // Success
-            alert("Successfully retrieved the transfer plan.");
-            console.log(response.result.transferPlan);
-            return response.result.transferPlan; // Return the specific transfer plan
-        } else {
-            alert("Error " + response.status + ": " + response.result.error);
-            return null; // Return null if there is an error
-        }
-    }).catch(error => {
-        console.error("An error occurred:", error);
-        alert("An error occurred: " + error.message);
-        return null; // Return null in case of error
-    });
-}
-
-async function updateTransferPlan(planName, updatePlannerForm) {
-    // Request to update an existing transfer plan
-    return Backend.TransferPlan.update(planName, updatePlannerForm).then(response => {
-        if (response.status === 200) {  // Success
-            alert("Successfully updated the transfer plan.");
-            return response.result.transferPlan; // Return the updated transfer plan
-        } else {
-            alert("Error " + response.status + ": " + response.result.error);
-            return null; // Return null if there is an error
-        }
-    }).catch(error => {
-        console.error("An error occurred:", error);
-        alert("An error occurred: " + error.message);
-        return null; // Return null in case of error
-    });
-}
-
-async function deleteTransferPlan(planName) {
-    // Request to delete a specific transfer plan by name
-    return Backend.TransferPlan.delete(planName).then(response => {
-        if (response.status === 200) {  // Success
-            alert(`Successfully deleted the transfer plan "${planName}".`);
-            return true; // Return true if the plan is successfully deleted
-        } else {
-            alert("Error " + response.status + ": " + response.result.error);
-            return false; // Return false if there is an error
-        }
-    }).catch(error => {
-        console.error("An error occurred:", error);
-        alert("An error occurred: " + error.message);
-        return false; // Return false in case of error
-    });
-}
-
-
-createButton.addEventListener('click', () => {
-    // Populate university transfer options
-    setUpTransferUniOptions();
-    createNewPlanModal.classList.remove('hidden');
-});
-
 // Render the list of Planners
 function renderPlanners() {
     plannerList.innerHTML = '';
@@ -182,6 +89,7 @@ function renderPlanners() {
     }
 }
 
+// delete planner ui and from db
 function deletePlanner(index) {
     const plannerName = planners[index].name;
 
@@ -202,6 +110,13 @@ function deletePlanner(index) {
         }
     })();
 }
+
+// Create new planner button logic
+createButton.addEventListener('click', () => {
+    // Populate university transfer options
+    setUpTransferUniOptions();
+    createNewPlanModal.classList.remove('hidden');
+});
 
 // Set up Universities to choose from
 async function setUpTransferUniOptions() {
@@ -229,6 +144,7 @@ async function setUpTransferUniOptions() {
 // ---------- Create New Planner Logic ---------- //
 const createNewPlanContainer = document.getElementById("create-new-plan");
 
+// close modal logic
 closeCreateNewPlanModal.addEventListener('click', () => {
     createNewPlanModal.classList.add('hidden');
 });
@@ -255,16 +171,13 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
     };
 
     // Create new entry in database
-    let newTransferPlan = null;
     (async () => {
         try {
+            let newTransferPlan = null;
             newTransferPlan = await createTransferPlan(formData);
-            console.log(newTransferPlan);
             window.location.href = `/transfer-plan/plan?name=${newTransferPlan.name}`;
         } catch (error) {
             console.error("An error occurred while creating the transfer plan:", error);
         }
     })();
 });
-
-
