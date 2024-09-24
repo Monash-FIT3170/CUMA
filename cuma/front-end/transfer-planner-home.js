@@ -202,9 +202,24 @@ async function setUpTransferUniOptions() {
 
 // ---------- Create New Planner Logic ---------- //
 const createNewPlanContainer = document.getElementById("create-new-plan");
+const courseLevel = document.getElementById('course-level');
+const course = document.getElementById('course');
+const studyYear = document.getElementById('study-year');
+const studyPeriod = document.getElementById('study-period');
+const transferUniversity = document.getElementById('transfer-university');
+const planName = document.getElementById('plan-name');
 
 // close modal logic
 closeCreateNewPlanModal.addEventListener('click', () => {
+    // clear value from selector and input
+    courseLevel.selectedIndex = 0;
+    course.selectedIndex = 0;
+    studyYear.selectedIndex = 0;
+    studyPeriod.selectedIndex = 0;
+    transferUniversity.selectedIndex = 0;
+    planName.value = "";
+
+    // hide the modal
     createNewPlanModal.classList.add('hidden');
 });
 
@@ -212,21 +227,14 @@ closeCreateNewPlanModal.addEventListener('click', () => {
 document.querySelector('.transfer-plan-form').addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent the form from submitting
 
-    const courseLevel = document.getElementById('course-level').value;
-    const course = document.getElementById('course').value;
-    const studyYear = document.getElementById('study-year').value;
-    const studyPeriod = document.getElementById('study-period').value;
-    const transferUniversity = document.getElementById('transfer-university').value;
-    const planName = document.getElementById('plan-name').value;
-
     // Create an object to store the data
     const formData = {
-        courseLevel: courseLevel,
-        course: course,
-        studyYear: studyYear,
-        studyPeriod: studyPeriod,
-        transferUniversity: transferUniversity,
-        planName: planName
+        courseLevel: courseLevel.value,
+        course: course.value,
+        studyYear: studyYear.value,
+        studyPeriod: studyPeriod.value,
+        transferUniversity: transferUniversity.value,
+        planName: planName.value
     };
 
     // Create new entry in database
