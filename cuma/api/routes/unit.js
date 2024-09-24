@@ -185,7 +185,7 @@ router.get('/retrieveUnit', authenticateToken, async (req, res) => {
         }
 
         const db = client.db('CUMA');
-        const collection = db.collection('units');
+        const collection = db.collection(collectionName);
 
         const unit = await collection.findOne({ universityName: universityName, unitCode: unitCode });
 
