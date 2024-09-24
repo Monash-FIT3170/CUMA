@@ -11,7 +11,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authenticateToken from './middleware/authenticateToken.js'
-import { setupAdminJS } from '../admin/adminConfig.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +38,7 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '..', 'front-end'), { index: false })); // Using all the static files within front-end
 app.use('/backend', express.static(path.join(__dirname, '../backend')));  // Serve backend JavaScript files
+app.use('/admin', express.static(path.join(__dirname, '..', 'front-end', 'admin')));
 
 // Middleware to attach MongoDB client to requests
 app.use((req, res, next) => {
@@ -56,10 +56,6 @@ app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
-// app.get('/', authenticateToken, (req, res) => {
-//   res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
-// });
-
 // Example route to log session data
 app.get('/view-session', (req, res) => {
   console.log(req.session);  // Logs the entire session object to the console
@@ -68,6 +64,10 @@ app.get('/view-session', (req, res) => {
 
 app.get('/', authenticateToken, (req, res) => {
   res.redirect('/index');
+});
+
+app.get('/cuma-admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'admin', 'pages', 'super-admin-dashboard.html'));
 });
 
 app.get('/login', (req, res) => {
@@ -126,14 +126,10 @@ async function run() {
     await mongoose.connect(process.env.TEST_MONGODB_URI);
     console.log("Connected to MongoDB using Mongoose");
 
-    // Setup AdminJS
-    await setupAdminJS(app);
-    console.log("AdminJS setup complete");
-
     // Start the Express server
     const server = app.listen(port, () => {
       console.log(`Server is running in ${process.env.NODE_ENV} mode on ${serverPath}`);
-      console.log(`Admin is running in ${process.env.NODE_ENV} mode on ${serverPath}/admin`);
+      console.log(`Admin is running in ${process.env.NODE_ENV} mode on ${serverPath}/cuma-admin`);
     });
     // Function to close server
     const closeServer = async () => {
