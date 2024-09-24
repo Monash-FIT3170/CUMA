@@ -10,7 +10,8 @@ import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
-import authenticateToken from './middleware/authenticateToken.js'
+import authenticateToken from './middleware/authenticateToken.js';
+import cumaAdmin from './routes/cumaAdmin.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
+app.use('/api/cuma-admin', cumaAdmin);
 
 // Page Link
 app.get('/index', authenticateToken, (req, res) => {
