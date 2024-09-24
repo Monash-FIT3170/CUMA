@@ -3,5 +3,6 @@ const serverPath = "http://localhost:3000";
 var Backend = {
     Unit: {},
     UnitConnection: {},
-    Auth: {}
+    Auth: {},
+    Admin: {}
 }

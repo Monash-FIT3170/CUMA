@@ -55,7 +55,7 @@ function initializeDummyUsers() {
             firstName: 'Alice',
             lastName: 'Johnson',
             email: 'alice.johnson@example.com',
-            roles: ['student'],
+            askingRole: 'student',
             status: 'pending',
             additional_info: {
                 dateOfBirth: '1998-05-12',
@@ -85,7 +85,7 @@ function initializeDummyUsers() {
             firstName: 'Carol',
             lastName: 'Williams',
             email: 'carol.williams@example.com',
-            roles: ['student'],
+            askingRole: 'course_director',
             status: 'pending',
             additional_info: {
                 dateOfBirth: '2000-07-30',
@@ -100,8 +100,8 @@ function initializeDummyUsers() {
             firstName: 'David',
             lastName: 'Brown',
             email: 'david.brown@example.com',
-            roles: ['general_user'],
-            status: 'approved',
+            askingRole: 'course_director',
+            status: 'pending',
             additional_info: {
                 dateOfBirth: '1995-09-15',
                 university: 'University of Examples',
@@ -114,7 +114,7 @@ function initializeDummyUsers() {
             firstName: 'Eve',
             lastName: 'Davis',
             email: 'eve.davis@example.com',
-            roles: [],
+            askingRole: 'course_director',
             status: 'pending',
             additional_info: {
                 dateOfBirth: '1988-02-20',
@@ -130,7 +130,7 @@ function initializeDummyUsers() {
             firstName: 'Frank',
             lastName: 'Miller',
             email: 'frank.miller@example.com',
-            roles: ['student'],
+            askingRole: 'student',
             status: 'pending',
             additional_info: {
                 dateOfBirth: '2001-12-05',
@@ -169,7 +169,13 @@ function populateUserList() {
 
         const userStatusDiv = document.createElement('div');
         userStatusDiv.classList.add('user-status');
-        userStatusDiv.textContent = `Role: ${formatRoles(user.roles)}`;
+
+        // Change text based on the current tab
+        if (currentTab === 'pending') {
+            userStatusDiv.textContent = `Asking Role: ${formatRoles(user.askingRole || user.roles)}`;
+        } else {
+            userStatusDiv.textContent = `Role: ${formatRoles(user.roles)}`;
+        }
 
         listItem.appendChild(userInfoDiv);
         listItem.appendChild(userStatusDiv);
@@ -183,6 +189,7 @@ function populateUserList() {
 
 function formatRoles(roles) {
     if (!roles || roles.length === 0) return 'None';
+    if (typeof roles === 'string') return formatKey(roles);
     return roles.map(role => formatKey(role)).join(', ');
 }
 
@@ -223,26 +230,36 @@ function displayUserDetails(user) {
         <p><strong>Last Name:</strong> ${user.lastName}</p>
         <p><strong>Email:</strong> ${user.email}</p>
         <p><strong>Status:</strong> ${formatStatus(user.status)}</p>
+        <p><strong>${user.status === 'pending' ? 'Asking Role' : 'Role'}:</strong> ${formatRoles(user.askingRole || user.roles)}</p>
         <h3>Additional Information</h3>
         ${formatAdditionalInfo(user.additional_info)}
     `;
-
-    // Set the role selection dropdown
-    const roleSelect = document.getElementById('role-select');
-    roleSelect.value = user.roles[0] || 'general_user';
+    
+    // Show or hide the role selection dropdown based on user status
+    const roleSelectionDiv = document.getElementById('role-selection');
+    if (user.status === 'pending') {
+        roleSelectionDiv.style.display = 'none';
+    } else {
+        roleSelectionDiv.style.display = 'block';
+        const roleSelect = document.getElementById('role-select');
+        roleSelect.value = user.roles && user.roles[0] || 'general_user';
+    }
 
     // Show or hide the Approve and Reject buttons based on user status
     const approveBtn = document.getElementById('approve-btn');
     const rejectBtn = document.getElementById('reject-btn');
+    const deleteBtn = document.getElementById('delete-btn');
 
-    if (currentTab === 'pending') {
+    if (user.status === 'pending') {
         approveBtn.innerHTML = '<i class="fas fa-check"></i> Approve';
         approveBtn.style.display = 'inline-block';
         rejectBtn.style.display = 'inline-block';
+        deleteBtn.style.display = 'inline-block';
     } else {
         approveBtn.innerHTML = '<i class="fas fa-save"></i> Update';
         approveBtn.style.display = 'inline-block';
         rejectBtn.style.display = 'none';
+        deleteBtn.style.display = 'inline-block';
     }
 
     // Show the modal
@@ -287,16 +304,26 @@ function handleUserAction(action) {
         return;
     }
 
-    if (action === 'approve') {
-        // Get the selected role
-        const selectedRole = document.getElementById('role-select').value;
-        allUsers[userIndex].roles = [selectedRole];
-        allUsers[userIndex].status = 'approved';
+    const user = allUsers[userIndex];
 
-        alert(currentTab === 'pending' ? 'User approved successfully.' : 'User updated successfully.');
+    if (action === 'approve') {
+        if (user.status === 'pending') {
+            // For pending users, use the askingRole
+            allUsers[userIndex].roles = [user.askingRole];
+            allUsers[userIndex].status = 'approved';
+            delete allUsers[userIndex].askingRole;
+            alert('User approved successfully.');
+        } else {
+            // For approved users, use the selected role
+            const selectedRole = document.getElementById('role-select').value;
+            allUsers[userIndex].roles = [selectedRole];
+            alert('User updated successfully.');
+        }
     } else if (action === 'reject') {
-        allUsers[userIndex].status = 'pending';
-        alert('User rejected successfully.');
+        if (user.status === 'pending') {
+            allUsers[userIndex].status = 'rejected';
+            alert('User rejected successfully.');
+        }
     } else if (action === 'delete') {
         let confirmAction = confirm('Are you sure you want to delete this user?');
         if (!confirmAction) return;
