@@ -18,7 +18,8 @@ Backend.TransferPlan.create = async function (createPlannerForm) {
     return { result: result, status: response.status };
 
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
+    return { result: null, status: 500, error: error.message };
   }
 };
 
@@ -44,11 +45,10 @@ Backend.TransferPlan.getAll = async function () {
   }
 };
 
-
 // Get one specific planner
 Backend.TransferPlan.getSpecific = async function (plannerName) {
   try {
-    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${plannerName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${encodeURIComponent(plannerName)}`);
 
     const response = await fetch(url, {
       method: "GET",
@@ -62,14 +62,15 @@ Backend.TransferPlan.getSpecific = async function (plannerName) {
     return { result: result, status: response.status };
 
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
+    return { result: null, status: 500, error: error.message };
   }
 };
 
 // Update an existing transfer plan using form data
 Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
   try {
-    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${planName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${encodeURIComponent(planName)}`);
 
     const response = await fetch(url, {
       method: "PUT",
@@ -84,14 +85,15 @@ Backend.TransferPlan.update = async function (planName, updatePlannerForm) {
     return { result: result, status: response.status };
 
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
+    return { result: null, status: 500, error: error.message };
   }
 };
 
 // Delete a transfer plan
 Backend.TransferPlan.delete = async function (planName) {
   try {
-    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${planName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + `/plan/${encodeURIComponent(planName)}`);
 
     const response = await fetch(url, {
       method: "DELETE",
@@ -105,6 +107,7 @@ Backend.TransferPlan.delete = async function (planName) {
     return { result: result, status: response.status };
 
   } catch (error) {
-    console.log("Error:", error);
+    console.error("Error:", error);
+    return { result: null, status: 500, error: error.message };
   }
 };

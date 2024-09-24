@@ -43,28 +43,26 @@ async function getUser(req) {
 }
 
 // Create a new transfer plan
+// Create a new transfer plan
 router.post('/create', authenticateToken, async (req, res) => {
     try {
-    const user = await getUser(req);
-    if (!user) return res.status(404).json({ error: "User not found" });
+        const user = await getUser(req);
+        if (!user) return res.status(404).json({ error: "User not found" });
 
-    const transferPlans = await getTransferPlanDBCollection(req);
-    const { createPlannerForm } = req.body;
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
+        const { createPlannerForm } = req.body;
 
-    const existingTransferPlan = await transferPlans.findOne({
-        user: user.email,
-        'transferPlan.name': createPlannerForm.planName
-    });
+        // Input validation
+        if (!createPlannerForm || !createPlannerForm.planName || !createPlannerForm.course || !createPlannerForm.studyYear || !createPlannerForm.studyPeriod || !createPlannerForm.transferUniversity) {
+            return res.status(400).json({ error: 'Invalid or missing fields in createPlannerForm' });
+        }
 
-    if (existingTransferPlan) {
-        return res.status(400).json({ error: 'Transfer Plan already exists. Choose a different name.' });
-    }
+        // Check if a record exists for the current user
+        const existingUserTransferPlans = await transferPlansCollection.findOne({ user: user.email });
 
-    const newTransferPlan = {
-        user: user.email,
-        transferPlan: [
-        {
-            createAt: new Date(),
+        // Create the new transfer plan object
+        const newPlan = {
+            createdAt: new Date(),
             updatedAt: new Date(),
             homeUniversity: "monash",
             courseLevel: createPlannerForm.courseLevel,
@@ -72,17 +70,54 @@ router.post('/create', authenticateToken, async (req, res) => {
             studyYear: createPlannerForm.studyYear,
             studyPeriod: createPlannerForm.studyPeriod,
             transferUniversity: createPlannerForm.transferUniversity,
-            name: createPlannerForm.planName
+            name: createPlannerForm.planName,
+            unitMappings: []
+        };
+
+        if (!existingUserTransferPlans) {
+            // If the user doesn't have any transfer plans, create a new user record with the new transfer plan
+            const newTransferPlan = {
+                user: user.email,
+                transferPlans: [newPlan]
+            };
+
+            await transferPlansCollection.insertOne(newTransferPlan);
+
+            return res.status(201).json({
+                message: 'New Transfer Plan created successfully',
+                transferPlan: newPlan,
+            });
+        } else {
+            // Check if a transfer plan with the same name already exists
+            const existingTransferPlan = existingUserTransferPlans.transferPlans.find(plan => plan.name === createPlannerForm.planName);
+
+            if (existingTransferPlan) {
+                return res.status(400).json({ error: 'Transfer Plan with this name already exists. Choose a different name.' });
+            }
+
+            // Update 'updatedAt' field of all existing transfer plans
+            existingUserTransferPlans.transferPlans.forEach(plan => {
+                plan.updatedAt = new Date();
+            });
+
+            // Add the new plan to the existing user's transferPlans array
+            existingUserTransferPlans.transferPlans.push(newPlan);
+
+            // Update the user's document in the collection
+            await transferPlansCollection.updateOne(
+                { user: user.email },
+                {
+                    $set: {
+                        transferPlans: existingUserTransferPlans.transferPlans
+                    }
+                }
+            );
+
+            return res.status(201).json({
+                message: 'New Transfer Plan added successfully',
+                transferPlan: newPlan,
+            });
         }
-        ]
-    };
-
-    await transferPlans.insertOne(newTransferPlan);
-
-    return res.status(201).json({
-        message: 'New Transfer Plan created successfully',
-        transferPlan: newTransferPlan.transferPlan,
-    });
 
     } catch (error) {
         console.error('Error:', error);
@@ -90,22 +125,24 @@ router.post('/create', authenticateToken, async (req, res) => {
     }
 });
 
+
 // Get all transfer plans
 router.get('/all', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        const transferPlans = await getTransferPlanDBCollection(req);
-        const userTransferPlans = await transferPlans.findOne({ user: user.email });
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
+        const userTransferPlans = await transferPlansCollection.findOne({ user: user.email });
 
-        if (!userTransferPlans || !userTransferPlans.transferPlans || userTransferPlans.transferPlans.length === 0) {
-            return res.status(404).json({ message: 'No transfer plans found', transferPlans: [] });
-        }
+        // If no transfer plans exist for the user, return an empty array
+        const transferPlans = userTransferPlans && userTransferPlans.transferPlans
+            ? userTransferPlans.transferPlans
+            : [];
 
         return res.status(200).json({
             message: 'Successfully retrieved all transfer plans',
-            transferPlans: userTransferPlans.transferPlans,
+            transferPlans: transferPlans,
         });
 
     } catch (error) {
@@ -120,19 +157,26 @@ router.get('/plan/:name', authenticateToken, async (req, res) => {
         const user = await getUser(req);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        const transferPlans = await getTransferPlanDBCollection(req);
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
         const { name } = req.params;
 
-        const transferPlanDocument = await transferPlans.findOne({ user: user.email });
+        // Find the user's transfer plan document
+        const userTransferPlans = await transferPlansCollection.findOne({ user: user.email });
 
-        if (!transferPlanDocument || !transferPlanDocument.transferPlans) {
-            return res.status(404).json({ error: "Transfer Plan not found" });
+        // If no document exists for the user or no transferPlans array exists, return not found
+        if (!userTransferPlans || !userTransferPlans.transferPlans) {
+            return res.status(404).json({ error: "No transfer plans found for the user" });
         }
 
-        const specificTransferPlan = transferPlanDocument.transferPlans.find(plan => plan.name === name);
+        // Find the specific transfer plan by name
+        const specificTransferPlan = userTransferPlans.transferPlans.find(plan => plan.name === name);
 
-        if (!specificTransferPlan) return res.status(404).json({ error: "Transfer Plan not found" });
+        // If no specific transfer plan is found, return not found
+        if (!specificTransferPlan) {
+            return res.status(404).json({ error: `Transfer Plan with name '${name}' not found` });
+        }
 
+        // Return the specific transfer plan
         return res.status(200).json({
             message: 'Transfer Plan retrieved successfully',
             transferPlan: specificTransferPlan,
@@ -144,7 +188,7 @@ router.get('/plan/:name', authenticateToken, async (req, res) => {
     }
 });
 
-// Update a transfer plan
+// Update a specific transfer plan
 router.put('/plan/:planName', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
@@ -153,27 +197,45 @@ router.put('/plan/:planName', authenticateToken, async (req, res) => {
         const { planName } = req.params;
         const { updatePlannerForm } = req.body;
 
-        const transferPlans = await getTransferPlanDBCollection(req);
-        const existingTransferPlan = await transferPlans.findOne({
-            user: user.email,
-            'transferPlan.name': planName
-        });
+        if (!updatePlannerForm) {
+            return res.status(400).json({ error: "Update data is required." });
+        }
 
-        if (!existingTransferPlan) return res.status(404).json({ error: 'Transfer Plan not found.' });
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
 
+        // Find the specific transfer plan for the user
+        const userTransferPlans = await transferPlansCollection.findOne({ user: user.email });
+
+        if (!userTransferPlans || !userTransferPlans.transferPlans) {
+            return res.status(404).json({ error: 'Transfer Plan not found.' });
+        }
+
+        // Find the specific plan by name
+        const planIndex = userTransferPlans.transferPlans.findIndex(plan => plan.name === planName);
+
+        if (planIndex === -1) {
+            return res.status(404).json({ error: 'Transfer Plan not found.' });
+        }
+
+        // Prepare the updated transfer plan object
         const updatedTransferPlan = {
-            'transferPlan.$.updatedAt': new Date(),
-            'transferPlan.$.courseLevel': updatePlannerForm.courseLevel,
-            'transferPlan.$.course': updatePlannerForm.course,
-            'transferPlan.$.studyYear': updatePlannerForm.studyYear,
-            'transferPlan.$.studyPeriod': updatePlannerForm.studyPeriod,
-            'transferPlan.$.transferUniversity': updatePlannerForm.transferUniversity,
-            'transferPlan.$.name': updatePlannerForm.planName || planName,
+            ...userTransferPlans.transferPlans[planIndex],
+            updatedAt: new Date(),
+            courseLevel: updatePlannerForm.courseLevel || userTransferPlans.transferPlans[planIndex].courseLevel,
+            course: updatePlannerForm.course || userTransferPlans.transferPlans[planIndex].course,
+            studyYear: updatePlannerForm.studyYear || userTransferPlans.transferPlans[planIndex].studyYear,
+            studyPeriod: updatePlannerForm.studyPeriod || userTransferPlans.transferPlans[planIndex].studyPeriod,
+            transferUniversity: updatePlannerForm.transferUniversity || userTransferPlans.transferPlans[planIndex].transferUniversity,
+            name: updatePlannerForm.planName || planName // Update plan name if provided, otherwise keep the original
         };
 
-        await transferPlans.updateOne(
-            { user: user.email, 'transferPlan.name': planName },
-            { $set: updatedTransferPlan }
+        // Update the specific transfer plan in the array
+        userTransferPlans.transferPlans[planIndex] = updatedTransferPlan;
+
+        // Update the document in the database
+        await transferPlansCollection.updateOne(
+            { user: user.email },
+            { $set: { transferPlans: userTransferPlans.transferPlans } }
         );
 
         return res.status(200).json({
@@ -187,7 +249,8 @@ router.put('/plan/:planName', authenticateToken, async (req, res) => {
     }
 });
 
-// Delete a transfer plan
+
+// Delete a specific transfer plan
 router.delete('/plan/:planName', authenticateToken, async (req, res) => {
     try {
         const user = await getUser(req);
@@ -195,12 +258,15 @@ router.delete('/plan/:planName', authenticateToken, async (req, res) => {
 
         const { planName } = req.params;
 
-        const transferPlans = await getTransferPlanDBCollection(req);
-        const result = await transferPlans.updateOne(
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
+
+        // Attempt to remove the specific transfer plan by name
+        const result = await transferPlansCollection.updateOne(
             { user: user.email },
-            { $pull: { transferPlan: { name: planName } } }
+            { $pull: { transferPlans: { name: planName } } }
         );
 
+        // Check if any document was modified (i.e., if the transfer plan was found and deleted)
         if (result.modifiedCount === 0) {
             return res.status(404).json({ error: 'Transfer Plan not found or already deleted.' });
         }
