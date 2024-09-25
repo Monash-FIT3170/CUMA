@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-let selectedUserId = null;
 let allUsers = [];
 let currentTab = 'pending'; // 'pending' or 'approved'
 
@@ -98,7 +97,7 @@ function populateUserList() {
         listItem.appendChild(userStatusDiv);
 
         listItem.addEventListener('click', () => {
-            displayUserDetails(user);
+            displayUserDetails(user._id);
         });
         userList.appendChild(listItem);
     });
@@ -139,49 +138,59 @@ function filterUserList() {
     });
 }
 
-function displayUserDetails(user) {
-    selectedUserId = user._id;
-    const userDetailsDiv = document.getElementById('user-details');
-    userDetailsDiv.innerHTML = `
-        <p><strong>First Name:</strong> ${user.firstName}</p>
-        <p><strong>Last Name:</strong> ${user.lastName}</p>
-        <p><strong>Email:</strong> ${user.email}</p>
-        <p><strong>Email Verified:</strong> ${user.emailVerified ? 'Yes' : 'No'}</p>
-        <p><strong>Status:</strong> ${formatStatus(user.status)}</p>
-        <p><strong>${user.status === 'pending_role' ? 'Asking Role' : 'Role'}:</strong> ${formatRoles(user.askingRole || user.role)}</p>
-        <h3>Additional Information</h3>
-        ${formatAdditionalInfo(user.additional_info)}
-    `;
+function displayUserDetails(userId) {
+    Backend.Admin.getUser(userId).then(response => {
+        if (response && response.status === 200){
+            const user = response.result.data;
+            const userDetailsDiv = document.getElementById('user-details');
+            userDetailsDiv.innerHTML = `
+                    <p><strong>First Name:</strong> ${user.firstName}</p>
+                    <p><strong>Last Name:</strong> ${user.lastName}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>Email Verified:</strong> ${user.emailVerified ? 'Yes' : 'No'}</p>
+                    <p><strong>Status:</strong> ${formatStatus(user.status)}</p>
+                    <p><strong>${user.status === 'pending_role' ? 'Asking Role' : 'Role'}:</strong> ${formatRoles(user.askingRole || user.role)}</p>
+                    <h3>Additional Information</h3>
+                    ${formatAdditionalInfo(user.additional_info)}
+            `;
+            // Show or hide the role selection dropdown based on user status
+            const roleSelectionDiv = document.getElementById('role-selection');
+            if (user.status === 'active') {
+                roleSelectionDiv.style.display = 'block';
+                const roleSelect = document.getElementById('role-select');
+                roleSelect.value = user.role || 'general_user';
+            } else {
+                roleSelectionDiv.style.display = 'none';
+            }
 
-    // Show or hide the role selection dropdown based on user status
-    const roleSelectionDiv = document.getElementById('role-selection');
-    if (user.status === 'active') {
-        roleSelectionDiv.style.display = 'block';
-        const roleSelect = document.getElementById('role-select');
-        roleSelect.value = user.role || 'general_user';
-    } else {
-        roleSelectionDiv.style.display = 'none';
-    }
+             // Show or hide the Approve and Reject buttons based on user status
+             const approveBtn = document.getElementById('approve-btn');
+             const rejectBtn = document.getElementById('reject-btn');
+             const deleteBtn = document.getElementById('delete-btn');
 
-    // Show or hide the Approve and Reject buttons based on user status
-    const approveBtn = document.getElementById('approve-btn');
-    const rejectBtn = document.getElementById('reject-btn');
-    const deleteBtn = document.getElementById('delete-btn');
+             if (user.status === 'pending_role' || user.status === 'pending_verification') {
+                 approveBtn.innerHTML = '<i class="fas fa-check"></i> Approve';
+                 approveBtn.style.display = 'inline-block';
+                 rejectBtn.style.display = 'inline-block';
+                 deleteBtn.style.display = 'inline-block';
+             } else {
+                 approveBtn.innerHTML = '<i class="fas fa-save"></i> Update';
+                 approveBtn.style.display = 'inline-block';
+                 rejectBtn.style.display = 'none';
+                 deleteBtn.style.display = 'inline-block';
+             }
 
-    if (user.status === 'pending_role' || user.status === 'pending_verification') {
-        approveBtn.innerHTML = '<i class="fas fa-check"></i> Approve';
-        approveBtn.style.display = 'inline-block';
-        rejectBtn.style.display = 'inline-block';
-        deleteBtn.style.display = 'inline-block';
-    } else {
-        approveBtn.innerHTML = '<i class="fas fa-save"></i> Update';
-        approveBtn.style.display = 'inline-block';
-        rejectBtn.style.display = 'none';
-        deleteBtn.style.display = 'inline-block';
-    }
+             openModal();
+        } else {
+            console.error('Failed to fetch user details:', response ? response.status : 'No response');
+            alert('Failed to load user details. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching user details:', error);
+        alert('An error occurred while loading user details. Please try again.');
+    });
 
-    // Show the modal
-    openModal();
 }
 
 function formatStatus(status) {
@@ -209,52 +218,60 @@ function formatKey(key) {
 }
 
 function handleUserAction(action) {
-    if (!selectedUserId) {
+    const userId = document.querySelector('#user-list li.selected').dataset.userId;
+    if (!userId) {
         alert('Please select a user first.');
         return;
     }
 
-    // Retrieve user from the allUsers array
-    const userIndex = allUsers.findIndex(user => user._id === selectedUserId);
+    Backend.Admin.getUser(userId).then(response => {
+        if (response && response.status === 200) {
+            const user = response.result.data;
+            if (action === 'approve') {
+                if (user.status === 'pending_role' || user.status === 'pending_verification') {
+                    user.status = 'active';
+                    user.role = user.askingRole;
+                    delete user.askingRole;
+                    alert('User approved successfully.');
+                } else {
+                    const selectedRole = document.getElementById('role-select').value;
+                    user.role = selectedRole;
+                    alert('User updated successfully.');
+                }
+            } else if (action === 'reject') {
+                if (user.status === 'pending_role' || user.status === 'pending_verification') {
+                    user.status = 'rejected';
+                    alert('User rejected successfully.');
+                }
+            } else if (action === 'delete') {
+                let confirmAction = confirm('Are you sure you want to delete this user?');
+                if (!confirmAction) return;
 
-    if (userIndex === -1) {
-        alert('User not found.');
-        return;
-    }
+                // Remove user from allUsers array
+                allUsers = allUsers.filter(u => u._id !== user._id);
+                alert('User deleted successfully.');
+            }
 
-    if (action === 'approve') {
-        if (user.status === 'pending_role' || user.status === 'pending_verification') {
-            user.status = 'active';
-            user.role = user.askingRole;
-            delete user.askingRole;
-            alert('User approved successfully.');
+            // Update the user in the backend
+            Backend.Admin.updateUser(user._id, user).then(() => {
+                // Refresh the user list
+                fetchUsers();
+                // Close the modal
+                closeModal();
+            })
+            .catch(error => {
+                console.error('Error updating user:', error);
+                alert('An error occurred while updating the user. Please try again.');
+            });
         } else {
-            const selectedRole = document.getElementById('role-select').value;
-            user.role = selectedRole;
-            alert('User updated successfully.');
+            console.error('Failed to fetch user details:', response ? response.status : 'No response');
+            alert('Failed to load user details. Please try again.');
         }
-    } else if (action === 'reject') {
-        if (user.status === 'pending_role' || user.status === 'pending_verification') {
-            user.status = 'rejected';
-            alert('User rejected successfully.');
-        }
-    } else if (action === 'delete') {
-        let confirmAction = confirm('Are you sure you want to delete this user?');
-        if (!confirmAction) return;
-
-        // Remove user from allUsers array
-        allUsers = allUsers.filter(u => u._id !== user._id);
-        alert('User deleted successfully.');
-    }
-
-    // Refresh the user list
-    fetchUsers();
-
-    // Close the modal
-    closeModal();
-
-    // Reset selected user
-    selectedUserId = null;
+    })
+    .catch(error => {
+        console.error('Error fetching user details:', error);
+        alert('An error occurred while loading user details. Please try again.');
+    });
 }
 
 function openModal() {

@@ -59,7 +59,7 @@ router.post('/signup', async (req, res) => {
             firstName,
             lastName,
             role,
-            status: 'pending_role_info',
+            status: 'pending_role',
             mfaEnabled: false,
             mfaSecret: null
         }

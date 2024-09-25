@@ -13,7 +13,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 router.get('/users', async (req, res) => {
     try {
         const users = await User.find({}).select('-hashedPassword -userGoogleId -additional_info._id').lean();
-        return res.status(200).json({message: 'Successfully retreived user data', data: users});
+        return res.status(200).json({message: 'Sucessfully retrieved all users data', data: users});
 
     } catch (error) {
         console.error(error);
@@ -23,7 +23,7 @@ router.get('/users', async (req, res) => {
 });
 router.get('/users/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-hashedPassword -userGoogleId');
+        const user = await User.findById(req.params.id).select('-hashedPassword -userGoogleId -additional_info._id').lean();
         if (user) {
             return res.status(200).json({message: 'Successfully retreived user data', data: user});
         } 
@@ -39,7 +39,7 @@ router.put('/users/update-role/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-hashedPassword -userGoogleId');
         if (user) {
-            user.roles = req.body.roles;
+            user.role = req.body.role;
             await user.save();
             return res.status(200).json({message: 'User role updated successfully', data: user});
         }
@@ -75,23 +75,36 @@ router.get('/pending-verifications', async (req, res) => {
         return res.status(500).json({message: 'Internal server error'});
     }
 }); 
-router.post('/verify-user/:id', async (req, res) => {
+
+
+router.put('/approve-user/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id)
-        if (user) {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        if (user.status === 'active') {
+            return res.status(400).json({message: 'User is already active'});
+        }
+        if (user.status === 'pending_role') {
             user.status = 'active';
             user.verifiedAt = new Date();
-            user.updateOne({status: 'active', verifiedAt: new Date()}, {$unset: {askingRole: ""}});
+            if (user.askingRole) {
+                user.role = user.askingRole;
+                user.askingRole = undefined;
+            }
             await user.save();
-            return res.status(200).json({message: 'User verified successfully'});
+            
+            return res.status(200).json({message: 'User approved successfully'});
+        } else {
+            return res.status(400).json({message: 'User is not in a pending state'});
         }
-        return res.status(404).json({message: 'User not found'});
-
     } catch (error) {
         console.error(error);
         return res.status(500).json({message: 'Internal server error'});
     }
 });
+
 router.post('/reject-user/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
