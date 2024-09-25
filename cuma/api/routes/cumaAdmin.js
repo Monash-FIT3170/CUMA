@@ -1,13 +1,6 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import * as AuthUtils from '../utils/auth-utils.js';
 import User from '../models/UserSchema.js';
-
-dotenv.config();
-
 const router = express.Router();
-const serverPath = "http://localhost:" + (process.env.PORT || 3000);
-const isProduction = process.env.NODE_ENV === 'production';
 
 
 router.get('/users', async (req, res) => {
@@ -37,13 +30,16 @@ router.get('/users/:id', async (req, res) => {
 
 router.put('/users/update-role/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-hashedPassword -userGoogleId');
-        if (user) {
-            user.role = req.body.role;
-            await user.save();
-            return res.status(200).json({message: 'User role updated successfully', data: user});
+        const userId = req.params.id;
+        const {role} = req.body;
+        const user = await User.findById(userId).select('-hashedPassword -userGoogleId');
+        if (!user){
+            return res.status(404).json({message: 'User not found'});
         }
-        return res.status(404).json({message: 'User not found'});
+        user.role = role;
+        user.updatedDate = new Date();
+        await user.save();
+        return res.status(200).json({message: 'User role updated successfully', data: user});
 
     } catch (error) {
         console.error(error);
@@ -52,12 +48,12 @@ router.put('/users/update-role/:id', async (req, res) => {
 });
 router.delete('/users/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-hashedPassword -userGoogleId');
-        if (user) {
-            await user.delete();
-            return res.status(200).json({message: 'User deleted successfully'});
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
         }
-        return res.status(404).json({message: 'User not found'});
+
+        return res.status(200).json({ message: 'User deleted successfully' });
 
     } catch (error) {
         console.error(error);
@@ -92,6 +88,7 @@ router.put('/approve-user/:id', async (req, res) => {
             if (user.askingRole) {
                 user.role = user.askingRole;
                 user.askingRole = undefined;
+                user.updatedDate = new Date();
             }
             await user.save();
             
@@ -105,16 +102,27 @@ router.put('/approve-user/:id', async (req, res) => {
     }
 });
 
-router.post('/reject-user/:id', async (req, res) => {
+router.put('/reject-user/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id)
-        if (user) {
-            user.status = 'rejected';
-            await user.save();
-            return res.status(200).json({message: 'User rejected successfully'});
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
         }
-        return res.status(404).json({message: 'User not found'});
+        if (user.status === 'rejected') {
+            return res.status(400).json({message: 'User is already rejected'});
+        }
+        if (user.status === 'pending_role') {
+            user.status = 'rejected';
+            user.verifiedAt = new Date();
+            user.updatedDate = new Date();
+            user.askingRole = undefined;
 
+            await user.save();
+            
+            return res.status(200).json({message: 'User rejected successfully'});
+        } else {
+            return res.status(400).json({message: 'User is not in a pending role info state'});
+        }
     } catch (error) {
         console.error(error);
         return res.status(500).json({message: 'Internal server error'});

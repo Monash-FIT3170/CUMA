@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+let selectedUserId = null;
 let allUsers = [];
 let currentTab = 'pending'; // 'pending' or 'approved'
 
@@ -71,7 +72,7 @@ function populateUserList() {
         if (currentTab === 'pending') {
             return user.status === 'pending_role' || user.status === 'pending_verification';
         } else {
-            return user.status === 'active';
+            return user.status;
         }
     });
 
@@ -139,6 +140,7 @@ function filterUserList() {
 }
 
 function displayUserDetails(userId) {
+    selectedUserId = userId;
     Backend.Admin.getUser(userId).then(response => {
         if (response && response.status === 200){
             const user = response.result.data;
@@ -218,60 +220,106 @@ function formatKey(key) {
 }
 
 function handleUserAction(action) {
-    const userId = document.querySelector('#user-list li.selected').dataset.userId;
-    if (!userId) {
+    if (!selectedUserId) {
         alert('Please select a user first.');
         return;
     }
 
-    Backend.Admin.getUser(userId).then(response => {
-        if (response && response.status === 200) {
-            const user = response.result.data;
-            if (action === 'approve') {
-                if (user.status === 'pending_role' || user.status === 'pending_verification') {
-                    user.status = 'active';
-                    user.role = user.askingRole;
-                    delete user.askingRole;
-                    alert('User approved successfully.');
-                } else {
-                    const selectedRole = document.getElementById('role-select').value;
-                    user.role = selectedRole;
-                    alert('User updated successfully.');
-                }
-            } else if (action === 'reject') {
-                if (user.status === 'pending_role' || user.status === 'pending_verification') {
-                    user.status = 'rejected';
-                    alert('User rejected successfully.');
-                }
-            } else if (action === 'delete') {
-                let confirmAction = confirm('Are you sure you want to delete this user?');
-                if (!confirmAction) return;
+    const user = allUsers.find(u => u._id === selectedUserId);
+    if (!user) {
+        alert('Selected user not found.');
+        return;
+    }
 
-                // Remove user from allUsers array
-                allUsers = allUsers.filter(u => u._id !== user._id);
-                alert('User deleted successfully.');
+    switch (action) {
+        case 'approve':
+            if (user.status === 'pending_role') {
+                Backend.Admin.approveUserRole(selectedUserId)
+                    .then(response => {
+                        if (response && response.status === 200) {
+                            alert('User approved successfully.');
+                            user.status = 'active';
+                            updateUI();
+                        } else {
+                            console.error('Failed to approve user:', response ? response.status : 'No response');
+                            alert('Failed to approve user. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error approving user:', error);
+                        alert('An error occurred while approving the user. Please try again.');
+                    });
+            } else {
+                const selectedRole = document.getElementById('role-select').value;
+                const roleSelectionDiv = document.getElementById('role-selection');
+
+                if (roleSelectionDiv.style.display === 'none') {
+                    alert('Cannot update user role.');
+                    return;
+                }
+                Backend.Admin.updateUserRole(selectedUserId, selectedRole)
+                    .then(response => {
+                        if (response && response.status === 200) {
+                            alert('User role updated successfully.');
+                            user.role = selectedRole;
+                            updateUI();
+                        } else {
+                            console.error('Failed to update user role:', response ? response.status : 'No response');
+                            alert('Failed to update user role. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating user role:', error);
+                        alert('An error occurred while updating the user role. Please try again.');
+                    });
             }
+            break;
+        case 'reject':
+            if (user.status === 'pending_role') {
+                Backend.Admin.rejectUserRole(selectedUserId)
+                    .then(response => {
+                        if (response && response.status === 200) {
+                            alert('User rejected successfully.');
+                            user.status = 'rejected';
+                            updateUI();
+                        } else {
+                            console.error('Failed to reject user:', response ? response.status : 'No response');
+                            alert('Failed to reject user. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error rejecting user:', error);
+                        alert('An error occurred while rejecting the user. Please try again.');
+                    });
+            }
+            break;
+        case 'delete':
+            if (confirm('Are you sure you want to delete this user?')) {
+                Backend.Admin.deleteUser(selectedUserId)
+                    .then(response => {
+                        if (response && response.status === 200) {
+                            alert('User deleted successfully.');
+                            allUsers = allUsers.filter(u => u._id !== selectedUserId);
+                            updateUI();
+                        } else {
+                            console.error('Failed to delete user:', response ? response.status : 'No response');
+                            alert('Failed to delete user. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting user:', error);
+                        alert('An error occurred while deleting the user. Please try again.');
+                    });
+            }
+            break;
+        default:
+            alert('Invalid action.');
+    }
+}
 
-            // Update the user in the backend
-            Backend.Admin.updateUser(user._id, user).then(() => {
-                // Refresh the user list
-                fetchUsers();
-                // Close the modal
-                closeModal();
-            })
-            .catch(error => {
-                console.error('Error updating user:', error);
-                alert('An error occurred while updating the user. Please try again.');
-            });
-        } else {
-            console.error('Failed to fetch user details:', response ? response.status : 'No response');
-            alert('Failed to load user details. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching user details:', error);
-        alert('An error occurred while loading user details. Please try again.');
-    });
+function updateUI() {
+    populateUserList();
+    closeModal();
 }
 
 function openModal() {
