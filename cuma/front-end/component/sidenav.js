@@ -242,7 +242,10 @@ sidenav.innerHTML = `
 
     <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
-            <a href="index.html" class="sidebar-link">
+            <a href="/transfer-plans" class="sidebar-link">
+                <img src="images/planner.png" class="sidebar-img"> Planner
+            </a>
+            <a href="index" class="sidebar-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
             <a href="nav-add-unit.html" class="sidebar-link">

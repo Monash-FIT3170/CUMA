@@ -47,14 +47,18 @@ app.use((req, res, next) => {
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
-app.use('/api/transferPlan', transferPlan)
+app.use('/api/transferPlan/', transferPlan)
 
 // Page Link
 app.get('/index', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
+});
+
+app.get('/transfer-plans', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
 });
 
-app.get('/transfer-plan/plan', authenticateToken, (req, res) => {
+app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
 });
 

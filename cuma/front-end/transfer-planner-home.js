@@ -116,7 +116,7 @@ function renderPlanners() {
 
             // Redirect when the planner item (excluding the delete button) is clicked
             plannerItem.addEventListener("click", () => {
-                window.location.href = `/transfer-plan/plan?name=${planner.name}`;
+                window.location.href = `/transfer-plans/planner?name=${planner.name}`;
             });
 
             // Add event listener to the delete button
@@ -242,7 +242,7 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
         try {
             let newTransferPlan = null;
             newTransferPlan = await createTransferPlan(formData);
-            window.location.href = `/transfer-plan/plan?name=${newTransferPlan.name}`;
+            window.location.href = `/transfer-plans/plan?name=${newTransferPlan.name}`;
         } catch (error) {
             console.error("An error occurred while creating the transfer plan:", error);
         }
