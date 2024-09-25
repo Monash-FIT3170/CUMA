@@ -347,6 +347,7 @@ main {
 .plan-header {
   text-align: left;
   min-width: 220px;
+  min-width: 220px;
   margin-bottom: 1.2rem;
 }
 
@@ -387,6 +388,7 @@ main {
 .univeristy-name-slot {
   height: 100%;
   width: 100%;
+  min-width: 220px;
   min-width: 220px;
   min-height: 245px;
   display: flex;
@@ -488,6 +490,7 @@ span.arrow-icon {
   font-size: 24px;
   color: #888;
   margin-bottom: 20px;
+  align-self: center;
   align-self: center;
 }
 
