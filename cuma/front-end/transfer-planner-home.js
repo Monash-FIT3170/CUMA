@@ -242,7 +242,7 @@ document.querySelector('.transfer-plan-form').addEventListener('submit', functio
         try {
             let newTransferPlan = null;
             newTransferPlan = await createTransferPlan(formData);
-            window.location.href = `/transfer-plans/plan?name=${newTransferPlan.name}`;
+            window.location.href = `/transfer-plans/planner?name=${newTransferPlan.name}`;
         } catch (error) {
             console.error("An error occurred while creating the transfer plan:", error);
         }
