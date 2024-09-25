@@ -12,7 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 router.get('/users', async (req, res) => {
     try {
-        const users = await User.find({}).select('-hashedPassword -userGoogleId');
+        const users = await User.find({}).select('-hashedPassword -userGoogleId -additional_info._id').lean();
         return res.status(200).json({message: 'Successfully retreived user data', data: users});
 
     } catch (error) {

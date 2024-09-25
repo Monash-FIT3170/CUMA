@@ -70,7 +70,7 @@ function populateUserList() {
 
     const filteredUsers = allUsers.filter(user => {
         if (currentTab === 'pending') {
-            return user.status === 'pending_role_info' || user.status === 'pending_verification';
+            return user.status === 'pending_role' || user.status === 'pending_verification';
         } else {
             return user.status === 'active';
         }
@@ -89,9 +89,9 @@ function populateUserList() {
 
         // Change text based on the current tab
         if (currentTab === 'pending') {
-            userStatusDiv.textContent = `Asking Role: ${formatRoles(user.askingRole || user.roles)}`;
+            userStatusDiv.textContent = `Asking Role: ${formatRoles(user.askingRole || user.role)}`;
         } else {
-            userStatusDiv.textContent = `Role: ${formatRoles(user.roles)}`;
+            userStatusDiv.textContent = `Role: ${formatRoles(user.role)}`;
         }
 
         listItem.appendChild(userInfoDiv);
@@ -146,8 +146,9 @@ function displayUserDetails(user) {
         <p><strong>First Name:</strong> ${user.firstName}</p>
         <p><strong>Last Name:</strong> ${user.lastName}</p>
         <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Email Verified:</strong> ${user.emailVerified ? 'Yes' : 'No'}</p>
         <p><strong>Status:</strong> ${formatStatus(user.status)}</p>
-        <p><strong>${user.status === 'pending' ? 'Asking Role' : 'Role'}:</strong> ${formatRoles(user.askingRole || user.roles)}</p>
+        <p><strong>${user.status === 'pending_role' ? 'Asking Role' : 'Role'}:</strong> ${formatRoles(user.askingRole || user.role)}</p>
         <h3>Additional Information</h3>
         ${formatAdditionalInfo(user.additional_info)}
     `;
@@ -157,7 +158,7 @@ function displayUserDetails(user) {
     if (user.status === 'active') {
         roleSelectionDiv.style.display = 'block';
         const roleSelect = document.getElementById('role-select');
-        roleSelect.value = user.roles && user.roles[0] || 'general_user';
+        roleSelect.value = user.role || 'general_user';
     } else {
         roleSelectionDiv.style.display = 'none';
     }
@@ -167,7 +168,7 @@ function displayUserDetails(user) {
     const rejectBtn = document.getElementById('reject-btn');
     const deleteBtn = document.getElementById('delete-btn');
 
-    if (user.status === 'pending_role_info' || user.status === 'pending_verification') {
+    if (user.status === 'pending_role' || user.status === 'pending_verification') {
         approveBtn.innerHTML = '<i class="fas fa-check"></i> Approve';
         approveBtn.style.display = 'inline-block';
         rejectBtn.style.display = 'inline-block';
@@ -222,18 +223,18 @@ function handleUserAction(action) {
     }
 
     if (action === 'approve') {
-        if (user.status === 'pending_role_info' || user.status === 'pending_verification') {
+        if (user.status === 'pending_role' || user.status === 'pending_verification') {
             user.status = 'active';
-            user.roles = [user.askingRole];
+            user.role = user.askingRole;
             delete user.askingRole;
             alert('User approved successfully.');
         } else {
             const selectedRole = document.getElementById('role-select').value;
-            user.roles = [selectedRole];
+            user.role = selectedRole;
             alert('User updated successfully.');
         }
     } else if (action === 'reject') {
-        if (user.status === 'pending_role_info' || user.status === 'pending_verification') {
+        if (user.status === 'pending_role' || user.status === 'pending_verification') {
             user.status = 'rejected';
             alert('User rejected successfully.');
         }

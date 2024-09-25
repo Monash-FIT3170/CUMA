@@ -42,11 +42,11 @@ router.post('/signup', async (req, res) => {
         }
 
         // Role checking via email domain
-        let roles = ['general_user'];
+        let role = 'general_user';
         if (email.endsWith('@student.monash.edu')) {
-            roles.push('student');
+            role = 'student';
         } else if (email.endsWith('@monash.edu')) {
-            roles.push('course_director');
+            role = 'course_director';
         }
 
         const hashedPassword = AuthUtils.encryptPassword(password);
@@ -58,7 +58,7 @@ router.post('/signup', async (req, res) => {
             emailHD: email.split('@')[1],
             firstName,
             lastName,
-            roles,
+            role,
             status: 'pending_role_info',
             mfaEnabled: false,
             mfaSecret: null
@@ -323,11 +323,11 @@ router.get('/oauth2callback', async (req, res) => {
         const userData = userInfo.data;
 
         // Verification of user role
-        let roles = ['general_user'];
+        let role = 'general_user';
         if (userData.email.endsWith('@student.monash.edu')) {
-            roles.push('student');
+            role = 'student';
         } else if (userData.email.endsWith('@monash.edu')) {
-            roles.push('course_director');
+            role = 'course_director';
         }
 
         let existingUser = await AuthUtils.fetchExistingGoogleUserFromDB(userData.id);
@@ -339,7 +339,7 @@ router.get('/oauth2callback', async (req, res) => {
                 emailHD: userData.hd,
                 firstName: userData.given_name,
                 lastName: userData.family_name,
-                roles: roles,
+                role,
                 status: 'active'
             });
         }

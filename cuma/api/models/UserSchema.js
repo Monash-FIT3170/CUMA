@@ -102,18 +102,18 @@ const UserSchema = new Schema({
     },
 
     // Role and Status Fields
-    roles: [{ 
+    role: { 
         type: String, 
         enum: ['student', 'course_director', 'general_user'] 
-    }],
+    },
     askingRole:{
         type: String,
         enum: ['student', 'course_director', 'general_user']
     },
     status: {
         type: String,
-        enum: ['pending_role_info', 'pending_verification', 'active', 'rejected'],
-        default: 'pending_role_info',
+        enum: ['pending_role', 'pending_verification', 'active', 'rejected'],
+        default: 'pending_role',
     },
 
     // Additional Information for Role Verification
