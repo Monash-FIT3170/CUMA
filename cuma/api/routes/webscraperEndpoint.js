@@ -13,11 +13,9 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
 
       const output = await run(url, res);
 
-      
-
       const result = await addToDatabase(req, output);
 
-      return res.status(200).json(result);
+      return res.write(JSON.stringify(result));
     } catch (error) {
       console.error(error);
       return res.status(500).json("Internal Server Error");
