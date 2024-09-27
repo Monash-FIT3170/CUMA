@@ -13,5 +13,8 @@ scanButton.addEventListener('click', function(event) {
     // Check if the input is not empty
     if (urlInput.trim() !== "") {
         Backend.Misc.scrapeDomestic(urlInput)
+    } else {
+        alert("Input is empty.")
     }
+
 })

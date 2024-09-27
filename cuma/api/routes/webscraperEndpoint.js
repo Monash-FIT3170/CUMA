@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import fs from 'fs';
 import gemini from '../../ai/geminiTest.js';
-import { run } from "../../backend/webscraper.js";
+import { run} from "../../backend/webscraper.js";
 
 const collectionName = "testUnits";
 
@@ -11,12 +11,11 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
       // Extract the source unit and comparison units from the request body
       const url = req.body.url;
 
-      const output = await run(url);
+      const output = await run(url, res);
 
       
 
       const result = await addToDatabase(req, output);
-      console.log(result)
 
       return res.status(200).json(result);
     } catch (error) {
@@ -25,6 +24,7 @@ router.post("/scrapeDomesticUnits", async (req, res) => {
     }
 
 });
+
 
 async function addToDatabase(req, data) {
   const returnResults = {

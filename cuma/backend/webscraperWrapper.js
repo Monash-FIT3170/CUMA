@@ -23,7 +23,27 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
             body: JSON.stringify({
                 "url":courseURL
             }),
-        });
+        })
+
+        const reader = response.body.getReader(); // ReadableStream reader
+        const decoder = new TextDecoder('utf-8');
+        
+        // Read and process chunks as they arrive
+        const processText = async ({ done, value }) => {
+            if (done) {
+                console.log('Stream complete');
+                return;
+            }
+            
+            const progress = decoder.decode(value);
+            console.log(progress)
+    
+            // Continue reading the stream
+            return reader.read().then(processText);
+        };
+    
+        // Start reading the stream
+        reader.read().then(processText);
 
         // Extract the response code
         const statusCode = response.status;

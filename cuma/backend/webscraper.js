@@ -8,6 +8,7 @@ const serverPath = "localhost:3000"
 const unitBackendPath = "/api/unit"
 
 
+
 /*
 * Asynchronous function that provided a course hand book page
 * will identify and return all links to units offered in that course
@@ -142,7 +143,7 @@ async function getUnitInfo(page, url){
 * @param {puppeteer.Page} page: passed in browser page
 * @param {string} url: handbook url for course of interest
 */
-export async function run(course){
+export async function run(course, res){
     //create our browser
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -182,7 +183,8 @@ export async function run(course){
             unitData["course"].push(courseData)
             data.units.push(unitData);
             //update user
-            console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
+            console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`);
+            res.write(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
         } else {
             console.log(`Unit at ${unitURL} 404d :(\n`)
         }
@@ -206,6 +208,7 @@ export async function run(course){
 
     return JSON.stringify(data);
 }
+
 
 // async function addToDatabase(){
 //     // read from unitdata.json
