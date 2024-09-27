@@ -28,6 +28,10 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
             }),
         })
 
+        if (!response.ok){
+            throw new Error("Internal Server Error: Either the course handbook URL is invalid, or a failure occurred during scraping");
+        }
+
         const reader = response.body.getReader(); // ReadableStream reader
         const decoder = new TextDecoder('utf-8');
 
@@ -62,6 +66,7 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
                     <h3>Unit Status</h3>
                     <p><strong>Units Added:</strong> ${responseChunk.unitsAdded}</p>
                     <p><strong>Units Modified:</strong> ${responseChunk.unitsModified}</p>
+                    <p><strong>Units Unchanged:</strong> ${responseChunk.unitsUnchanged}</p>
                 </div>
                 `;
             }
@@ -99,6 +104,7 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
         doneButton.disabled = false;
         spinningIcon.remove();
 
+        return;
 
     }
 }
