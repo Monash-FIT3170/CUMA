@@ -32,22 +32,38 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
         const decoder = new TextDecoder('utf-8');
 
 
-
-        
-
-
         
         // Read and process chunks as they arrive
         const processText = async ({ done, value }) => {
             if (done) {
                 doneButton.disabled = false;
                 spinningIcon.remove();
+                console.log("done")
+   
                 return;
             }
+
+
+            // check if response is done
             
             // update front end of the progress
-            const progress = decoder.decode(value);
-            waitingScreenText.innerHTML = progress
+            const responseChunk = decoder.decode(value);
+            if (responseChunk.progress) // if this is the progress response, then display it this way
+            {
+
+                waitingScreenText.innerHTML = `<p>${responseChunk.progress}</p> <p>${responseChunk.log}</p>`
+            }
+            else if (responseChunk.unitsAdded != null || responseChunk.unitsModified  != null)
+                // if this is the result response, then display it this way
+            {
+                waitingScreenText.innerHTML = `
+                <div style="font-family: Arial, sans-serif; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+                    <h3>Unit Status</h3>
+                    <p><strong>Units Added:</strong> ${responseChunk.unitsAdded}</p>
+                    <p><strong>Units Modified:</strong> ${responseChunk.unitsModified}</p>
+                </div>
+                `;
+            }
     
             // Continue reading the stream
             return reader.read().then(processText);
@@ -59,12 +75,16 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
         // Start reading the stream
         reader.read().then(processText);
 
-        // Extract the response code
-        const statusCode = response.status;
 
-        const result = await response.json();
-        return { result: result, status: statusCode };
+
+        // Extract the response code
+        // const statusCode = response.status;
+
+        // const result = await response.json();
+        // return { result: result, status: statusCode };
     } catch (error) {
+        console.log("66")
+        console.log(error)
 
         //handle UI element
         waitingScreenText.innerHTML = error.message;

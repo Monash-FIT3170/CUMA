@@ -195,9 +195,15 @@ export async function run(course, res){
 
         const responseChunk = {
             log: log,
-            progress: i + 1
+            progress: `${i + 1} / ${courseUnits.length} scrapped`  
         }
+
+
+        //streaming data
+
+
         res.write(JSON.stringify(responseChunk))
+     
 
         
         //pause so as not to overwhelm monash servers

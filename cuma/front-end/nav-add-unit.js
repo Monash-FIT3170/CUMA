@@ -41,6 +41,8 @@ scanButton.addEventListener('click', function(event) {
 })
 
 function closeWaitingScreen() {
-    const screen = document.getElementById("waiting-screen")
-    screen.remove()
+    // const screen = document.getElementById("waiting-screen")
+    // screen.remove()
+
+    window.location.reload()
 }
