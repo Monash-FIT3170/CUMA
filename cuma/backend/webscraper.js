@@ -195,7 +195,8 @@ export async function run(course, res){
 
         const responseChunk = {
             log: log,
-            progress: `${i + 1} / ${courseUnits.length} scrapped`  
+            progress: `${i + 1} / ${courseUnits.length} scrapped`, 
+            type: "progress"
         }
 
 

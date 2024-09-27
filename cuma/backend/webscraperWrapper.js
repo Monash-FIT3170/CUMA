@@ -36,6 +36,7 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
         // Read and process chunks as they arrive
         const processText = async ({ done, value }) => {
             if (done) {
+                // if the streaming is done, then allow users to click on "Done" button
                 doneButton.disabled = false;
                 spinningIcon.remove();
                 console.log("done")
@@ -44,16 +45,16 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
             }
 
 
-            // check if response is done
             
             // update front end of the progress
-            const responseChunk = decoder.decode(value);
-            if (responseChunk.progress) // if this is the progress response, then display it this way
+            const responseChunkRaw = decoder.decode(value);
+            const responseChunk = JSON.parse(responseChunkRaw)
+            if (responseChunk.type === "progress") // if this is the progress response, then display it this way
             {
 
                 waitingScreenText.innerHTML = `<p>${responseChunk.progress}</p> <p>${responseChunk.log}</p>`
             }
-            else if (responseChunk.unitsAdded != null || responseChunk.unitsModified  != null)
+            else if (responseChunk.type === "result")
                 // if this is the result response, then display it this way
             {
                 waitingScreenText.innerHTML = `
@@ -83,7 +84,7 @@ Backend.Misc.scrapeDomestic = async function (courseURL) {
         // const result = await response.json();
         // return { result: result, status: statusCode };
     } catch (error) {
-        console.log("66")
+
         console.log(error)
 
         //handle UI element

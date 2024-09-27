@@ -30,7 +30,8 @@ async function addToDatabase(req, data) {
   const returnResults = {
     "unitsAdded": null,
     "unitsModified": null,
-    "unitsUnchanged": null
+    "unitsUnchanged": null,
+    "type" : "result"
   };
 
   // Read from unitdata.json
