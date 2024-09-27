@@ -140,7 +140,7 @@ function configureTargetUnitSlot(targetUniversityName) {
                 }
 
                 // Open the modal with home university units (using 'Monash' as an example)
-                setupTargetUnitsModal('Monash', targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
+                setupTargetUnitsModal(plannerTargetUniName, targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
             });
         } else {
             console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
@@ -383,6 +383,7 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
 
 // Function to setup Target unit modal and fetch units based on the university name 
 async function setupTargetUnitsModal(universityName, unitSlotID) {
+    console.log("called")
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
 
@@ -390,7 +391,7 @@ async function setupTargetUnitsModal(universityName, unitSlotID) {
     modalCardGrid.innerHTML = `<p>Loading units...</p>`;
 
     // Fetch the units from the backend
-    Backend.Unit.getAllUnitsFromUniversity(universityName) // TODO: Change this to get Target units
+    Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
         allUnits = UnitArray; // Store the units for filtering
         renderUnitsInModal(unitSlotID, allUnits);
