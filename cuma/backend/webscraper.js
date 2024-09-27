@@ -178,17 +178,26 @@ export async function run(course, res){
 
 
         //check if page 404d, if not add to our json obj
+        var log = ""
         if (unitData !== null){
             unitData["universityName"] = "Monash"
             unitData["course"].push(courseData)
             data.units.push(unitData);
             //update user
-            console.log(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`);
-            res.write(`Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`)
-        } else {
-            console.log(`Unit at ${unitURL} 404d :(\n`)
-        }
+            log = `Scraped unit: ${unitURL.split("/")[5]}, ${i+1} out of ${courseUnits.length} units \n`
 
+
+        } else {
+            log = `Unit at ${unitURL} 404d :(\n`
+        }
+        
+        console.log(log);
+
+        const responseChunk = {
+            log: log,
+            progress: i + 1
+        }
+        res.write(JSON.stringify(responseChunk))
 
         
         //pause so as not to overwhelm monash servers
