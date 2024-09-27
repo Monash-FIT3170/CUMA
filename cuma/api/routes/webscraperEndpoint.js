@@ -96,16 +96,13 @@ async function addToDatabase(req, data) {
     returnResults.unitsModified = 0;
     returnResults.unitsUnchanged = 0;
 
-    console.log(result)
 
   } catch (error) {
     if (error && error.writeErrors) {
 
-      console.log("here3")
 
       // Handle unique key errors
       const failedUnits = error.writeErrors.map(writeError => writeError.getOperation().unitCode.toString());
-      console.log(failedUnits);
       
       // Define the filter for existing units
       const filter = {
@@ -128,7 +125,6 @@ async function addToDatabase(req, data) {
 
       // Update the units that already exist
       const modifyResult = await units.updateMany(filter, update); // Await the updateMany
-      console.log(modifyResult); // Log the result after the update
     
       // Prepare the return result after the update
       returnResults.unitsAdded = error.result.insertedCount
