@@ -56,31 +56,6 @@ async function addToDatabase(req, data) {
   const units = database.collection(collectionName);
 
 
-  // for testing purposes only
-  // console.log(await units.updateOne(
-  //   { "unitCode": "MAT1830" }, 
-  //   { "$set": { "course": [] } }
-  // ));
-
-  // console.log(await units.deleteMany({
-  //   "unitCode": {"$in" : [
-  //   'MAT1830', 'FIT2004', 'FIT2085', 'FIT2099',
-  //   'FIT2100', 'FIT2101', 'FIT2107', 'FIT3077',
-  //   'FIT3159', 'FIT3170', 'FIT3171', 'FIT4165',
-  //   'FIT4002', 'FIT4701', 'FIT4702', 'FIT4042',
-  //   'ENG0001', 'ENG0002', 'FIT3003', 'FIT3031',
-  //   'FIT3080', 'FIT3094', 'FIT3134', 'FIT3138',
-  //   'FIT3139', 'FIT3143', 'FIT3146', 'FIT3152',
-  //   'FIT3155', 'FIT3168', 'FIT3169', 'FIT3173',
-  //   'FIT3175', 'FIT3176', 'FIT3178', 'FIT3179',
-  //   'FIT3182', 'FIT3183', 'FIT4005', 'FIT5003',
-  //   'FIT5032', 'FIT5037', 'FIT5046', 'FIT5124',
-  //   'FIT5129', 'FIT5137', 'FIT5145', 'FIT5163',
-  //   'FIT5201', 'FIT5202', 'FIT5215', 'FIT5216',
-  //   'FIT5217', 'FIT5221', 'FIT5222', 'FIT5223',
-  //   'FIT5225'
-  // ]}
-  // }))
 
   try {
 
@@ -129,8 +104,8 @@ async function addToDatabase(req, data) {
     
       // Prepare the return result after the update
       returnResults.unitsAdded = error.result.insertedCount
-      returnResults.unitsModified = modifyResult.modifiedCount; // Capture modified count
-      returnResults.unitsUnchanged = modifyResult.matchedCount - modifyResult.modifiedCount; // Calculate unchanged units
+      returnResults.unitsModified = modifyResult.modifiedCount;
+      returnResults.unitsUnchanged = unitData.length - returnResults.unitsAdded - returnResults.unitsModified;
 
     }
 
@@ -143,20 +118,7 @@ async function addToDatabase(req, data) {
 
 
 
-  
 
-
-  
-  
-  
-  //   return res.status(200).json(result);
-  // } catch (error) {
-  //   // Handle errors
-  //   console.error('Error:', error);
-  //   res.status(500).json({ error: 'Internal server error' });
-  // }
-  
-  
 
 
 
