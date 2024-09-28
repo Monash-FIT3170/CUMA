@@ -260,7 +260,6 @@ sidenav.innerHTML = `
             <a href="nav-setting.html" class="sidebar-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
             </a>
-            <!--Temporary buttons, please fix if required-->
             <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
             <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
         </div>
