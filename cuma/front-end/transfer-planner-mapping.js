@@ -74,8 +74,8 @@ function configureTransferPlanner(plannerData) {
 
     // Congfigure Unit Slots
     configureHomeUnitSlot(plannerData.homeUniversity);
-    // configureTargetUnitSlot(plannerData.transferUniversity); // TODO: Revert back to this when connection are populated
-    configureTargetUnitSlot(plannerData.homeUniversity);
+    configureTargetUnitSlot(plannerData.transferUniversity); 
+    // configureTargetUnitSlot(plannerData.homeUniversity); // For testing purposes 
 
     // Populate the unit mappings
     (async () => {
@@ -104,7 +104,7 @@ function configureHomeUnitSlot(homeUniversityName) {
         const searchIcon = homeUnitSlotElement.querySelector('.search-icon-container');
         if (searchIcon) {
             searchIcon.addEventListener('click', (event) => {
-                setupHomeUnitsModal(homeUniversityName, homeUnitSlotElement.id);
+                setupUnitsModal(homeUniversityName, homeUnitSlotElement.id);
             });
         } else {
             console.error(`Element with ID ${homeUnitSlotName} not found`);
@@ -140,7 +140,7 @@ function configureTargetUnitSlot(targetUniversityName) {
                 }
 
                 // Open the modal with home university units (using 'Monash' as an example)
-                setupTargetUnitsModal(plannerTargetUniName, targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
+                setupUnitsModal(targetUniversityName, targetUnitSlotElement.id); // TODO: need to change to 'targetUniversityName' to use correct data
             });
         } else {
             console.error(`Search icon not found in the element with ID ${targetUnitSlotName}`);
@@ -302,8 +302,19 @@ function getUnitMappings() {
 // Open user default main app in preparation for sending Transfer for approval
 function sendTransferForApproval() {
     const unitMappings = getUnitMappings();
-    // TODO: Setup Email again
-    // userSendConnections(getConnections());
+    connectionsToSend = [];
+    for (mapping of unitMappings) {
+        if (mapping.targetUnit == null) continue;
+        const connection = {
+            "universityNameA": mapping.homeUnit.universityName,
+            "unitCodeA": mapping.homeUnit.unitCode,
+            "universityNameB": mapping.targetUnit.universityName,
+            "unitCodeB": mapping.targetUnit.unitCode
+        }
+        connectionsToSend.push(connection);
+    }
+    
+    userSendConnections(connectionsToSend);
 }
 
 // Open user default main app in preparation for sending Transfer for approval
@@ -358,8 +369,8 @@ function filterUnits() {
     renderUnitsInModal(addUnitModal.dataset.id, filteredUnits);
 }
 
-// Function to setup Home unit modal and fetch units based on the university name
-async function setupHomeUnitsModal(universityName, unitSlotID) {
+// Function to setup unit modal and fetch units based on the university name 
+async function setupUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
 
@@ -369,30 +380,6 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
     // Fetch the units from the backend
     Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
-        allUnits = UnitArray; // Store the units for filtering
-        renderUnitsInModal(unitSlotID, allUnits);
-    })
-    .catch(error => {
-        console.error('Error fetching units from university:', error);
-        modalCardGrid.innerHTML = `<p>Error loading units. Please try again.</p>`;
-    });
-
-    // open the modal
-    addUnitModal.style.display = 'block';
-}
-
-// Function to setup Target unit modal and fetch units based on the university name 
-async function setupTargetUnitsModal(universityName, unitSlotID) {
-    // Set the unitSlotID to the modal grid dataset
-    addUnitModal.dataset.id = unitSlotID;
-
-    // Clear the modal grid and show a loading message
-    modalCardGrid.innerHTML = `<p>Loading units...</p>`;
-
-    // Fetch the units from the backend
-    Backend.Unit.getAllUnitsFromUniversity(universityName)
-    .then(UnitArray => {
-        console.log(UnitArray)
         allUnits = UnitArray; // Store the units for filtering
         renderUnitsInModal(unitSlotID, allUnits);
     })
@@ -489,7 +476,7 @@ function replaceSearchContainer(unitSlot) {
 
         if (isHomeSlot) {
             // Handle home unit slot click event
-            setupHomeUnitsModal(unitSlot.dataset.university, unitSlot.id);
+            setupUnitsModal(unitSlot.dataset.university, unitSlot.id);
         } else if (isTargetSlot) {
             // Handle target unit slot click event
             const homeSlotElement = document.getElementById(unitSlot.dataset.slotPair);
@@ -497,7 +484,7 @@ function replaceSearchContainer(unitSlot) {
                 alert("Please select a unit from Home University first!");
                 return;
             }
-            setupTargetUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
+            setupUnitsModal('Monash', unitSlot.id); // TODO: change 'Monash' to 'unitSlot.dataset.university' to use correct data
         } else {
             console.error(`Unit slot with ID ${unitSlot.id} not found in home or target arrays.`);
         }
