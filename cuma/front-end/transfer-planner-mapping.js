@@ -383,7 +383,6 @@ async function setupHomeUnitsModal(universityName, unitSlotID) {
 
 // Function to setup Target unit modal and fetch units based on the university name 
 async function setupTargetUnitsModal(universityName, unitSlotID) {
-    console.log("called")
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
 
@@ -393,6 +392,7 @@ async function setupTargetUnitsModal(universityName, unitSlotID) {
     // Fetch the units from the backend
     Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
+        console.log(UnitArray)
         allUnits = UnitArray; // Store the units for filtering
         renderUnitsInModal(unitSlotID, allUnits);
     })
