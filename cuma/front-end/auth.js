@@ -135,15 +135,9 @@ function verifyLoginTOTPToken() {
 
 
 // function form to show the role selection
-function showForm(userType) {
+function showForm() {
+    document.getElementById('student-form').style.display = 'block';
     document.getElementById('user-type-selection').style.display = 'none';
-    if (userType === 'student') {
-        document.getElementById('student-form').style.display = 'block';
-        document.getElementById('course-director-form').style.display = 'none';
-    } else {
-        document.getElementById('student-form').style.display = 'none';
-        document.getElementById('course-director-form').style.display = 'block';
-    }
 }
 
 // function to handle the student additional info form submission
@@ -154,8 +148,11 @@ function handleStudentFormSubmission(e) {
     const major = document.getElementById('student-major').value.trim();
     const studentId = document.getElementById('student-id').value.trim();
 
-    // TODO: Add validation for these fields and send to backend
-    console.log('Student data:', { dateOfBirth, university, major, studentId });
+    // Validate fields
+    if (!dateOfBirth || !university || !major || !studentId) {
+        alert('Please fill in all fields.');
+        return;
+    }
 
     const additionalInfo = {
         askingRole: 'student',
@@ -168,56 +165,32 @@ function handleStudentFormSubmission(e) {
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
             alert("Success: " + response.message);
-            showSubmissionComplete(response.nextStep,response.userEmail);
+            showSubmissionComplete(response.nextStep, response.userEmail);
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred. Please try again later.");
     });
 }
 
-// function to handle the course director additional info form submission
-function handleDirectorFormSubmission(e) {
-    e.preventDefault();
-    const dateOfBirth = document.getElementById('director-dob').value;
-    const university = document.getElementById('director-university').value.trim();
-    const professionalTitle = document.getElementById('director-title').value.trim();
-    const department = document.getElementById('director-department').value.trim();
-    const faculty = document.getElementById('director-faculty').value.trim();
-    const staffId = document.getElementById('director-staff-id').value.trim();
-
-    // TODO: Add validation for these fields and send to backend
-    const additionalInfo = {
-        askingRole: 'course_director',
-        dateOfBirth: dateOfBirth,
-        university: university,
-        professionalTitle: professionalTitle,
-        faculty: faculty,
-        department: department,
-        staffId: staffId
-    };
-
-    Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
-        if (response.status === 200) {
-            alert("Success: " + response.message);
-            showSubmissionComplete(response.nextStep,response.userEmail);
-        } else {
-            alert("Error " + response.status + ": " + response.error);
-        }
-    });
-}
 function goBack() {
-    window.location.href = '/signup';
+    if (document.getElementById('student-form').style.display === 'block') {
+        document.getElementById('student-form').style.display = 'none';
+        document.getElementById('user-type-selection').style.display = 'block';
+        return;
+    } else {
+        window.location.href = '/signup';
+    }
 }
 
 // Function to show the submission complete section
 function showSubmissionComplete(nextStep, userEmail) {
-    document.getElementById('user-type-selection').style.display = 'none';
     document.getElementById('student-form').style.display = 'none';
-    document.getElementById('course-director-form').style.display = 'none';
     document.getElementById('submission-complete').style.display = 'block';
     document.getElementById('submission-complete').dataset.nextStep = nextStep;
     document.getElementById('user-email').textContent = userEmail;
-
 
     clearSignupData();
 }
@@ -230,13 +203,6 @@ function continueMFA() {
     } else {
         console.error('Next step URL not found');
     }
-}
-
-// function to show the role selection and hide the forms
-function showRoleSelection() {
-    document.getElementById('user-type-selection').style.display = 'block';
-    document.getElementById('student-form').style.display = 'none';
-    document.getElementById('course-director-form').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -255,10 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const studentForm = document.getElementById('student-form');
     if (studentForm) {
         studentForm.addEventListener('submit', handleStudentFormSubmission);
-    }
-    const directorForm = document.getElementById('course-director-form');
-    if (directorForm) {
-        directorForm.addEventListener('submit', handleDirectorFormSubmission);
     }
     const returnToLoginButton = document.getElementById('return-login-btn');
     if (returnToLoginButton) {
