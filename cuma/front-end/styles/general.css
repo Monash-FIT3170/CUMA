@@ -333,11 +333,22 @@ button:last-of-type:hover,
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 30px;
+}
+
+.profile-details button {
+  margin: 0;
+}
+
+.profile-details input {
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .profile-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .profile-item label {
