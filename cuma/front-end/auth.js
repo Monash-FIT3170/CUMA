@@ -143,20 +143,18 @@ function showForm() {
 // function to handle the student additional info form submission
 function handleStudentFormSubmission(e) {
     e.preventDefault();
-    const dateOfBirth = document.getElementById('student-dob').value;
     const university = document.getElementById('student-university').value.trim();
     const major = document.getElementById('student-major').value.trim();
     const studentId = document.getElementById('student-id').value.trim();
 
     // Validate fields
-    if (!dateOfBirth || !university || !major || !studentId) {
+    if (!university || !major || !studentId) {
         alert('Please fill in all fields.');
         return;
     }
 
     const additionalInfo = {
         askingRole: 'student',
-        dateOfBirth: dateOfBirth,
         university: university,
         major: major,
         studentId: studentId

@@ -92,37 +92,20 @@ router.post('/role-verification', async (req, res) => {
         const pendingUserData = sessionUser.userData;
 
         const { 
-            askingRole, dateOfBirth, university, major, studentId, professionalTitle,
-            faculty, department, staffId 
+            askingRole, university, major, studentId
         } = req.body;
 
         console.log(req.body);
 
-        if (!['student', 'course_director'].includes(askingRole)) {
+        if (askingRole !== 'student') {
             return res.status(400).json({ message: 'Invalid role selected.' });
         }
 
         let additionalInfo = {
-            dateOfBirth,
             university,
+            major,
+            studentId
         };
-
-        if (askingRole === 'student') {
-            additionalInfo = {
-                ...additionalInfo,
-                major,
-                studentId
-            };
-
-        } else if (askingRole == 'course_director') {
-            additionalInfo = {
-                ...additionalInfo,
-                department,
-                faculty,
-                professionalTitle,
-                staffId
-            };
-        }
 
         const newUser = new User({
             ...pendingUserData,
