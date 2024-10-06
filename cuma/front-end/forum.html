@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Forum</title>
+  <link rel="stylesheet" href="general.css">
+</head>
+<body>
+
+  <div class="forum-container">
+    <h1>Forum</h1>
+    
+    <form id="post-form">
+      <textarea id="post-content" placeholder="Enter your post" required></textarea>
+      <button type="submit">Post</button>
+    </form>
+
+    <div id="posts-section">
+      <h2>Posts</h2>
+      <ul id="posts-list"></ul>
+    </div>
+  </div>
+
+  <script src="forum.js"></script>
+</body>
+</html>
