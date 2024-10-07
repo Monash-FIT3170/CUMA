@@ -22,33 +22,34 @@ router.post('/add', authenticateToken, async (req, res) => {
         const units = database.collection(unitsCollectionName);
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
-        if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
-            return res.status(404).json({ error: 'Cannot add connection to self' });
-        }
+            if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
+                return res.status(404).json({ error: 'Cannot add connection to self, ' + unitCodeA + " == " + unitCodeB });
+            }
+            // Check if unitCodes exists
+            const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
+            const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
 
-        // Check if unitCodes exists
-        const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
-        const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
+            if (!unitA) {
+                return res.status(404).json({ error: universityNameA + ", " + unitCodeA + ' not found' });
+            }
+            if (!unitB) {
+                return res.status(404).json({ error: universityNameB + ", " + unitCodeB + ' not found' });
+            }
+            if (user.connections) {
+                // const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
+                const anyConnectionToB = user.connections.find(connection => connection.unitAId.toString() == unitA._id && connection.unitBId.toString() == unitB._id);
 
-        if (!unitA) {
-            return res.status(404).json({ error: 'unitA not found' });
-        }
-        if (!unitB) {
-            return res.status(404).json({ error: 'unitB not found' });
-        }
-        // const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
-        const anyConnectionToB = user.connections.find(connection => connection.unitAId == unitA._id && connection.unitBId == unitB._id);
+                // Add connection to B
+                const anyConnectionToA = user.connections.find(connection => connection.unitAId.toString() == unitB._id && connection.unitBId.toString() == unitA._id);
 
-        // Add connection to B
-        const anyConnectionToA = user.connections.find(connection => connection.unitAId == unitB._id && connection.unitBId == unitA._id);
-
-        if (anyConnectionToA || anyConnectionToB) {
-            return res.status(400).json({ result: "Connection already exists between these units", status: 400 });
-        } 
-
-        user.connections.push({ unitAId: unitA._id, unitBId: unitB._id });
-        await user.save();
-        res.json({ status: "Success" });
+                if (anyConnectionToA || anyConnectionToB) {
+                    return res.status(400).json({ result: "Connection already exists between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
+                } 
+            }
+            user.connections.push({ unitAId: unitA._id, unitBId: unitB._id });
+            await user.save();
+            res.json({ status: "Success" });
+        
     } catch (error) {
         // Handle errors
         console.error('Error:', error);
@@ -70,34 +71,36 @@ router.post('/delete', authenticateToken, async (req, res) => {
         const units = database.collection(unitsCollectionName);
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
-        if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
-            return res.status(404).json({ error: 'Cannot add connection to self' });
-        }
-        // Check if unitCodes exists
-        const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
-        const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
+            if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
+                return res.status(404).json({ error: 'Cannot delete connection to self, ' + unitCodeA + " == " + unitCodeB });
+            }
+            // Check if unitCodes exists
+            const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
+            const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
 
-        if (!unitA) {
-            return res.status(404).json({ error: 'unitA not found' });
-        }
-        if (!unitB) {
-            return res.status(404).json({ error: 'unitB not found' });
-        }
+            if (!unitA) {
+                return res.status(404).json({ error: universityNameA + ", " + unitCodeA + ' not found' });
+            }
+            if (!unitB) {
+                return res.status(404).json({ error: universityNameB + ", " + unitCodeB + ' not found' });
+            }
 
-        const connectionIndex = user.connections.findIndex(connection => 
-            (connection.unitAId.equals(unitA._id) && connection.unitBId.equals(unitB._id)) ||
-            (connection.unitAId.equals(unitB._id) && connection.unitBId.equals(unitA._id))
-        );
-
-        if (connectionIndex === -1) {
-            return res.status(400).json({ result: "Connection does not exist between these units", status: 400 });
-        }
-
-        user.connections.splice(connectionIndex, 1);
-        await user.save();
-
-        return res.json({ status: "Success" });
-
+            if (user.connections == null) {
+                return res.status(400).json({ result: "There already exists no connection between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
+            }
+            const connectionIndex = user.connections.findIndex(connection => 
+                (connection.unitAId.equals(unitA._id) && connection.unitBId.equals(unitB._id)) ||
+                (connection.unitAId.equals(unitB._id) && connection.unitBId.equals(unitA._id))
+            );
+    
+            if (connectionIndex === -1 || (!anyConnectionToA && !anyConnectionToB)) {
+                return res.status(400).json({ result: "There already exists no connection between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
+            }
+    
+            user.connections.splice(connectionIndex, 1);
+            await user.save();
+            return res.json({ status: "Success" });
+        
     } catch (error) {
         // Handle errors
         console.error('Error:', error);

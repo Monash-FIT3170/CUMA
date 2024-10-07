@@ -17,27 +17,6 @@ style = `
         border-top: 0;
         border-left: 0;
         border-bottom: 0;
-        transition: background-color 0.3s;
-    }
-
-    .sidebar.dark-mode {
-        background-color: #333; /* Dark Mode Background for Sidebar */
-    }
-
-    /* Sidebar Styling */
-    .sidebar {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        top: 75px;
-        background-color: #f4f6f9;
-        width: 200px;
-        z-index: 100;
-        padding-top: 10px;
-        border-right: 1px solid lightgray;
-        border-top: 0;
-        border-left: 0;
-        border-bottom: 0;
         transition: background-color 0.3s, color 0.3s;
     }
 
@@ -263,7 +242,10 @@ sidenav.innerHTML = `
 
     <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
-            <a href="index.html" class="sidebar-link">
+            <a href="/transfer-plans" class="sidebar-link">
+                <img src="images/planner.png" class="sidebar-img"> Planner
+            </a>
+            <a href="index" class="sidebar-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
             <a href="nav-add-unit.html" class="sidebar-link">
@@ -278,7 +260,6 @@ sidenav.innerHTML = `
             <a href="nav-setting.html" class="sidebar-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
             </a>
-            <!--Temporary buttons, please fix if required-->
             <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
             <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
         </div>

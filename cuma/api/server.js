@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
+import transferPlan from './routes/transferPlan.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
@@ -52,17 +53,34 @@ app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 app.use('/api/cuma-admin', cumaAdmin);
+app.use('/api/transferPlan/', transferPlan)
 
 // Page Link
 app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
+app.get('/transfer-plans', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
+});
+
+app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
+});
+
+app.get('/transfer-plans', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
+});
+
+app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
+});
+
 // Example route to log session data
 app.get('/view-session', (req, res) => {
   console.log(req.session);  // Logs the entire session object to the console
   res.send('Check the console to see session data.');
-});
+}); 
 
 app.get('/', authenticateToken, (req, res) => {
   res.redirect('/index');
