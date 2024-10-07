@@ -60,7 +60,7 @@ function setupGreeting() {
     Backend.Auth.getUserInfo()
     .then( response => {
         if (response.status === 200) {
-            greeting.textContent = `Hello, ${response.data.name}!`;
+            greeting.textContent = `Hello, ${response.data.firstName}!`;
         } else {
             greeting.textContent = `Hello, Student!`;
         }

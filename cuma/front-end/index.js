@@ -632,7 +632,9 @@ async function fetchAndDisplayUserInfo() {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
             // Populate the profile fields with the fetched data
-            document.getElementById('profile-name').value = response.data.name;
+            const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            const name = capitalize(response.data.firstName.trim()) + " " + capitalize(response.data.lastName.trim());
+            document.getElementById('profile-name').value = name;
             document.getElementById('profile-email').value = response.data.email;
             document.getElementById('profile-role').value = response.data.role;
 
@@ -819,23 +821,11 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     });
 }
 
-// // Call every render if on index
-// if (window.location.pathname.includes('index.html')) {
-//     repopulateResults();
-// }
-
-
-// // call every render if on index
-// if (window.location.pathname.includes('index.html')) {
-//     repopulateResults();
-// }
-
-
-// // call every render
-// document.addEventListener('DOMContentLoaded', () => {
-//     fetchAndDisplayUserInfo();
-//     repopulateResults();
-// });
+// call every render
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndDisplayUserInfo();
+    repopulateResults();
+});
 
 
 function editProfile() {
