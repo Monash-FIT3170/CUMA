@@ -465,7 +465,7 @@ function getAIRecommendations(targetUnitSlotID) {
 function addAIRecommendationIcons(results) {
     console.log("AI results: ");
     console.log(results);
-    
+
     // Iterate through each unit in the AI results
     for (const [unitCode, similarityScore] of Object.entries(results)) {
         if (similarityScore > 6) {
@@ -476,18 +476,24 @@ function addAIRecommendationIcons(results) {
             
             if (unitCard) {
                 // Find the container where icons are located
-                const infoIconContainer = unitCard.querySelector('.unit-icons');
+                const infoIconContainer = unitCard.querySelector(".unit-icons");
                 
                 if (infoIconContainer) {
                     // Check if the AI icon already exists to prevent duplicates
-                    if (!unitCard.querySelector('.ai-recommendation-icon')) {
+                    if (!unitCard.querySelector(".ai-recommendation-icon")) {
                         // Create the AI recommendation icon element
-                        const aiIcon = document.createElement('span');
-                        aiIcon.classList.add('ai-recommendation-icon');
+                        const aiIcon = document.createElement("div");
+                        aiIcon.classList.add("ai-recommendation-icon");
                         aiIcon.title = "AI Recommended";
                         aiIcon.textContent = '⭐';
 
-                        // Append the AI icon next to the icons container
+                        // Create tooltip for icon
+                        const tooltip = document.createElement("span");
+                        tooltip.classList.add("tooltip")
+                        tooltip.textContent = "This unit is recommended by AI";
+
+                        // Append the AI icon & tooltip to the icons container
+                        aiIcon.appendChild(tooltip);
                         infoIconContainer.appendChild(aiIcon);
                     }
                 }
