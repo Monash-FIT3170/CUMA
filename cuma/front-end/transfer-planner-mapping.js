@@ -29,6 +29,39 @@ function toggleNav() {
 }
 
 let transferPlanData = {};
+let possibleMapping = {};
+
+// Set key (home unit slot ID) & value (selected home unit) pairs for querying AI for recommendations later
+function setSelectedHomeUnit(unitSlotID, unit) {
+    let formatedUnit = {
+        unitName: unit.unitName,
+        unitCode: unit.unitCode,
+        unitDescription: unit.unitDescription,
+        unitLevel: unit.unitLevel,
+        universityName: unit.universityName,
+        faculty: unit.faculty,
+        creditPoints: unit.creditPoints
+    }
+    possibleMapping[unitSlotID] = formatedUnit;
+}
+
+// Set key (target unit slot ID) & value (all possible target units) pairs for querying AI for recommendations later
+function setPossibleTargetUnits(unitSlotID, units) {
+    let formattedUnits = []
+    for (let unit of units) {
+        let formatedUnit = {
+            unitName: unit.unitName,
+            unitCode: unit.unitCode,
+            unitDescription: unit.unitDescription,
+            unitLevel: unit.unitLevel,
+            universityName: unit.universityName,
+            faculty: unit.faculty,
+            creditPoints: unit.creditPoints
+        }
+        formattedUnits.push(formatedUnit);
+    }
+    possibleMapping[unitSlotID] = formattedUnits;
+}
 
 document.addEventListener('DOMContentLoaded', (req, res) => {
     toggleNav();
@@ -382,6 +415,12 @@ async function setupUnitsModal(universityName, unitSlotID) {
     .then(UnitArray => {
         allUnits = UnitArray; // Store the units for filtering
         renderUnitsInModal(unitSlotID, allUnits);
+
+        // Add all possible target units to possible mapping to query AI recommendations
+        if (unitSlotID.includes("target")) {
+            setPossibleTargetUnits(unitSlotID, allUnits);
+            // getAIRecommendations(unitSlotID);
+        }
     })
     .catch(error => {
         console.error('Error fetching units from university:', error);
@@ -541,6 +580,11 @@ function createUnitCard(unitSlotID, unit, type) {
         actionButton.addEventListener('click', () => {
             addUnitToSlot(addUnitModal.dataset.id, unit);
             addUnitModal.style.display = 'none';
+
+            // Add selected home unit to possible mapping to query AI recommendations later
+            if (unitSlotID.includes("home")) {
+                setSelectedHomeUnit(unitSlotID, unit);
+            }
         });
     } else {
         actionButton.addEventListener('click', () => {
