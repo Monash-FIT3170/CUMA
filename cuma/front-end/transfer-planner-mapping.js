@@ -451,9 +451,12 @@ function getAIRecommendations(targetUnitSlotID) {
 
     // Query & process AI recommendations
     console.log("Querying AI for unit mapping recommendations...");
-    Backend.AI.AIMatch(possibleMapping[homeUnitSlotID], possibleMapping[targetUnitSlotID])
+    const homeUnit = possibleMapping[homeUnitSlotID];
+    const targetUnits = possibleMapping[targetUnitSlotID];
+    Backend.AI.AIMatch(homeUnit, targetUnits)
     .then(results => {     
-        addAIRecommendationIcons(JSON.parse(results.result));
+        const aiResults = JSON.parse(results.result);
+        addAIRecommendationIcons(aiResults, homeUnit.unitCode);
     })
     .catch(error => {
         console.error("Error querying & processing AI recommendations:", error);
@@ -462,13 +465,13 @@ function getAIRecommendations(targetUnitSlotID) {
 
 
 // Function to add AI recommendation icons to units with similarity score > 6
-function addAIRecommendationIcons(results) {
+function addAIRecommendationIcons(results, homeUnitCode) {
     console.log("AI results: ");
     console.log(results);
 
     // Iterate through each unit in the AI results
     for (const [unitCode, similarityScore] of Object.entries(results)) {
-        if (similarityScore > 6) {
+        if (unitCode !== homeUnitCode && similarityScore > 6) {
             console.log(`Found AI-recommended unit: ${unitCode} - similarity score: ${similarityScore}`);
 
             // Find the unit card element in the DOM
@@ -502,7 +505,7 @@ function addAIRecommendationIcons(results) {
             }
         }
     }
-    console.log("Done adding AI recommendation icons");
+    console.log("----- Done querying AI -----");
 }
 
 // Function to render units to the grid
