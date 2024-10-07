@@ -22,27 +22,29 @@ router.post('/add', authenticateToken, async (req, res) => {
             const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
             if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
-                return res.status(404).json({ error: 'Cannot add connection to self' });
+                return res.status(404).json({ error: 'Cannot add connection to self, ' + unitCodeA + " == " + unitCodeB });
             }
             // Check if unitCodes exists
             const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
             const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
 
             if (!unitA) {
-                return res.status(404).json({ error: 'unitA not found' });
+                return res.status(404).json({ error: universityNameA + ", " + unitCodeA + ' not found' });
             }
             if (!unitB) {
-                return res.status(404).json({ error: 'unitB not found' });
+                return res.status(404).json({ error: universityNameB + ", " + unitCodeB + ' not found' });
             }
-            // const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
-            const anyConnectionToB = user.connections.find(connection => connection.unitAId == unitA._id && connection.unitBId == unitB._id);
+            if (user.connections) {
+                // const anyConnectionToB = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA, "connections": unitB._id });
+                const anyConnectionToB = user.connections.find(connection => connection.unitAId.toString() == unitA._id && connection.unitBId.toString() == unitB._id);
 
-            // Add connection to B
-            const anyConnectionToA = user.connections.find(connection => connection.unitAId == unitB._id && connection.unitBId == unitA._id);
+                // Add connection to B
+                const anyConnectionToA = user.connections.find(connection => connection.unitAId.toString() == unitB._id && connection.unitBId.toString() == unitA._id);
 
-            if (anyConnectionToA || anyConnectionToB) {
-                return res.status(400).json({ result: "Connection already exists between these units", status: 400 });
-            } 
+                if (anyConnectionToA || anyConnectionToB) {
+                    return res.status(400).json({ result: "Connection already exists between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
+                } 
+            }
             // Add connection to directly to user
             const db = req.client.db("CUMA");
             const usersCollection = db.collection("users");
@@ -72,30 +74,35 @@ router.post('/delete', authenticateToken, async (req, res) => {
             const { universityNameA, unitCodeA, universityNameB, unitCodeB } = req.body;
 
             if (universityNameA == universityNameB && unitCodeA == unitCodeB) {
-                return res.status(404).json({ error: 'Cannot add connection to self' });
+                return res.status(404).json({ error: 'Cannot delete connection to self, ' + unitCodeA + " == " + unitCodeB });
             }
             // Check if unitCodes exists
             const unitA = await units.findOne({ universityName: universityNameA, "unitCode": unitCodeA });
             const unitB = await units.findOne({ universityName: universityNameB, "unitCode": unitCodeB });
 
             if (!unitA) {
-                return res.status(404).json({ error: 'unitA not found' });
+                return res.status(404).json({ error: universityNameA + ", " + unitCodeA + ' not found' });
             }
             if (!unitB) {
-                return res.status(404).json({ error: 'unitB not found' });
+                return res.status(404).json({ error: universityNameB + ", " + unitCodeB + ' not found' });
             }
+
+            if (user.connections == null) {
+                return res.status(400).json({ result: "There already exists no connection between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
+            }
+
             // Add connection to B
-            const anyConnectionToB = user.connections.find(connection => connection.unitAId == unitA._id && connection.unitBId == unitB._id);
+            const anyConnectionToB = user.connections.find(connection => connection.unitAId.toString() == unitA._id && connection.unitBId.toString() == unitB._id);
 
             // Add connection to A
-            const anyConnectionToA = user.connections.find(connection => connection.unitAId == unitB._id && connection.unitBId == unitA._id);
+            const anyConnectionToA = user.connections.find(connection => connection.unitAId.toString() == unitB._id && connection.unitBId.toString() == unitA._id);
 
             const db = req.client.db("CUMA");
             const usersCollection = db.collection("users");
             const userEmail = getEmail(req);
 
             if (!anyConnectionToA && !anyConnectionToB) {
-                return res.status(400).json({ result: "There already exists no connection between these units", status: 400 });
+                return res.status(400).json({ result: "There already exists no connection between these units (" + unitCodeA + " & " + unitCodeB + ")", status: 400 });
 
             // Delete connection from user
             } else if (anyConnectionToA) {

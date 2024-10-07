@@ -11,7 +11,10 @@
     <script src="../backend/authentication.js" defer></script>
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
+    <link rel="stylesheet" href="styles/foreign-unit-recommendations.css">
     <script src="./index.js" defer></script>
+    <script src="./script/sidenav-logout.js"></script>
+    <script src="../backend/unitConnection.js" defer></script>
 
 </head>
 <body>
@@ -22,7 +25,7 @@
 
 <nav class="sidebar">
     <div class="sidebar-link">
-        <img src="images/icons8-navigation-96.png" class="sidebar-img">
+        <img src="images/mapping.png" class="sidebar-img">
         Mapping
     </div>
     <div class="sidebar-link">
@@ -41,21 +44,18 @@
         <img src="images/icons8-cog-96.png" class="sidebar-img">
         Settings
     </div>
-    <!--Temporary buttons, please fix if required-->
-    <button id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
-    <button id="logout-button", onclick="userLogout()">Logout</button>
 </nav>
     <main>
         <section>
             <h2>Enter Foreign Unit Details</h2>
             <form id="foreign-unit-form">
-                <div class="form-group">
+                <div class="form-group", style="padding-bottom: 10px;">
                     <label for="foreign-unit-name">Unit Name:</label>
-                    <input type="text" id="foreign-unit-name" placeholder="Enter unit name">
+                    <input type="text" id="foreign-unit-name" class="foreign-unit-input" placeholder="Enter unit name">
                 </div>
-                <div class="form-group">
+                <div class="form-group", style="padding-bottom: 10px;">
                     <label for="foreign-unit-code">Unit Code:</label>
-                    <input type="text" id="foreign-unit-code" placeholder="Enter unit code">
+                    <input type="text" id="foreign-unit-code" class="foreign-unit-input" placeholder="Enter unit code">
                 </div>
                 <div class="form-group">
                     <label for="foreign-unit-description">Unit Description:</label>

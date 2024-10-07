@@ -3,6 +3,7 @@ import { MongoClient } from 'mongodb';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
+import transferPlan from './routes/transferPlan.js';
 import ai from './routes/ai.js'
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -47,11 +48,20 @@ app.use((req, res, next) => {
 app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
+app.use('/api/transferPlan/', transferPlan)
 app.use('/api/ai/', ai);
 
 // Page Link
 app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
+});
+
+app.get('/transfer-plans', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
+});
+
+app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
 });
 
 // app.get('/', authenticateToken, (req, res) => {

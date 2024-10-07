@@ -186,8 +186,8 @@ router.get("/retrieveUnit", authenticateToken, async (req, res) => {
         .json({ error: "Both university and unitcode must be provided" });
     }
 
-    const db = client.db("CUMA");
-    const collection = db.collection("units");
+        const db = client.db('CUMA');
+        const collection = db.collection(collectionName);
 
     const unit = await collection.findOne({
       universityName: universityName,
@@ -355,16 +355,59 @@ router.get("/getAllNotInUni", authenticateToken, async (req, res) => {
     const database = client.db("CUMA");
     const units = database.collection(collectionName);
 
-    //get all the units
-    const allUnits = await units.find({
-      universityName: { $ne: params.universityName },
-    });
-    const result = await allUnits.toArray();
-    return res.json(result);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json("Internal Server Error");
-  }
-});
+        //get all the units
+        const allUnits = await units.find({ universityName: { $ne: params.universityName } });;
+        const result = await allUnits.toArray()
+        return res.json(result);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json("Internal Server Error");
+    }
+})
+
+// Get all university names that are not the one in input
+router.get('/getAllOtherUni', authenticateToken, async (req, res) => {
+    try {
+        // get the client
+        const client = req.client;
+
+        // get the request url params 
+        const { universityName } = req.query;
+
+        if (universityName == null) {
+            return res.status(404).json({ error: "Ensure you provide universityName" });
+        }
+
+        //get the database and the collection
+        const database = client.db("CUMA");
+        const units = database.collection(collectionName);
+
+        //get all the units
+        const otherUniversities = await units.aggregate([
+            {
+                $match: { universityName: { $ne: universityName } } // Filter out "Monash University"
+            },
+            {
+                $group: {
+                    _id: "$universityName" // Group by universityName to get unique names
+                }
+            },
+            {
+                $project: {
+                    _id: 0, universityName: "$_id" // Return a clean list of university names
+                }
+            }
+        ])
+        const result = await otherUniversities.toArray()
+        return res.json(result);
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json("Internal Server Error");
+    }
+})
+
+
 
 export default router;

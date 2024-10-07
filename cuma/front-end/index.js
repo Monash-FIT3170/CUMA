@@ -1,3 +1,37 @@
+// Navigation bar tracker
+let navOpen = false;
+
+//handle nav stuff
+function closeNav() {
+    sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "false")
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    const sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "true");
+
+    document.getElementById("main").style.marginLeft= "200px";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+});
+
 let unitConnections = {};
 let selectedUnitCode = null;
 let isEditMode = false; // Track whether we're in add or edit mode
@@ -89,7 +123,7 @@ function addUnit() {
             Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
                 if (!handleResponse(response)) {
                     // if no error
-                    repopulateResults()
+                    // repopulateResults()
                 }
             });
 
@@ -127,7 +161,7 @@ function addUnit() {
             // handles any error
             if (handleResponse(response) == 0) {
                 // if no error, then repopulate the result
-                repopulateResults()
+                // repopulateResults()
             }
         });
     }
@@ -161,6 +195,10 @@ function handleResponse(response) {
      */
     if (response.status == 400) {
         alert("Error: " + response.result)
+        return 1
+    } else if (response.ok != null && !response.ok) {
+        // If response is not OK, handle the error status
+        alert(response.error);
         return 1
     }
     return 0
@@ -290,6 +328,7 @@ function deleteUnit() {
     Backend.Unit.delete(default_university, selectedUnitCode).then(response => {
         if (!handleResponse(response)) {
             // if no error, repopulate the data
+
             repopulateResults()
         }
     })
@@ -583,45 +622,21 @@ function addConnectionExistingUnit(foeignUnitDiv) {
 
     Backend.UnitConnection.add(unitInfo).then(response => {
         handleResponse(response);
-        repopulateResults();
+        // repopulateResults();
     });
 }
 
-
-function userLogout() {
-    Backend.Auth.logout().then(() => {
-            console.log("Logout successful");
-        }).catch(error => {
-            console.error("An error occurred during logout:", error);
-            alert("An error occurred during logout. Please try again.");
-    });
-}
-
-
-function userSendConnections() {
-    // TODO: Perhaps change email to be dynamic, or to admin CUMA email
-    const email = "change@me.com";
-    emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n";
-
-    Backend.UnitConnection.getAllUserConnections().then(req => {
-        if (!req.connections || req.connections.length === 0 || req.error) {
-            alert("Ensure you are logged in and have added connections to send.");
-            return;
-        }
-        req.connections.map(connection => {
-            const { universityNameA, unitCodeA, universityNameB, unitCodeB } = connection;
-            if (universityNameA && unitCodeA && universityNameB && unitCodeB) {
-                emailBody += "\n" + universityNameA + " - " + unitCodeA + " to " + universityNameB + " - " + unitCodeB;
-            }
-        });
-        window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
-    });
-}
 
 async function fetchAndDisplayUserInfo() {
     try {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
+            // Populate the profile fields with the fetched data
+            document.getElementById('profile-name').value = response.data.name;
+            document.getElementById('profile-email').value = response.data.email;
+            document.getElementById('profile-role').value = response.data.role;
+
+            // Also update any other parts of the UI that depend on user info
             updateUserDisplay(response.data);
             updateUIBasedOnRole(response.data.role);
         } else {
@@ -804,57 +819,50 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     });
 }
 
-// Call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
+// // Call every render if on index
+// if (window.location.pathname.includes('index.html')) {
+//     repopulateResults();
+// }
 
 
-// call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
+// // call every render if on index
+// if (window.location.pathname.includes('index.html')) {
+//     repopulateResults();
+// }
 
-// Navigation bar tracker
-let navOpen = false;
 
-//handle nav stuff
-function closeNav() {
-    document.getElementById("sidebar").style.width = "0";
+// // call every render
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchAndDisplayUserInfo();
+//     repopulateResults();
+// });
 
-    document.getElementById("sidebar-content").style.display = "none";
 
-    document.getElementById("main").style.marginLeft= "0";
-}
-
-//handle nav stuff
-function openNav() {
-    document.getElementById("sidebar").style.width = "200px";
-
-    document.getElementById("sidebar-content").style.display = "block";
-
-    document.getElementById("main").style.marginLeft= "200px";
-}
-
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
+function editProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
     
+    // Enable editing by removing the 'readonly' attribute
+    inputs.forEach(input => input.removeAttribute('readonly'));
+
+    // Show Save button and hide Edit button
+    document.getElementById('edit-button').style.display = 'none';
+    document.getElementById('save-button').style.display = 'inline-block';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    toggleNav();
-})
+function saveProfile() {
+    // Get all the profile input fields
+    const inputs = document.querySelectorAll('.profile-details input');
+    
+    inputs.forEach(input => {
+        console.log(`${input.id}: ${input.value}`);
+    });
+    
+    // Disable editing by adding the 'readonly' attribute back
+    inputs.forEach(input => input.setAttribute('readonly', 'readonly'));
 
+    // Hide Save button and show Edit button
+    document.getElementById('edit-button').style.display = 'inline-block';
+    document.getElementById('save-button').style.display = 'none';
+}
 
-// call every render
-document.addEventListener('DOMContentLoaded', () => {
-    fetchAndDisplayUserInfo();
-    repopulateResults();
-});
