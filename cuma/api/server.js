@@ -68,14 +68,6 @@ app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
 });
 
-app.get('/transfer-plans', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
-});
-
-app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
-});
-
 // Example route to log session data
 app.get('/view-session', (req, res) => {
   console.log(req.session);  // Logs the entire session object to the console
