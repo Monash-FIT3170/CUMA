@@ -69,11 +69,13 @@ router.post("/compareUnits", async (req, res) => {
 
     // Construct the prompt to be sent to the AI model for comparison
     const prompt =
-      "Please analyse the similarity between this unit: " +
-      JSON.stringify(unitSRC) +
-      "And the following units: " +
-      JSON.stringify(unitsToCompare) +
-      "Please provide your results in a json object with the keys being the unit codes of each unit and their respective value an integer in range [1,10]. Do not provide any other text aside from this json object.";
+      "Please analyse the similarity between the selected home unit and all possible target units.\n" +
+      "Selected home unit: " + JSON.stringify(unitSRC) + "\n" +
+      "All possible target units: " + JSON.stringify(unitsToCompare) + "\n" +
+      "Please provide your analysis results in a JSON object.\n" +
+      "The keys of the JSON object should be the unit code of each of the possible target units, and the values should be the similarity score between the selected home unit and the possible target unit.\n" +
+      "The similarity score should be an integer in range [1,10] inclusive, with 10 being extremely similar and 1 being not similar at all.\n" +
+      "Do not provide any other text aside from this json object."
 
     // Query the AI model with the constructed prompt
     const result = await model.generateContent(prompt);
