@@ -431,6 +431,41 @@ async function setupUnitsModal(universityName, unitSlotID) {
     addUnitModal.style.display = 'block';
 }
 
+// Provide the selected home unit and all possible target units to query AI for mapping recommendations
+function getAIRecommendations(targetUnitSlotID) {
+    let homeUnitSlotID = null;
+    switch (targetUnitSlotID) {
+        case "target-unit-slot-1":
+            homeUnitSlotID = "home-unit-slot-1";
+            break;
+        case "target-unit-slot-2":
+            homeUnitSlotID = "home-unit-slot-2";
+            break;
+        case "target-unit-slot-3":
+            homeUnitSlotID = "home-unit-slot-3";
+            break;
+        case "target-unit-slot-4":
+            homeUnitSlotID = "home-unit-slot-4";
+            break;
+    }
+
+    console.log("Querying AI to get recommendations for home unit:");
+    console.log(possibleMapping[homeUnitSlotID]);
+    console.log("From the following possible target units:");
+    console.log(possibleMapping[targetUnitSlotID]);
+
+    // Query & process AI recommendations
+    console.log("Querying AI...");
+    Backend.AI.AIMatch(possibleMapping[homeUnitSlotID], possibleMapping[targetUnitSlotID])
+    .then(results => {
+        // TODO: add an AI recommendation icon to all units that have a similarity score of 6 or above
+        // addAIRecommendationIcons(results.result);
+    })
+    .catch(error => {
+        console.error("Error querying & processing AI recommendations:", error);
+    });
+}
+
 // Function to render units to the grid
 function renderUnitsInModal(unitSlotID, units) {
     // Clear existing content
