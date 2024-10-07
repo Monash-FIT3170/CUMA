@@ -479,8 +479,10 @@ router.get('/user-info', authenticateToken, async (req, res) => {
 
         // Construct user information
         const userInfo = {
-            name: existingUser.firstName,
-            roles: existingUser.roles,
+            firstName: existingUser.firstName,
+            lastName: existingUser.lastName,
+            email: existingUser.email,
+            role: existingUser.role,
             status: existingUser.status
         };
 

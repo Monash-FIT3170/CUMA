@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bachelor of Software Engineering - Monash University</title>
+    <link rel="stylesheet" href="../styles/transfer-planner.css">
+    
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/transferPlan.js" defer></script>
+    <script src="../backend/authentication.js" defer></script>
+    <script src="../backend/unit.js" defer></script>
+    <script src="../transfer-planner-mapping.js" defer></script>
+    <script src="./script/transfer-planner-db-access.js" defer></script>
+    <script src="../dark-light-mode.js"></script>
+    <script src="../component/sidenav.js"></script>
+    <script src="../component/header/header.js"></script>
+    <script src="./script/sidenav-logout.js"></script>
+    <script src="./script/send-connections.js"></script>
+    <script src="../backend/unitConnection.js" defer></script>
+
+</head>
+
+<body>
+    <header-component></header-component>
+
+    <sidenav-component isopen="true"></sidenav-component>
+    
+    <!-- Main Page -->
+    <main id="main">
+                
+        <!-- Add Unit Connection Container -->
+        <div class="container" id="transfer-planner">
+
+            <!-- Text Heading -->
+            <div class="plan-header">
+                <h2 id="planner-name"></h1>
+                <h1 id="course-name"></h2>
+                <p id="study-year-period"></p>
+            </div>
+
+            <!-- Add Unit Connection Grid -->
+            <div class="plan-grid">
+
+                <!-- University Name -->
+                <div class="university-name-column">
+                    <div class="univeristy-name-slot">
+                        <h3 id="home-university-name"></h3>
+                    </div>
+
+                    <span class="arrow-icon">↓</span>
+
+                    <div class="univeristy-name-slot">
+                        <h3 id="target-university-name"></h3>
+                    </div>
+                </div>
+
+                <!-- Unit Slots 1 -->
+                <div class="unit-connection-column">
+
+                    <div class="unit-slot" id="home-unit-slot-1">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+
+                    <span class="arrow-icon">↓</span>
+
+                    <div class="unit-slot" id="target-unit-slot-1">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Slots 2 -->
+                <div class="unit-connection-column">
+
+                    <div class="unit-slot" id="home-unit-slot-2">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+
+                    <span class="arrow-icon">↓</span>
+
+                    <div class="unit-slot" id="target-unit-slot-2">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Slots 3 -->
+                <div class="unit-connection-column">
+
+                    <div class="unit-slot" id="home-unit-slot-3">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+
+                    <span class="arrow-icon">↓</span>
+
+                    <div class="unit-slot" id="target-unit-slot-3">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Slots 4 -->
+                <div class="unit-connection-column">
+
+                    <div class="unit-slot" id="home-unit-slot-4">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+
+                    <span class="arrow-icon">↓</span>
+
+                    <div class="unit-slot" id="target-unit-slot-4">
+                        <div class="search-icon-container">
+                            <span class="search-icon">🔍</span>
+                            <span class="add-text">ADD A UNIT</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn save" onclick="saveUnitConnections()">Save</button>
+                <button class="btn send-approval" onclick="sendTransferForApproval()">Send for Approval</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Overlay for background blur -->
+    <div class="modal-overlay hidden" id="modal-overlay"></div>
+
+    <!-- Floating modal container displaying selected units information-->
+    <div class="modal hidden" id="unit-info-modal">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-title-header">
+                    <h1>Subject Details</h1>
+                    <button class="close-button" id="close-unit-info-modal"><img src="images/close.png" class="close-button-icon"></button>
+                </div>
+            </div>
+
+            <!-- Unit Content -->
+            <div class="unit-info-container">
+                <p class="unit-details-text" id="units-details">Placeholder</p>
+                <h1 class="unit-name-text" id="units-name">Placeholder</h1>
+                <div class="tags-container">
+                    <div class="semester-tags-container">
+                    </div>
+                    <div class="selected-tag" id="selected-tag"><img src="images/check.png" class="check-icon">In Plan</div>
+                </div>
+                <div class="section-container">
+                    <h2 id="section-heading">Description</h3>
+                    <p id="unit-descriptions">Placeholder</p>
+                    <a id="handbook-link" target="_blank">View more details in Handbook<img src="images/share.png" class="share-icon"></a>
+                </div>
+                <div class="section-container">
+                    <h2 id="section-heading">Course</h3>
+                    <div class="unit-course-container">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Full-screen modal container displaying units for adding to mapping slot -->
+    <div class="modal hidden" id="add-unit-modal">
+        <div class="modal-content">
+
+            <!-- Header with Search Bar -->
+            <div class="modal-header">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search Units from Monash University" />
+                    <button class="close-button" id="close-add-unit-modal"><img src="images/close.png" class="close-button-icon"></button>
+                </div>
+            </div>
+
+            <!-- Modal Content Container -->
+            <div class="unit-search-container">
+
+                <!-- Filters -->
+                <div class="filters">
+                    <div class="filter-selection">
+                        <label for="unit-course-level">Course Level</label>
+                        <select id="unit-course-level">
+                            <option value="">select</option>
+                            <option value="1">Level 1</option>
+                            <option value="2">Level 2</option>
+                            <option value="3">Level 3</option>
+                            <option value="4">Level 4</option>
+                            <option value="5">Level 5</option>
+                            <option value="6">Level 6</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-selection">
+                        <label for="unit-study-period">Study Period</label>
+                        <select id="unit-study-period">
+                            <option value="">select</option>
+                            <option value="semester-1">Semester 1</option>
+                            <option value="semester-2">Semester 2</option>
+                            <option value="summer-term">Summer Term</option>
+                            <option value="winter-term">Winter Term</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Result Feedbacks -->
+                <div class="results-heading"></div>
+
+                <!-- Units Result Grid -->
+                <div class="unit-cards-grid" id="home-university-card-grid"></div>
+
+                <!-- Add Custom Unit button -->
+                <button class="add-custom">+ Add Custom Unit</button>
+            </div>
+
+        </div>
+    </div>
+    
+
+</body>
+</html>
