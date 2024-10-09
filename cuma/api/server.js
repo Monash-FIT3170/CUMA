@@ -49,17 +49,29 @@ app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 app.use('/api/webscraperEndpoint/',scraper);
 
-// Page Link
+// Page Link routes
+app.get('/', authenticateToken, (req, res) => {
+  res.redirect('/index');
+});
+
 app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
-// app.get('/', authenticateToken, (req, res) => {
-//   res.sendFile(path.join(__dirname, '..', 'front-end', 'landingPage', 'landingPage.html'));
-// });
+app.get('/add-unit', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-add-unit.html'));
+});
 
-app.get('/', authenticateToken, (req, res) => {
-  res.redirect('/index');
+app.get('/unit-info', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-unit-info.html'));
+});
+
+app.get('/profile', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-profile.html'));
+});
+
+app.get('/settings', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-setting.html'));
 });
 
 app.get('/login', (req, res) => {

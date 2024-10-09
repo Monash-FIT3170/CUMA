@@ -263,19 +263,19 @@ sidenav.innerHTML = `
 
     <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
-            <a href="index.html" class="sidebar-link">
+            <a href="/index" class="sidebar-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
-            <a href="nav-add-unit.html" class="sidebar-link">
+            <a href="/add-unit" class="sidebar-link">
                 <img src="images/icons8-navigation-96.png" class="sidebar-img"> Add Unit
             </a>
-            <a href="nav-unit-info.html" class="sidebar-link">
+            <a href="/unit-info" class="sidebar-link">
                 <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img"> Unit Info
             </a>
-            <a href="nav-profile.html" class="sidebar-link">
+            <a href="/profile" class="sidebar-link">
                 <img src="images/icons8-person-96.png" class="sidebar-img"> Profile
             </a>
-            <a href="nav-setting.html" class="sidebar-link">
+            <a href="/settings" class="sidebar-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
             </a>
             <!--Temporary buttons, please fix if required-->
