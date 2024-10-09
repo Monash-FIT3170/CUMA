@@ -4,9 +4,15 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin: 20px 0 20px 50px; /* Keeps it positioned to the left, under the navbar */
-    max-width: 1000px; /* Increased the width for a larger bubble */
-    position: relative; /* Keeps position relative to the navbar */
+    margin: 20px 0 20px 50px;
+    max-width: 1000px;
+    position: relative;
+}
+
+body.dark-mode .settings-info {
+    background-color: #1f1f1f; /* Dark background */
+    color: #ffffff; /* White text */
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1); /* Softer shadow for dark mode */
 }
 
 .settings-container {
@@ -23,6 +29,10 @@
     border-bottom: 1px solid #ddd;
 }
 
+body.dark-mode .settings-item {
+    border-bottom: 1px solid #444; /* Dark border */
+}
+
 .settings-item:last-child {
     border-bottom: none;
 }
@@ -30,6 +40,10 @@
 .settings-item label {
     font-size: 1.2em;
     color: #333;
+}
+
+body.dark-mode .settings-item label {
+    color: #ffffff; /* White text in dark mode */
 }
 
 input[type="checkbox"] {
@@ -42,4 +56,10 @@ select {
     border-radius: 5px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
+}
+
+body.dark-mode select {
+    background-color: #333; /* Dark mode background */
+    color: white;
+    border: 1px solid #555; /* Darker border */
 }
