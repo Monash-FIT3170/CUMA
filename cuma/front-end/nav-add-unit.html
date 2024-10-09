@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CUMA</title>
+    <title>Add Unit - CUMA</title>
     <link rel="stylesheet" href="styles/general.css">
-
     <script src="../backend/namespace.js" defer></script>
     <script src="../backend/unitConnection.js" defer></script>
     <script src="../backend/unit.js" defer></script>
     <script src="../backend/authentication.js" defer></script>
-    <script src="../backend/webscraperWrapper.js" defer></script>
     <script src="./component/sidenav.js" defer></script>
-    <script src="./component/header/header.js" defer></script>
+    <script src="./component/header/header.js"></script>
+
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/nav.css">
     <script src="./index.js" defer></script>
     <script src="dark-light-mode.js"></script>
-    <script src="./nav-add-unit.js" defer></script>
-
-    <link rel="stylesheet" href="./styles/waitingScreen.css">
 </head>
 <body>
     <header-component></header-component>
-
-    
     <sidenav-component isopen="true"></sidenav-component>
     
     <main id="main">
@@ -77,24 +71,6 @@
                 <p><strong>Unit Level:</strong> <span id="summary-unit-level"></span></p>
             </div>
         </section>
-
-        <section class="add-unit-section">
-            <h2>Scan URL</h2>
-            <form id="scan-url-form">
-                <label for="url">Input URL</label>
-                <input type="text" id="url">
-            </form>
-            <button type="submit" class="primary-btn" id="scan-url-button">Scan URL</button>
-        </section>
-
-
-
     </main>
-
-
-    
- 
 </body>
 </html>
-
-
