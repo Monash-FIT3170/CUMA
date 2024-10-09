@@ -821,40 +821,6 @@ if (window.location.pathname.includes('index.html')) {
     repopulateResults();
 }
 
-// Navigation bar tracker
-let navOpen = false;
-
-//handle nav stuff
-function closeNav() {
-    sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "false")
-    document.getElementById("main").style.marginLeft= "0";
-}
-
-//handle nav stuff
-function openNav() {
-    const sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "true");
-
-    document.getElementById("main").style.marginLeft= "200px";
-}
-
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    toggleNav();
-})
-
 
 // call every render
 document.addEventListener('DOMContentLoaded', () => {
