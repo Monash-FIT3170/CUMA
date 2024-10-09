@@ -821,6 +821,11 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     });
 }
 
+// Call every render if on index
+if (window.location.pathname.includes('index.html')) {
+    repopulateResults();
+}
+
 // call every render
 document.addEventListener('DOMContentLoaded', () => {
     fetchAndDisplayUserInfo();

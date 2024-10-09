@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
+import scraper from './routes/webscraperEndpoint.js'
 import transferPlan from './routes/transferPlan.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -56,10 +57,24 @@ app.use('/api/cuma-admin', cumaAdmin);
 app.use('/api/transferPlan/', transferPlan)
 
 // Page Link
+app.use('/api/webscraperEndpoint/',scraper);
+
+// Page Link routes
+app.get('/', authenticateToken, (req, res) => {
+  res.redirect('/index');
+});
+
 app.get('/index', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
+app.get('/add-unit', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-add-unit.html'));
+});
+
+app.get('/unit-info', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-unit-info.html'));
+});
 app.get('/transfer-plans', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
 });
@@ -74,8 +89,12 @@ app.get('/view-session', (req, res) => {
   res.send('Check the console to see session data.');
 }); 
 
-app.get('/', authenticateToken, (req, res) => {
-  res.redirect('/index');
+app.get('/profile', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-profile.html'));
+});
+
+app.get('/settings', authenticateToken, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-setting.html'));
 });
 
 app.get('/cuma-admin', (req, res) => {
