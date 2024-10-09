@@ -6,8 +6,8 @@ body {
     background-color: #f4f6f9;
 }
 body.dark-mode {
-    background-color: #121212; /* Dark mode background */
-    color: #ffffff; /* Dark mode text color */
+    background-color: #121212;
+    color: #ffffff;
 }
 
 /* Main layout */
@@ -22,7 +22,7 @@ main {
 }
 
 body.dark-mode main {
-    background-color: #1f1f1f; /* Dark mode background for main layout */
+    background-color: #1f1f1f;
 }
 
 /* Navigation Icons */
@@ -48,7 +48,7 @@ nav a i {
 }
 
 nav a.dark-mode {
-    color: #ffffff; /* Dark mode text for links */
+    color: #ffffff;
 }
 
 .nav-sandwich-bar {
@@ -67,9 +67,9 @@ nav a.dark-mode {
 }
 
 body.dark-mode .course-info {
-    background-color: #1f1f1f; /* Dark mode background */
-    color: #ffffff; /* Dark mode text */
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1); /* Softer shadow for dark mode */
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
 
 .course-info:hover {
@@ -283,6 +283,20 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     color: #2c3e50;
 }
 
+body.dark-mode .unit-details, body.dark-mode .mapped-units {
+    background: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .unit-details:hover, body.dark-mode .mapped-units:hover {
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
+}
+
+body.dark-mode .mapped-units h4 {
+    color: #ffffff;
+}
+
 /* Connections */
 .connection {
     padding: 15px;
@@ -310,6 +324,26 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
 }
 
+body.dark-mode .connection {
+    background-color: #1f1f1f;
+    border-color: #444;
+    color: #ffffff;
+}
+
+body.dark-mode .connection h5 {
+    color: #82caff;
+}
+
+body.dark-mode .connection p {
+    color: #bbbbbb;
+}
+
+body.dark-mode .connection:hover {
+    background-color: #3949ab;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(82, 138, 255, 0.3);
+}
+
 /* Modify and Delete Buttons */
 #modify-unit-button, #delete-unit-button {
     background: linear-gradient(135deg, #3498db, #2980b9);
@@ -328,6 +362,7 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     box-shadow: 0 12px 25px rgba(52, 152, 219, 0.7);
 }
 
+/* profile page */
 .profile-info {
     background-color: white;
     padding: 15px; 
@@ -356,26 +391,63 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
 .profile-details {
     display: flex;
     flex-direction: column;
-    gap: 10px; 
+    gap: 10px;
 }
 
-.profile-item label {
-    font-size: 1em; 
+.profile-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1em;
     color: #333;
 }
 
 .profile-item input {
     width: 100%;
-    padding: 10px; 
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
+    color: #333;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-item input:focus {
     border-color: #3498db;
-    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2); 
+    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.2);
+}
+
+body.dark-mode .profile-info {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-container {
+    color: #ffffff;
+}
+
+body.dark-mode .profile-image {
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-details {
+    color: #ffffff;
+}
+
+body.dark-mode .profile-item {
+    color: #ffffff;
+}
+
+body.dark-mode .profile-item input {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+}
+
+body.dark-mode .profile-item input:focus {
+    border-color: #82caff;
+    box-shadow: 0 3px 10px rgba(130, 202, 255, 0.2);
 }
 
 /* Edit and Save Buttons */
@@ -396,6 +468,19 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     transform: translateY(-2px); 
 }
 
+body.dark-mode #edit-button,
+body.dark-mode #save-button {
+    background-color: #444;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(130, 202, 255, 0.4);
+}
+
+body.dark-mode #edit-button:hover,
+body.dark-mode #save-button:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+}
+
 /* Form Containers */
 .add-unit-section .bubble {
     background-color: white;
@@ -404,6 +489,12 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 700px;
     margin: 40px auto;
+}
+
+body.dark-mode .add-unit-section .bubble {
+    background-color: #1f1f1f; /* Dark background */
+    color: #ffffff; /* White text in dark mode */
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1); /* Softer shadow for dark mode */
 }
 
 /* Input Fields */
@@ -420,6 +511,7 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     border-radius: 8px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
+    color: #333;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -449,6 +541,31 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     left: 10px;
     font-size: 0.8em;
     color: #3498db;
+}
+
+body.dark-mode .input-container input,
+body.dark-mode .input-container select {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+}
+
+body.dark-mode .input-container input:focus,
+body.dark-mode .input-container select:focus {
+    border-color: #82caff;
+    box-shadow: 0 5px 15px rgba(130, 202, 255, 0.2);
+}
+
+body.dark-mode .input-container label {
+    background-color: #1f1f1f;
+    color: #cccccc;
+}
+
+body.dark-mode .input-container input:focus + label,
+body.dark-mode .input-container input:not(:placeholder-shown) + label,
+body.dark-mode .input-container select:focus + label,
+body.dark-mode .input-container select:not(:placeholder-shown) + label {
+    color: #82caff; /* Light blue text color for active labels in dark mode */
 }
 
 /* Button */
@@ -500,6 +617,12 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     margin: 40px auto;
 }
 
+body.dark-mode .unit-info-section .bubble {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
 /* Input Fields */
 .input-container {
     position: relative;
@@ -514,6 +637,7 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     border-radius: 8px;
     border: 1px solid #ddd;
     background-color: #f9f9f9;
+    color: #333;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -545,6 +669,31 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     color: #3498db;
 }
 
+body.dark-mode .input-container input,
+body.dark-mode .input-container select {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #ffffff;
+}
+
+body.dark-mode .input-container input:focus,
+body.dark-mode .input-container select:focus {
+    border-color: #82caff;
+    box-shadow: 0 5px 15px rgba(130, 202, 255, 0.2);
+}
+
+body.dark-mode .input-container label {
+    background-color: #1f1f1f;
+    color: #aaaaaa;
+}
+
+body.dark-mode .input-container input:focus + label,
+body.dark-mode .input-container input:not(:placeholder-shown) + label,
+body.dark-mode .input-container select:focus + label,
+body.dark-mode .input-container select:not(:placeholder-shown) + label {
+    color: #82caff;
+}
+
 /* Button */
 .primary-btn {
     padding: 12px 25px;
@@ -563,3 +712,101 @@ button:hover, .add-unit-form button:hover, .add-connection-form button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(52, 152, 219, 0.5);
 }
+
+body.dark-mode .primary-btn {
+    background-color: #444;
+    color: #ffffff;
+}
+
+body.dark-mode .primary-btn:hover {
+    background-color: #555;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(130, 202, 255, 0.5);
+}
+
+
+/* add-connection part */
+.add-connection-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.add-connection-form h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-container input,
+.input-container select,
+.input-container textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.input-container label {
+    position: absolute;
+    top: -20px;
+    left: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Dark Mode */
+body.dark-mode .add-connection-form {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .add-connection-form h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .input-container input,
+body.dark-mode .input-container select,
+body.dark-mode .input-container textarea {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #555;
+}
+
+body.dark-mode .input-container label {
+    color: #cccccc; /* Light grey label color for dark mode */
+}
+
+body.dark-mode button {
+    background-color: #444;
+    color: white;
+}
+
+body.dark-mode button:hover {
+    background-color: #555;
+}
+

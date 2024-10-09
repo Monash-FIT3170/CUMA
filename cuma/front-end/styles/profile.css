@@ -29,3 +29,28 @@
     font-size: 1em; 
     color: #666;
 }
+
+/* dark mode */
+body.dark-mode .profile-details {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-detail-grid {
+    gap: 15px;
+}
+
+body.dark-mode .profile-detail-element {
+    background-color: #333;
+    color: #ffffff;
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .profile-detail-element h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .profile-detail-element p {
+    color: #cccccc;
+}
