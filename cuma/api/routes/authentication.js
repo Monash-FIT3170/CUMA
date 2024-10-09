@@ -8,7 +8,7 @@ import authenticateToken from '../middleware/authenticateToken.js';
 dotenv.config();
 
 const router = express.Router();
-const serverPath = "http://localhost:" + (process.env.PORT || 3000);
+const serverPath = "https://cumamonash.xyz";
 const isProduction = process.env.NODE_ENV === 'production';
 
 // OAuth2 Client Configuration

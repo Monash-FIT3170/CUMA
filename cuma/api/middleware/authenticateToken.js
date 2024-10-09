@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as AuthUtils from '../utils/auth-utils.js';
 
-const serverPath = "http://localhost:" + (process.env.PORT || 3000);
+const serverPath = "https://cumamonash.xyz";
 const authBackendPath = "/api/authentication";
 
 /**

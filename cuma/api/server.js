@@ -20,7 +20,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const serverPath = "http://localhost:" + port
+const serverPath = "https://cumamonash.xyz"
 const client = new MongoClient(process.env.MONGODB_URI);
 
 // Middleware setup
