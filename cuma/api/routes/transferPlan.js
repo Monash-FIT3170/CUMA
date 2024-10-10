@@ -366,10 +366,6 @@ router.get('/getall-custom-unit:universityName', authenticateToken, async (req, 
         if (!user) return res.status(403).json({ error: "User not found" });
     
         const transferPlansCollection = await getTransferPlanDBCollection(req);
-    
-        // get request payload
-        const query = req.body;
-        const unitInfoReq = query.unitInfo;
 
         const { universityName } = req.params;
     
