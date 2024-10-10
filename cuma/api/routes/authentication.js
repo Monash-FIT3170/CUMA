@@ -213,16 +213,22 @@ router.post('/login', async (req, res) => {
 
         if (existingUser.mfaEnabled) {
             req.session.pendingLoginUser = { email, expiresIn: Date.now() + 5 * 60 * 1000 };
-            return res.status(206).json({ message: 'MFA required' });
+            return res.status(206).json({ 
+                message: 'MFA required',
+                nextStep: '/login/verify-totp' 
+            });
         }
 
         await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
-        return res.status(201).json({ message: 'Login successful' });
+        return res.status(201).json({ 
+            message: 'Login successful',
+            nextStep: '/' 
+        });
 
     } catch (error) {
         console.error('Error logging in: ', error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: 'An unexpected error occurred. Please try again later.' });
     }
 });
 
@@ -330,7 +336,7 @@ router.get('/oauth2callback', async (req, res) => {
         await AuthUtils.processGoogleLogin(res, existingUser, userData, isProduction);
 
         delete req.session.googleState;
-        return res.redirect('/index');
+        return res.redirect('/');
 
     } catch (error) {
         console.error('Error retrieving access token or user info', error);

@@ -40,13 +40,16 @@ Backend.Auth.login = async function (email, password) {
   
       const result = await response.json();
 
-      console.log({ result: result, status: response.status });
+      if (!response.ok) {
+        throw new Error(result.error || 'An error occurred during login');
+      }
 
-      return { result: result, status: response.status };
+      return { result, status: response.status };
 
     } catch (error) {
 
       console.log("Error:", error);
+      throw error;
 
     }
 };

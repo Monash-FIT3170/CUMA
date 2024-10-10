@@ -53,16 +53,9 @@ function handleLoginFormSubmission(e) {
 
         // request api to authenticate and login
         Backend.Auth.login(email, password).then(response => {
-            // Check if the login was successful
-            if (response.status === 201) {
-                // Redirect to the homepage
-                alert("Success: " + response.result.message)
-                window.location.href = '/index';
-            // Login require MFA
-            } else if (response.status === 206) {
-                // Redirect to the homepage
-                alert("Success: " + response.result.message)
-                window.location.href = '/login/verify-totp'; 
+            if (response.status === 201 || response.status === 206) {
+                alert("Sucess: " + response.result.message)
+                window.location.href = response.result.nextStep;
             } else {
                 alert("Error " + response.status + ": " + response.result.error)
             }
