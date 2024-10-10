@@ -23,16 +23,6 @@ function openModal(){
 
 }
 
-function getUniName() {
-
-    console.log(slotIDForModal);
-
-    if (slotIDForModal.includes("home")) {
-        return document.getElementById("home-university-name").innerText;;
-    } else if (slotIDForModal.includes("target")) {
-        return document.getElementById("target-university-name").innerText;
-    }
-}
 
 
 async function addCustomUnit(){

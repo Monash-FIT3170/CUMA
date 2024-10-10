@@ -2,6 +2,8 @@
 
 let transferPlanData = {};
 
+
+
 document.addEventListener('DOMContentLoaded', (req, res) => {
 
     const queryString = window.location.search;
@@ -27,11 +29,14 @@ const plannerContainer = document.getElementById("transfer-planner");
 const plannerName = document.getElementById("planner-name");
 const plannerCourse = document.getElementById("course-name");
 const plannerStudyYearPeriod = document.getElementById("study-year-period");
+
 const plannerHomeUniName = document.getElementById("home-university-name");
 const plannerTargetUniName = document.getElementById("target-university-name");
 const homeUnitSlotNameArray = ["home-unit-slot-1", "home-unit-slot-2", "home-unit-slot-3", "home-unit-slot-4"];
 const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "target-unit-slot-3", "target-unit-slot-4"];
 
+
+const searchBarRef = document.getElementById("search-bar");
 // Configure the Transfer Planner with the data collected from the Transfer Plan Form
 function configureTransferPlanner(plannerData) {
     // Set the plan header
@@ -42,6 +47,8 @@ function configureTransferPlanner(plannerData) {
     // Set the university name
     plannerHomeUniName.textContent = plannerData.homeUniversity;
     plannerTargetUniName.textContent = plannerData.transferUniversity;
+
+    //
 
     // Congfigure Unit Slots
     configureHomeUnitSlot(plannerData.homeUniversity);
@@ -362,9 +369,6 @@ async function setupUnitsModal(universityName, unitSlotID) {
     .then(UnitArray => {
         Backend.TransferPlan.getAllCustomUnitsFrom(universityName).then(customUnitsData => {
             allUnits = UnitArray.concat(customUnitsData.result); 
-
-
-            
             renderUnitsInModal(unitSlotID, allUnits);
         });
     })
@@ -377,7 +381,22 @@ async function setupUnitsModal(universityName, unitSlotID) {
 
     // open the modal
     addUnitModal.style.display = 'block';
+
+    searchBarRef.placeholder = "Search Units from " + getUniName()
 }
+
+// function to get the uni name for the modal
+function getUniName() {
+
+    console.log(slotIDForModal);
+
+    if (slotIDForModal.includes("home")) {
+        return document.getElementById("home-university-name").innerText;;
+    } else if (slotIDForModal.includes("target")) {
+        return document.getElementById("target-university-name").innerText;
+    }
+}
+
 
 // Function to render units to the grid
 function renderUnitsInModal(unitSlotID, units) {
