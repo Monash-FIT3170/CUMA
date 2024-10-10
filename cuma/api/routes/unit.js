@@ -10,7 +10,7 @@
 import express from 'express';
 import mongoErrorCode from '../mongoErrorCode.js';
 import authenticateToken from '../middleware/authenticateToken.js';
-import authorize from '../middleware/roleAuth.js';
+import authorize from '../middleware/authorize.js';
 import gemini from '../../ai/geminiTest.js';
 
 const router = express.Router();
