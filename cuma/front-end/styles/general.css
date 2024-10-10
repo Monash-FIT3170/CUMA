@@ -183,6 +183,7 @@ textarea {
 
 /* Add Unit Form */
 .add-unit-form,
+.add-unit-section,
 .add-connection-form {
   flex: 1;
   background: white;
@@ -208,6 +209,7 @@ textarea {
 .add-unit-form .input-container textarea,
 .add-connection-form .input-container input,
 .add-connection-form .input-container select,
+.add-unit-section,
 .add-connection-form .unit-info-section .input-container textarea {
   width: 100%;
   padding: 10px;

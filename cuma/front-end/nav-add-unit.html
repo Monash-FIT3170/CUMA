@@ -28,15 +28,14 @@
     <sidenav-component isopen="true"></sidenav-component>
     
     <main id="main">
-        <section class="add-unit-section">
+        <section class="add-unit-section" style="display: inline;">
             <div class="bubble">
                 <h2>Add Unit to Database</h2>
                 <form id="add-unit-form">
                     <div class="input-container">
                         <select id="institution" required>
                             <option value="" disabled selected>Select Institution</option>
-                            <option value="Institution 1">Institution 1</option>
-                            <option value="Institution 2">Institution 2</option>
+                            <option value="Monash">Monash</option>
                         </select>
                         <label for="institution">Institution</label>
                     </div>
@@ -57,12 +56,28 @@
                         <label for="unit-type">Unit Type</label>
                     </div>
                     <div class="input-container">
-                        <input type="number" id="credit-points" required>
+                        <input type="number" min="0" id="credit-points" required>
                         <label for="credit-points">Credit Points</label>
                     </div>
                     <div class="input-container">
-                        <input type="number" id="unit-level" required>
+                        <input type="number" min="1" id="unit-level" required>
                         <label for="unit-level">Unit Level</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="unit-faculty" required>
+                        <label for="unit-faculty">Faculty</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="unit-offering" required>
+                        <label for="unit-offering">Offering</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="unit-description" required>
+                        <label for="unit-description">Description</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="handbookURL" required>
+                        <label for="handbookURL">Handbook URL</label>
                     </div>
                     <button type="submit" class="primary-btn">Add Unit</button>
                 </form>
@@ -78,7 +93,7 @@
             </div>
         </section>
 
-        <section class="add-unit-section">
+        <section class="add-unit-section" style="display: inline;">
             <h2>Scan URL</h2>
             <form id="scan-url-form">
                 <label for="url">Input URL</label>
