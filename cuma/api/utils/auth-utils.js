@@ -20,8 +20,8 @@ export function generateAccessToken(email, role) {
     return jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 }
 
-export function generateRefreshToken(email, roles) {
-    return jwt.sign({ email, roles }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+export function generateRefreshToken(email, role) {
+    return jwt.sign({ email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 }
 
 // Cookie deletion
@@ -100,8 +100,8 @@ export async function fetchExistingUserWithRefreshTokenFromDB(email, refreshToke
 
 // Token processing
 export async function processLoginAccessToken(res, user, isProduction) {
-    const accessToken = generateAccessToken(user.email, user.roles);
-    const refreshToken = generateRefreshToken(user.email, user.roles);
+    const accessToken = generateAccessToken(user.email, user.role);
+    const refreshToken = generateRefreshToken(user.email, user.role);
     
     user.lastLogin = new Date();
     user.refreshToken = { token: refreshToken, expiry: Date.now() + REFRESH_TOKEN_AGE };
@@ -113,7 +113,7 @@ export async function processLoginAccessToken(res, user, isProduction) {
 
 // Process Google login
 export async function processGoogleLogin(res, user, userData, isProduction) {
-    const refreshToken = generateRefreshToken(userData.email, user.roles);
+    const refreshToken = generateRefreshToken(userData.email, user.role);
 
     if (!user) {
         user = new User({
@@ -135,7 +135,7 @@ export async function processGoogleLogin(res, user, userData, isProduction) {
         await user.save();
     }
 
-    const accessToken = generateAccessToken(userData.email, user.roles);
+    const accessToken = generateAccessToken(userData.email, user.role);
 
     createAccessTokenCookie(res, accessToken, isProduction);
     createRefreshTokenCookie(res, refreshToken, isProduction);
