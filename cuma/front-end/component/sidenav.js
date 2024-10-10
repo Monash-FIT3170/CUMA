@@ -2,6 +2,8 @@
 
 const sidenav = document.createElement("template");
 
+var navOpen = true
+
 style = `
     /* Sidebar Styling */
     .sidebar {
@@ -248,16 +250,16 @@ sidenav.innerHTML = `
             <a href="index" class="sidebar-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
-            <a href="nav-add-unit.html" class="sidebar-link">
+            <a href="/add-unit" class="sidebar-link">
                 <img src="images/icons8-navigation-96.png" class="sidebar-img"> Add Unit
             </a>
-            <a href="nav-unit-info.html" class="sidebar-link">
+            <a href="/unit-info" class="sidebar-link">
                 <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img"> Unit Info
             </a>
-            <a href="nav-profile.html" class="sidebar-link">
+            <a href="/profile" class="sidebar-link">
                 <img src="images/icons8-person-96.png" class="sidebar-img"> Profile
             </a>
-            <a href="nav-setting.html" class="sidebar-link">
+            <a href="/settings" class="sidebar-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
             </a>
             <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
@@ -295,6 +297,40 @@ class Sidenav extends HTMLElement {
 
 
 }
+
+
+
+//handle nav stuff
+function closeNav() {
+    sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "false")
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    const sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "true");
+
+    document.getElementById("main").style.marginLeft= "200px";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+})
 
 customElements.define("sidenav-component", Sidenav);
 

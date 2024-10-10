@@ -5,4 +5,5 @@ var Backend = {
     UnitConnection: {},
     Auth: {},
     TransferPlan: {},
+    Misc: {}
 }

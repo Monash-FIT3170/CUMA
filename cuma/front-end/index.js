@@ -1,5 +1,4 @@
-// Navigation bar tracker
-let navOpen = false;
+
 
 //handle nav stuff
 function closeNav() {
@@ -16,17 +15,6 @@ function openNav() {
     document.getElementById("main").style.marginLeft= "200px";
 }
 
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     toggleNav();

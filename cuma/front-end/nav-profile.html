@@ -1,20 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>CUMA</title>
-    <link rel="stylesheet" href="styles/general.css">
-    <script src="../backend/namespace.js" defer></script>
-    <script src="../backend/unitConnection.js" defer></script>
-    <script src="../backend/unit.js" defer></script>
-    <script src="../backend/authentication.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="styles/general.css"
+    />
+    <script
+      src="../backend/namespace.js"
+      defer
+    ></script>
+    <script
+      src="../backend/unitConnection.js"
+      defer
+    ></script>
+    <script
+      src="../backend/unit.js"
+      defer
+    ></script>
+    <script
+      src="../backend/authentication.js"
+      defer
+    ></script>
 
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/nav.css">
-    <script src="./index.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="styles/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="styles/nav.css"
+    />
+    <script
+      src="./index.js"
+      defer
+    ></script>
     <script src="dark-light-mode.js"></script>
-    <script src="./component/sidenav.js" defer></script>
+    <script
+      src="./component/sidenav.js"
+      defer
+    ></script>
     <script src="./component/header/header.js"></script>
     <script src="./script/sidenav-logout.js"></script>
     <script src="./script/send-connections.js"></script>
@@ -22,64 +52,89 @@
 </head>
 <body>
     <header-component></header-component>
-    
+
     <sidenav-component isopen="true"></sidenav-component>
 
     <main id="main">
-        <!-- Profile Section -->
-        <section class="profile-info">
-            <h2>Profile</h2>
-            <div class="profile-container">
-                <img src="images/profile-example.jpg" alt="Profile Image" class="profile-image">
-                <div class="profile-details">
-                    <div class="profile-item">
-                        <label for="profile-name">Name:</label>
-                        <input type="text" id="profile-name" readonly>
-                    </div>
-                    <div class="profile-item">
-                        <label for="profile-email">Email:</label>
-                        <input type="email" id="profile-email" readonly>
-                    </div>
-                    <div class="profile-item">
-                        <label for="profile-role">Role:</label>
-                        <input type="text" id="profile-role" readonly>
-                    </div>                    
-                    <button id="edit-button" onclick="editProfile()">Edit</button>
-                    <button id="save-button" onclick="saveProfile()" style="display: none;">Save</button>
-                </div>
+      <!-- Profile Section -->
+      <section class="profile-info">
+        <h2>Profile</h2>
+        <div class="profile-container">
+          <img
+            src="images/icons8-person-96.png"
+            alt="Profile Image"
+            class="profile-image"
+          />
+          <div class="profile-details">
+            <div class="profile-item">
+              <label for="profile-name">Name:</label>
+              <input
+                type="text"
+                id="profile-name"
+                readonly
+              />
             </div>
-        </section>
-        
-        <!-- Profile Detail Section -->
-        <section class="profile-details">
-            <h2>Profile Details</h2>
-            <div class="profile-detail-grid">
-                <div class="profile-detail-element">
-                    <h3>Contact Information</h3>
-                    <p><strong>Email:</strong> john.doe@example.com</p>
-                    <p><strong>Phone:</strong> (555) 123-4567</p>
-                </div>
-                <div class="profile-detail-element">
-                    <h3>Preferences</h3>
-                    <p><strong>Language:</strong> English</p>
-                    <p><strong>Timezone:</strong> GMT+10</p>
-                </div>
+            <div class="profile-item">
+              <label for="profile-email">Email:</label>
+              <input
+                type="email"
+                id="profile-email"
+                readonly
+              />
             </div>
-        </section>
+            <div class="profile-item">
+              <label for="profile-role">Role:</label>
+              <input
+                type="text"
+                id="profile-role"
+                readonly
+              />
+            </div>
+            <button
+              id="edit-button"
+              onclick="editProfile()"
+            >
+              Edit
+            </button>
+            <button
+              id="save-button"
+              onclick="saveProfile()"
+              style="display: none"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile Detail Section -->
+      <section class="profile-details">
+        <h2>Profile Details</h2>
+        <div class="profile-detail-grid">
+          <div class="profile-detail-element">
+            <h3>Contact Information</h3>
+            <p><strong>Email:</strong> john.doe@example.com</p>
+            <p><strong>Phone:</strong> (555) 123-4567</p>
+          </div>
+          <div class="profile-detail-element">
+            <h3>Preferences</h3>
+            <p><strong>Language:</strong> English</p>
+            <p><strong>Timezone:</strong> GMT+10</p>
+          </div>
+        </div>
+      </section>
     </main>
-    
-<!--    <main id="main">-->
-<!--        <section class="profile-section">-->
-<!--            <div class="bubble">-->
-<!--                <h2>User Profile</h2>-->
-<!--                <p><strong>Name:</strong></p>-->
-<!--                <p><strong>Email:</strong></p>-->
-<!--                <p><strong>Institution:</strong></p>-->
-<!--                <button class="secondary-btn" onclick="editProfile()">Edit Profile</button>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--    </main>-->
-    
-    
-</body>
+
+    <!--    <main id="main">-->
+    <!--        <section class="profile-section">-->
+    <!--            <div class="bubble">-->
+    <!--                <h2>User Profile</h2>-->
+    <!--                <p><strong>Name:</strong></p>-->
+    <!--                <p><strong>Email:</strong></p>-->
+    <!--                <p><strong>Institution:</strong></p>-->
+    <!--                <button class="secondary-btn" onclick="editProfile()">Edit Profile</button>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--    </main>-->
+  </body>
 </html>
