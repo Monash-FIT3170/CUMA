@@ -355,17 +355,25 @@ async function setupUnitsModal(universityName, unitSlotID) {
     // Clear the modal grid and show a loading message
     modalCardGrid.innerHTML = `<p>Loading units...</p>`;
 
+    slotIDForModal = unitSlotID;
+
     // Fetch the units from the backend
     Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
-        allUnits = UnitArray; // Store the units for filtering
-        slotIDForModal = unitSlotID
-        renderUnitsInModal(unitSlotID, allUnits);
+        Backend.TransferPlan.getAllCustomUnitsFrom(universityName).then(customUnitsData => {
+            allUnits = UnitArray.concat(customUnitsData.result); 
+
+
+            
+            renderUnitsInModal(unitSlotID, allUnits);
+        });
     })
     .catch(error => {
         console.error('Error fetching units from university:', error);
         modalCardGrid.innerHTML = `<p>Error loading units. Please try again.</p>`;
     });
+
+
 
     // open the modal
     addUnitModal.style.display = 'block';
