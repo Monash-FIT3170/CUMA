@@ -169,6 +169,12 @@ function addUnitToSlotFromDB(unitSlotID, unit) {
     unitSlot.dataset.unitCode = unit.unitCode;
     unitSlot.dataset.unitName = unit.unitName;
 
+
+    if (unit.isCustomUnit) {
+        unitSlot.classList.add('red');
+    }
+    
+
     // Remove all child element - aka search container
     while (unitSlot.firstChild) {
         unitSlot.removeChild(unitSlot.firstChild);
@@ -475,6 +481,7 @@ function createUnitCard(unitSlotID, unit, type) {
     const unitCardDiv = document.createElement('div');
     unitCardDiv.className = 'unit-card';
 
+
     // Extract course code and other data
     const courseCode = unit.course && unit.course[0].courseCode ? unit.course[0].courseCode : ' ';
 
@@ -487,10 +494,13 @@ function createUnitCard(unitSlotID, unit, type) {
         <div class="unit-top">
             <span class="courseCode">${courseCode}</span>
             <div class="unit-icons">
+                    ${unit.isCustomUnit ? '<button class="custom-tag" disabled>Custom</button>' : ''}
                     <button class="unit-icons-btn" id="info-icon">i</button>
                     <button class="unit-icons-btn" id=${actionBtnId}>${actionBtnIcon}</button>
             </div>
         </div>
+
+
 
         <h3 class="unit-name-text">${unit.unitName}</h3>
 

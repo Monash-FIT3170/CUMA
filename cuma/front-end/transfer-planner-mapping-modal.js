@@ -7,7 +7,7 @@ const currentCourse =                     {
 
 
 function openModal(){
-    console.log("hello")
+    overlay.style.display = "block";
     const addCustomUnitModal = document.getElementById("add-custom-unit-modal");
     addCustomUnitModal.style.display = "block";
     // overlay.style.display = "block";
@@ -27,10 +27,10 @@ function addCustomUnit(){
         const unitLearningOutcome = document.getElementById('form-learning-outcome').value.trim();
     
         // Ensure fields are filled out
-        if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !unitLearningOutcome) {
-            alert("Please fill out all fields.");
-            return;
-        }
+        // if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !unitLearningOutcome) {
+        //     alert("Please fill out all fields.");
+        //     return;
+        // }
 
         const customUnit = 
             {
@@ -61,5 +61,21 @@ function addCustomUnit(){
 
 function closeCustomUnitModal() {
     const addCustomUnitModal = document.getElementById("add-custom-unit-modal");
-    addCustomUnitModal.style.display = "none";
+    
+    if (addCustomUnitModal.style.display != "none"){
+        // confirm the user if they want to close the modal
+        const confirmPrompt = confirm("Changes in this modal won't be saved. Are you sure you want to close this modal?")
+        if (confirmPrompt)
+        {
+            overlay.style.display = "none";
+            addCustomUnitModal.style.display = "none";
+        }else{
+            overlay.style.display = "block"
+        }
+
+    }
 }
+
+overlay.addEventListener('click', () => {
+    closeCustomUnitModal();
+})
