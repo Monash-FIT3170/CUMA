@@ -11,6 +11,7 @@
     <script src="../backend/authentication.js" defer></script>
     <script src="./component/sidenav.js" defer></script>
     <script src="./component/header/header.js"></script>
+    <script src="./nav-unit-info.js" defer></script>
     
 
     <link rel="stylesheet" href="styles/header.css">
@@ -29,10 +30,9 @@
                 <h2>Search for Unit Information</h2>
                 <form id="search-unit-form">
                     <div class="input-container">
-                        <select id="search-institution">
-                            <option value="" disabled selected>Select Institution (Optional)</option>
-                            <option value="Institution 1">Institution 1</option>
-                            <option value="Institution 2">Institution 2</option>
+                        <select id="search-institution" required>
+                            <option value="" disabled selected>Select Institution</option>
+                            <option value="Monash">Monash</option>
                         </select>
                         <label for="search-institution">Institution</label>
                     </div>
@@ -40,7 +40,7 @@
                         <input type="text" id="search-unit" required>
                         <label for="search-unit">Search for Existing Unit</label>
                     </div>
-                    <button type="submit" class="primary-btn">Search</button>
+                    <button type="button" class="primary-btn" id = 'searchButton'>Search</button>
                 </form>
             </div>
         </section>
