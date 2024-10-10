@@ -19,6 +19,7 @@
     <script src="./script/sidenav-logout.js"></script>
     <script src="./script/send-connections.js"></script>
     <script src="../backend/unitConnection.js" defer></script>
+    <script src="./transfer-planner-mapping-modal.js" defer></script>
 
 </head>
 
@@ -235,12 +236,80 @@
                 <div class="unit-cards-grid" id="home-university-card-grid"></div>
 
                 <!-- Add Custom Unit button -->
-                <button class="add-custom">+ Add Custom Unit</button>
+                <button class="add-custom" id="add-custom-button" onclick="openModal()">+ Add Custom Unit</button>
+
+                
             </div>
 
         </div>
     </div>
-    
+
+    <!-- Add custom unit modal-->
+    <div class="modal hidden" id="add-custom-unit-modal">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <div class="modal-title-header">
+                    
+                </div>
+            </div>
+
+            <!-- Unit Content -->
+            <div class="unit-info-container">
+                <h3>Add Unit Connection</h3>
+
+                <!-- Form Fields -->
+                <div class="input-container">
+                    <input type="text" id="form-connection-name" required>
+                    <label for="form-connection-name">Unit Name</label>
+                </div>
+        
+                <div class="input-container">
+                    <input type="text" id="form-connection-code" required>
+                    <label for="form-connection-code">Unit Code</label>
+                </div>
+        
+                <div class="input-container">
+                    <input type="text" id="form-connection-institution" required>
+                    <label for="form-connection-institution">Institution</label>
+                </div>
+        
+                <div class="input-container">
+                    <select id="form-connection-type" required>
+                        <option value="" disabled selected>Select Unit Type</option>
+                        <option value="Core">Core</option>
+                        <option value="Elective">Elective</option>
+                    </select>
+                    <label for="form-connection-type">Unit Type</label>
+                </div>
+        
+                <div class="input-container">
+                    <input type="number" id="form-connection-credit" required>
+                    <label for="form-connection-credit">Unit Credit Points</label>
+                </div>
+        
+                <div class="input-container">
+                    <input type="number" id="form-connection-level" required>
+                    <label for="form-connection-level">Unit Level</label>
+                </div>
+        
+                <div class="input-container">
+                    <textarea id="form-connection-overview" required></textarea>
+                    <label for="form-connection-overview">Unit Overview</label>
+                </div>
+
+                <div class="input-container">
+                    <textarea id="form-connection-learning-outcome" required></textarea>
+                    <label for="form-connection-learning-outcome">Learning Outcome</label>
+                </div>
+        
+                <button onclick="addConnectionNewUnit()">Link Unit to Selected Course</button>
+                <button onclick="toggleAddConnectionNewUnitForm()">Cancel</button>
+            </div>
+
+        </div>
+    </div>
 
 </body>
 </html>
