@@ -1,15 +1,19 @@
 
 function addButtonFunc(){
+    //function to add button functionality
+    
     let button = document.getElementById("searchButton");
 
-
+    //add on click event
     button.addEventListener("click", async () => {
 
+        //default html to populate "Selected Unit Information" section
         let defaultHTML = `
             <h2>Selected Unit Information</h2>
             <p id="display-unit-description">Search for a unit to see the details</p>
         `;
 
+        // check if error text from previous search is still visible, if so clear
         if (document.getElementById("errorText").style.display === "inline"){
             toggleErrorSpan();
         }
@@ -17,13 +21,15 @@ function addButtonFunc(){
         let uniForm = document.getElementById("search-institution");
         let unitForm = document.getElementById("search-unit");
         
-
+        //query mongoDB
         let result = await Backend.Unit.retrieveUnit(uniForm.value, unitForm.value)
 
+        //handling if we fail to retrieve a units information
         if (result == undefined){
             toggleErrorSpan()
             document.getElementById("displayUnitSection").innerHTML = defaultHTML;
         } else {
+            //Otherwise if successful, populate "Selected Unit Information" section with respective unit attributes
             let unitName = result.unitName;
             let unitCode = result.unitCode;
             let unitType = result.unitType;
@@ -45,15 +51,14 @@ function addButtonFunc(){
             `;
 
 
-            
             document.getElementById("displayUnitSection").innerHTML = newHTML;
         }
 
-        console.log(result)
     });
 }
 
 function toggleErrorSpan(){
+    //Toggle error text visibility. To be shown when a db unit fetch request fails.
     let span = document.getElementById("errorText");
 
     if (span.style.display === "none"){
