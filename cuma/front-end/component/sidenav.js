@@ -245,7 +245,7 @@ sidenav.innerHTML = `
             <a href="/transfer-plans" class="sidebar-link">
                 <img src="images/planner.png" class="sidebar-img"> Planner
             </a>
-            <a href="/index" class="sidebar-link">
+            <a href="/mapping" class="sidebar-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
             <a href="/add-unit" class="sidebar-link">
