@@ -36,10 +36,10 @@ async function addCustomUnit(){
         const unitLearningOutcome = document.getElementById('form-learning-outcome').value.trim();
     
         // Ensure fields are filled out
-        // if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !unitLearningOutcome) {
-        //     alert("Please fill out all fields.");
-        //     return;
-        // }
+        if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !unitLearningOutcome) {
+            alert("Please fill out all fields.");
+            return;
+        }
 
         const customUnit = 
             {
