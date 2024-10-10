@@ -341,6 +341,7 @@ function filterUnits() {
 }
 
 // Function to setup unit modal and fetch units based on the university name 
+const slotIdForModal = null
 async function setupUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
@@ -352,6 +353,7 @@ async function setupUnitsModal(universityName, unitSlotID) {
     Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
         allUnits = UnitArray; // Store the units for filtering
+        slotIDForModal = unitSlotID
         renderUnitsInModal(unitSlotID, allUnits);
     })
     .catch(error => {

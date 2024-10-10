@@ -257,51 +257,63 @@
 
             <!-- Unit Content -->
             <div class="unit-info-container">
-                <h3>Add Unit Connection</h3>
+                <h3>Add Unit</h3>
 
-                <!-- Form Fields -->
-                <div class="input-container">
-                    <input type="text" id="form-connection-name" required>
-                    <label for="form-connection-name">Unit Name</label>
-                </div>
-        
-                <div class="input-container">
-                    <input type="text" id="form-connection-code" required>
-                    <label for="form-connection-code">Unit Code</label>
-                </div>
-        
-                <div class="input-container">
-                    <input type="text" id="form-connection-institution" required>
-                    <label for="form-connection-institution">Institution</label>
-                </div>
-        
-                <div class="input-container">
-                    <select id="form-connection-type" required>
-                        <option value="" disabled selected>Select Unit Type</option>
-                        <option value="Core">Core</option>
-                        <option value="Elective">Elective</option>
-                    </select>
-                    <label for="form-connection-type">Unit Type</label>
-                </div>
-        
-                <div class="input-container">
-                    <input type="number" id="form-connection-credit" required>
-                    <label for="form-connection-credit">Unit Credit Points</label>
-                </div>
-        
-                <div class="input-container">
-                    <input type="number" id="form-connection-level" required>
-                    <label for="form-connection-level">Unit Level</label>
-                </div>
-        
-                <div class="input-container">
-                    <textarea id="form-connection-overview" required></textarea>
-                    <label for="form-connection-overview">Unit Overview</label>
-                </div>
+            <!-- Form: Unit Name -->
+            <div class="input-container">
+                <label for="form-unit-name">Unit Name</label>
+                <input type="text" id="form-unit-name" required>
+
+            </div>
+
+            <!-- Form: Unit Code -->
+            <div class="input-container">
+                <label for="form-unit-code">Unit Code</label>
+                <input type="text" id="form-unit-code" required>
+
+            </div>
+
+            <!-- Form: Unit Type Dropdown -->
+            <div class="input-container">
+                <label for="form-unit-type">Unit Type</label>
+                <select id="form-unit-type" required>
+                    <option value="" disabled selected>Select Unit Type</option>
+                    <option value="Core">Core</option>
+                    <option value="Elective">Elective</option>
+                </select>
+  
+            </div>
+
+            <!-- Form: Other Fields -->
+            <div class="input-container">
+                <label for="form-unit-credit">Unit Credit Points</label>
+                <input type="number" id="form-unit-credit" required>
+
+            </div>
+            <div class="input-container">
+                <label for="form-unit-level">Unit Level</label>
+                <input type="number" id="form-unit-level" required>
+            </div>
 
                 <div class="input-container">
-                    <textarea id="form-connection-learning-outcome" required></textarea>
-                    <label for="form-connection-learning-outcome">Learning Outcome</label>
+                    <label for="offerings">Offering</label>
+                    <input list="offerings" name="">
+                        <datalist id="offerings">
+                            <option value="Semester 1">
+                            <option value="Semester 2">
+                        </datalist>
+                    </input>
+                </div>
+
+                <div class="input-container">
+                    <label for="form-unit-overview">Unit Overview</label>
+                    <input type="number" id="form-unit-overview" required>
+                </div>
+
+                <div class="input-container">
+                    <label for="form-learning-outcome">Learning Outcome</label>
+                    <textarea id="form-learning-outcome" required></textarea>
+  
                 </div>
         
                 <button onclick="addCustomUnit()">Add Unit</button>
