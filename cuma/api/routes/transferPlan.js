@@ -348,5 +348,51 @@ router.post('/custom-unit', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/getall-custom-unit:universityName', authenticateToken, async (req, res) => {
+    /**
+     * returns json response: 
+     * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
+     * code: 200 - if successful
+     * code: 500 - if server error or other errors occured
+     */
+
+
+
+
+
+    try {
+
+        const user = await getUser(req);
+        if (!user) return res.status(403).json({ error: "User not found" });
+    
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
+    
+        // get request payload
+        const query = req.body;
+        const unitInfoReq = query.unitInfo;
+
+        const { universityName } = req.params;
+    
+    
+        // Add the custom unit to the database
+        const result = await transferPlansCollection.findMany(
+            { 
+                user: user.email, 
+                "customUnits" : {$elemMatch : {universityName : universityName}} 
+            },
+            {
+                customUnits : 1 
+            }   
+        );    
+
+
+        return res.status(200).json(result);
+    } catch (error) {
+        // Handle errors
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 export default router;
