@@ -221,7 +221,7 @@ router.post('/login', async (req, res) => {
 
         await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
-        return res.status(201).json({ 
+        return res.status(200).json({ 
             message: 'Login successful',
             nextStep: '/' 
         });

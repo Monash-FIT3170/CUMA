@@ -53,7 +53,7 @@ function handleLoginFormSubmission(e) {
 
         // request api to authenticate and login
         Backend.Auth.login(email, password).then(response => {
-            if (response.status === 201 || response.status === 206) {
+            if (response.status === 200 || response.status === 206) {
                 alert("Sucess: " + response.result.message)
                 window.location.href = response.result.nextStep;
             } else {
