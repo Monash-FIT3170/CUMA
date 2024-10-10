@@ -348,7 +348,7 @@ router.post('/custom-unit', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/getall-custom-unit:universityName', authenticateToken, async (req, res) => {
+router.get('/getall-custom-units', authenticateToken, async (req, res) => {
     /**
      * returns json response: 
      * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
@@ -367,22 +367,38 @@ router.get('/getall-custom-unit:universityName', authenticateToken, async (req, 
     
         const transferPlansCollection = await getTransferPlanDBCollection(req);
 
-        const { universityName } = req.params;
+        // get the request url params 
+        const params = req.query;
     
-    
+        console.log(params.universityName)
         // Add the custom unit to the database
-        const result = await transferPlansCollection.findMany(
-            { 
-                user: user.email, 
-                "customUnits" : {$elemMatch : {universityName : universityName}} 
+
+        const pipeline = [
+            {
+                "$match": { "user": user.email}
+            },
+            { "$unwind": "$customUnits" },
+            {
+                "$match": { "customUnits.universityName": params.universityName }
             },
             {
-                customUnits : 1 
-            }   
+                "$project": {
+                    "_id": 0,
+                    "transferPlans": 0,
+                    "user" : 0
+                }
+            }
+        ];
+        
+
+        const result = await transferPlansCollection.aggregate(
+            pipeline
         );    
 
-
-        return res.status(200).json(result);
+        const resultsArray = await result.toArray()
+        // Transforming the data to extract customUnits information
+        const unitArray = resultsArray.map(item => item.customUnits);
+        return res.status(200).json(unitArray);
     } catch (error) {
         // Handle errors
         console.error('Error:', error);

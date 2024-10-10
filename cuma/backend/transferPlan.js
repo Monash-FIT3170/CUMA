@@ -141,14 +141,16 @@ Backend.TransferPlan.addCustomUnit = async function (unitInfo) {
 // add persistent custom units in the transfer plan
 Backend.TransferPlan.getAllCustomUnitsFrom = async function (universityName) {
 
+  console.log("called")
+
+  const params = {"universityName": universityName}
+
   try {
-    const url = new URL(serverPath + transferPlanBackendPath + `/${universityName}`);
+    const url = new URL(serverPath + transferPlanBackendPath + "/getall-custom-units");
+    url.search = new URLSearchParams(params).toString();
 
     const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
+      method: "GET"
     });
 
     const result = await response.json();
