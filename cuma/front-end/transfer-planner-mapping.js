@@ -347,7 +347,7 @@ function filterUnits() {
 }
 
 // Function to setup unit modal and fetch units based on the university name 
-const slotIdForModal = null
+var slotIDForModal = null
 async function setupUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
@@ -416,6 +416,7 @@ function addUnitToSlot(unitSlotID, unit) {
 
 // Remove unit from the unitSlot
 function removeUnitFromSlot(unitSlotID) {
+
     // Get unitSlot and remove unit data
     const unitSlot = document.getElementById(unitSlotID);
     replaceSearchContainer(unitSlot);

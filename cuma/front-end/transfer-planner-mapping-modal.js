@@ -1,8 +1,15 @@
-const homeUniversity = "Monash University"
-const currentCourse =                     {
+
+
+// var definition
+// other variables will be referenced from transfer-planner-home.js and transfer-planner-mapping.js
+var homeUniversity = ""
+var targetUniversity = ""
+
+const currentCourse = {
     "courseCode": "SFTWRENG01",
     "courseName": "Software engineering"
-}
+};
+
 
 
 
@@ -15,8 +22,19 @@ function openModal(){
 
 }
 
+function getUniName() {
 
-function addCustomUnit(){
+    console.log(slotIDForModal);
+
+    if (slotIDForModal.includes("home")) {
+        return document.getElementById("home-university-name").innerText;;
+    } else if (slotIDForModal.includes("target")) {
+        return document.getElementById("target-university-name").innerText;
+    }
+}
+
+
+async function addCustomUnit(){
         // Collect input values
         const unitName = document.getElementById('form-unit-name').value.trim();
         const unitCode = document.getElementById('form-unit-code').value.trim();
@@ -34,13 +52,14 @@ function addCustomUnit(){
 
         const customUnit = 
             {
-                "universityName": homeUniversity,
+                "universityName": getUniName(),
                 "unitCode": unitCode,
                 "unitName": unitName,
                 "unitDescription": unitOverview,
                 "unitType": unitType,
                 "unitLevel": unitLevel,
                 "creditPoints": unitCredit,
+                "learningOutcome":unitLearningOutcome,
                 "course": [
                     currentCourse
                 ],
@@ -50,11 +69,19 @@ function addCustomUnit(){
                 "isCustomUnit": true
             }
 
+        console.log(getUniName());
+
         // add to unitList
         allUnits.push(customUnit)
         
         // re-render all the units
-        renderUnitsInModal(slotIdForModal, allUnits)
+        renderUnitsInModal(slotIDForModal, allUnits)
+
+        await Backend.TransferPlan.addCustomUnit(customUnit).then(response => {
+            if (!handleResponse(response)) {
+                // if no error
+            }
+        });
 
         closeCustomUnitModal()
 }
@@ -74,6 +101,33 @@ function closeCustomUnitModal() {
         }
 
     }
+}
+
+function handleResponse(response) {
+    /**
+     * Handles the response from the API based on the response status code
+     * It displays the error on the web tier (front-end) if there is an error
+     * 
+     * Input - 
+     *  response: {
+     *    result: str,  
+     *    code: int
+     *  }
+     * 
+     * Returns 
+     * 1 - if there's an error in the response
+     * 0 - if there's no error
+     * 
+     */
+    if (response.status == 400) {
+        alert("Error: " + response.result)
+        return 1
+    } else if (response.ok != null && !response.ok) {
+        // If response is not OK, handle the error status
+        alert(response.error);
+        return 1
+    }
+    return 0
 }
 
 overlay.addEventListener('click', () => {
