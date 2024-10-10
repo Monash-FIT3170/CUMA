@@ -13,6 +13,7 @@ const currentCourse = {
 
 
 
+
 function openModal(){
     overlay.style.display = "block";
     const addCustomUnitModal = document.getElementById("add-custom-unit-modal");
@@ -80,18 +81,29 @@ async function addCustomUnit(){
         await Backend.TransferPlan.addCustomUnit(customUnit).then(response => {
             if (!handleResponse(response)) {
                 // if no error
+                closeCustomUnitModal("unit-added")
             }
         });
 
-        closeCustomUnitModal()
 }
 
-function closeCustomUnitModal() {
+function closeCustomUnitModal(confirmTextType) {
+
+    var confirmText = ""
+    
+    if (confirmTextType === "cancel"){
+        confirmText = "Changes in this modal won't be saved. Are you sure you want to close this modal?"
+    }
+    else if (confirmTextType === "unit-added"){
+        confirmText = "This unit has been added"
+    }
+
+
     const addCustomUnitModal = document.getElementById("add-custom-unit-modal");
     
     if (addCustomUnitModal.style.display != "none"){
         // confirm the user if they want to close the modal
-        const confirmPrompt = confirm("Changes in this modal won't be saved. Are you sure you want to close this modal?")
+        const confirmPrompt = confirm(confirmText)
         if (confirmPrompt)
         {
             overlay.style.display = "none";
@@ -131,5 +143,5 @@ function handleResponse(response) {
 }
 
 overlay.addEventListener('click', () => {
-    closeCustomUnitModal();
+    closeCustomUnitModal("cancel");
 })
