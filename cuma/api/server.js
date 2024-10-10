@@ -62,12 +62,15 @@ app.use('/api/webscraperEndpoint/',scraper);
 
 // Page Link routes
 app.get('/', authenticateToken, (req, res) => {
+  if (!req.user || !req.user.role) {
+      return res.redirect('/login');
+  }
   if (req.user.role === 'course_director') {
-    res.redirect('/mapping');
+      res.redirect('/mapping');
   } else if (req.user.role === 'student' || req.user.role === 'general_user') {
-    res.redirect('/transfer-plans');
+      res.redirect('/transfer-plans');
   } else {
-    res.status(403).send('Unauthorized role');
+      res.status(403).send('Unauthorized role');
   }
 });
 

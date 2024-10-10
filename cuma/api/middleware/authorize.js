@@ -1,11 +1,17 @@
 function authorize(roles) {
-    return (req, res, next) => {
+  return (req, res, next) => {
+      console.log("User in authorize middleware:", req.user);
+      if (!req.user || !req.user.role) {
+          console.log("No user or role found in request");
+          return res.redirect('/login');
+      }
       const userRole = req.user.role;
       if (!roles.includes(userRole)) {
-        return res.status(403).json({ error: 'Access denied' });
+          console.log(`User role ${userRole} not authorized for this route`);
+          return res.status(403).json({ error: 'Access denied' });
       }
       next();
-    };
-  }
-  
-  export default authorize;
+  };
+}
+
+export default authorize;
