@@ -1,5 +1,6 @@
 const transferPlanBackendPath = "/api/transferPlan";
 
+
 // Create new planner using the form data
 Backend.TransferPlan.create = async function (createPlannerForm) {
   try {
@@ -111,3 +112,29 @@ Backend.TransferPlan.delete = async function (planName) {
     return { result: null, status: 500, error: error.message };
   }
 };
+
+// add persistent custom units in the transfer plan
+Backend.TransferPlan.addCustomUnit = async function (unitInfo) {
+  
+  try {
+    const url = new URL(serverPath + transferPlanBackendPath + `/custom-unit`);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({unitInfo }),
+    });
+
+    const result = await response.json();
+
+    return { result: result, status: response.status };
+
+  } catch (error) {
+    console.error("Error:", error);
+    return { result: null, status: 500, error: error.message };
+  }
+};
+
+

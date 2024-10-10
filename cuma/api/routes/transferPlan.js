@@ -16,6 +16,8 @@ async function getTransferPlanDBCollection(req) {
  * @param {Object} req request
  * @returns 
  */
+import gemini from '../../ai/geminiTest.js';
+
 function getEmail(req) {
     // No user detected
     if (!req.user.email) {
@@ -269,5 +271,82 @@ router.delete('/plan/:planName', authenticateToken, async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+router.post('/custom-unit', authenticateToken, async (req, res) => {
+    /**
+     * This endpoint inserts a unit into the database.
+     * 
+     *  requestbody payload = {
+            "universityName": str, 
+            "unitInfo": {
+                "unitCode": "str",
+                "unitName": "str",
+                "unitDescription": "str",
+                "unitType": "int",
+                "unitLevel": "int",
+                "creditPoints": "int",
+            }
+        }
+     *
+     * returns json response: 
+     * code: 400 - if the university does not exist. Or if the unit already exists in the university (duplicates)
+     * code: 200 - if successful
+     * code: 500 - if server error or other errors occured
+     */
+
+
+
+
+
+    try {
+
+        const user = await getUser(req);
+        if (!user) return res.status(403).json({ error: "User not found" });
+    
+        const transferPlansCollection = await getTransferPlanDBCollection(req);
+    
+        // get request payload
+        const query = req.body;
+        const unitInfoReq = query.unitInfo;
+        
+        // check if the unit in the university already exists
+        const unit = await transferPlansCollection.findOne({ 
+            "customUnits" : {$elemMatch : { "unitCode": unitInfoReq.unitCode, "universityName": unitInfoReq.universityName }}
+    
+        });
+    
+        // if unit already exists, return error
+        if (unit) {
+            return res.status(400).json("unit already exists")
+        }
+    
+           // call gemini to create keywords for the unit
+           const aiGenUnitKeyword = await gemini(unitInfoReq.unitDescription)
+    
+    
+        // Add the custom unit to the database
+        const result = await transferPlansCollection.updateOne(
+            { user: user.email },
+            { 
+                $push: {
+                    customUnits: {
+                        aiGenKeyWord: aiGenUnitKeyword,
+                        ...unitInfoReq
+                    }
+                }
+            }
+        );    
+
+
+        return res.status(200).json(result);
+    } catch (error) {
+        // Handle errors
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 export default router;
