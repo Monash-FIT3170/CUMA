@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import authenticateToken from './middleware/authenticateToken.js';
 import cumaAdmin from './routes/cumaAdmin.js';
+import authorize from './middleware/authorize.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -61,21 +62,27 @@ app.use('/api/webscraperEndpoint/',scraper);
 
 // Page Link routes
 app.get('/', authenticateToken, (req, res) => {
-  res.redirect('/index');
+  if (req.user.role === 'course_director') {
+    res.redirect('/mapping');
+  } else if (req.user.role === 'student' || req.user.role === 'general_user') {
+    res.redirect('/transfer-plans');
+  } else {
+    res.status(403).send('Unauthorized role');
+  }
 });
 
-app.get('/index', authenticateToken, (req, res) => {
+app.get('/mapping', authenticateToken, authorize(['course_director']),  (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'index.html'));
 });
 
-app.get('/add-unit', authenticateToken, (req, res) => {
+app.get('/add-unit', authenticateToken, authorize(['course_director']), (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-add-unit.html'));
 });
 
-app.get('/unit-info', authenticateToken, (req, res) => {
+app.get('/unit-info', authenticateToken, authorize(['student', 'general_user']), (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-unit-info.html'));
 });
-app.get('/transfer-plans', authenticateToken, (req, res) => {
+app.get('/transfer-plans', authenticateToken, authorize(['student', 'general_user']) ,(req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
 });
 
