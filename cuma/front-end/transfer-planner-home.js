@@ -1,9 +1,6 @@
 // Set home university
 DEFAULT_HOME_UNIVERSITY = "Monash"
 
-// Navigation bar tracker
-let navOpen = false;
-
 //handle nav stuff
 function closeNav() {
     sidebar = document.querySelector("sidenav-component");
@@ -19,17 +16,7 @@ function openNav() {
     document.getElementById("main").style.marginLeft= "200px";
 }
 
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     toggleNav();
