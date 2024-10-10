@@ -1,27 +1,8 @@
 // Set home university
 DEFAULT_HOME_UNIVERSITY = "Monash"
 
-//handle nav stuff
-function closeNav() {
-    sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "false")
-    document.getElementById("main").style.marginLeft= "0";
-}
-
-//handle nav stuff
-function openNav() {
-    const sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "true");
-
-    document.getElementById("main").style.marginLeft= "200px";
-}
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    toggleNav();
-
-})
 
 
 // ---------- Transfer Planner Home ---------- //

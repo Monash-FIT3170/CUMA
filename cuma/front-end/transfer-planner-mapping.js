@@ -3,7 +3,6 @@
 let transferPlanData = {};
 
 document.addEventListener('DOMContentLoaded', (req, res) => {
-    toggleNav();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
