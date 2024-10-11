@@ -1,8 +1,8 @@
-const authBackendPath = "/api/cuma-admin/"
+const cumaBackendPath = "/api/cuma-admin/"
 
 Backend.Admin.getAllUsers = async function () {
     try {
-        const url = new URL(serverPath + authBackendPath + "users");
+        const url = new URL(serverPath + cumaBackendPath + "users");
 
         const response = await fetch(url, {
             method: "GET",
@@ -21,7 +21,7 @@ Backend.Admin.getAllUsers = async function () {
 
 Backend.Admin.getUser = async function (userId) {
     try {
-        const url = new URL(serverPath + authBackendPath + "users/" + userId);
+        const url = new URL(serverPath + cumaBackendPath + "users/" + userId);
 
         const response = await fetch(url, {
             method: "GET",
@@ -40,7 +40,7 @@ Backend.Admin.getUser = async function (userId) {
 
 Backend.Admin.approveUserRole = async function (userId) {
     try {
-        const url = new URL(serverPath + authBackendPath + "approve-user/" + userId);
+        const url = new URL(serverPath + cumaBackendPath + "approve-user/" + userId);
 
         const response = await fetch(url, {
             method: "PUT",
@@ -58,7 +58,7 @@ Backend.Admin.approveUserRole = async function (userId) {
 
 Backend.Admin.rejectUserRole = async function (userId) {
     try {
-        const url = new URL(serverPath + authBackendPath + "reject-user/" + userId);
+        const url = new URL(serverPath + cumaBackendPath + "reject-user/" + userId);
 
         const response = await fetch(url, {
             method: "PUT",
@@ -76,7 +76,7 @@ Backend.Admin.rejectUserRole = async function (userId) {
 
 Backend.Admin.updateUserRole = async function (userId, role) {
     try {
-        const url = new URL(serverPath + authBackendPath + "users/update-role/" + userId);
+        const url = new URL(serverPath + cumaBackendPath + "users/update-role/" + userId);
 
         const response = await fetch(url, {
             method: "PUT",
@@ -95,7 +95,7 @@ Backend.Admin.updateUserRole = async function (userId, role) {
 
 Backend.Admin.deleteUser = async function (userId) {
     try {
-        const url = new URL(serverPath + authBackendPath + "users/" + userId);
+        const url = new URL(serverPath + cumaBackendPath + "users/" + userId);
 
         const response = await fetch(url, {
             method: "DELETE",
