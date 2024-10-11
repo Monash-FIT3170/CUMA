@@ -55,9 +55,7 @@ app.use('/api/unit', unit);
 app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 app.use('/api/cuma-admin', cumaAdmin);
-app.use('/api/transferPlan/', transferPlan)
-
-// Page Link
+app.use('/api/transferPlan/', transferPlan);
 app.use('/api/webscraperEndpoint/',scraper);
 
 // Page Link routes

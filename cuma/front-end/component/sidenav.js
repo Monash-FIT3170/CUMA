@@ -2,6 +2,8 @@
 
 const sidenav = document.createElement("template");
 
+var navOpen = true
+
 style = `
     /* Sidebar Styling */
     .sidebar {
@@ -310,14 +312,56 @@ class Sidenav extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        const sidebar = this.shadowRoot.getElementById("sidebar");
-        const content = this.shadowRoot.getElementById("sidebar-content");
-        if (name === "isopen") {
-            sidebar.style.width = newValue === "true" ? "200px" : "0";
-            content.style.display = newValue === "true" ? "block" : "none";
+        if (name === "isopen"){
+            if (newValue == "true"){
+                this.shadowRoot.getElementById("sidebar").style.width = "200px";
+
+                this.shadowRoot.getElementById("sidebar-content").style.display = "block";
+            }
+            else if (newValue == "false"){
+                this.shadowRoot.getElementById("sidebar").style.width = "0";
+
+                this.shadowRoot.getElementById("sidebar-content").style.display = "none";
+            }
         }
     }
+
+
 }
+
+
+
+//handle nav stuff
+function closeNav() {
+    sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "false")
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+//handle nav stuff
+function openNav() {
+    const sidebar = document.querySelector("sidenav-component");
+    sidebar.setAttribute("isopen", "true");
+
+    document.getElementById("main").style.marginLeft= "200px";
+}
+
+// open and close navigation bar
+function toggleNav() {
+    if (navOpen) {
+        closeNav();
+        navOpen = false;
+    } else {
+        openNav();
+        navOpen = true;
+    }
+    
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleNav();
+})
 
 customElements.define("sidenav-component", Sidenav);
 

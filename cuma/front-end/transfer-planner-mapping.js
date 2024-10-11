@@ -1,37 +1,10 @@
-// Navigation bar tracker
-let navOpen = false;
 
-//handle nav stuff
-function closeNav() {
-    sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "false")
-    document.getElementById("main").style.marginLeft= "0";
-}
-
-//handle nav stuff
-function openNav() {
-    const sidebar = document.querySelector("sidenav-component");
-    sidebar.setAttribute("isopen", "true");
-
-    document.getElementById("main").style.marginLeft= "200px";
-}
-
-// open and close navigation bar
-function toggleNav() {
-    if (navOpen) {
-        closeNav();
-        navOpen = false;
-    } else {
-        openNav();
-        navOpen = true;
-    }
-    
-}
 
 let transferPlanData = {};
 
+
+
 document.addEventListener('DOMContentLoaded', (req, res) => {
-    toggleNav();
 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -56,11 +29,14 @@ const plannerContainer = document.getElementById("transfer-planner");
 const plannerName = document.getElementById("planner-name");
 const plannerCourse = document.getElementById("course-name");
 const plannerStudyYearPeriod = document.getElementById("study-year-period");
+
 const plannerHomeUniName = document.getElementById("home-university-name");
 const plannerTargetUniName = document.getElementById("target-university-name");
 const homeUnitSlotNameArray = ["home-unit-slot-1", "home-unit-slot-2", "home-unit-slot-3", "home-unit-slot-4"];
 const targetUnitSlotNameArray = ["target-unit-slot-1", "target-unit-slot-2", "target-unit-slot-3", "target-unit-slot-4"];
 
+
+const searchBarRef = document.getElementById("search-bar");
 // Configure the Transfer Planner with the data collected from the Transfer Plan Form
 function configureTransferPlanner(plannerData) {
     // Set the plan header
@@ -71,6 +47,8 @@ function configureTransferPlanner(plannerData) {
     // Set the university name
     plannerHomeUniName.textContent = plannerData.homeUniversity;
     plannerTargetUniName.textContent = plannerData.transferUniversity;
+
+    //
 
     // Congfigure Unit Slots
     configureHomeUnitSlot(plannerData.homeUniversity);
@@ -197,6 +175,12 @@ function addUnitToSlotFromDB(unitSlotID, unit) {
     const unitSlot = document.getElementById(unitSlotID);
     unitSlot.dataset.unitCode = unit.unitCode;
     unitSlot.dataset.unitName = unit.unitName;
+
+
+    if (unit.isCustomUnit) {
+        unitSlot.classList.add('red');
+    }
+    
 
     // Remove all child element - aka search container
     while (unitSlot.firstChild) {
@@ -370,6 +354,7 @@ function filterUnits() {
 }
 
 // Function to setup unit modal and fetch units based on the university name 
+var slotIDForModal = null
 async function setupUnitsModal(universityName, unitSlotID) {
     // Set the unitSlotID to the modal grid dataset
     addUnitModal.dataset.id = unitSlotID;
@@ -377,20 +362,41 @@ async function setupUnitsModal(universityName, unitSlotID) {
     // Clear the modal grid and show a loading message
     modalCardGrid.innerHTML = `<p>Loading units...</p>`;
 
+    slotIDForModal = unitSlotID;
+
     // Fetch the units from the backend
     Backend.Unit.getAllUnitsFromUniversity(universityName)
     .then(UnitArray => {
-        allUnits = UnitArray; // Store the units for filtering
-        renderUnitsInModal(unitSlotID, allUnits);
+        Backend.TransferPlan.getAllCustomUnitsFrom(universityName).then(customUnitsData => {
+            allUnits = UnitArray.concat(customUnitsData.result); 
+            renderUnitsInModal(unitSlotID, allUnits);
+        });
     })
     .catch(error => {
         console.error('Error fetching units from university:', error);
         modalCardGrid.innerHTML = `<p>Error loading units. Please try again.</p>`;
     });
 
+
+
     // open the modal
     addUnitModal.style.display = 'block';
+
+    searchBarRef.placeholder = "Search Units from " + getUniName()
 }
+
+// function to get the uni name for the modal
+function getUniName() {
+
+    console.log(slotIDForModal);
+
+    if (slotIDForModal.includes("home")) {
+        return document.getElementById("home-university-name").innerText;;
+    } else if (slotIDForModal.includes("target")) {
+        return document.getElementById("target-university-name").innerText;
+    }
+}
+
 
 // Function to render units to the grid
 function renderUnitsInModal(unitSlotID, units) {
@@ -437,6 +443,7 @@ function addUnitToSlot(unitSlotID, unit) {
 
 // Remove unit from the unitSlot
 function removeUnitFromSlot(unitSlotID) {
+
     // Get unitSlot and remove unit data
     const unitSlot = document.getElementById(unitSlotID);
     replaceSearchContainer(unitSlot);
@@ -502,6 +509,7 @@ function createUnitCard(unitSlotID, unit, type) {
     const unitCardDiv = document.createElement('div');
     unitCardDiv.className = 'unit-card';
 
+
     // Extract course code and other data
     const courseCode = unit.course && unit.course[0].courseCode ? unit.course[0].courseCode : ' ';
 
@@ -514,10 +522,13 @@ function createUnitCard(unitSlotID, unit, type) {
         <div class="unit-top">
             <span class="courseCode">${courseCode}</span>
             <div class="unit-icons">
+                    ${unit.isCustomUnit ? '<button class="custom-tag" disabled>Custom</button>' : ''}
                     <button class="unit-icons-btn" id="info-icon">i</button>
                     <button class="unit-icons-btn" id=${actionBtnId}>${actionBtnIcon}</button>
             </div>
         </div>
+
+
 
         <h3 class="unit-name-text">${unit.unitName}</h3>
 
