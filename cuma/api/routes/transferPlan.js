@@ -1,8 +1,13 @@
 import express from 'express';
 import authenticateToken from '../middleware/authenticateToken.js';
+import User from '../models/UserSchema.js';
+import gemini from '../../ai/geminiTest.js';
 const router = express.Router();
 
-const CLIENT = "CUMA";
+
+// For testing 
+const CLIENT = "CUMA_TEST";
+// const CLIENT = "CUMA";
 const TRANSFER_PLAN_COLLECTION = "transferPlans";
 
 async function getTransferPlanDBCollection(req) {
@@ -16,7 +21,7 @@ async function getTransferPlanDBCollection(req) {
  * @param {Object} req request
  * @returns 
  */
-import gemini from '../../ai/geminiTest.js';
+
 
 function getEmail(req) {
     // No user detected
