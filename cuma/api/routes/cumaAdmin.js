@@ -129,10 +129,6 @@ router.put('/reject-user/:id', async (req, res) => {
     }
 });
 
-router.post('/login')
-router.post('/logout')
-router.get('/me')
-
 router.get('/search-users', async (req, res) => {
     try {
         const {search} = req.query;
@@ -157,7 +153,6 @@ router.get('/search-users', async (req, res) => {
         return res.status(500).json({message: 'Internal server error'});
     }
 });
-router.get('/filter-users')
 
 
 export default router;

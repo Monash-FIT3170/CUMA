@@ -41,13 +41,12 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'User already exists' });
         }
 
-        // Role checking via email domain
         let role = 'general_user';
-        if (email.endsWith('@student.monash.edu')) {
+        const emailHD = email.split('@')[1];
+
+        if (emailHD.endsWith('.edu')) {
             role = 'student';
-        } else if (email.endsWith('@monash.edu')) {
-            role = 'course_director';
-        }
+        } 
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
@@ -59,7 +58,7 @@ router.post('/signup', async (req, res) => {
             firstName,
             lastName,
             role,
-            status: 'pending_role',
+            status: role === 'general_user' ? 'pending_role' : 'pending_verification',
             mfaEnabled: false,
             mfaSecret: null
         }
@@ -68,10 +67,18 @@ router.post('/signup', async (req, res) => {
             userData: pendingUser,
             expiresIn: Date.now() + 5 * 60 * 1000
         }
+        
+        let nextStep = '';
+
+        if (role === 'general_user') {
+            nextStep = '/signup/role-verification';
+        } else {
+            nextStep = '/signup/verification-pending';
+        }
 
         return res.status(201).json({ 
             message: 'Initial signup successful. Please proceed with additional information.',
-            nextStep: '/signup/role-verification'
+            nextStep
         });
 
     } catch (error) {
