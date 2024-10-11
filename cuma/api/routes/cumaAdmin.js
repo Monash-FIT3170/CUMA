@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/users', async (req, res) => {
     try {
-        const users = await User.find({}).select('-hashedPassword -userGoogleId -additional_info._id').lean();
+        const users = await User.find({role: {$ne: 'admin'}}).select('-hashedPassword -userGoogleId -additional_info._id').lean();
         return res.status(200).json({message: 'Sucessfully retrieved all users data', data: users});
 
     } catch (error) {
