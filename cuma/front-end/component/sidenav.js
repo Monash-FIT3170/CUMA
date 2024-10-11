@@ -239,25 +239,24 @@ style = `
 
 sidenav.innerHTML = `
     <style>${style}</style>
-
     <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
-            <a href="/transfer-plans" class="sidebar-link">
+            <a href="/transfer-plans" class="sidebar-link" id="planner-link">
                 <img src="images/planner.png" class="sidebar-img"> Planner
             </a>
-            <a href="/mapping" class="sidebar-link">
+            <a href="/mapping" class="sidebar-link" id="mapping-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
-            <a href="/add-unit" class="sidebar-link">
+            <a href="/add-unit" class="sidebar-link" id="add-unit-link">
                 <img src="images/icons8-navigation-96.png" class="sidebar-img"> Add Unit
             </a>
-            <a href="/unit-info" class="sidebar-link">
+            <a href="/unit-info" class="sidebar-link" id="unit-info-link">
                 <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img"> Unit Info
             </a>
-            <a href="/profile" class="sidebar-link">
+            <a href="/profile" class="sidebar-link" id="profile-link">
                 <img src="images/icons8-person-96.png" class="sidebar-img"> Profile
             </a>
-            <a href="/settings" class="sidebar-link">
+            <a href="/settings" class="sidebar-link" id="settings-link">
                 <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
             </a>
             <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
@@ -267,35 +266,51 @@ sidenav.innerHTML = `
 `;
 
 class Sidenav extends HTMLElement {
-    constructor(){
+    constructor() {
         super();
-        const shadow = this.attachShadow({mode: "open"});
-        shadow.append(sidenav.content.cloneNode(true));
+        this.attachShadow({ mode: "open" });
+        this.shadowRoot.append(sidenav.content.cloneNode(true));
+    }
+
+    connectedCallback() {
+        this.adjustVisibilityByRole();
+    }
+
+    adjustVisibilityByRole() {
+        const role = localStorage.getItem('userRole');
+        this.setupSideNav(role);  // Adjust UI based on the role
+    }
+
+    setupSideNav(role) {
+        const elementsToHide = {
+            'student': ['#mapping-link', '#add-unit-link', '#send-connections-button'],
+            'general_user': ['#mapping-link', '#add-unit-link'],
+            'course_director': ['#planner-link']
+        };
+
+        Object.entries(elementsToHide).forEach(([key, selectors]) => {
+            if (role === key) {
+                selectors.forEach(selector => {
+                    const element = this.shadowRoot.querySelector(selector);
+                    if (element) element.style.display = 'none';
+                });
+            }
+        });
     }
 
     static get observedAttributes() {
-        return ["isopen"]
-      }
-
-      
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "isopen"){
-            if (newValue == "true"){
-                this.shadowRoot.getElementById("sidebar").style.width = "200px";
-
-                this.shadowRoot.getElementById("sidebar-content").style.display = "block";
-            }
-            else if (newValue == "false"){
-                this.shadowRoot.getElementById("sidebar").style.width = "0";
-
-                this.shadowRoot.getElementById("sidebar-content").style.display = "none";
-            }
-        }
+        return ["isopen"];
     }
 
-
+    attributeChangedCallback(name, oldValue, newValue) {
+        const sidebar = this.shadowRoot.getElementById("sidebar");
+        const content = this.shadowRoot.getElementById("sidebar-content");
+        if (name === "isopen") {
+            sidebar.style.width = newValue === "true" ? "200px" : "0";
+            content.style.display = newValue === "true" ? "block" : "none";
+        }
+    }
 }
 
 customElements.define("sidenav-component", Sidenav);
-
 

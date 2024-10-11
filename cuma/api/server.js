@@ -84,14 +84,14 @@ app.get('/add-unit', authenticateToken, authorize(['course_director']), (req, re
   res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-add-unit.html'));
 });
 
-app.get('/unit-info', authenticateToken, authorize(['student', 'general_user']), (req, res) => {
+app.get('/unit-info', authenticateToken, authorize(['student', 'general_user', 'course_director']), (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-unit-info.html'));
 });
 app.get('/transfer-plans', authenticateToken, authorize(['student', 'general_user']) ,(req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-home.html'));
 });
 
-app.get('/transfer-plans/planner', authenticateToken, (req, res) => {
+app.get('/transfer-plans/planner', authenticateToken, authorize(['student', 'general_user']), (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'transfer-planner-mapping.html'));
 });
 
