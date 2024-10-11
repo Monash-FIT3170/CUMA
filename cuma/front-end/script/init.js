@@ -1,6 +1,7 @@
 async function initializeApp() {
     const user = await fetchUser();
     localStorage.setItem('userRole', user.role);
+    document.dispatchEvent(new CustomEvent('userInfoReady', { detail: user }));
 }
 
 async function fetchUser() {

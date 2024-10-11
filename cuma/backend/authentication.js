@@ -86,7 +86,6 @@ Backend.Auth.logout = async function () {
 
       if (response.status === 200) {
           // Redirect here in the client-side code
-          alert("Successfully logged out")
           window.location.href = '/login';
           return { result: result, status: response.status };
       } else {

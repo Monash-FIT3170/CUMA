@@ -273,12 +273,19 @@ class Sidenav extends HTMLElement {
     }
 
     connectedCallback() {
-        this.adjustVisibilityByRole();
+        document.addEventListener('userInfoReady', (event) => {
+            const user = event.detail;
+            this.adjustVisibilityByRole(user.role);
+        });
+
+        const initialRole = localStorage.getItem('userRole');
+        if (initialRole) {
+            this.adjustVisibilityByRole(initialRole);
+        }
     }
 
-    adjustVisibilityByRole() {
-        const role = localStorage.getItem('userRole');
-        this.setupSideNav(role);  // Adjust UI based on the role
+    adjustVisibilityByRole(role) {
+        this.setupSideNav(role);
     }
 
     setupSideNav(role) {
