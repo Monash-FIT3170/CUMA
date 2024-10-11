@@ -97,7 +97,7 @@ const UserSchema = new Schema({
     // Role and Status Fields
     role: { 
         type: String, 
-        enum: ['student', 'course_director', 'general_user'] 
+        enum: ['student', 'course_director', 'general_user', 'admin'] 
     },
     askingRole:{
         type: String,

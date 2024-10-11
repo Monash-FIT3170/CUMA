@@ -69,7 +69,9 @@ app.get('/', authenticateToken, (req, res) => {
       res.redirect('/mapping');
   } else if (req.user.role === 'student' || req.user.role === 'general_user') {
       res.redirect('/transfer-plans');
-  } else {
+  } else if (req.user.role === 'admin'){
+      res.redirect('/cuma-admin');
+  }else {
       res.status(403).send('Unauthorized role');
   }
 });
@@ -107,7 +109,7 @@ app.get('/settings', authenticateToken, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'nav-setting.html'));
 });
 
-app.get('/cuma-admin', (req, res) => {
+app.get('/cuma-admin', authenticateToken, authorize(['admin']), (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'front-end', 'admin', 'pages', 'super-admin-dashboard.html'));
 });
 
