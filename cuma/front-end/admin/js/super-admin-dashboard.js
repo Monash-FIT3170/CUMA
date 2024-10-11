@@ -36,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Placeholder logout button event listener
     document.getElementById('logout-btn').addEventListener('click', () => {
-        Backend.Auth.logout().then(() => {
+        Backend.Auth.logout().then((response) => {
+                alert(response.result.message);
                 console.log("Logout successful");
             }).catch(error => {
                 console.error("An error occurred during logout:", error);
