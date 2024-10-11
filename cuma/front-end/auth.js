@@ -116,7 +116,7 @@ function verifyLoginTOTPToken() {
     Backend.Auth.verifyMFA(token).then(response => {
         if (response.status === 201) { // Assuming backend uses 200 for success
             alert("Success: " + response.message);
-            window.location.href = "/index";
+            window.location.href = "/";
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
