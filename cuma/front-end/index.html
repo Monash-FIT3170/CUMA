@@ -41,7 +41,7 @@
                     <!-- Dynamic units will be appended here -->
                 </div>
             </div>
-            <button class="add-unit" onclick="toggleAddUnitForm()" style="display: none;">Add Unit</button>
+            <button class="add-unit" onclick="toggleAddUnitForm()">Add Unit</button>
         </div>
     </section>
     
@@ -99,8 +99,8 @@
         <p><strong>Code:</strong> <span id="display-unit-id">N/A</span></p>
         <p id="display-unit-description">Select a unit to see the details</p>
 
-        <button id="modify-unit-button" onclick="modifyUnit()" >Modify Unit</button>
-        <button id="delete-unit-button" onclick="deleteUnit()">Delete Unit</button>
+        <button id="modify-unit-button" onclick="modifyUnit()" style="display: none;" >Modify Unit</button>
+        <button id="delete-unit-button" onclick="deleteUnit()" style="display: none;">Delete Unit</button>
         <button onclick="toggleAddConnection()">Add Unit Connection</button>
     </section>
 

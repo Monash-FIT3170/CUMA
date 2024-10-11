@@ -92,7 +92,7 @@ function addUnit() {
             Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
                 if (!handleResponse(response)) {
                     // if no error
-                    // repopulateResults()
+                    repopulateResults()
                 }
             });
 
@@ -130,7 +130,7 @@ function addUnit() {
             // handles any error
             if (handleResponse(response) == 0) {
                 // if no error, then repopulate the result
-                // repopulateResults()
+                repopulateResults()
             }
         });
     }
@@ -340,11 +340,9 @@ function selectUnit(unitElement) {
     // Display mapped units for this selected unit
     displayMappedUnits(selectedUnitCode);
 
-    // Show the Modify and Delete buttons only for non-student roles
-    if (userRole === 'course_director') {
-        document.getElementById('modify-unit-button').style.display = 'inline-block';
-        document.getElementById('delete-unit-button').style.display = 'inline-block';
-    }
+    // Show the Modify and Delete buttons
+    document.getElementById('modify-unit-button').style.display = 'inline-block';
+    document.getElementById('delete-unit-button').style.display = 'inline-block';
 }
 
 
@@ -591,7 +589,7 @@ function addConnectionExistingUnit(foeignUnitDiv) {
 
     Backend.UnitConnection.add(unitInfo).then(response => {
         handleResponse(response);
-        // repopulateResults();
+        repopulateResults();
     });
 }
 
@@ -609,7 +607,6 @@ async function fetchAndDisplayUserInfo() {
 
             // Also update any other parts of the UI that depend on user info
             updateUserDisplay(response.data);
-            updateUIBasedOnRole(response.data.role);
         } else {
             console.error('Failed to fetch user info:', response);
         }
@@ -640,42 +637,6 @@ function updateUserDisplay(userData) {
         console.error('User info display container not found.');
     }
 }
-
-function updateUIBasedOnRole(userRole) {
-    const addUnitButton = document.querySelector('.add-unit');
-    const modifyUnitButton = document.getElementById('modify-unit-button');
-    const deleteUnitButton = document.getElementById('delete-unit-button');
-    const sendConnectionsButton = document.getElementById('send-connections-button');
-
-    // hide all buttons
-    if (addUnitButton) addUnitButton.style.display = 'none';
-    if (modifyUnitButton) modifyUnitButton.style.display = 'none';
-    if (deleteUnitButton) deleteUnitButton.style.display = 'none';
-    if (sendConnectionsButton) sendConnectionsButton.style.display = 'none';
-
-    // Configure UI based on user role
-    switch (userRole) {
-        case 'course_director':
-            // Course directors can do everything
-            if (addUnitButton) addUnitButton.style.display = 'block';
-            if (modifyUnitButton) modifyUnitButton.style.display = 'block';
-            if (deleteUnitButton) deleteUnitButton.style.display = 'block';
-            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
-            break;
-        case 'student':
-            // Students cannot add, modify, or delete units
-            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
-            break;
-        case 'general_user':
-            // General users cannot add, modify, delete units or send connections
-            break;
-
-        default:
-            break;
-    }
-}
-
-
 
 async function getTopThreeSimilarUnits() {
     const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
@@ -790,10 +751,6 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
     });
 }
 
-// Call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
 
 // call every render
 document.addEventListener('DOMContentLoaded', () => {

@@ -20,6 +20,18 @@ document.addEventListener('DOMContentLoaded', (req, res) => {
         }
     })();
 
+    // Add this event listener for userInfoReady
+    document.addEventListener('userInfoReady', (event) => {
+        const user = event.detail;
+        updateApprovalButtonVisibility(user.role);
+    });
+
+    // Check if the role is already in localStorage (in case the event has already fired)
+    const storedRole = localStorage.getItem('userRole');
+    if (storedRole) {
+        updateApprovalButtonVisibility(storedRole);
+    }
+
 });
 
 // ---------- Transfer Planner Logic ---------- //
@@ -305,6 +317,18 @@ function sendTransferForApproval() {
 async function saveUnitConnections() {
     const unitMappings = getUnitMappings();
     updateTransferPlan(plannerName.textContent, unitMappings);
+}
+
+// Utils- handling approval button visibility
+function updateApprovalButtonVisibility(role) {
+    const sendApprovalButton = document.querySelector('.btn.send-approval');
+    if (sendApprovalButton) {
+        if (role === 'student') {
+            sendApprovalButton.style.display = 'inline-block';
+        } else {
+            sendApprovalButton.style.display = 'none';
+        }
+    }
 }
 
 // ---------- Add Unit Modal Logic ---------- //
