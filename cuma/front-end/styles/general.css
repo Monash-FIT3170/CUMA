@@ -208,7 +208,7 @@ textarea {
 .add-unit-form .input-container textarea,
 .add-connection-form .input-container input,
 .add-connection-form .input-container select,
-.add-connection-form .input-container textarea {
+.add-connection-form .unit-info-section .input-container textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
