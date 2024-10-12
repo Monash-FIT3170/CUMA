@@ -497,7 +497,7 @@ function addAIRecommendationIcons(results, homeUnitCode) {
 
                         // Append the AI icon & tooltip to the icons container
                         aiIcon.appendChild(tooltip);
-                        infoIconContainer.appendChild(aiIcon);
+                        infoIconContainer.insertBefore(aiIcon, infoIconContainer.firstChild);
                     }
                 }
             } else {
@@ -622,7 +622,7 @@ function createUnitCard(unitSlotID, unit, type) {
     const courseCode = unit.course && unit.course[0].courseCode ? unit.course[0].courseCode : ' ';
 
     // Create action button based on type
-    const actionBtnIcon = type === 'add' ? '+' : 'x'
+    const actionBtnIcon = type === 'add' ? '➕' : '╳'
     const actionBtnId = type === 'add' ? "btn-add-unit" : "btn-remove-unit"
 
     // Add unit code to each unit card as ID
@@ -633,7 +633,7 @@ function createUnitCard(unitSlotID, unit, type) {
         <div class="unit-top">
             <span class="courseCode">${courseCode}</span>
             <div class="unit-icons">
-                    <button class="unit-icons-btn" id="info-icon">i</button>
+                    <button class="unit-icons-btn" id="info-icon">𝚒</button>
                     <button class="unit-icons-btn" id=${actionBtnId}>${actionBtnIcon}</button>
             </div>
         </div>

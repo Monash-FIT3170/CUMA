@@ -925,7 +925,7 @@ span.arrow-icon {
 .ai-recommendation-icon {
   position: relative;
   display: inline-block;
-  margin-left: 5px;
+  margin-top: 2px;
   color: gold;
   cursor: help;
   font-size: 1rem;
