@@ -204,6 +204,36 @@ router.post('/enable-mfa', async (req, res) => {
     }
 });
 
+// Skip MFA setup
+router.get('/skip-mfa', async (req, res) => {
+    try {
+        const sessionUser = req.session.pendingSignupUser.userData;
+        if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+            delete req.session.pendingSignupUser;  // Delete the session if it has expired
+            return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+        }
+        const email = sessionUser.email;
+
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
+        if (!existingUser) {
+            return res.status(400).json({ error: 'User not found, please try again' });
+        }
+
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
+        delete req.session.pendingSignupUser;
+
+        return res.status(200).json({ 
+            message: 'Login successful',
+            nextStep: '/'
+        });
+
+    } catch (error) {
+        console.error('Error skipping mfa: ', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+        
+    }
+});
+
 // Default login process routers
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
