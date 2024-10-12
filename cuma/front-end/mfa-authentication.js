@@ -34,9 +34,10 @@ function handleVerifyTOTP(e) {
     Backend.Auth.enableMFA(token).then(response => {
         if (response.status === 200) { // Assuming backend uses 200 for success
             alert("Success: " + response.message);
-            window.location.href = "/login";
+            window.location.href = "/";
         } else {
             alert("Error " + response.status + ": " + response.error);
+            window.location.href = "/login";
         }
     }).catch(error => {
         console.error("An error occurred:", error);

@@ -193,6 +193,7 @@ router.post('/enable-mfa', async (req, res) => {
         existingUser.mfaEnabled = true;
         await existingUser.save();
 
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
         delete req.session.pendingSignupUser;
 
         return res.status(200).json({ message: 'MFA enabled successfully' });
@@ -318,14 +319,6 @@ router.get('/oauth2callback', async (req, res) => {
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data;
 
-        // Verification of user role
-        let role = 'general_user';
-        if (userData.email.endsWith('@student.monash.edu')) {
-            role = 'student';
-        } else if (userData.email.endsWith('@monash.edu')) {
-            role = 'course_director';
-        }
-
         let existingUser = await AuthUtils.fetchExistingGoogleUserFromDB(userData.id);
         if (!existingUser) {
             existingUser = new User({
@@ -335,7 +328,7 @@ router.get('/oauth2callback', async (req, res) => {
                 emailHD: userData.hd,
                 firstName: userData.given_name,
                 lastName: userData.family_name,
-                role,
+                role: 'student',
                 status: 'active'
             });
         }
