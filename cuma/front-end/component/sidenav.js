@@ -249,9 +249,6 @@ sidenav.innerHTML = `
             <a href="/mapping" class="sidebar-link" id="mapping-link">
                 <img src="images/mapping.png" class="sidebar-img"> Mapping
             </a>
-            <a href="/add-unit" class="sidebar-link" id="add-unit-link">
-                <img src="images/icons8-navigation-96.png" class="sidebar-img"> Add Unit
-            </a>
             <a href="/unit-info" class="sidebar-link" id="unit-info-link">
                 <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img"> Unit Info
             </a>
