@@ -255,9 +255,6 @@ sidenav.innerHTML = `
             <a href="/profile" class="sidebar-link" id="profile-link">
                 <img src="images/icons8-person-96.png" class="sidebar-img"> Profile
             </a>
-            <a href="/settings" class="sidebar-link" id="settings-link">
-                <img src="images/icons8-cog-96.png" class="sidebar-img"> Settings
-            </a>
             <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
             <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
         </div>
