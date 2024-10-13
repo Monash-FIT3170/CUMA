@@ -28,17 +28,15 @@ style = `
     }
 
     .sidebar-link {
-        padding-top: 15px;
-        padding-bottom: 15px;
-        padding-left: 15px;
+        padding: 15px;
         cursor: pointer;
         display: flex;
-        flex-direction: row;
         align-items: center;
         color: rgb(80, 80, 80);
         font-size: 20px;
         transition: background-color 0.3s, color 0.3s;
         text-decoration: none;
+        width: 100%;
     }
 
     .sidebar-link.dark-mode {
@@ -46,8 +44,8 @@ style = `
     }
 
     .sidebar-link:hover {
-        background-color: #e0e0e0;
-        color: rgb(50, 50, 50);
+        background-color: rgba(154, 179, 251, 0.5);
+        border-radius: 10px;
     }
 
     .sidebar-link.dark-mode:hover {
@@ -57,10 +55,8 @@ style = `
 
     .sidebar-img {
         height: 30px;
+        width: 30px;
         margin-right: 10px;
-        display: inline-block;
-        vertical-align: middle;
-        transition: filter 0.3s;
     }
 
     .sidebar-img.dark-mode {
@@ -98,17 +94,6 @@ style = `
         width: 150px;
     }
 
-    nav button.sidebar-button {
-        width: 100%;
-        margin-top: 10px;
-        margin-bottom: 5px;
-        margin-left: 5px;
-    }
-
-    nav button.sidebar-button:hover {
-        background-color: #3b90d5;
-    }
-
     /* Apply Hover Effect and Transitions */
     .sidebar a {
         display: flex;
@@ -121,7 +106,7 @@ style = `
         display: flex;
         align-items: center;
         padding: 15px;
-        font-size: 20px;
+        font-size: 18px;
         width: 100%;
     }
 
@@ -134,16 +119,6 @@ style = `
         margin-right: 10px;
         width: 30px;
         height: 30px;
-    }
-
-    /* Dark Mode for Buttons */
-    .sidebar-button.dark-mode {
-        background-color: #444;
-        color: white;
-    }
-
-    .sidebar-button.dark-mode:hover {
-        background-color: #3b90d5;
     }
 
     /* Header Styling */
@@ -224,19 +199,6 @@ style = `
     body.dark-mode .profile-detail-element h3 {
         color: #ffffff; /* White heading color in dark mode */
     }
-
-    button {
-        background-color: #4da5f5; 
-        color: white; /* Text color */
-        border: none; /* Remove default border */
-        border-radius: 4px; /* Rounded corners */
-        padding: 10px 20px; /* Spacing inside the button */
-        font-size: 16px; /* Font size */
-        font-weight: bold; /* Font weight */
-        cursor: pointer; /* Pointer cursor on hover */
-        transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background color and scaling */
-        outline: none; /* Remove outline */
-    }
 `
 
 sidenav.innerHTML = `
@@ -244,19 +206,23 @@ sidenav.innerHTML = `
     <nav class="sidebar" id="sidebar">
         <div id="sidebar-content">
             <a href="/transfer-plans" class="sidebar-link" id="planner-link">
-                <img src="images/planner.png" class="sidebar-img"> Planner
+                <img src="images/planner.png" class="sidebar-img" alt="Planner"> Planner
             </a>
             <a href="/mapping" class="sidebar-link" id="mapping-link">
-                <img src="images/mapping.png" class="sidebar-img"> Mapping
+                <img src="images/mapping.png" class="sidebar-img" alt="Mapping"> Mapping
             </a>
             <a href="/unit-info" class="sidebar-link" id="unit-info-link">
-                <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img"> Unit Info
+                <img src="images/bl_1645_Search_seo_magnifier_earth_globe_internet-512.webp" class="sidebar-img" alt="Unit Info"> Unit Info
             </a>
             <a href="/profile" class="sidebar-link" id="profile-link">
-                <img src="images/icons8-person-96.png" class="sidebar-img"> Profile
+                <img src="images/icons8-person-96.png" class="sidebar-img" alt="Profile"> Profile
             </a>
-            <button class="sidebar-button" id="send-connections-button" onclick="userSendConnections()">Send Connections</button>
-            <button class="sidebar-button" id="logout-button" onclick="userLogout()">Logout</button>
+            <a href="javascript:void(0)" class="sidebar-link" id="send-connections-link" onclick="userSendConnections()">
+                <img src="images/email.png" class="sidebar-img" alt="Send Connections"> Send Connections
+            </a>
+            <a href="javascript:void(0)" class="sidebar-link" id="logout-link" onclick="userLogout()">
+                <img src="images/logout.png" class="sidebar-img" alt="Logout"> Logout
+            </a>
         </div>
     </nav>
 `;
@@ -286,8 +252,8 @@ class Sidenav extends HTMLElement {
 
     setupSideNav(role) {
         const elementsToHide = {
-            'student': ['#mapping-link', '#add-unit-link', '#send-connections-button'],
-            'general_user': ['#mapping-link', '#add-unit-link', '#send-connections-button'],
+            'student': ['#mapping-link', '#add-unit-link', '#send-connections-link'],
+            'general_user': ['#mapping-link', '#add-unit-link', '#send-connections-link'],
             'course_director': ['#planner-link']
         };
 
