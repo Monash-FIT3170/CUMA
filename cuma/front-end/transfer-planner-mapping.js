@@ -332,12 +332,19 @@ function sendTransferForApproval() {
     const unitMappings = getUnitMappings();
     connectionsToSend = [];
     for (mapping of unitMappings) {
-        if (mapping.targetUnit == null) continue;
+        targetUnitUniversityName = "NULL";
+        targetUnitUnitCode= "NULL";
+
+        if (mapping.targetUnit != null) {
+            targetUnitUniversityName = mapping.targetUnit.universityName;
+            targetUnitUnitCode = mapping.targetUnit.unitCode;
+        }
+
         const connection = {
             "universityNameA": mapping.homeUnit.universityName,
             "unitCodeA": mapping.homeUnit.unitCode,
-            "universityNameB": mapping.targetUnit.universityName,
-            "unitCodeB": mapping.targetUnit.unitCode
+            "universityNameB": targetUnitUniversityName,
+            "unitCodeB": targetUnitUnitCode
         }
         connectionsToSend.push(connection);
     }

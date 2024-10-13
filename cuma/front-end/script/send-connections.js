@@ -3,7 +3,7 @@ async function userSendConnections(connections) {
     // TODO: Perhaps change email to be dynamic, or to admin CUMA email
     const email = "change@me.com";
     emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n";
-
+    nullUnit = "NULL";
     if (connections == null) {
         await Backend.UnitConnection.getAllUserConnections().then(req => {
             if (!req.connections || req.connections.length === 0 || req.error) {
@@ -17,7 +17,11 @@ async function userSendConnections(connections) {
     connections.map(connection => {
         const { universityNameA, unitCodeA, universityNameB, unitCodeB } = connection;
         if (universityNameA && unitCodeA && universityNameB && unitCodeB) {
-            emailBody += "\n" + universityNameA + " - " + unitCodeA + " to " + universityNameB + " - " + unitCodeB;
+            if (universityNameB == nullUnit) {
+                emailBody += "\n" + universityNameA + " - " + unitCodeA + " → " + nullUnit;
+            } else {
+                emailBody += "\n" + universityNameA + " - " + unitCodeA + " → " + universityNameB + " - " + unitCodeB;
+            }
         }
     });
     window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
