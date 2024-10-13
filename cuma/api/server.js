@@ -6,6 +6,8 @@ import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
 import scraper from './routes/webscraperEndpoint.js'
 import transferPlan from './routes/transferPlan.js';
+import scraper from './routes/webscraperEndpoint.js'
+import ai from './routes/ai.js'
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
@@ -56,6 +58,7 @@ app.use('/api/unitConnection/', unitConnection);
 app.use('/api/authentication/', authentication);
 app.use('/api/cuma-admin', cumaAdmin);
 app.use('/api/transferPlan/', transferPlan);
+app.use('/api/ai/', ai);
 app.use('/api/webscraperEndpoint/',scraper);
 
 // Page Link routes
