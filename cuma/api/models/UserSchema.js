@@ -105,8 +105,7 @@ const UserSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['pending_role', 'pending_verification', 'active', 'rejected'],
-        default: 'pending_role',
+        enum: ['pending_role', 'active', 'rejected']
     },
 
     // Additional Information for Role Verification
