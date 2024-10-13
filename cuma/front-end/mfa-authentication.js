@@ -34,7 +34,23 @@ function handleVerifyTOTP(e) {
     Backend.Auth.enableMFA(token).then(response => {
         if (response.status === 200) { // Assuming backend uses 200 for success
             alert("Success: " + response.message);
+            window.location.href = "/";
+        } else {
+            alert("Error " + response.status + ": " + response.error);
             window.location.href = "/login";
+        }
+    }).catch(error => {
+        console.error("An error occurred:", error);
+        alert("An error occurred: " + error.message);
+    });
+}
+
+function handleSkipMFA(e) {
+    e.preventDefault();
+    
+    Backend.Auth.skipMFA().then(response => {
+        if (response.status === 200) {
+            window.location.href = response.nextStep;
         } else {
             alert("Error " + response.status + ": " + response.error);
         }
@@ -62,9 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const skipMFA = document.getElementById('signup-mfa-skip');
     if (skipMFA) {
-        skipMFA.addEventListener('click', () => {
-            window.location.href = '/login';
-        });
+        skipMFA.addEventListener('click', handleSkipMFA);
     }
 
     const continueMFA = document.getElementById('mfa-setup-continue');

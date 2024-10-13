@@ -41,13 +41,12 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'User already exists' });
         }
 
-        // Role checking via email domain
         let role = 'general_user';
-        if (email.endsWith('@student.monash.edu')) {
+        const emailHD = email.split('@')[1];
+
+        if (emailHD.endsWith('.edu')) {
             role = 'student';
-        } else if (email.endsWith('@monash.edu')) {
-            role = 'course_director';
-        }
+        } 
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
@@ -59,19 +58,30 @@ router.post('/signup', async (req, res) => {
             firstName,
             lastName,
             role,
-            status: 'pending_role',
+            status: role === 'general_user' ? 'pending_role' : 'active',
             mfaEnabled: false,
             mfaSecret: null
         }
+
+        const newUser = new User(pendingUser);
+        await newUser.save();
 
         req.session.pendingSignupUser = {
             userData: pendingUser,
             expiresIn: Date.now() + 5 * 60 * 1000
         }
+        
+        let nextStep = '';
+
+        if (role === 'general_user') {
+            nextStep = '/signup/role-verification';
+        } else {
+            nextStep = '/signup/mfa-init';
+        }
 
         return res.status(201).json({ 
             message: 'Initial signup successful. Please proceed with additional information.',
-            nextStep: '/signup/role-verification'
+            nextStep
         });
 
     } catch (error) {
@@ -91,6 +101,11 @@ router.post('/role-verification', async (req, res) => {
 
         const pendingUserData = sessionUser.userData;
 
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(pendingUserData.email);
+        if (!existingUser) {
+            return res.status(400).json({ error: 'User not found, please log in again' });
+        }
+
         const { 
             askingRole, university, major, studentId
         } = req.body;
@@ -101,26 +116,19 @@ router.post('/role-verification', async (req, res) => {
             return res.status(400).json({ message: 'Invalid role selected.' });
         }
 
-        let additionalInfo = {
+        existingUser.askingRole = askingRole;
+        existingUser.additional_info = {
             university,
             major,
             studentId
         };
-
-        const newUser = new User({
-            ...pendingUserData,
-            askingRole,
-            additional_info: additionalInfo,
-            verificationRequestedAt: new Date()
-        });
-
-        // Save the user to the database
-        await newUser.save();
+        existingUser.verificationRequestedAt = new Date();
+        await existingUser.save();
 
         res.status(200).json({ 
             message: 'Role information added successfully.', 
             nextStep: '/signup/mfa-init',
-            userEmail: newUser.email
+            userEmail: existingUser.email
         });
 
     } catch (error) {
@@ -186,6 +194,7 @@ router.post('/enable-mfa', async (req, res) => {
         existingUser.mfaEnabled = true;
         await existingUser.save();
 
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
         delete req.session.pendingSignupUser;
 
         return res.status(200).json({ message: 'MFA enabled successfully' });
@@ -193,6 +202,40 @@ router.post('/enable-mfa', async (req, res) => {
     } catch (error) {
         console.error('Error enabling mfa: ', error);
         return res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// Skip MFA setup
+router.get('/skip-mfa', async (req, res) => {
+    try {
+        const sessionUser = req.session.pendingSignupUser;
+        if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+            delete req.session.pendingSignupUser;  // Delete the session if it has expired
+            return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+        }
+        const userData = sessionUser.userData;
+        const email = userData.email;
+
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
+        if (!existingUser) {
+            return res.status(400).json({ error: 'User not found, please try again' });
+        }
+        
+        existingUser.mfaEnabled = false;
+        await existingUser.save();
+
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
+        delete req.session.pendingSignupUser;
+
+        return res.status(200).json({ 
+            message: 'Login successful',
+            nextStep: '/'
+        });
+
+    } catch (error) {
+        console.error('Error skipping mfa: ', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+        
     }
 });
 
@@ -311,14 +354,6 @@ router.get('/oauth2callback', async (req, res) => {
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data;
 
-        // Verification of user role
-        let role = 'general_user';
-        if (userData.email.endsWith('@student.monash.edu')) {
-            role = 'student';
-        } else if (userData.email.endsWith('@monash.edu')) {
-            role = 'course_director';
-        }
-
         let existingUser = await AuthUtils.fetchExistingGoogleUserFromDB(userData.id);
         if (!existingUser) {
             existingUser = new User({
@@ -328,7 +363,7 @@ router.get('/oauth2callback', async (req, res) => {
                 emailHD: userData.hd,
                 firstName: userData.given_name,
                 lastName: userData.family_name,
-                role,
+                role: 'student',
                 status: 'active'
             });
         }

@@ -144,6 +144,29 @@ Backend.Auth.enableMFA = async function (token) {
   }
 };
 
+Backend.Auth.skipMFA = async function () {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/skip-mfa");
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result };
+    
+  } catch (error) {
+    console.log("Error skipping MFA:", error);
+    throw error;
+    
+  }
+};
+
 Backend.Auth.verifyMFA = async function (token) {
   try {
     const url = new URL(serverPath + authBackendPath + "/verify-mfa");

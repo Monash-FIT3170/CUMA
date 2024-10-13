@@ -155,7 +155,6 @@ function handleStudentFormSubmission(e) {
 
     Backend.Auth.roleVerificationInfo(additionalInfo).then(response => {
         if (response.status === 200) {
-            alert("Success: " + response.message);
             showSubmissionComplete(response.nextStep, response.userEmail);
         } else {
             alert("Error " + response.status + ": " + response.error);
