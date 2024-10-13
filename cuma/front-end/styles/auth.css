@@ -18,7 +18,7 @@ html {
 }
 
 .left-section {
-  background-color: #58c4f4;
+  background-color: #47C4F3;
   color: white;
   flex: 1;
   display: flex;
@@ -260,4 +260,34 @@ html {
 #user-type-selection p {
   font-size: small;
   margin: 5px 0;
+}
+
+.sign-up-forget-password {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 14px;
+}
+
+.sign-up-forget-password a {
+  color: #3b5998;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.sign-up-forget-password a:hover {
+  color: #2d4373;
+  text-decoration: underline;
+}
+
+.sign-up-forget-password .signup b {
+  font-weight: 600;
+}
+
+.sign-up-forget-password .forgot-password {
+  color: #606060;
+}
+
+.sign-up-forget-password .forgot-password:hover {
+  color: #3b5998;
 }
