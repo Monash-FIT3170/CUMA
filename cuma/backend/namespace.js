@@ -1,5 +1,5 @@
 // creating a namespace
-const serverPath = "http://localhost:3000";
+const serverPath = "https://cumamonash.xyz";
 var Backend = {
     Unit: {},
     UnitConnection: {},

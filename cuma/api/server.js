@@ -25,7 +25,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const serverPath = "http://localhost:" + port
+const serverPath = "https://cumamonash.xyz"
 // Change the URI to MONGODB_URI for production
 const client = new MongoClient(process.env.TEST_MONGODB_URI);
 
