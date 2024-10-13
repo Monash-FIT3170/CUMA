@@ -290,7 +290,7 @@ class Sidenav extends HTMLElement {
     setupSideNav(role) {
         const elementsToHide = {
             'student': ['#mapping-link', '#add-unit-link', '#send-connections-button'],
-            'general_user': ['#mapping-link', '#add-unit-link'],
+            'general_user': ['#mapping-link', '#add-unit-link', '#send-connections-button'],
             'course_director': ['#planner-link']
         };
 

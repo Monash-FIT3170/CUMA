@@ -2,7 +2,39 @@
 
 let transferPlanData = {};
 
+let possibleMapping = {};
 
+// Set key (home unit slot ID) & value (selected home unit) pairs for querying AI for recommendations later
+function setSelectedHomeUnit(unitSlotID, unit) {
+    let formatedUnit = {
+        unitName: unit.unitName,
+        unitCode: unit.unitCode,
+        unitDescription: unit.unitDescription,
+        unitLevel: unit.unitLevel,
+        universityName: unit.universityName,
+        faculty: unit.faculty,
+        creditPoints: unit.creditPoints
+    }
+    possibleMapping[unitSlotID] = formatedUnit;
+}
+
+// Set key (target unit slot ID) & value (all possible target units) pairs for querying AI for recommendations later
+function setPossibleTargetUnits(unitSlotID, units) {
+    let formattedUnits = []
+    for (let unit of units) {
+        let formatedUnit = {
+            unitName: unit.unitName,
+            unitCode: unit.unitCode,
+            unitDescription: unit.unitDescription,
+            unitLevel: unit.unitLevel,
+            universityName: unit.universityName,
+            faculty: unit.faculty,
+            creditPoints: unit.creditPoints
+        }
+        formattedUnits.push(formatedUnit);
+    }
+    possibleMapping[unitSlotID] = formattedUnits;
+}
 
 document.addEventListener('DOMContentLoaded', (req, res) => {
 
@@ -394,6 +426,12 @@ async function setupUnitsModal(universityName, unitSlotID) {
         Backend.TransferPlan.getAllCustomUnitsFrom(universityName).then(customUnitsData => {
             allUnits = UnitArray.concat(customUnitsData.result); 
             renderUnitsInModal(unitSlotID, allUnits);
+
+            // Add all possible target units to possible mapping to query AI recommendations
+            if (unitSlotID.includes("target")) {
+                setPossibleTargetUnits(unitSlotID, allUnits);
+                getAIRecommendations(unitSlotID);
+            }
         });
     })
     .catch(error => {
@@ -421,6 +459,83 @@ function getUniName() {
     }
 }
 
+
+// Provide the selected home unit and all possible target units to query AI for mapping recommendations
+function getAIRecommendations(targetUnitSlotID) {
+    let homeUnitSlotID = null;
+    switch (targetUnitSlotID) {
+        case "target-unit-slot-1":
+            homeUnitSlotID = "home-unit-slot-1";
+            break;
+        case "target-unit-slot-2":
+            homeUnitSlotID = "home-unit-slot-2";
+            break;
+        case "target-unit-slot-3":
+            homeUnitSlotID = "home-unit-slot-3";
+            break;
+        case "target-unit-slot-4":
+            homeUnitSlotID = "home-unit-slot-4";
+            break;
+    }
+
+    // Query & process AI recommendations
+    console.log("Querying AI for unit mapping recommendations...");
+    const homeUnit = possibleMapping[homeUnitSlotID];
+    const targetUnits = possibleMapping[targetUnitSlotID];
+    Backend.AI.AIMatch(homeUnit, targetUnits)
+    .then(results => {     
+        const aiResults = JSON.parse(results.result);
+        addAIRecommendationIcons(aiResults, homeUnit.unitCode);
+    })
+    .catch(error => {
+        console.error("Error querying & processing AI recommendations:", error);
+    });
+}
+
+
+// Function to add AI recommendation icons to units with similarity score > 6
+function addAIRecommendationIcons(results, homeUnitCode) {
+    console.log("AI results: ");
+    console.log(results);
+
+    // Iterate through each unit in the AI results
+    for (const [unitCode, similarityScore] of Object.entries(results)) {
+        if (unitCode !== homeUnitCode && similarityScore > 6) {
+            console.log(`Found AI-recommended unit: ${unitCode} - similarity score: ${similarityScore}`);
+
+            // Find the unit card element in the DOM
+            const unitCard = document.querySelector(`[data-unit-code="${unitCode}"]`);
+            
+            if (unitCard) {
+                // Find the container where icons are located
+                const infoIconContainer = unitCard.querySelector(".unit-icons");
+                
+                if (infoIconContainer) {
+                    // Check if the AI icon already exists to prevent duplicates
+                    if (!unitCard.querySelector(".ai-recommendation-icon")) {
+                        // Create the AI recommendation icon element
+                        const aiIcon = document.createElement("div");
+                        aiIcon.classList.add("ai-recommendation-icon");
+                        aiIcon.title = "AI Recommended";
+                        aiIcon.textContent = '⭐';
+
+                        // Create tooltip for icon
+                        const tooltip = document.createElement("span");
+                        tooltip.classList.add("tooltip")
+                        tooltip.textContent = "This unit is recommended by AI";
+
+                        // Append the AI icon & tooltip to the icons container
+                        aiIcon.appendChild(tooltip);
+                        infoIconContainer.insertBefore(aiIcon, infoIconContainer.firstChild);
+                    }
+                }
+            } else {
+                console.warn(`Unit card with code ${unitCode} not found in the DOM.`);
+            }
+        }
+    }
+    console.log("----- Done querying AI -----");
+}
 
 // Function to render units to the grid
 function renderUnitsInModal(unitSlotID, units) {
@@ -538,8 +653,11 @@ function createUnitCard(unitSlotID, unit, type) {
     const courseCode = unit.course && unit.course[0].courseCode ? unit.course[0].courseCode : ' ';
 
     // Create action button based on type
-    const actionBtnIcon = type === 'add' ? '+' : 'x'
+    const actionBtnIcon = type === 'add' ? '➕' : '╳'
     const actionBtnId = type === 'add' ? "btn-add-unit" : "btn-remove-unit"
+
+    // Add unit code to each unit card as ID
+    unitCardDiv.setAttribute('data-unit-code', unit.unitCode); 
 
     // Populate the unit card content
     unitCardDiv.innerHTML = `
@@ -547,7 +665,7 @@ function createUnitCard(unitSlotID, unit, type) {
             <span class="courseCode">${courseCode}</span>
             <div class="unit-icons">
                     ${unit.isCustomUnit ? '<button class="custom-tag" disabled>Custom</button>' : ''}
-                    <button class="unit-icons-btn" id="info-icon">i</button>
+                    <button class="unit-icons-btn" id="info-icon">𝚒</button>
                     <button class="unit-icons-btn" id=${actionBtnId}>${actionBtnIcon}</button>
             </div>
         </div>
@@ -576,6 +694,11 @@ function createUnitCard(unitSlotID, unit, type) {
         actionButton.addEventListener('click', () => {
             addUnitToSlot(addUnitModal.dataset.id, unit);
             addUnitModal.style.display = 'none';
+
+            // Add selected home unit to possible mapping to query AI recommendations later
+            if (unitSlotID.includes("home")) {
+                setSelectedHomeUnit(unitSlotID, unit);
+            }
         });
     } else {
         actionButton.addEventListener('click', () => {
