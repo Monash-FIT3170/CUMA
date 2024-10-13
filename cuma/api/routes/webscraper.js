@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 //const { NONAME } = require('dns');
 const backendPath = "api/webscraperEndpoint"
-const serverPath = "localhost:3000"
+const serverPath = "cumamonash.xyz"
 const unitBackendPath = "/api/unit"
 
 

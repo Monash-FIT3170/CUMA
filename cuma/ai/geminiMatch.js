@@ -7,7 +7,7 @@ Backend.Unit.AIMatch = async function (unitSRC, unitsToCompare) {
     */
 
     try {
-        const url = new URL("http://127.0.0.1:3000" + pathname + "/geminiMatch");
+        const url = new URL("https://cumamonash.xyz/geminiMatch");
 
         const response = await fetch(url, {
             method: "POST",
