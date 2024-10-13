@@ -4,10 +4,9 @@ import mongoose from 'mongoose';
 import unit from './routes/unit.js';
 import unitConnection from './routes/unitConnection.js';
 import authentication from './routes/authentication.js';
-import scraper from './routes/webscraperEndpoint.js'
+import scraper from './routes/webscraperEndpoint.js';
 import transferPlan from './routes/transferPlan.js';
-import scraper from './routes/webscraperEndpoint.js'
-import ai from './routes/ai.js'
+import ai from './routes/ai.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import session from 'express-session';
