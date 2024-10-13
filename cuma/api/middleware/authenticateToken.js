@@ -28,7 +28,6 @@ async function authenticateToken(req, res, next) {
             return next();
         } catch (error) {
             console.log("Error verifying access token:", error);
-            return res.redirect("/login?error=invalid-access-token");
         };
     } else if (refreshToken) {
         try {
@@ -46,7 +45,7 @@ async function authenticateToken(req, res, next) {
             const result = await response.json();
             if (!response.ok || !result.accessToken) {
                 console.log("Failed to refresh token:", result.message || "Unknown error");
-                return res.redirect('/login?error=invalid-token-refresh');
+                return res.redirect('/login');
             };
 
             // Verify the new access token and store in cookie
@@ -55,12 +54,12 @@ async function authenticateToken(req, res, next) {
 
             // Add user info to api request
             req.user = decodedAccessToken;
-
+            console.log('Authenticated with refreshed token');
             return next();
 
         } catch (error) {
             console.log("Error refreshing Token: ", error);
-            return res.redirect('/login?error=invalid-token-refresh');
+            return res.redirect('/login');
         };
 
     } else {

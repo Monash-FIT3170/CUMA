@@ -4,5 +4,7 @@ var Backend = {
     Unit: {},
     UnitConnection: {},
     Auth: {},
-    Misc: {}
+    Misc: {},
+    Admin: {},
+    TransferPlan: {},
 }

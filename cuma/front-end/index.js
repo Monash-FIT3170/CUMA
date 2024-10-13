@@ -1,3 +1,6 @@
+
+
+
 let unitConnections = {};
 let selectedUnitCode = null;
 let isEditMode = false; // Track whether we're in add or edit mode
@@ -66,9 +69,10 @@ function addUnit() {
     const unitCredit = document.getElementById('form-unit-credit').value.trim();
     const unitLevel = document.getElementById('form-unit-level').value.trim();
     const unitOverview = document.getElementById('form-unit-overview').value.trim();
+    const handbookURL = document.getElementById('form-handbookURL').value.trim();
 
     // Ensure fields are filled out
-    if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview) {
+    if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !handbookURL) {
         alert("Please fill out all fields.");
         return;
     }
@@ -83,7 +87,8 @@ function addUnit() {
                 "unitType": unitType,
                 "unitLevel": unitLevel,
                 "creditPoints": unitCredit,
-                "unitDescription": unitOverview
+                "unitDescription": unitOverview,
+                "handBookURL": handbookURL
             }
 
             Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
@@ -120,7 +125,8 @@ function addUnit() {
             "unitType": unitType,
             "unitLevel": unitLevel,
             "creditPoints": unitCredit,
-            "unitDescription": unitOverview
+            "unitDescription": unitOverview,
+            "handBookURL": handbookURL
         }
 
         Backend.Unit.add(default_university, unitBody).then(response => {
@@ -161,6 +167,10 @@ function handleResponse(response) {
      */
     if (response.status == 400) {
         alert("Error: " + response.result)
+        return 1
+    } else if (response.ok != null && !response.ok) {
+        // If response is not OK, handle the error status
+        alert(response.error);
         return 1
     }
     return 0
@@ -290,6 +300,7 @@ function deleteUnit() {
     Backend.Unit.delete(default_university, selectedUnitCode).then(response => {
         if (!handleResponse(response)) {
             // if no error, repopulate the data
+
             repopulateResults()
         }
     })
@@ -332,11 +343,9 @@ function selectUnit(unitElement) {
     // Display mapped units for this selected unit
     displayMappedUnits(selectedUnitCode);
 
-    // Show the Modify and Delete buttons only for non-student roles
-    if (userRole === 'course_director') {
-        document.getElementById('modify-unit-button').style.display = 'inline-block';
-        document.getElementById('delete-unit-button').style.display = 'inline-block';
-    }
+    // Show the Modify and Delete buttons
+    document.getElementById('modify-unit-button').style.display = 'inline-block';
+    document.getElementById('delete-unit-button').style.display = 'inline-block';
 }
 
 
@@ -439,8 +448,8 @@ function addConnectionNewUnit() {
                     // Hide the form again
                     toggleAddConnectionNewUnitForm();
 
-                                // Display the updated mapped units for the selected unit
-                      repopulateResults()
+                    // Display the updated mapped units for the selected unit
+                    repopulateResults()
                 
                 }
 
@@ -588,48 +597,19 @@ function addConnectionExistingUnit(foeignUnitDiv) {
 }
 
 
-function userLogout() {
-    Backend.Auth.logout().then(() => {
-            console.log("Logout successful");
-        }).catch(error => {
-            console.error("An error occurred during logout:", error);
-            alert("An error occurred during logout. Please try again.");
-    });
-}
-
-
-function userSendConnections() {
-    // TODO: Perhaps change email to be dynamic, or to admin CUMA email
-    const email = "change@me.com";
-    emailBody = "Hi! \n\nHere are the connection(s) I am seeking approval for: \n";
-
-    Backend.UnitConnection.getAllUserConnections().then(req => {
-        if (!req.connections || req.connections.length === 0 || req.error) {
-            alert("Ensure you are logged in and have added connections to send.");
-            return;
-        }
-        req.connections.map(connection => {
-            const { universityNameA, unitCodeA, universityNameB, unitCodeB } = connection;
-            if (universityNameA && unitCodeA && universityNameB && unitCodeB) {
-                emailBody += "\n" + universityNameA + " - " + unitCodeA + " to " + universityNameB + " - " + unitCodeB;
-            }
-        });
-        window.location.href = "mailto:" + email + "?body=" + encodeURIComponent(emailBody);
-    });
-}
-
 async function fetchAndDisplayUserInfo() {
     try {
         const response = await Backend.Auth.getUserInfo();
         if (response.status === 200 && response.data) {
             // Populate the profile fields with the fetched data
-            document.getElementById('profile-name').value = response.data.name;
+            const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            const name = capitalize(response.data.firstName.trim()) + " " + capitalize(response.data.lastName.trim());
+            document.getElementById('profile-name').value = name;
             document.getElementById('profile-email').value = response.data.email;
             document.getElementById('profile-role').value = response.data.role;
 
             // Also update any other parts of the UI that depend on user info
             updateUserDisplay(response.data);
-            updateUIBasedOnRole(response.data.role);
         } else {
             console.error('Failed to fetch user info:', response);
         }
@@ -660,42 +640,6 @@ function updateUserDisplay(userData) {
         console.error('User info display container not found.');
     }
 }
-
-function updateUIBasedOnRole(userRole) {
-    const addUnitButton = document.querySelector('.add-unit');
-    const modifyUnitButton = document.getElementById('modify-unit-button');
-    const deleteUnitButton = document.getElementById('delete-unit-button');
-    const sendConnectionsButton = document.getElementById('send-connections-button');
-
-    // hide all buttons
-    if (addUnitButton) addUnitButton.style.display = 'none';
-    if (modifyUnitButton) modifyUnitButton.style.display = 'none';
-    if (deleteUnitButton) deleteUnitButton.style.display = 'none';
-    if (sendConnectionsButton) sendConnectionsButton.style.display = 'none';
-
-    // Configure UI based on user role
-    switch (userRole) {
-        case 'course_director':
-            // Course directors can do everything
-            if (addUnitButton) addUnitButton.style.display = 'block';
-            if (modifyUnitButton) modifyUnitButton.style.display = 'block';
-            if (deleteUnitButton) deleteUnitButton.style.display = 'block';
-            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
-            break;
-        case 'student':
-            // Students cannot add, modify, or delete units
-            if (sendConnectionsButton) sendConnectionsButton.style.display = 'block';
-            break;
-        case 'general_user':
-            // General users cannot add, modify, delete units or send connections
-            break;
-
-        default:
-            break;
-    }
-}
-
-
 
 async function getTopThreeSimilarUnits() {
     const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
@@ -808,17 +752,6 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
         event.preventDefault();
         getTopThreeSimilarUnits();
     });
-}
-
-// Call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
-}
-
-
-// call every render if on index
-if (window.location.pathname.includes('index.html')) {
-    repopulateResults();
 }
 
 

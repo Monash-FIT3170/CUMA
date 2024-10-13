@@ -4,19 +4,22 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
+import User from "../models/UserSchema.js";
 
 // Constants
 const ACCESS_TOKEN_AGE = 15 * 60 * 1000;    // 15mins
 const REFRESH_TOKEN_AGE = 60 * 60 * 1000;   // 1hr
-const DB_NAME = 'CUMA';
-const DB_COLLECTION_NAME = 'users';
+// // For testing purposes
+// // const DB_NAME = 'CUMA';
+// // const DB_COLLECTION_NAME = 'users';
+// const DB_NAME = 'CUMA_TEST';
+// const DB_COLLECTION_NAME = 'users';
 
 // Token access generation
 export function generateAccessToken(email, role) {
     return jwt.sign({ email, role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 }
 
-// Token refresh generation
 export function generateRefreshToken(email, role) {
     return jwt.sign({ email, role }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 }
@@ -63,7 +66,6 @@ export function createAccessTokenCookie(res, cookieToken, isProduction) {
     });
 }
 
-// Create refresh token cookie
 export function createRefreshTokenCookie(res, cookieToken, isProduction) {
     res.cookie('refreshToken', cookieToken, {
         httpOnly: true,
@@ -74,115 +76,84 @@ export function createRefreshTokenCookie(res, cookieToken, isProduction) {
 }
 
 // Database operations
-export async function fetchExistingUserFromDB(client, email) {
-    const database = client.db(DB_NAME);
-    const users = database.collection(DB_COLLECTION_NAME);
-    const existingUser = await users.findOne({ email });
-    return { users, existingUser };
+export async function fetchExistingUserFromDB(email) {
+    return await User.findOne({ email });
 }
 
-// fecth google users
-export async function fetchExistingGoogleUserFromDB(client, userGoogleID) {
-    const database = client.db(DB_NAME);
-    const users = database.collection(DB_COLLECTION_NAME);
-    const existingUser = await users.findOne({ userGoogleID });
-    return { users, existingUser };
+export async function fetchExistingGoogleUserFromDB(userGoogleID) {
+    return await User.findOne({ userGoogleId: userGoogleID });
 }
 
-// fecth user with password reset token
-export async function fetchExistingUserWithPwResetTokenFromDB(client, email, token) {
-    const database = client.db(DB_NAME);
-    const users = database.collection(DB_COLLECTION_NAME);
-    const existingUser = await users.findOne({ 
+export async function fetchExistingUserWithPwResetTokenFromDB(email, token) {
+    return await User.findOne({ 
         email,
         'passwordReset.resetToken': token 
     });
-    return { users, existingUser };
 }
 
-// fecth user with refresh token
-export async function fetchExistingUserWithRefreshTokenFromDB(client, email, refreshToken) {
-    const database = client.db(DB_NAME);
-    const users = database.collection(DB_COLLECTION_NAME);
-    const existingUser = await users.findOne({ 
+export async function fetchExistingUserWithRefreshTokenFromDB(email, refreshToken) {
+    return await User.findOne({ 
         email,
         'refreshToken.token': refreshToken 
     });
-    return { users, existingUser };
 }
 
 // Token processing
-export async function processLoginAccessToken(res, users, existingUser, isProduction) {
-    const accessToken = generateAccessToken(existingUser.email, existingUser.role);
-    const refreshToken = generateRefreshToken(existingUser.email, existingUser.role);
+export async function processLoginAccessToken(res, user, isProduction) {
+    const accessToken = generateAccessToken(user.email, user.role);
+    const refreshToken = generateRefreshToken(user.email, user.role);
     
-    await users.updateOne(
-        { email: existingUser.email },
-        {
-            $set: {
-                lastLogin: new Date(),
-                role: existingUser.role,
-                refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
-            }
-        }
-    );
+    user.lastLogin = new Date();
+    user.refreshToken = { token: refreshToken, expiry: Date.now() + REFRESH_TOKEN_AGE };
+    await user.save();
 
     createAccessTokenCookie(res, accessToken, isProduction);
     createRefreshTokenCookie(res, refreshToken, isProduction);
 }
 
 // Process Google login
-export async function processGoogleLogin(res, users, existingUser, userData, isProduction) {
-    const refreshToken = generateRefreshToken(userData.email, userData.role);
-    const accessToken = generateAccessToken(userData.email, userData.role);
+export async function processGoogleLogin(res, user, userData, isProduction) {
+    const refreshToken = generateRefreshToken(userData.email, user.role);
 
-    if (!existingUser) {
-        const newUser = {
-            userGoogleID: userData.id,
+    if (!user) {
+        user = new User({
+            userGoogleId: userData.id,
             email: userData.email,
             emailVerified: userData.verified_email,
             emailHD: userData.hd,
             firstName: userData.given_name,
             lastName: userData.family_name,
-            role: userData.role,
-            createAt: new Date(),
-            updatedAt: new Date(),
+            roles: ['general_user'],
+            status: 'active',
             lastLogin: new Date(),
-            refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
-        };
-        await users.insertOne(newUser);
+            refreshToken: { token: refreshToken, expiry: Date.now() + REFRESH_TOKEN_AGE }
+        });
+        await user.save();
     } else {
-        await users.updateOne(
-            { userGoogleID: userData.id },
-            {
-                $set: {
-                    lastLogin: new Date(),
-                    role: userData.role,
-                    refreshToken: { token: refreshToken, expiresIn: Date.now() + REFRESH_TOKEN_AGE }
-                }
-            }
-        );
+        user.lastLogin = new Date();
+        user.refreshToken = { token: refreshToken, expiry: Date.now() + REFRESH_TOKEN_AGE };
+        await user.save();
     }
+
+    const accessToken = generateAccessToken(userData.email, user.role);
 
     createAccessTokenCookie(res, accessToken, isProduction);
     createRefreshTokenCookie(res, refreshToken, isProduction);
 }
 
 // Password reset
-export async function processResetPasswordLink(users, existingUser, serverPath) {
-    const token = crypto.randomBytes(32).toString('hex');
+export async function processResetPasswordLink(user, serverPath) {
+    const token = generateRandomToken();
     const expiration = Date.now() + 1 * 60 * 60 * 1000; // Token valid for 1 hour
 
-    await users.updateOne(
-        { email: existingUser.email }, 
-        { $set: { 
-            'passwordReset.resetToken': token, 
-            'passwordReset.resetTokenExpiry': expiration 
-            }
-        }
-    );
+    user.passwordReset = {
+        resetToken: token,
+        resetTokenExpiry: expiration
+    };
 
-    const resetLink = `${serverPath}/reset-password?token=${token}&email=${existingUser.email}`;
+    await user.save();
+
+    const resetLink = `${serverPath}/reset-password?token=${token}&email=${user.email}`;
     
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -194,9 +165,9 @@ export async function processResetPasswordLink(users, existingUser, serverPath) 
 
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: existingUser.email,
+        to: user.email,
         subject: 'Reset your CUMA account password',
-        text: `Hi ${existingUser.firstName},\n\nWe got your request to reset your CUMA account password.\nClick the link to reset your password: ${resetLink}.\nYour password reset link is valid for 1 hour.`
+        text: `Hi ${user.firstName},\n\nWe got your request to reset your CUMA account password.\nClick the link to reset your password: ${resetLink}.\nYour password reset link is valid for 1 hour.`
     };
 
     try {
@@ -209,11 +180,12 @@ export async function processResetPasswordLink(users, existingUser, serverPath) 
 }
 
 // MFA
-export async function setupMFA(users, email) {
+export async function setupMFA(user) {
     const secret = authenticator.generateSecret();
-    await users.updateOne({ email }, { $set: { mfaSecret: secret } });
+    user.mfaSecret = secret;
+    await user.save();
 
-    const otpauth = authenticator.keyuri(email, 'Cuma', secret);
+    const otpauth = authenticator.keyuri(user.email, 'Cuma', secret);
     return new Promise((resolve, reject) => {
         QRCode.toDataURL(otpauth, (err, imageUrl) => {
             if (err) {
@@ -225,7 +197,70 @@ export async function setupMFA(users, email) {
     });
 }
 
-// MFA verification
+
 export function verifyMFA(token, secret) {
     return authenticator.verify({ token, secret });
 }
+
+// Send approval email
+export const sendApprovalEmail = async (email, firstName, lastName, role) => {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'CUMA: Manual Verification Approved',
+      html: `
+        <p>Dear ${firstName} ${lastName},</p>
+        <p>Thank you for signing up to CUMA. After manually verifying your information, we are pleased to inform you that your application to join as a ${role} has been approved.</p>
+        <p>You can now log in to your account and start using our services.</p>
+        <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+        <p>Welcome to the CUMA community!</p>
+        <p>Best regards,<br>The CUMA Team</p>
+      `
+    };
+
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Approval email sent to ${email}`);
+    } catch (error) {
+      console.error(`Error sending approval email to ${email}:`, error);
+    }
+  };
+
+// Send rejection email
+export const sendRejectionEmail = async (email, firstName, lastName, role) => {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: 'CUMA: Manual Verification Unsuccessful',
+      html: `
+        <p>Dear ${firstName} ${lastName},</p>
+        <p>Thank you for signing up to CUMA. After manually verifying your information, we regret to inform you that we are unable to approve your application to join as a ${role} at this time.</p>
+        <p>If you believe this decision was made in error or if you have any questions, please don't hesitate to contact our support team for more information or clarification.</p>
+        <p>We appreciate your interest in CUMA and thank you for your understanding.</p>
+        <p>Best regards,<br>The CUMA Team</p>
+      `
+    };
+
+    const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_APP_PASSWORD
+        }
+    });
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Rejection email sent to ${email}`);
+    } catch (error) {
+      console.error(`Error sending rejection email to ${email}:`, error);
+    }
+  };

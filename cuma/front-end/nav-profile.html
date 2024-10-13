@@ -7,131 +7,96 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title>CUMA</title>
-    <link
-      rel="stylesheet"
-      href="styles/general.css"
-    />
-    <script
-      src="../backend/namespace.js"
-      defer
-    ></script>
-    <script
-      src="../backend/unitConnection.js"
-      defer
-    ></script>
-    <script
-      src="../backend/unit.js"
-      defer
-    ></script>
-    <script
-      src="../backend/authentication.js"
-      defer
-    ></script>
+    <link rel="stylesheet" href="styles/general.css">
+    <script src="../backend/namespace.js" defer></script>
+    <script src="../backend/unitConnection.js" defer></script>
+    <script src="../backend/unit.js" defer></script>
+    <script src="../backend/authentication.js" defer></script>
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/nav.css">
+    <script src="./index.js" defer></script>
+    <script src="../front-end/nav-profile.js"></script>
 
-    <link
-      rel="stylesheet"
-      href="styles/header.css"
-    />
-    <link
-      rel="stylesheet"
-      href="styles/nav.css"
-    />
-    <script
-      src="./index.js"
-      defer
-    ></script>
     <script src="dark-light-mode.js"></script>
+    <script src="./scripts/init.js"></script>
     <script
       src="./component/sidenav.js"
       defer
     ></script>
+    <script src="./script/sidenav-logout.js"></script>
     <script src="./component/header/header.js"></script>
   </head>
   <body>
-    <header-component></header-component>
+  <header-component></header-component>
+  <sidenav-component isopen="true"></sidenav-component>
 
-    <sidenav-component isopen="true"></sidenav-component>
-
-    <main id="main">
-      <!-- Profile Section -->
-      <section class="profile-info">
-        <h2>Profile</h2>
-        <div class="profile-container">
-          <img
-            src="images/icons8-person-96.png"
-            alt="Profile Image"
-            class="profile-image"
-          />
-          <div class="profile-details">
-            <div class="profile-item">
-              <label for="profile-name">Name:</label>
-              <input
-                type="text"
-                id="profile-name"
-                readonly
-              />
-            </div>
-            <div class="profile-item">
-              <label for="profile-email">Email:</label>
-              <input
-                type="email"
-                id="profile-email"
-                readonly
-              />
-            </div>
-            <div class="profile-item">
-              <label for="profile-role">Role:</label>
-              <input
-                type="text"
-                id="profile-role"
-                readonly
-              />
-            </div>
-            <button
-              id="edit-button"
-              onclick="editProfile()"
-            >
-              Edit
-            </button>
-            <button
-              id="save-button"
-              onclick="saveProfile()"
-              style="display: none"
-            >
-              Save
-            </button>
+  <main id="main">
+    <!-- Profile Section -->
+    <section class="profile-section">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-image-container">
+            <img src="images/icons8-person-96.png" alt="Profile Image" class="profile-image" />
+          </div>
+          <div class="profile-info">
+            <h2 id="profile-name">John Doe</h2>
+            <p><strong>Role:</strong> <span id="profile-role">Student</span></p>
+            <button id="edit-button">Edit Profile</button>
           </div>
         </div>
-      </section>
-
-      <!-- Profile Detail Section -->
-      <section class="profile-details">
-        <h2>Profile Details</h2>
-        <div class="profile-detail-grid">
-          <div class="profile-detail-element">
+        <!-- Preferences and Contact Information Section -->
+        <div class="profile-details">
+          <div class="details-card">
             <h3>Contact Information</h3>
-            <p><strong>Email:</strong> john.doe@example.com</p>
-            <p><strong>Phone:</strong> (555) 123-4567</p>
+            <p><strong>Email:</strong> <span id="profile-email">john.doe@example.com</span></p>
+            <p><strong>Phone:</strong> <span id="profile-phone">(555) 123-4567</span></p>
           </div>
-          <div class="profile-detail-element">
+          <div class="details-card">
             <h3>Preferences</h3>
-            <p><strong>Language:</strong> English</p>
-            <p><strong>Timezone:</strong> GMT+10</p>
+            <p><strong>Language:</strong> <span id="profile-language">English</span></p>
+            <p><strong>Timezone:</strong> <span id="profile-timezone">GMT+10</span></p>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <!--    <main id="main">-->
-    <!--        <section class="profile-section">-->
-    <!--            <div class="bubble">-->
-    <!--                <h2>User Profile</h2>-->
-    <!--                <p><strong>Name:</strong></p>-->
-    <!--                <p><strong>Email:</strong></p>-->
-    <!--                <p><strong>Institution:</strong></p>-->
-    <!--                <button class="secondary-btn" onclick="editProfile()">Edit Profile</button>-->
-    <!--            </div>-->
-    <!--        </section>-->
-    <!--    </main>-->
+  <!-- Modal for editing profile -->
+  <div id="edit-profile-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h2>Edit Profile</h2>
+      <form id="edit-profile-form">
+        <div class="form-group">
+          <label for="modal-profile-name">Name:</label>
+          <input type="text" id="modal-profile-name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="modal-profile-role">Role:</label>
+          <input type="text" id="modal-profile-role" name="role" readonly>
+        </div>
+        <div class="form-group">
+          <label for="modal-profile-email">Email:</label>
+          <input type="email" id="modal-profile-email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="modal-profile-phone">Phone:</label>
+          <input type="tel" id="modal-profile-phone" name="phone">
+        </div>
+        <div class="form-group">
+          <label for="modal-profile-language">Language:</label>
+          <input type="text" id="modal-profile-language" name="language">
+        </div>
+        <div class="form-group">
+          <label for="modal-profile-timezone">Timezone:</label>
+          <input type="text" id="modal-profile-timezone" name="timezone">
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="save-button">Save Changes</button>
+          <button type="button" id="cancel-button">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
   </body>
 </html>

@@ -137,7 +137,7 @@ header.innerHTML = `
         <img src="images/1200px-Hamburger_icon.svg.webp" class="burger-bar-icon">
     </button>
     
-    <a class="appname" href="index.html">
+    <a class="appname" href="/">
         <h1>CUMA</h1>
     </a>
             <!--Temporary info, please fix if required-->

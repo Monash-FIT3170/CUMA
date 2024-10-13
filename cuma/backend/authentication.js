@@ -40,13 +40,16 @@ Backend.Auth.login = async function (email, password) {
   
       const result = await response.json();
 
-      console.log({ result: result, status: response.status });
+      if (!response.ok) {
+        throw new Error(result.error || 'An error occurred during login');
+      }
 
-      return { result: result, status: response.status };
+      return { result, status: response.status };
 
     } catch (error) {
 
       console.log("Error:", error);
+      throw error;
 
     }
 };
@@ -83,7 +86,6 @@ Backend.Auth.logout = async function () {
 
       if (response.status === 200) {
           // Redirect here in the client-side code
-          alert("Successfully logged out")
           window.location.href = '/login';
           return { result: result, status: response.status };
       } else {
@@ -139,6 +141,29 @@ Backend.Auth.enableMFA = async function (token) {
   } catch (error) {
     console.log("Error enabling MFA:", error);
     throw error;
+  }
+};
+
+Backend.Auth.skipMFA = async function () {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/skip-mfa");
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result };
+    
+  } catch (error) {
+    console.log("Error skipping MFA:", error);
+    throw error;
+    
   }
 };
 
@@ -244,6 +269,7 @@ Backend.Auth.getUserInfo = async function () {
 
     const response = await fetch(url, {
       method: "GET",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json"
       },
@@ -291,4 +317,28 @@ Backend.Auth.updateUserInfo = async function (userInfo) {
       throw error;
   }
 };
+
+Backend.Auth.roleVerificationInfo = async function (additionalInfo) {
+  try {
+    const url = new URL(serverPath + authBackendPath + "/role-verification");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(additionalInfo),
+    });
+
+    const result = await response.json();
+
+    console.log({ result: result, status: response.status });
+
+    return { status: response.status, ...result }; 
+
+  } catch (error) {
+      console.log("Error updating user info:", error);
+      throw error;
+  }
+}
 

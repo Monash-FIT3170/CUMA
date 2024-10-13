@@ -192,3 +192,21 @@ Backend.Unit.delete = async function (universityName, unitCode) {
         console.log("Error:", error);
     }
 }
+
+Backend.Unit.getAllOtherUni = async function (universityName) {
+    /**
+     * @param {string} universityName
+     */
+    const params = {"universityName": universityName}
+
+    try {
+        const url = new URL(serverPath + unitBackendPath + "/getAllOtherUni");
+        url.search = new URLSearchParams(params).toString();
+
+        const response = await fetch(url);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}

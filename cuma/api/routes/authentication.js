@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import * as AuthUtils from '../utils/auth-utils.js';
 import authenticateToken from '../middleware/authenticateToken.js';
+import User from '../models/UserSchema.js';
 
 dotenv.config();
 
@@ -30,45 +31,58 @@ const scopes = [
   'openid'
 ];
 
-// Signup proccess routers
+// Signup process routers
 router.post('/signup', async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
 
-        // Role checking via email domain
-        let userRole = 'general_user';
-        if (email.endsWith('@student.monash.edu')) {
-            userRole = 'student';
-        } else if (email.endsWith('@monash.edu')) {
-            userRole = 'course_director';
-        }
+        let role = 'general_user';
+        const emailHD = email.split('@')[1];
+
+        if (emailHD.endsWith('.edu')) {
+            role = 'student';
+        } 
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
-        const newUser = {
+        const pendingUser = {
             hashedPassword,
             email,
             emailVerified: false,
             emailHD: email.split('@')[1],
             firstName,
             lastName,
-            role: userRole,
+            role,
+            status: role === 'general_user' ? 'pending_role' : 'active',
             mfaEnabled: false,
-            mfaSecret: null,
-            createAt: new Date(),
-            updatedAt: new Date(),
-            lastLogin: new Date()
-        };
-        await users.insertOne(newUser);
+            mfaSecret: null
+        }
 
-        req.session.pendingSignupUser = { email, expiresIn: Date.now() + 5 * 60 * 1000};
+        const newUser = new User(pendingUser);
+        await newUser.save();
 
-        return res.status(201).json({ message: 'Signup successfully' });
+        req.session.pendingSignupUser = {
+            userData: pendingUser,
+            expiresIn: Date.now() + 5 * 60 * 1000
+        }
+        
+        let nextStep = '';
+
+        if (role === 'general_user') {
+            nextStep = '/signup/role-verification';
+        } else {
+            nextStep = '/signup/mfa-init';
+        }
+
+        return res.status(201).json({ 
+            message: 'Initial signup successful. Please proceed with additional information.',
+            nextStep
+        });
 
     } catch (error) {
         console.error('Error signing up: ', error);
@@ -76,24 +90,71 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-router.get('/setup-mfa', async (req, res) => {
+// Update additional information endpoint
+router.post('/role-verification', async (req, res) => {
     try {
         const sessionUser = req.session.pendingSignupUser;
         if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
             delete req.session.pendingSignupUser;
             return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
         }
+
+        const pendingUserData = sessionUser.userData;
+
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(pendingUserData.email);
+        if (!existingUser) {
+            return res.status(400).json({ error: 'User not found, please log in again' });
+        }
+
+        const { 
+            askingRole, university, major, studentId
+        } = req.body;
+
+        console.log(req.body);
+
+        if (askingRole !== 'student') {
+            return res.status(400).json({ message: 'Invalid role selected.' });
+        }
+
+        existingUser.askingRole = askingRole;
+        existingUser.additional_info = {
+            university,
+            major,
+            studentId
+        };
+        existingUser.verificationRequestedAt = new Date();
+        await existingUser.save();
+
+        res.status(200).json({ 
+            message: 'Role information added successfully.', 
+            nextStep: '/signup/mfa-init',
+            userEmail: existingUser.email
+        });
+
+    } catch (error) {
+        console.error("Failed to update additional information:", error);
+        res.status(500).json({ message: "Failed to update additional information." });
+    }
+});
+
+router.get('/setup-mfa', async (req, res) => {
+    try {
+        const sessionUser = req.session.pendingSignupUser.userData;
+        if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+            delete req.session.pendingSignupUser;
+            return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+        }
         const email = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User not found, please log in again' });
         }
 
         try {
-            const { secret, imageUrl } = await AuthUtils.setupMFA(users, email);
+            const { secret, imageUrl } = await AuthUtils.setupMFA(existingUser);
 
-            req.session.pendingSignupUser.expiresIn = Date.now() + 5 * 60 * 1000; // 5mins
+            req.session.pendingSignupUser.userData.expiresIn = Date.now() + 5 * 60 * 1000; // 5mins
 
             return res.status(201).json({ 
                 email,
@@ -115,14 +176,14 @@ router.post('/enable-mfa', async (req, res) => {
     const { token } = req.body;
 
     try {
-        const sessionUser = req.session.pendingSignupUser;
+        const sessionUser = req.session.pendingSignupUser.userData;
         if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
             delete req.session.pendingSignupUser;  // Delete the session if it has expired
             return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
         }
         const email = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User not found, please try again' });
         }
@@ -130,8 +191,10 @@ router.post('/enable-mfa', async (req, res) => {
         const isValidMFAToken = AuthUtils.verifyMFA(token, existingUser.mfaSecret);
         if (!isValidMFAToken) return res.status(400).json({ error: 'Invalid MFA token' });
 
-        await users.updateOne({ email }, { $set: { mfaEnabled: true } });
+        existingUser.mfaEnabled = true;
+        await existingUser.save();
 
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
         delete req.session.pendingSignupUser;
 
         return res.status(200).json({ message: 'MFA enabled successfully' });
@@ -141,12 +204,47 @@ router.post('/enable-mfa', async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+// Skip MFA setup
+router.get('/skip-mfa', async (req, res) => {
+    try {
+        const sessionUser = req.session.pendingSignupUser;
+        if (!sessionUser || sessionUser.expiresIn <= Date.now()) {
+            delete req.session.pendingSignupUser;  // Delete the session if it has expired
+            return res.status(400).json({ error: 'Session expired or invalid. Please start the signup process again.' });
+        }
+        const userData = sessionUser.userData;
+        const email = userData.email;
+
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
+        if (!existingUser) {
+            return res.status(400).json({ error: 'User not found, please try again' });
+        }
+        
+        existingUser.mfaEnabled = false;
+        await existingUser.save();
+
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
+        delete req.session.pendingSignupUser;
+
+        return res.status(200).json({ 
+            message: 'Login successful',
+            nextStep: '/'
+        });
+
+    } catch (error) {
+        console.error('Error skipping mfa: ', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+        
+    }
+});
+
 // Default login process routers
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
         }
@@ -158,16 +256,22 @@ router.post('/login', async (req, res) => {
 
         if (existingUser.mfaEnabled) {
             req.session.pendingLoginUser = { email, expiresIn: Date.now() + 5 * 60 * 1000 };
-            return res.status(206).json({ message: 'MFA required' });
+            return res.status(206).json({ 
+                message: 'MFA required',
+                nextStep: '/login/verify-totp' 
+            });
         }
 
-        await AuthUtils.processLoginAccessToken(res, users, existingUser, isProduction);
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
-        return res.status(201).json({ message: 'Login successful' });
+        return res.status(200).json({ 
+            message: 'Login successful',
+            nextStep: '/' 
+        });
 
     } catch (error) {
         console.error('Error logging in: ', error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: 'An unexpected error occurred. Please try again later.' });
     }
 });
 
@@ -182,7 +286,7 @@ router.post('/verify-mfa', async (req, res) => {
         }
         const userEmail = sessionUser.email;
 
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, userEmail);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(userEmail);
 
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
@@ -193,7 +297,7 @@ router.post('/verify-mfa', async (req, res) => {
             return res.status(400).json({ error: 'Invalid MFA token' });
         }
 
-        await AuthUtils.processLoginAccessToken(res, users, existingUser, isProduction);
+        await AuthUtils.processLoginAccessToken(res, existingUser, isProduction);
 
         return res.status(201).json({ message: 'Login successful' });
 
@@ -203,10 +307,10 @@ router.post('/verify-mfa', async (req, res) => {
     }
 });
 
+
 // Google authentication routers
 router.get('/google', (req, res) => {
     try {
-
         const state = AuthUtils.generateRandomToken();
         req.session.googleState = { state, expiresIn: Date.now() + 5 * 60 * 1000  };
 
@@ -220,7 +324,7 @@ router.get('/google', (req, res) => {
         res.redirect(authorizationUrl);
 
     } catch (error) {
-        console.error('Error Verifying MFA: ', error);
+        console.error('Error initiating Google auth: ', error);
         res.status(500).json({ error: error.message});
     }
 });
@@ -249,24 +353,25 @@ router.get('/oauth2callback', async (req, res) => {
         const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
         const userInfo = await oauth2.userinfo.get();
         const userData = userInfo.data;
-        const userGoogleID = userData.id;
 
-        // Verification of user role
-        const userEmail = userData.email;
-        let userRole = 'general_user';
-        if (userEmail.endsWith('@student.monash.edu')) {
-            userRole = 'student';
-        } else if (userEmail.endsWith('@monash.edu')) {
-            userRole = 'course_director';
+        let existingUser = await AuthUtils.fetchExistingGoogleUserFromDB(userData.id);
+        if (!existingUser) {
+            existingUser = new User({
+                userGoogleId: userData.id,
+                email: userData.email,
+                emailVerified: userData.verified_email,
+                emailHD: userData.hd,
+                firstName: userData.given_name,
+                lastName: userData.family_name,
+                role: 'student',
+                status: 'active'
+            });
         }
 
-        userData.role = userRole;
-
-        const { users, existingUser } = await AuthUtils.fetchExistingGoogleUserFromDB(req.client, userGoogleID);
-        await AuthUtils.processGoogleLogin(res, users, existingUser, userData, isProduction);
+        await AuthUtils.processGoogleLogin(res, existingUser, userData, isProduction);
 
         delete req.session.googleState;
-        return res.redirect('/index');
+        return res.redirect('/');
 
     } catch (error) {
         console.error('Error retrieving access token or user info', error);
@@ -283,15 +388,13 @@ router.get('/logout', async (req, res) => {
             const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
             const email = decoded.email;
 
-            const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+            const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
             if (!existingUser) {
                 return res.status(400).json({ error: 'User does not exist' });
             }
 
-            await users.updateOne(
-                { email },
-                { $unset: { refreshToken: "" } }
-            );
+            existingUser.refreshToken = undefined;
+            await existingUser.save();
         }
 
         // Clear JWT cookies
@@ -319,12 +422,12 @@ router.post('/request-password-reset', async (req, res) => {
     const { email } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(email);
         if (!existingUser) {
             return res.status(400).json({ error: 'User does not exist' });
         }
 
-        if (!await AuthUtils.processResetPasswordLink(users, existingUser, serverPath)) {
+        if (!await AuthUtils.processResetPasswordLink(existingUser, serverPath)) {
             return res.status(500).json({ error: 'Error sending email' });
         }
 
@@ -340,7 +443,7 @@ router.post('/validate-password-reset-link', async (req, res) => {
     const { token, email } = req.body;
 
     try {
-        const { existingUser } = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(req.client, email, token);
+        const existingUser = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(email, token);
         if (!existingUser || existingUser.passwordReset.resetTokenExpiry < Date.now()) {
             return res.status(400).json({ error: 'Invalid or expired password reset token. Please request another password reset.' });
         }
@@ -357,20 +460,16 @@ router.post('/update-new-password', async (req, res) => {
     const { email, password, token } = req.body;
 
     try {
-        const { users, existingUser } = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(req.client, email, token);
+        const existingUser = await AuthUtils.fetchExistingUserWithPwResetTokenFromDB(email, token);
         if (!existingUser || existingUser.passwordReset.resetTokenExpiry < Date.now()) {
             return res.status(400).json({ error: 'Invalid or expired password reset token. Please request another password reset.' });
         }
 
         const hashedPassword = AuthUtils.encryptPassword(password);
 
-        await users.updateOne(
-            { email },
-            { 
-                $set: { hashedPassword },
-                $unset: { 'passwordReset.resetToken': "", 'passwordReset.resetTokenExpiry': "" }
-            }
-        );
+        existingUser.hashedPassword = hashedPassword;
+        existingUser.passwordReset = undefined;
+        await existingUser.save();
 
         return res.status(200).json({ message: 'Successfully updated new password.' });
 
@@ -389,13 +488,13 @@ router.post('/refresh-token', async (req, res) => {
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
             if (err) return res.status(403).json({ message: 'Invalid refresh token' });
 
-            const { existingUser } = await AuthUtils.fetchExistingUserWithRefreshTokenFromDB(req.client, user.email, refreshToken);
+            const existingUser = await AuthUtils.fetchExistingUserWithRefreshTokenFromDB(user.email, refreshToken);
 
-            if (!existingUser || existingUser.refreshToken.expiresIn < Date.now()) {
+            if (!existingUser || existingUser.refreshToken.expiry < Date.now()) {
                 return res.status(400).json({ error: 'Invalid or expired refresh token. Please log in again.' });
             }
 
-            const newAccessToken = AuthUtils.generateAccessToken(existingUser.email, existingUser.role);
+            const newAccessToken = AuthUtils.generateAccessToken(existingUser.email, existingUser.roles);
 
             return res.status(200).json({ accessToken: newAccessToken, message: 'Access token refreshed successfully' });
         });
@@ -408,21 +507,24 @@ router.post('/refresh-token', async (req, res) => {
         }
     }
 });
+        
 
 // Get user information endpoint
 router.get('/user-info', authenticateToken, async (req, res) => {
     try {
-
         // Fetch user from database
-        const { users, existingUser } = await AuthUtils.fetchExistingUserFromDB(req.client, req.user.email);
+        const existingUser = await AuthUtils.fetchExistingUserFromDB(req.user.email);
         if (!existingUser) {
             return res.status(404).json({ message: "User not found." });
         }
 
         // Construct user information
         const userInfo = {
-            name: existingUser.firstName,
-            role: existingUser.role
+            firstName: existingUser.firstName,
+            lastName: existingUser.lastName,
+            email: existingUser.email,
+            role: existingUser.role,
+            status: existingUser.status
         };
 
         res.json(userInfo);
@@ -432,7 +534,6 @@ router.get('/user-info', authenticateToken, async (req, res) => {
         res.status(500).json({ message: "Failed to retrieve user information." });
     }
 });
-
 export default router;
 
 
