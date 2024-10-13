@@ -7,4 +7,5 @@ var Backend = {
     Misc: {},
     Admin: {},
     TransferPlan: {},
+    AI: {}
 }

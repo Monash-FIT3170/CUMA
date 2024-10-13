@@ -1021,3 +1021,54 @@ textarea {
 .input-button:hover{
   background-color: #3b90d5;
 }
+
+
+/* Tooltip container */
+.ai-recommendation-icon {
+  position: relative;
+  display: inline-block;
+  margin-top: 2px;
+  color: gold;
+  cursor: help;
+  font-size: 1rem;
+}
+
+/* Tooltip text */
+.ai-recommendation-icon .tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.ai-recommendation-icon .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.ai-recommendation-icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
