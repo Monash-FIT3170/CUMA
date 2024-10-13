@@ -69,9 +69,10 @@ function addUnit() {
     const unitCredit = document.getElementById('form-unit-credit').value.trim();
     const unitLevel = document.getElementById('form-unit-level').value.trim();
     const unitOverview = document.getElementById('form-unit-overview').value.trim();
+    const handbookURL = document.getElementById('form-handbookURL').value.trim();
 
     // Ensure fields are filled out
-    if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview) {
+    if (!unitName || !unitCode || !unitType || !unitCredit || !unitLevel || !unitOverview || !handbookURL) {
         alert("Please fill out all fields.");
         return;
     }
@@ -86,7 +87,8 @@ function addUnit() {
                 "unitType": unitType,
                 "unitLevel": unitLevel,
                 "creditPoints": unitCredit,
-                "unitDescription": unitOverview
+                "unitDescription": unitOverview,
+                "handBookURL": handbookURL
             }
 
             Backend.Unit.modify(default_university, selectedUnitCode, newUnitBody).then(response => {
@@ -123,7 +125,8 @@ function addUnit() {
             "unitType": unitType,
             "unitLevel": unitLevel,
             "creditPoints": unitCredit,
-            "unitDescription": unitOverview
+            "unitDescription": unitOverview,
+            "handBookURL": handbookURL
         }
 
         Backend.Unit.add(default_university, unitBody).then(response => {
