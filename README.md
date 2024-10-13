@@ -32,7 +32,7 @@ CUMA is a tool that helps course directors facilitate students' transition betwe
 
 ### How to access the CUMA website
 
-Deployment is done using AWS. To access it, visit: https://3.25.70.20/
+Deployment is done using AWS. To access it, visit: https://cumamonash.xyz
 
 
 
