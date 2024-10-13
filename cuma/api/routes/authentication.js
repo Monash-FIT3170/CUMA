@@ -58,7 +58,7 @@ router.post('/signup', async (req, res) => {
             firstName,
             lastName,
             role,
-            status: role === 'general_user' ? 'pending_role' : 'pending_verification',
+            status: role === 'general_user' ? 'pending_role' : 'active',
             mfaEnabled: false,
             mfaSecret: null
         }
@@ -73,7 +73,7 @@ router.post('/signup', async (req, res) => {
         if (role === 'general_user') {
             nextStep = '/signup/role-verification';
         } else {
-            nextStep = '/signup/verification-pending';
+            nextStep = '/signup/mfa-init';
         }
 
         return res.status(201).json({ 
