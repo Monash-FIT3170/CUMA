@@ -40,10 +40,6 @@ Backend.Auth.login = async function (email, password) {
   
       const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.error || 'An error occurred during login');
-      }
-
       return { result, status: response.status };
 
     } catch (error) {
