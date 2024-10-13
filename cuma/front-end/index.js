@@ -1,6 +1,3 @@
-
-
-
 let unitConnections = {};
 let selectedUnitCode = null;
 let isEditMode = false; // Track whether we're in add or edit mode
@@ -596,51 +593,6 @@ function addConnectionExistingUnit(foeignUnitDiv) {
     });
 }
 
-
-async function fetchAndDisplayUserInfo() {
-    try {
-        const response = await Backend.Auth.getUserInfo();
-        if (response.status === 200 && response.data) {
-            // Populate the profile fields with the fetched data
-            const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-            const name = capitalize(response.data.firstName.trim()) + " " + capitalize(response.data.lastName.trim());
-            document.getElementById('profile-name').value = name;
-            document.getElementById('profile-email').value = response.data.email;
-            document.getElementById('profile-role').value = response.data.role;
-
-            // Also update any other parts of the UI that depend on user info
-            updateUserDisplay(response.data);
-        } else {
-            console.error('Failed to fetch user info:', response);
-        }
-    } catch (error) {
-        console.error('An error occurred while fetching user info:', error);
-    }
-}
-
-function getRoleName(role) {
-    const roleMap = {
-        course_director: "Course Director",
-        general_user: "General User",
-        student: "Student"
-    };
-    return roleMap[role] || "Unknown Role";
-}
-
-
-function updateUserDisplay(userData) {
-    const userInfoDiv = document.querySelector('.user-info');
-    if (userInfoDiv) {
-        const roleName = getRoleName(userData.role);
-        userInfoDiv.innerHTML = `
-            <p><strong>User</strong>: ${userData.name}</p>
-            <p><strong>Role</strong>: ${roleName}</p>
-        `;
-    } else {
-        console.error('User info display container not found.');
-    }
-}
-
 async function getTopThreeSimilarUnits() {
     const foreignUnitDescription = document.getElementById('foreign-unit-description').value.trim();
 
@@ -757,7 +709,6 @@ if (window.location.pathname.includes('foreign-unit-reccomendation.html')) {
 
 // call every render
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAndDisplayUserInfo();
     repopulateResults();
 });
 
