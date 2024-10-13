@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelButton = document.getElementById('cancel-button');
     const saveButton = document.getElementById('save-button');
 
+    (async () => {
+        try {
+            const user = await fetchUser();
+            document.getElementById('profile-name').textContent = `${user.firstName} ${user.lastName}`
+            document.getElementById('profile-role').textContent = user.role
+            document.getElementById('profile-email').textContent = user.email
+        } catch (error) {
+            console.error("An error occurred while retrieving user info:", error);
+            alert('Error:' + error);
+        }
+    })();
+    
+
     // Function to open the modal and populate fields
     function openModal() {
         populateModalFields();
